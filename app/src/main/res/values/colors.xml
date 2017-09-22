@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#e71d24</color>
+    <color name="colorPrimaryDark">#aa1d22</color>
+    <color name="colorAccent">#ec1d25</color>
+
+    <color name="color_white">#ffffff</color>
+    <color name="color_white_transparant">#ccffffff</color>
+    <color name="color_white_transparant2">#70ffffff</color>
+    <color name="btn_color">#ec1c25</color>
+    <color name="btn_color_active">#ff545b</color>
+    <color name="color_hint">#86ec1d25</color>
+
+    <color name="color_input">#fafafa</color>
+    <color name="color_input_disable">#e4e5e6</color>
+    <color name="color_stroke">#cdcecf</color>
+    <color name="color_btn1">#cdcecf</color>
+    <color name="color_btn2">#58a8f9</color>
+
+    <color name="default_text">#9b9b9b</color>
+    <color name="default_background">#f92a25</color>
+    <color name="default_background2">#ffc3c1</color>
+</resources>

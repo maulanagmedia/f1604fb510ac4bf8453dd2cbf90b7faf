@@ -1,0 +1,114 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="formControlLabel">
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="formControlInput">
+        <item name="android:background">@drawable/input_bg</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:ellipsize">none</item>
+        <item name="android:layout_marginTop">@dimen/default_margin_tiny</item>
+        <item name="android:padding">@dimen/default_margin_small</item>
+    </style>
+
+    <style name="formControlTextarea">
+        <item name="android:background">@drawable/input_bg</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:scrollHorizontally">false</item>
+        <item name="android:ellipsize">none</item>
+        <item name="android:layout_marginTop">@dimen/default_margin_tiny</item>
+        <item name="android:minHeight">80dp</item>
+        <item name="android:gravity">top</item>
+        <item name="android:padding">@dimen/default_margin_small</item>
+    </style>
+
+    <style name="formControlInput.disable" parent="formControlInput">
+        <item name="android:inputType">none</item>
+        <item name="android:editable">false</item>
+        <item name="android:background">@drawable/input_bg_disable</item>
+    </style>
+
+    <style name="formControlDropdown">
+        <item name="android:background">@drawable/btn_form</item>
+        <item name="android:src">@mipmap/ic_dropdown</item>
+        <item name="android:layout_marginLeft">1dp</item>
+        <item name="android:layout_marginTop">@dimen/default_margin_tiny</item>
+    </style>
+
+    <style name="formControlButton">
+        <item name="android:background">@drawable/btn_form</item>
+        <item name="android:layout_marginLeft">1dp</item>
+        <item name="android:layout_marginRight">1dp</item>
+        <item name="android:layout_marginTop">@dimen/default_margin_tiny</item>
+    </style>
+
+    <style name="formGroup">
+        <item name="android:layout_marginTop">@dimen/default_margin</item>
+        <item name="android:layout_marginLeft">@dimen/default_margin_small</item>
+        <item name="android:layout_marginRight">@dimen/default_margin_small</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="AppTheme.Login.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/color_white</item>
+        <item name="android:textColorPrimary">@color/default_text</item>
+        <item name="android:background">@color/default_background</item>
+    </style>
+
+    <style name="AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!--item RadioButton or CheckBox color-->
+        <item name="colorControlNormal">@color/color_white</item>
+        <item name="colorControlActivated">@color/color_white</item>
+        <!--item text color-->
+        <item name="textColorAlertDialogListItem">@android:color/white</item>
+        <!--buttons color-->
+        <item name="colorAccent">@color/color_white</item>
+        <!--title and message color-->
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <!--dialog background-->
+        <item name="android:windowBackground">@color/default_background</item>
+    </style>
+
+    <style name="titleList">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">@dimen/default_margin_tiny</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/title_text_list</item>
+        <item name="android:textColor">@color/color_white</item>
+    </style>
+
+    <style name="subtitleList">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">@dimen/default_margin_tiny</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/subtitle_text_list</item>
+        <item name="android:textColor">@color/color_white</item>
+    </style>
+
+    <style name="CustomAutoComplete">
+        <item name="android:imeOptions">actionSearch</item> <!--Search icon on soft keyboard-->
+        <item name="android:singleLine">true</item>
+        <item name="android:background">@color/default_background2</item>
+        <item name="android:drawableLeft">@mipmap/ic_search</item>
+    </style>
+
+</resources>

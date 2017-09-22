@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_background"
+    tools:context="gmedia.net.id.psp.OrderPulsa.DetailOrderPulsa">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarSize="3dp"
+        android:background="@drawable/login_container">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No Nota"
+                    style="@style/formControlLabel"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edt_nonota"
+                    style="@style/formControlInput.disable"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nama Reseller"
+                    style="@style/formControlLabel"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edt_nama_reseller"
+                    style="@style/formControlInput.disable"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_container"
+                android:paddingLeft="@dimen/default_margin_small"
+                android:paddingRight="@dimen/default_margin_small"
+                android:paddingBottom="@dimen/default_margin_small"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:text="Pulsa"
+                    style="@style/formControlLabel"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.25"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_pulsa_cube"
+                                android:scaleType="centerCrop"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="5S"
+                                android:textColor="@color/color_white"
+                                android:textSize="25sp"
+                                android:textStyle="bold"
+                                android:layout_centerInParent="true"/>
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.75"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/default_margin_small"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:text="S5"
+                                android:textStyle="bold"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:id="@+id/tv_hargaS5"
+                                android:gravity="right"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/input_bg"
+                                android:text=""
+                                android:id="@+id/edt_s5"
+                                android:inputType="number"
+                                android:hint="Jumlah"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:gravity="right"
+                                android:id="@+id/tv_s5"
+                                android:textStyle="bold"
+                                android:padding="@dimen/default_margin_tiny"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.25"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_pulsa_cube"
+                                android:scaleType="centerCrop"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="10S"
+                                android:textColor="@color/color_white"
+                                android:textSize="25sp"
+                                android:textStyle="bold"
+                                android:layout_centerInParent="true"/>
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.75"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/default_margin_small"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:text="S10"
+                                android:textStyle="bold"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:id="@+id/tv_hargaS10"
+                                android:gravity="right"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/input_bg"
+                                android:text=""
+                                android:id="@+id/edt_s10"
+                                android:inputType="number"
+                                android:hint="Jumlah"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:gravity="right"
+                                android:id="@+id/tv_s10"
+                                android:textStyle="bold"
+                                android:padding="@dimen/default_margin_tiny"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.25"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_pulsa_cube"
+                                android:scaleType="centerCrop"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="20S"
+                                android:textColor="@color/color_white"
+                                android:textSize="25sp"
+                                android:textStyle="bold"
+                                android:layout_centerInParent="true"/>
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.75"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/default_margin_small"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:text="S20"
+                                android:textStyle="bold"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:id="@+id/tv_hargaS20"
+                                android:gravity="right"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/input_bg"
+                                android:text=""
+                                android:id="@+id/edt_s20"
+                                android:inputType="number"
+                                android:hint="Jumlah"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:gravity="right"
+                                android:id="@+id/tv_s20"
+                                android:textStyle="bold"
+                                android:padding="@dimen/default_margin_tiny"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.25"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_pulsa_cube"
+                                android:scaleType="centerCrop"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="25S"
+                                android:textColor="@color/color_white"
+                                android:textSize="25sp"
+                                android:textStyle="bold"
+                                android:layout_centerInParent="true"/>
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.75"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/default_margin_small"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:text="S25"
+                                android:textStyle="bold"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:id="@+id/tv_hargaS25"
+                                android:gravity="right"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/input_bg"
+                                android:text=""
+                                android:id="@+id/edt_s25"
+                                android:inputType="number"
+                                android:hint="Jumlah"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/tv_s25"
+                                android:text="0"
+                                android:gravity="right"
+                                android:textStyle="bold"
+                                android:padding="@dimen/default_margin_tiny"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.25"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_pulsa_cube"
+                                android:scaleType="centerCrop"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="50S"
+                                android:textColor="@color/color_white"
+                                android:textSize="25sp"
+                                android:textStyle="bold"
+                                android:layout_centerInParent="true"/>
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.75"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/default_margin_small"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:text="S50"
+                                android:textStyle="bold"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:id="@+id/tv_hargaS50"
+                                android:gravity="right"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/input_bg"
+                                android:text=""
+                                android:id="@+id/edt_s50"
+                                android:inputType="number"
+                                android:hint="Jumlah"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:gravity="right"
+                                android:id="@+id/tv_s50"
+                                android:textStyle="bold"
+                                android:padding="@dimen/default_margin_tiny"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.25"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_pulsa_cube"
+                                android:scaleType="centerCrop"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="100S"
+                                android:textColor="@color/color_white"
+                                android:textSize="25sp"
+                                android:textStyle="bold"
+                                android:layout_centerInParent="true"/>
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.75"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/default_margin_small"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:text="S100"
+                                android:textStyle="bold"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:id="@+id/tv_hargaS100"
+                                android:gravity="right"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/input_bg"
+                                android:text=""
+                                android:id="@+id/edt_s100"
+                                android:hint="Jumlah"
+                                android:inputType="number"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:gravity="right"
+                                android:id="@+id/tv_s100"
+                                android:textStyle="bold"
+                                android:padding="@dimen/default_margin_tiny"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.25"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_pulsa_cube"
+                                android:scaleType="centerCrop"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="BULK"
+                                android:textColor="@color/color_white"
+                                android:textSize="25sp"
+                                android:textStyle="bold"
+                                android:layout_centerInParent="true"/>
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.75"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/default_margin_small"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="BULK"
+                            android:textStyle="bold"
+                            android:padding="@dimen/default_margin_tiny"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/input_bg"
+                                android:text=""
+                                android:id="@+id/edt_bulk"
+                                android:inputType="number"
+                                android:hint="Jumlah"
+                                android:padding="@dimen/default_margin_tiny"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:gravity="right"
+                                android:id="@+id/tv_bulk"
+                                android:textStyle="bold"
+                                android:padding="@dimen/default_margin_tiny"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total"
+                    style="@style/formControlLabel"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edt_total"
+                    style="@style/formControlInput.disable"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Keterangan"
+                    style="@style/formControlLabel"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edt_keterangan"
+                    style="@style/formControlTextarea"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_margin"
+                style="@style/formGroup">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:gravity="center">
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:layout_height="wrap_content"
+                        android:text="Proses"
+                        android:id="@+id/btn_proses"
+                        android:textColor="@color/color_white"
+                        android:background="@drawable/btn_login"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/pb_proses"
+        android:visibility="gone"/>
+</RelativeLayout>

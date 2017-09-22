@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="gmedia.net.id.psp">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SplashScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".LoginScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OrderPerdana.DetailOrderPerdana"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OrderPulsa.DetailOrderPulsa"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OrderPulsa.ListReseller"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OrderPerdana.ListBarang"
+            android:screenOrientation="portrait" />
+        <activity android:name=".PenjualanMKIOS.PenjualanMKIOS" />
+        <activity android:name=".PenjualanPerdana.PenjualanPerdana" />
+        <activity android:name=".SemuaPenjualan.SemuaPenjualan" />
+        <activity android:name=".PelunasanPenjualan.PelunasanPenjualan" />
+        <activity android:name=".PelunasanPenjualan.VerifikasiPelunasan" />
+        <activity android:name=".DaftarPiutang.DaftarPiutang" />
+        <activity android:name=".StokSales.StokSales" />
+        <activity android:name=".OrderPerdana.CustomerPerdana"></activity>
+    </application>
+
+</manifest>
