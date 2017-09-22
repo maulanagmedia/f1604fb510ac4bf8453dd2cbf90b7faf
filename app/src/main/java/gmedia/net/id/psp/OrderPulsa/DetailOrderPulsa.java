@@ -556,43 +556,41 @@ public class DetailOrderPulsa extends AppCompatActivity {
 
     private void hitungTotal(){
 
-        if(!kodeRS.equals("")){
-            double jumlah5 = iv.parseNullDouble(edtS5.getText().toString());
-            double jumlah10 = iv.parseNullDouble(edtS10.getText().toString());
-            double jumlah20 = iv.parseNullDouble(edtS20.getText().toString());
-            double jumlah25 = iv.parseNullDouble(edtS25.getText().toString());
-            double jumlah50 = iv.parseNullDouble(edtS50.getText().toString());
-            double jumlah100 = iv.parseNullDouble(edtS100.getText().toString());
-            double jumlahBulk = iv.parseNullDouble(edtBulk.getText().toString());
+        double jumlah5 = iv.parseNullDouble(edtS5.getText().toString());
+        double jumlah10 = iv.parseNullDouble(edtS10.getText().toString());
+        double jumlah20 = iv.parseNullDouble(edtS20.getText().toString());
+        double jumlah25 = iv.parseNullDouble(edtS25.getText().toString());
+        double jumlah50 = iv.parseNullDouble(edtS50.getText().toString());
+        double jumlah100 = iv.parseNullDouble(edtS100.getText().toString());
+        double jumlahBulk = iv.parseNullDouble(edtBulk.getText().toString());
 
-            double harga5 = iv.parseNullDouble(hargaS5);
-            double harga10 = iv.parseNullDouble(hargaS10);
-            double harga20 = iv.parseNullDouble(hargaS20);
-            double harga25 = iv.parseNullDouble(hargaS25);
-            double harga50 = iv.parseNullDouble(hargaS50);
-            double harga100 = iv.parseNullDouble(hargaS100);
-            double diskonBulk = iv.parseNullDouble(hargaDiskonBulk);
+        double harga5 = iv.parseNullDouble(hargaS5);
+        double harga10 = iv.parseNullDouble(hargaS10);
+        double harga20 = iv.parseNullDouble(hargaS20);
+        double harga25 = iv.parseNullDouble(hargaS25);
+        double harga50 = iv.parseNullDouble(hargaS50);
+        double harga100 = iv.parseNullDouble(hargaS100);
+        double diskonBulk = iv.parseNullDouble(hargaDiskonBulk);
 
-            total5 = jumlah5 * harga5;
-            total10 = jumlah10 * harga10;
-            total20 = jumlah20 * harga20;
-            total25 = jumlah25 * harga25;
-            total50 = jumlah50 * harga50;
-            total100 = jumlah100 * harga100;
-            totalBulk = jumlahBulk - (jumlahBulk * diskonBulk / 100);
+        total5 = jumlah5 * harga5;
+        total10 = jumlah10 * harga10;
+        total20 = jumlah20 * harga20;
+        total25 = jumlah25 * harga25;
+        total50 = jumlah50 * harga50;
+        total100 = jumlah100 * harga100;
+        totalBulk = jumlahBulk - (jumlahBulk * diskonBulk / 100);
 
-            tvS5.setText(iv.ChangeToRupiahFormat(total5));
-            tvS10.setText(iv.ChangeToRupiahFormat(total10));
-            tvS20.setText(iv.ChangeToRupiahFormat(total20));
-            tvS25.setText(iv.ChangeToRupiahFormat(total25));
-            tvS50.setText(iv.ChangeToRupiahFormat(total50));
-            tvS100.setText(iv.ChangeToRupiahFormat(total100));
-            tvBulk.setText(iv.ChangeToRupiahFormat(totalBulk));
+        tvS5.setText(iv.ChangeToRupiahFormat(total5));
+        tvS10.setText(iv.ChangeToRupiahFormat(total10));
+        tvS20.setText(iv.ChangeToRupiahFormat(total20));
+        tvS25.setText(iv.ChangeToRupiahFormat(total25));
+        tvS50.setText(iv.ChangeToRupiahFormat(total50));
+        tvS100.setText(iv.ChangeToRupiahFormat(total100));
+        tvBulk.setText(iv.ChangeToRupiahFormat(totalBulk));
 
-            totalHarga = total5 + total10 + total20 + total25 + total50 + total100 + totalBulk;
+        totalHarga = total5 + total10 + total20 + total25 + total50 + total100 + totalBulk;
 
-            edtTotal.setText(iv.ChangeToRupiahFormat(totalHarga));
-        }
+        edtTotal.setText(iv.ChangeToRupiahFormat(totalHarga));
     }
 
     private void isLoading(boolean status){

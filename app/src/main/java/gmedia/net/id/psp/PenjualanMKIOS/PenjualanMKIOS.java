@@ -1,18 +1,23 @@
 package gmedia.net.id.psp.PenjualanMKIOS;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -46,6 +51,12 @@ public class PenjualanMKIOS extends AppCompatActivity {
     private boolean firstLoad = true;
     private FloatingActionButton btnAdd;
     private SessionManager session;
+    private int startIndex = 0, count = 0;
+    private String keyword = "";
+    private boolean isLoading = false;
+    private final String TAG = "PenjualanMKIOS";
+    private View footerList;
+    private ListPenjualanMKIOSAdapter adapterListPenjualan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +77,13 @@ public class PenjualanMKIOS extends AppCompatActivity {
         actvPelanggan = (AutoCompleteTextView) findViewById(R.id.actv_pelanggan);
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
         btnAdd = (FloatingActionButton) findViewById(R.id.btn_add);
+        LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        footerList = li.inflate(R.layout.layout_footer_listview, null);
 
+        startIndex = 0;
+        count = getResources().getInteger(R.integer.count_table);
         session = new SessionManager(PenjualanMKIOS.this);
+        keyword = "";
         getData();
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +95,25 @@ public class PenjualanMKIOS extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
+
+        lvPenjualan.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+                if(absListView.getLastVisiblePosition() == i2-1 && lvPenjualan.getCount() > (count-1) && !isLoading ){
+                    isLoading = true;
+                    lvPenjualan.addFooterView(footerList);
+                    startIndex += count;
+                    getMoreData();
+                    Log.i(TAG, "onScroll: last");
+                }
+            }
+        });
     }
 
     private void getData() {
@@ -86,7 +121,18 @@ public class PenjualanMKIOS extends AppCompatActivity {
         masterList = new ArrayList<>();
         pbProses.setVisibility(View.VISIBLE);
         String nik = session.getUserDetails().get(SessionManager.TAG_NIK);
-        ApiVolley request = new ApiVolley(PenjualanMKIOS.this, new JSONObject(), "GET", ServerURL.getMkios+nik, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        JSONObject jBody = new JSONObject();
+
+        try {
+            jBody.put("nonota", "");
+            jBody.put("keyword", keyword);
+            jBody.put("startindex", String.valueOf(startIndex));
+            jBody.put("count", String.valueOf(count));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(PenjualanMKIOS.this, jBody, "POST", ServerURL.getMkios+nik, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -101,7 +147,7 @@ public class PenjualanMKIOS extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("nonota"), jo.getString("nama"), jo.getString("nomor"), jo.getString("voucher"), jo.getString("total"), jo.getString("status"), jo.getString("flag"), jo.getString("kode")));
+                            masterList.add(new CustomItem(jo.getString("nonota"), jo.getString("nama"), jo.getString("nomor"), jo.getString("voucher"), jo.getString("total"), jo.getString("status"), jo.getString("flag"), jo.getString("kode"), jo.getString("tgl")));
                         }
                     }
 
@@ -128,6 +174,62 @@ public class PenjualanMKIOS extends AppCompatActivity {
         });
     }
 
+    private void getMoreData() {
+
+        isLoading = true;
+        final List<CustomItem> moreList = new ArrayList<>();
+
+        String nik = session.getUserDetails().get(SessionManager.TAG_NIK);
+        JSONObject jBody = new JSONObject();
+
+        try {
+            jBody.put("nonota", "");
+            jBody.put("keyword", keyword);
+            jBody.put("startindex", String.valueOf(startIndex));
+            jBody.put("count", String.valueOf(count));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(PenjualanMKIOS.this, jBody, "POST", ServerURL.getMkios+nik, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray items = response.getJSONArray("response");
+                        for(int i  = 0; i < items.length(); i++){
+
+                            JSONObject jo = items.getJSONObject(i);
+                            moreList.add(new CustomItem(jo.getString("nonota"), jo.getString("nama"), jo.getString("nomor"), jo.getString("voucher"), jo.getString("total"), jo.getString("status"), jo.getString("flag"), jo.getString("kode"), jo.getString("tgl")));
+                        }
+                    }
+
+                    lvPenjualan.removeFooterView(footerList);
+                    if(adapterListPenjualan != null) adapterListPenjualan.addMoreData(moreList);
+                    isLoading = false;
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isLoading = false;
+                    lvPenjualan.removeFooterView(footerList);
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+
+                isLoading = false;
+                lvPenjualan.removeFooterView(footerList);
+            }
+        });
+    }
+
     private void getAutocompleteEvent(final List<CustomItem> tableList) {
 
         if(firstLoad){
@@ -147,7 +249,12 @@ public class PenjualanMKIOS extends AppCompatActivity {
                 @Override
                 public void afterTextChanged(Editable editable) {
 
-                    if(actvPelanggan.getText().length() == 0) getTableList(masterList);
+                    if(actvPelanggan.getText().length() == 0){
+
+                        keyword = "";
+                        startIndex = 0;
+                        getData();
+                    }
                 }
             });
         }
@@ -158,15 +265,10 @@ public class PenjualanMKIOS extends AppCompatActivity {
 
                 if(i == EditorInfo.IME_ACTION_SEARCH){
 
-                    List<CustomItem> items = new ArrayList<CustomItem>();
-                    String keyword = actvPelanggan.getText().toString().trim().toUpperCase();
+                    keyword = actvPelanggan.getText().toString();
+                    startIndex = 0;
+                    getData();
 
-                    for (CustomItem item: tableList){
-
-                        if(item.getItem2().toUpperCase().contains(keyword)) items.add(item);
-                    }
-
-                    getTableList(items);
                     iv.hideSoftKey(PenjualanMKIOS.this);
                     return true;
                 }
@@ -182,8 +284,8 @@ public class PenjualanMKIOS extends AppCompatActivity {
 
         if(tableList != null && tableList.size() > 0){
 
-            ListPenjualanMKIOSAdapter adapter = new ListPenjualanMKIOSAdapter(PenjualanMKIOS.this, tableList);
-            lvPenjualan.setAdapter(adapter);
+            adapterListPenjualan = new ListPenjualanMKIOSAdapter(PenjualanMKIOS.this, tableList);
+            lvPenjualan.setAdapter(adapterListPenjualan);
 
             lvPenjualan.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

@@ -13,6 +13,7 @@ import com.maulana.custommodul.ItemValidation;
 import java.util.List;
 
 import gmedia.net.id.psp.R;
+import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ItemLength;
 
 
@@ -33,7 +34,13 @@ public class ListPenjualanMKIOSAdapter extends ArrayAdapter{
     }
 
     private static class ViewHolder {
-        private TextView tvItem1, tvItem2, tvItem3, tvItem4, tvItem5;
+        private TextView tvItem1, tvItem2, tvItem3, tvItem4, tvItem5, tvItem6;
+    }
+
+    public void addMoreData(List<CustomItem> moreData){
+
+        items.addAll(moreData);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -58,6 +65,7 @@ public class ListPenjualanMKIOSAdapter extends ArrayAdapter{
             holder.tvItem3 = (TextView) convertView.findViewById(R.id.tv_item3);
             holder.tvItem4 = (TextView) convertView.findViewById(R.id.tv_item4);
             holder.tvItem5 = (TextView) convertView.findViewById(R.id.tv_item5);
+            holder.tvItem6 = (TextView) convertView.findViewById(R.id.tv_item6);
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
@@ -67,8 +75,9 @@ public class ListPenjualanMKIOSAdapter extends ArrayAdapter{
         holder.tvItem1.setText(itemSelected.getItem2());
         holder.tvItem2.setText(itemSelected.getItem3());
         holder.tvItem3.setText(itemSelected.getItem4());
-        holder.tvItem4.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(itemSelected.getItem5())));
-        holder.tvItem5.setText(itemSelected.getItem6());
+        holder.tvItem4.setText(itemSelected.getItem6());
+        holder.tvItem5.setText(iv.ChangeFormatDateString(itemSelected.getItem9(), FormatItem.formatTimestamp, FormatItem.formatDateDisplay));
+        holder.tvItem6.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(itemSelected.getItem5())));
         return convertView;
 
     }

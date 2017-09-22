@@ -64,7 +64,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.35"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -72,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/default_background2"
-                android:text="Total"
+                android:text="Tanggal"
                 android:textSize="@dimen/subtitle_text_list"
                 android:padding="@dimen/default_margin_tiny"/>
 
@@ -88,7 +88,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.25"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -103,8 +103,32 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/value_text_list"
                 android:id="@+id/tv_item4"
+                android:textSize="@dimen/value_text_list"
+                android:textStyle="bold"
+                android:padding="@dimen/default_margin_tiny"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/default_background2"
+                android:text="Total"
+                android:textSize="@dimen/subtitle_text_list"
+                android:padding="@dimen/default_margin_tiny"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/value_text_list"
+                android:id="@+id/tv_item5"
                 android:textStyle="bold"
                 android:padding="@dimen/default_margin_tiny"/>
 

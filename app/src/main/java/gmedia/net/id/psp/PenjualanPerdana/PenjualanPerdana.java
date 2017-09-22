@@ -1,16 +1,20 @@
 package gmedia.net.id.psp.PenjualanPerdana;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
@@ -47,6 +51,12 @@ public class PenjualanPerdana extends AppCompatActivity {
     private boolean firstLoad = true;
     private FloatingActionButton btnAdd;
     private SessionManager session;
+    private int startIndex = 0, count = 0;
+    private String keyword = "";
+    private boolean isLoading = false;
+    private final String TAG = "PenjualanMKIOS";
+    private View footerList;
+    private ListPerdanaAdapter adapterPerdana;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +77,12 @@ public class PenjualanPerdana extends AppCompatActivity {
         actvPelanggan = (AutoCompleteTextView) findViewById(R.id.actv_pelanggan);
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
         btnAdd = (FloatingActionButton) findViewById(R.id.btn_add);
+        LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        footerList = li.inflate(R.layout.layout_footer_listview, null);
 
+        startIndex = 0;
+        count = getResources().getInteger(R.integer.count_table);
+        keyword = "";
         session = new SessionManager(PenjualanPerdana.this);
         getData();
 
@@ -80,6 +95,25 @@ public class PenjualanPerdana extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
+
+        lvPenjualan.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+                if(absListView.getLastVisiblePosition() == i2-1 && lvPenjualan.getCount() > (count-1) && !isLoading ){
+                    isLoading = true;
+                    lvPenjualan.addFooterView(footerList);
+                    startIndex += count;
+                    getMoreData();
+                    Log.i(TAG, "onScroll: last");
+                }
+            }
+        });
     }
 
     private void getData() {
@@ -87,7 +121,17 @@ public class PenjualanPerdana extends AppCompatActivity {
         masterList = new ArrayList<>();
         pbProses.setVisibility(View.VISIBLE);
         String nik = session.getUserDetails().get(SessionManager.TAG_UID);
-        ApiVolley request = new ApiVolley(PenjualanPerdana.this, new JSONObject(), "GET", ServerURL.getPenjualanPerdana+nik, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        JSONObject jBody = new JSONObject();
+
+        try {
+            jBody.put("keyword", keyword);
+            jBody.put("startindex", String.valueOf(startIndex));
+            jBody.put("count", String.valueOf(count));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(PenjualanPerdana.this, jBody, "POST", ServerURL.getPenjualanPerdana+nik, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -102,7 +146,7 @@ public class PenjualanPerdana extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("nobukti"), jo.getString("total"), jo.getString("tempo"), jo.getString("notelp"), jo.getString("status"), jo.getString("surat_jalan"), jo.getString("tempo_asli"), jo.getString("crbayar"), jo.getString("kodebrg"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("no_ba"), jo.getString("kodegudang")));
+                            masterList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("nobukti"), jo.getString("total"), jo.getString("tempo"), jo.getString("notelp"), jo.getString("status"), jo.getString("surat_jalan"), jo.getString("tempo_asli"), jo.getString("crbayar"), jo.getString("kodebrg"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("no_ba"), jo.getString("kodegudang"), jo.getString("tgl")));
                         }
                     }
 
@@ -129,6 +173,56 @@ public class PenjualanPerdana extends AppCompatActivity {
         });
     }
 
+    private void getMoreData() {
+
+        final List<CustomItem> moreList = new ArrayList<>();
+        String nik = session.getUserDetails().get(SessionManager.TAG_UID);
+        JSONObject jBody = new JSONObject();
+
+        try {
+            jBody.put("keyword", keyword);
+            jBody.put("startindex", String.valueOf(startIndex));
+            jBody.put("count", String.valueOf(count));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(PenjualanPerdana.this, jBody, "POST", ServerURL.getPenjualanPerdana+nik, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray items = response.getJSONArray("response");
+                        for(int i  = 0; i < items.length(); i++){
+
+                            JSONObject jo = items.getJSONObject(i);
+                            moreList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("nobukti"), jo.getString("total"), jo.getString("tempo"), jo.getString("notelp"), jo.getString("status"), jo.getString("surat_jalan"), jo.getString("tempo_asli"), jo.getString("crbayar"), jo.getString("kodebrg"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("no_ba"), jo.getString("kodegudang"), jo.getString("tgl")));
+                        }
+                    }
+                    isLoading = false;
+                    lvPenjualan.removeFooterView(footerList);
+                    if(adapterPerdana != null) adapterPerdana.addMoreData(moreList);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isLoading = false;
+                    lvPenjualan.removeFooterView(footerList);
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+                isLoading = false;
+                lvPenjualan.removeFooterView(footerList);
+            }
+        });
+    }
+
     private void getAutocompleteEvent(final List<CustomItem> tableList) {
 
         if(firstLoad){
@@ -148,7 +242,12 @@ public class PenjualanPerdana extends AppCompatActivity {
                 @Override
                 public void afterTextChanged(Editable editable) {
 
-                    if(actvPelanggan.getText().length() == 0) getTableList(masterList);
+                    if(actvPelanggan.getText().length() == 0){
+
+                        keyword = "";
+                        startIndex = 0;
+                        getData();
+                    }
                 }
             });
         }
@@ -159,15 +258,10 @@ public class PenjualanPerdana extends AppCompatActivity {
 
                 if(i == EditorInfo.IME_ACTION_SEARCH){
 
-                    List<CustomItem> items = new ArrayList<CustomItem>();
-                    String keyword = actvPelanggan.getText().toString().trim().toUpperCase();
+                    keyword = actvPelanggan.getText().toString();
+                    startIndex = 0;
+                    getData();
 
-                    for (CustomItem item: tableList){
-
-                        if(item.getItem2().toUpperCase().contains(keyword) || item.getItem3().toUpperCase().contains(keyword)) items.add(item);
-                    }
-
-                    getTableList(items);
                     iv.hideSoftKey(PenjualanPerdana.this);
                     return true;
                 }
@@ -183,8 +277,8 @@ public class PenjualanPerdana extends AppCompatActivity {
 
         if(tableList != null && tableList.size() > 0){
 
-            ListPerdanaAdapter adapter = new ListPerdanaAdapter(PenjualanPerdana.this, tableList);
-            lvPenjualan.setAdapter(adapter);
+            adapterPerdana = new ListPerdanaAdapter(PenjualanPerdana.this, tableList);
+            lvPenjualan.setAdapter(adapterPerdana);
 
             lvPenjualan.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

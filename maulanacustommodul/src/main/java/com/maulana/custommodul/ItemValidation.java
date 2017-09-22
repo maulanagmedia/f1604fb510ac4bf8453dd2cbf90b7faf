@@ -154,7 +154,7 @@ public class ItemValidation {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return sdfCustom.format(date1);
+        return (sdfCustom.format(date1) == null) ? "" : sdfCustom.format(date1);
     }
 
     public int dpToPx(Context context, int dp) {
