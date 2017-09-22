@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "F:\\Gmedia\\AndroidProject\\PSP\\zxing-android-embedded\\build\\intermediates\\res\\merged\\debug\\layout\\zxing_capture.xml",
+        "source": "F:\\Gmedia\\AndroidProject\\PSP\\zxing-android-embedded\\res\\layout\\zxing_capture.xml"
+    },
+    {
+        "merged": "F:\\Gmedia\\AndroidProject\\PSP\\zxing-android-embedded\\build\\intermediates\\res\\merged\\debug\\layout\\zxing_barcode_scanner.xml",
+        "source": "F:\\Gmedia\\AndroidProject\\PSP\\zxing-android-embedded\\res\\layout\\zxing_barcode_scanner.xml"
+    }
+]
