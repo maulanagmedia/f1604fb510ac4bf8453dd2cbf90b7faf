@@ -33,8 +33,38 @@
         android:weightSum="1">
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/default_background2"
+                android:text="No Bukti"
+                android:textSize="@dimen/subtitle_text_list"
+                android:padding="@dimen/default_margin_tiny"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/value_text_list"
+                android:id="@+id/tv_item2"
+                android:textStyle="bold"
+                android:padding="@dimen/default_margin_tiny"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.30"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -49,7 +79,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_item2"
+                android:id="@+id/tv_item3"
                 android:textSize="@dimen/value_text_list"
                 android:textStyle="bold"
                 android:padding="@dimen/default_margin_tiny"/>
@@ -58,7 +88,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.30"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -66,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/default_background2"
-                android:text="Tunai / Tempo"
+                android:text="Pembayaran"
                 android:textSize="@dimen/subtitle_text_list"
                 android:padding="@dimen/default_margin_tiny"/>
 
@@ -74,21 +104,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/value_text_list"
-                android:id="@+id/tv_item3"
+                android:id="@+id/tv_item4"
                 android:textStyle="bold"
                 android:padding="@dimen/default_margin_tiny"/>
 
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -104,7 +128,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/value_text_list"
-                android:id="@+id/tv_item4"
+                android:id="@+id/tv_item5"
+                android:gravity="right"
                 android:textStyle="bold"
                 android:padding="@dimen/default_margin_tiny"/>
 

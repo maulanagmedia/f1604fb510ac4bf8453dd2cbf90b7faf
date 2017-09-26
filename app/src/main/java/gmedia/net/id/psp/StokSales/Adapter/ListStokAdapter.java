@@ -37,6 +37,11 @@ public class ListStokAdapter extends ArrayAdapter{
         private TextView tvItem1, tvItem2, tvItem3;
     }
 
+    public void addMoreData(List<CustomItem> moreData){
+        items.addAll(moreData);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         if(items.size() < ItemLength.ListLength){

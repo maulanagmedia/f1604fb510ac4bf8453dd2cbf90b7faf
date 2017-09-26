@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/CustomAutoComplete"
-            android:hint="Outlet"
+            android:hint="Outlet / No Bukti"
             android:id="@+id/actv_outlet"/>
 
         <LinearLayout

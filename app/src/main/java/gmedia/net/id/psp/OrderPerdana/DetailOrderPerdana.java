@@ -1,5 +1,6 @@
 package gmedia.net.id.psp.OrderPerdana;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
@@ -40,9 +41,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import gmedia.net.id.psp.OrderPerdana.Adapter.ListCCIDAdapter;
 import gmedia.net.id.psp.OrderPerdana.Adapter.ListCCIDCBAdapter;
+import gmedia.net.id.psp.OrderPerdana.Adapter.ListRentangCCIDAdapter;
 import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
@@ -78,6 +81,7 @@ public class DetailOrderPerdana extends AppCompatActivity {
     private String noBa = "", status = "";
     private boolean editMode = false;
     private List<CustomItem> listCCIDLama;
+    private Button btnRentangCCID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +114,8 @@ public class DetailOrderPerdana extends AppCompatActivity {
         pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
 
         btnAmbilCCIDList = (Button) findViewById(R.id.btn_ambil_ccid_list);
-        btnScanCCID =(Button) findViewById(R.id.btn_scan_ccid);
+        btnScanCCID = (Button) findViewById(R.id.btn_scan_ccid);
+        btnRentangCCID = (Button) findViewById(R.id.btn_rentang_ccid);
 
         llScanCCID = (LinearLayout) findViewById(R.id.ll_scan_ccid);
 
@@ -708,6 +713,14 @@ public class DetailOrderPerdana extends AppCompatActivity {
                 openScanBarcode();
             }
         });
+
+        btnRentangCCID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                loadRentangCCID();
+            }
+        });
     }
 
     private void isLoading(boolean status){
@@ -852,6 +865,8 @@ public class DetailOrderPerdana extends AppCompatActivity {
         updateHargaTotal();
     }
 
+
+    //region ============================================ Ambil dari list =====================================================
     private boolean[] selectedOptionList;
     private void showListCCID() {
 
@@ -1038,6 +1053,104 @@ public class DetailOrderPerdana extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    //endregion
+
+    //region ================================================ range ccid ===========================================
+
+    private boolean[] selectedRentang;
+    private void loadRentangCCID(){
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(DetailOrderPerdana.this, R.style.AlertDialog);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.layout_rentang_ccid, null);
+        builder.setView(view);
+
+        selectedRentang = new boolean[masterCCID.size()];
+        final List<OptionItem> rentangCCIDList = new ArrayList<>();
+        final EditText edtCCIDAwal = (EditText) view.findViewById(R.id.edt_ccid_awal);
+        final EditText edtCCIDAkhir = (EditText) view.findViewById(R.id.edt_ccid_akhir);
+        final EditText edtBanyakCCID = (EditText) view.findViewById(R.id.edt_banyak_ccid);
+        final Button btnAmbilCCID = (Button) view.findViewById(R.id.btn_ambil_ccid);
+        final ListView lvRentangCCID = (ListView) view.findViewById(R.id.lv_rentang_ccid);
+
+        btnAmbilCCID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(edtCCIDAwal.getText().length() == 0){
+                    edtCCIDAwal.setError("Harap di isi");
+                    return;
+                }else{
+                    edtCCIDAwal.setError(null);
+                }
+
+                if(edtCCIDAkhir.getText().length() == 0){
+                    edtCCIDAkhir.setError("Harap di isi");
+                    return;
+                }else{
+                    edtCCIDAkhir.setError(null);
+                }
+
+                selectedRentang = new boolean[masterCCID.size()];
+                for(int i = 0; i < masterCCID.size();i++) {
+                    selectedRentang[i] = false;
+                }
+
+                long ccidAwal = iv.parseNullLong(edtCCIDAwal.getText().toString());
+                long ccidAkhir = iv.parseNullLong(edtCCIDAkhir.getText().toString());
+                List<OptionItem> selectedItems = new ArrayList<OptionItem>();
+
+                for(int x = 0; x < masterCCID.size();x++){
+                    long selectedCCID = iv.parseNullLong(masterCCID.get(x).getText());
+                    if(selectedCCID >= ccidAwal && selectedCCID <= ccidAkhir){
+                        selectedRentang[x] = true;
+                        selectedItems.add(masterCCID.get(x));
+                    }
+                }
+
+                edtBanyakCCID.setText(String.valueOf(selectedItems.size()));
+
+                lvRentangCCID.setAdapter(null);
+                if(selectedItems != null && selectedItems.size() > 0){
+                    ListRentangCCIDAdapter adapter = new ListRentangCCIDAdapter(DetailOrderPerdana.this, selectedItems);
+                    lvRentangCCID.setAdapter(adapter);
+                }
+            }
+        });
+
+        builder.setPositiveButton("Simpan", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                for(int x = 0; x < selectedRentang.length; x++){
+
+                    if(selectedRentang[x]){
+                        OptionItem item = masterCCID.get(x);
+                        masterCCID.get(x).setSelected(true);
+                        ccidList.add(new CustomItem(item.getValue(), item.getText(), item.getAtt1(), item.getAtt2(), item.getAtt3(), item.getAtt4(), item.getAtt5()));
+                    }
+                }
+
+                ListCCIDAdapter adapter = new ListCCIDAdapter(DetailOrderPerdana.this, ccidList);
+                lvCCID.setAdapter(null);
+                lvCCID.setAdapter(adapter);
+                updateHargaTotal();
+            }
+        });
+
+        builder.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    //endregion
 
     private static void updateHargaTotal(){
 

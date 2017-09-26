@@ -22,4 +22,7 @@ public class ServerURL {
     public static final String getListCCIDPerdana = baseURL + "api/perdana/get_list_ccid/";
     public static final String getSelectedCCIDPerdana = baseURL + "api/perdana/get_selected_ccid/";
     public static final String getPenjualanPerdana = baseURL + "api/perdana/get_penjualan_perdana/";
+    public static final String getSemuaPenjualan = baseURL + "api/penjualan/get_penjualan/";
+    public static final String getPiutang = baseURL + "api/piutang/get_piutang/";
+    public static final String getStok = baseURL + "api/stok/get_stok/";
 }

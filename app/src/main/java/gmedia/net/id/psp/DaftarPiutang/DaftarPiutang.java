@@ -1,28 +1,39 @@
 package gmedia.net.id.psp.DaftarPiutang;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.SessionManager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import gmedia.net.id.psp.DaftarPiutang.Adapter.ListPiutangAdapter;
 import gmedia.net.id.psp.R;
+import gmedia.net.id.psp.Utils.ServerURL;
 
 public class DaftarPiutang extends AppCompatActivity {
 
@@ -32,6 +43,13 @@ public class DaftarPiutang extends AppCompatActivity {
     private ProgressBar pbProses;
     private ItemValidation iv = new ItemValidation();
     private boolean firstLoad = true;
+    private SessionManager session;
+    private int startIndex = 0, count = 0;
+    private String keyword = "";
+    private boolean isLoading = false;
+    private final String TAG = "TAG";
+    private View footerList;
+    private ListPiutangAdapter adapterPiutang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,23 +70,142 @@ public class DaftarPiutang extends AppCompatActivity {
         actvOutlet = (AutoCompleteTextView) findViewById(R.id.actv_outlet);
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
 
+        LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        footerList = li.inflate(R.layout.layout_footer_listview, null);
+        startIndex = 0;
+        count = getResources().getInteger(R.integer.count_table);
+        keyword = "";
+        session = new SessionManager(DaftarPiutang.this);
         getData();
+
+        lvPiutang.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+                if(absListView.getLastVisiblePosition() == i2-1 && lvPiutang.getCount() > (count-1) && !isLoading ){
+                    isLoading = true;
+                    lvPiutang.addFooterView(footerList);
+                    startIndex += count;
+                    getMoreData();
+                    Log.i(TAG, "onScroll: last");
+                }
+            }
+        });
     }
 
     private void getData() {
 
         masterList = new ArrayList<>();
         pbProses.setVisibility(View.VISIBLE);
+        String nik = session.getUserDetails().get(SessionManager.TAG_UID);
+        JSONObject jBody = new JSONObject();
 
-        for(int i  = 1; i < 10; i++){
-            masterList.add(new CustomItem(""+i, "Maul Cell "+i, "2017-09-0"+i, (i*3)+"0000", "Tunai / 34"));
+        try {
+            jBody.put("keyword", keyword);
+            jBody.put("startindex", String.valueOf(startIndex));
+            jBody.put("count", String.valueOf(count));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-        final List<CustomItem> tableList = new ArrayList<>(masterList);
+        ApiVolley request = new ApiVolley(DaftarPiutang.this, jBody, "POST", ServerURL.getPiutang+nik, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
 
-        getAutocompleteEvent(tableList);
-        getTableList(tableList);
-        pbProses.setVisibility(View.GONE);
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray items = response.getJSONArray("response");
+                        for(int i  = 0; i < items.length(); i++){
+
+                            JSONObject jo = items.getJSONObject(i);
+                            masterList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("nonota"), jo.getString("total"), jo.getString("tempo"),jo.getString("tgl"),jo.getString("crbayar")));
+                        }
+                    }
+
+                    final List<CustomItem> tableList = new ArrayList<>(masterList);
+                    getAutocompleteEvent(tableList);
+                    getTableList(tableList);
+                    pbProses.setVisibility(View.GONE);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    getAutocompleteEvent(null);
+                    getTableList(null);
+                    pbProses.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+
+                getAutocompleteEvent(null);
+                getTableList(null);
+                pbProses.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void getMoreData() {
+
+        final List<CustomItem> moreList = new ArrayList<>();
+        String nik = session.getUserDetails().get(SessionManager.TAG_UID);
+        JSONObject jBody = new JSONObject();
+
+        try {
+            jBody.put("keyword", keyword);
+            jBody.put("startindex", String.valueOf(startIndex));
+            jBody.put("count", String.valueOf(count));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(DaftarPiutang.this, jBody, "POST", ServerURL.getPiutang+nik, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray items = response.getJSONArray("response");
+                        for(int i  = 0; i < items.length(); i++){
+
+                            JSONObject jo = items.getJSONObject(i);
+                            moreList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("nonota"), jo.getString("total"), jo.getString("tempo"),jo.getString("tgl"),jo.getString("crbayar")));
+                        }
+                    }
+
+                    isLoading = false;
+                    lvPiutang.removeFooterView(footerList);
+                    if(adapterPiutang != null) adapterPiutang.addMoreData(moreList);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isLoading = false;
+                    lvPiutang.removeFooterView(footerList);
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+
+                isLoading = false;
+                lvPiutang.removeFooterView(footerList);
+            }
+        });
     }
 
     private void getAutocompleteEvent(final List<CustomItem> tableList) {
@@ -90,7 +227,12 @@ public class DaftarPiutang extends AppCompatActivity {
                 @Override
                 public void afterTextChanged(Editable editable) {
 
-                    if(actvOutlet.getText().length() == 0) getTableList(masterList);
+                    if(actvOutlet.getText().length() == 0){
+
+                        keyword = "";
+                        startIndex = 0;
+                        getData();
+                    }
                 }
             });
         }
@@ -101,15 +243,10 @@ public class DaftarPiutang extends AppCompatActivity {
 
                 if(i == EditorInfo.IME_ACTION_SEARCH){
 
-                    List<CustomItem> items = new ArrayList<CustomItem>();
-                    String keyword = actvOutlet.getText().toString().trim().toUpperCase();
+                    keyword = actvOutlet.getText().toString();
+                    startIndex = 0;
+                    getData();
 
-                    for (CustomItem item: tableList){
-
-                        if(item.getItem2().toUpperCase().contains(keyword) || item.getItem3().toUpperCase().contains(keyword)) items.add(item);
-                    }
-
-                    getTableList(items);
                     iv.hideSoftKey(DaftarPiutang.this);
                     return true;
                 }
@@ -125,8 +262,8 @@ public class DaftarPiutang extends AppCompatActivity {
 
         if(tableList != null && tableList.size() > 0){
 
-            ListPiutangAdapter adapter = new ListPiutangAdapter(DaftarPiutang.this, tableList);
-            lvPiutang.setAdapter(adapter);
+            adapterPiutang = new ListPiutangAdapter(DaftarPiutang.this, tableList);
+            lvPiutang.setAdapter(adapterPiutang);
 
             lvPiutang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

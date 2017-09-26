@@ -51,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_item2"
                 android:textSize="@dimen/value_text_list"
+                android:gravity="right"
                 android:textStyle="bold"
                 android:padding="@dimen/default_margin_tiny"/>
 
@@ -75,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/value_text_list"
                 android:id="@+id/tv_item3"
+                android:gravity="right"
                 android:textStyle="bold"
                 android:padding="@dimen/default_margin_tiny"/>
 

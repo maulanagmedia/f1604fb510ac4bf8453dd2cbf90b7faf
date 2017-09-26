@@ -34,7 +34,13 @@ public class ListPiutangAdapter extends ArrayAdapter{
     }
 
     private static class ViewHolder {
-        private TextView tvItem1, tvItem2, tvItem3, tvItem4;
+        private TextView tvItem1, tvItem2, tvItem3, tvItem4, tvItem5;
+    }
+
+    public void addMoreData(List<CustomItem> moreData){
+
+        items.addAll(moreData);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -58,6 +64,7 @@ public class ListPiutangAdapter extends ArrayAdapter{
             holder.tvItem2 = (TextView) convertView.findViewById(R.id.tv_item2);
             holder.tvItem3 = (TextView) convertView.findViewById(R.id.tv_item3);
             holder.tvItem4 = (TextView) convertView.findViewById(R.id.tv_item4);
+            holder.tvItem5 = (TextView) convertView.findViewById(R.id.tv_item5);
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
@@ -65,9 +72,10 @@ public class ListPiutangAdapter extends ArrayAdapter{
 
         final CustomItem itemSelected = items.get(position);
         holder.tvItem1.setText(itemSelected.getItem2());
-        holder.tvItem2.setText(iv.ChangeFormatDateString(itemSelected.getItem3(), FormatItem.formatDate, FormatItem.formatDateDisplay));
-        holder.tvItem3.setText(itemSelected.getItem4());
-        holder.tvItem4.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(itemSelected.getItem5())));
+        holder.tvItem2.setText(itemSelected.getItem3());
+        holder.tvItem3.setText(iv.ChangeFormatDateString(itemSelected.getItem6(), FormatItem.formatDate, FormatItem.formatDateDisplay));
+        holder.tvItem4.setText(((itemSelected.getItem7().toUpperCase().equals("T")) ? "Tempo / " : "Tunai / " ) + itemSelected.getItem5());
+        holder.tvItem5.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(itemSelected.getItem4())));
         return convertView;
 
     }
