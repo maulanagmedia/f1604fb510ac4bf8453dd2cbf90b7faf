@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ll_header"
+        android:background="@color/default_background"
         android:orientation="vertical">
 
         <AutoCompleteTextView
@@ -20,10 +21,6 @@
             android:hint="Outlet / No Bukti"
             android:id="@+id/actv_outlet"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/default_margin_small"
-            android:background="@color/default_background"></LinearLayout>
     </LinearLayout>
 
     <LinearLayout

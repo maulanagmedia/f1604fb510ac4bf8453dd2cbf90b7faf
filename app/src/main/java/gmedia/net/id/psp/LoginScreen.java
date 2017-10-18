@@ -10,6 +10,7 @@ import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -40,6 +41,7 @@ public class LoginScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         setContentView(R.layout.activity_login_screen);
 
         //Check close statement
@@ -147,6 +149,7 @@ public class LoginScreen extends AppCompatActivity {
         final ProgressDialog progressDialog = new ProgressDialog(LoginScreen.this, R.style.AppTheme_Login_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         JSONObject jBody = new JSONObject();
@@ -176,10 +179,10 @@ public class LoginScreen extends AppCompatActivity {
                         String area = response.getJSONObject("response").getString("kodearea");
                         String flag = response.getJSONObject("response").getString("flag");
                         session.createLoginSession(nikGa,nik, nama ,edtUsername.getText().toString(),edtPassword.getText().toString(), (cbRemeber.isChecked())? "1": "0","","","",area, flag);
-                        Intent intent = new Intent(LoginScreen.this, MainActivity.class);
+                        Toast.makeText(LoginScreen.this, message, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginScreen.this, MainNavigationActivity.class);
                         startActivity(intent);
                         progressDialog.dismiss();
-                        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
                         finish();
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     }

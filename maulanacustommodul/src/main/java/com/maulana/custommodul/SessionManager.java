@@ -22,7 +22,7 @@ public class SessionManager {
 	int PRIVATE_MODE = 0;
 	
 	// Sharedpref file name
-	private static final String PREF_NAME = "GmediaUser" + R.string.app_name;
+	private static final String PREF_NAME = "GmediaUserPSP";
 	
 	// All Shared Preferences Keys
 	private static final String IS_LOGIN = "IsLoggedIn";
@@ -52,7 +52,7 @@ public class SessionManager {
 
 		editor.putBoolean(IS_LOGIN, true);
 		
-		editor.putString(TAG_UID, uid);
+		editor.putString(TAG_UID, uid); // nik GA
 		
 		editor.putString(TAG_NIK, nik);
 
@@ -115,6 +115,14 @@ public class SessionManager {
 
 	public String getUser(){
 		return pref.getString(TAG_NAMA, null);
+	}
+
+	public String getUsername(){
+		return pref.getString(TAG_USERNAME, null);
+	}
+
+	public String getPassword(){
+		return pref.getString(TAG_PASSWORD, null);
 	}
 
 	public String getLevel(){

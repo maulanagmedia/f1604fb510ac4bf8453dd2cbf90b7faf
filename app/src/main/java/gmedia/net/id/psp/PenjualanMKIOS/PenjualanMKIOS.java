@@ -34,7 +34,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import gmedia.net.id.psp.MainActivity;
+import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.OrderPulsa.DetailOrderPulsa;
 import gmedia.net.id.psp.OrderPulsa.ListReseller;
 import gmedia.net.id.psp.PenjualanMKIOS.Adapter.ListPenjualanMKIOSAdapter;
@@ -316,7 +316,7 @@ public class PenjualanMKIOS extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        Intent intent = new Intent(PenjualanMKIOS.this, MainActivity.class);
+        Intent intent = new Intent(PenjualanMKIOS.this, MainNavigationActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();

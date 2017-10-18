@@ -7,10 +7,24 @@
     android:background="@drawable/ic_background"
     tools:context="gmedia.net.id.psp.LoginScreen">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:id="@+id/tv_footer"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:textSize="@dimen/subtitle_text_list"
+        android:textColor="@color/color_white"
+        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_above="@id/tv_footer"
+        android:id="@+id/ll_main"
         android:layout_marginLeft="@dimen/default_margin"
         android:layout_marginRight="@dimen/default_margin"
         android:gravity="center"
@@ -23,7 +37,6 @@
             android:orientation="vertical"
             android:gravity="center"
             android:padding="@dimen/default_margin"
-            android:background="@drawable/login_container"
             android:weightSum="1">
 
             <LinearLayout
@@ -51,9 +64,10 @@
                     android:id="@+id/edt_username"
                     android:inputType="textPersonName"
                     android:hint="Username"
-                    android:textColorHint="@color/color_hint"
-                    android:background="@drawable/input_form"
-                    android:drawableLeft="@mipmap/ic_user"/>
+                    android:textColorHint="@color/color_white"
+                    android:textColor="@color/color_white"
+                    android:backgroundTint="@color/color_white"
+                    android:drawableLeft="@mipmap/ic_username"/>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -62,10 +76,11 @@
                     android:id="@+id/edt_password"
                     android:inputType="textPassword"
                     android:hint="Password"
-                    android:textColorHint="@color/color_hint"
-                    android:background="@drawable/input_form"
-                    android:drawableLeft="@mipmap/ic_pass"
-                    android:drawableRight="@mipmap/ic_visible"/>
+                    android:textColor="@color/color_white"
+                    android:textColorHint="@color/color_white"
+                    android:backgroundTint="@color/color_white"
+                    android:drawableLeft="@mipmap/ic_password"
+                    android:drawableRight="@mipmap/ic_hide"/>
 
                 <CheckBox
                     android:layout_width="match_parent"
@@ -89,8 +104,12 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/btn_login"
-                    android:text="               Login               "
+                    android:background="@drawable/btn_login_2"
+                    android:paddingLeft="@dimen/default_margin"
+                    android:paddingRight="@dimen/default_margin"
+                    android:text="    Login    "
+                    android:textSize="20sp"
+                    android:textAllCaps="false"
                     android:id="@+id/btn_login"
                     android:textColor="@color/color_white"/>
             </LinearLayout>

@@ -5,6 +5,7 @@
         <shape android:shape="rectangle">
             <solid android:color="@color/color_btn2"></solid>
             <corners android:radius="@dimen/default_corner"></corners>
+            <corners android:radius="20dp"></corners>
         </shape>
     </item>
     <item android:state_enabled="true"
@@ -12,6 +13,7 @@
         <shape android:shape="rectangle">
             <solid android:color="@color/color_btn2"></solid>
             <corners android:radius="@dimen/default_corner"></corners>
+            <corners android:radius="20dp"></corners>
         </shape>
     </item>
     <item android:state_enabled="true"
@@ -19,12 +21,14 @@
         <shape android:shape="rectangle">
             <solid android:color="@color/color_btn2"></solid>
             <corners android:radius="@dimen/default_corner"></corners>
+            <corners android:radius="20dp"></corners>
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
             <solid android:color="@color/color_btn1"></solid>
             <corners android:radius="@dimen/default_corner"></corners>
+            <corners android:radius="20dp"></corners>
         </shape>
     </item>
 </selector>

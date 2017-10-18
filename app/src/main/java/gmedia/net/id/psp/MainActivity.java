@@ -162,6 +162,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }, timerClose);
     }
-
-
 }

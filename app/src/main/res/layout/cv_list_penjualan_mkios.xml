@@ -2,155 +2,169 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/default_margin_tiny"
     android:background="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/default_background"
-        android:weightSum="1">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="0.85"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_item1"
-                style="@style/titleList"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_item2"
-                style="@style/subtitleList"/>
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_weight="0.15"
-            android:layout_height="match_parent"
-            android:src="@mipmap/ic_next"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
+        android:orientation="vertical"
+        android:layout_margin="@dimen/default_margin_small">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:background="@drawable/bg_input_up"
+            android:weightSum="1">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/default_background2"
-                android:text="Voucher"
-                android:textSize="@dimen/subtitle_text_list"
-                android:padding="@dimen/default_margin_tiny"/>
+                android:orientation="vertical">
 
-            <TextView
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_item1"
+                    style="@style/titleList"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_item2"
+                    style="@style/subtitleList"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/default_margin_tiny"
+            android:background="@drawable/bg_input_down">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/value_text_list"
-                android:id="@+id/tv_item3"
-                android:textStyle="bold"
-                android:padding="@dimen/default_margin_tiny"/>
+                android:orientation="horizontal"
+                android:weightSum="1">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Voucher"
+                        android:gravity="center"
+                        android:textColor="@color/color_black"
+                        android:textSize="@dimen/subtitle_text_list"
+                        android:padding="@dimen/default_margin_tiny"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/value_text_list"
+                        android:id="@+id/tv_item3"
+                        android:gravity="center"
+                        android:textColor="@color/default_background"
+                        android:textStyle="bold"
+                        android:padding="@dimen/default_margin_tiny"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.25"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Status"
+                        android:gravity="center"
+                        android:textColor="@color/color_black"
+                        android:textSize="@dimen/subtitle_text_list"
+                        android:padding="@dimen/default_margin_tiny"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_item4"
+                        android:gravity="center"
+                        android:textColor="@color/default_background"
+                        android:textSize="@dimen/value_text_list"
+                        android:textStyle="bold"
+                        android:padding="@dimen/default_margin_tiny"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.35"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tanggal"
+                        android:gravity="center"
+                        android:textColor="@color/color_black"
+                        android:textSize="@dimen/subtitle_text_list"
+                        android:padding="@dimen/default_margin_tiny"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_item5"
+                        android:gravity="center"
+                        android:textColor="@color/default_background"
+                        android:textSize="@dimen/value_text_list"
+                        android:textStyle="bold"
+                        android:padding="@dimen/default_margin_tiny"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.4"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Total"
+                        android:gravity="center"
+                        android:textColor="@color/color_black"
+                        android:textSize="@dimen/subtitle_text_list"
+                        android:padding="@dimen/default_margin_tiny"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/value_text_list"
+                        android:id="@+id/tv_item6"
+                        android:textColor="@color/default_background"
+                        android:gravity="right"
+                        android:textStyle="bold"
+                        android:padding="@dimen/default_margin_tiny"/>
+
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="0.25"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/default_background2"
-                android:text="Status"
-                android:textSize="@dimen/subtitle_text_list"
-                android:padding="@dimen/default_margin_tiny"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_item4"
-                android:textSize="@dimen/value_text_list"
-                android:textStyle="bold"
-                android:padding="@dimen/default_margin_tiny"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="0.35"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/default_background2"
-                android:text="Tanggal"
-                android:textSize="@dimen/subtitle_text_list"
-                android:padding="@dimen/default_margin_tiny"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_item5"
-                android:textSize="@dimen/value_text_list"
-                android:textStyle="bold"
-                android:padding="@dimen/default_margin_tiny"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="0.4"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/default_background2"
-                android:text="Total"
-                android:textSize="@dimen/subtitle_text_list"
-                android:padding="@dimen/default_margin_tiny"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/value_text_list"
-                android:id="@+id/tv_item6"
-                android:gravity="right"
-                android:textStyle="bold"
-                android:padding="@dimen/default_margin_tiny"/>
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/default_margin_small"
-        android:background="@color/default_background"></LinearLayout>
 
 </LinearLayout>

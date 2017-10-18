@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_background"
     tools:context="gmedia.net.id.psp.OrderPerdana.DetailOrderPerdana">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbarSize="3dp"
-        android:background="@drawable/login_container">
+        android:scrollbarSize="3dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +25,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="No Bukti"
-                    style="@style/formControlLabel"/>
+                    style="@style/formControlLabel2"/>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -46,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Nama Barang"
-                    style="@style/formControlLabel"/>
+                    style="@style/formControlLabel2"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -74,7 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Harga"
-                    style="@style/formControlLabel"/>
+                    style="@style/formControlLabel2"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -104,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Surat Jalan"
-                    style="@style/formControlLabel"/>
+                    style="@style/formControlLabel2"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -140,7 +138,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Pilih metode input CCID"
-                    style="@style/formControlLabel"/>
+                    style="@style/formControlLabel2"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -154,6 +152,7 @@
                         android:layout_weight="0.5"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/default_margin_tiny"
+                        android:layout_marginBottom="@dimen/default_margin_small"
                         android:text="Ambil dari list"
                         android:id="@+id/btn_ambil_ccid_list"
                         android:textColor="@color/color_white"
@@ -164,6 +163,7 @@
                         android:layout_weight="0.5"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/default_margin_tiny"
+                        android:layout_marginBottom="@dimen/default_margin_small"
                         android:text="Scan CCID"
                         android:id="@+id/btn_scan_ccid"
                         android:textColor="@color/color_white"
@@ -174,7 +174,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="@dimen/default_margin_small"
                     android:weightSum="1">
 
                     <Button
@@ -182,6 +181,7 @@
                         android:layout_height="wrap_content"
                         android:text="Tentukan Rentang CCID"
                         android:id="@+id/btn_rentang_ccid"
+                        android:layout_marginBottom="@dimen/default_margin_small"
                         android:textColor="@color/color_white"
                         android:background="@drawable/btn_login"/>
 
@@ -204,7 +204,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="CCID Perdana"
-                        style="@style/formControlLabel"/>
+                        style="@style/formControlLabel2"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -240,7 +240,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Nama Barang Per CCID"
-                        style="@style/formControlLabel"/>
+                        style="@style/formControlLabel2"/>
 
                     <EditText
                         android:layout_width="match_parent"
@@ -272,7 +272,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Harga Per CCID"
-                                style="@style/formControlLabel"
+                                style="@style/formControlLabel2"
                                 />
 
                             <EditText
@@ -298,7 +298,7 @@
 
                             <Button
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:text="Ubah"
                                 android:id="@+id/btn_ubah_harga"
                                 android:textColor="@color/color_white"
@@ -313,24 +313,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/login_container"
+                android:background="@drawable/bg_item"
                 android:paddingLeft="@dimen/default_margin_small"
                 android:paddingRight="@dimen/default_margin_small"
                 android:paddingBottom="@dimen/default_margin_small"
                 style="@style/formGroup">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_margin_small"
-                    android:text="Perdana"
-                    style="@style/formControlLabel"/>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/default_margin_tiny"
+                    android:layout_marginTop="@dimen/default_margin_small"
                     android:weightSum="1">
 
                     <LinearLayout
@@ -428,7 +421,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/default_margin"
                 style="@style/formGroup">
 
                 <LinearLayout
@@ -443,6 +435,8 @@
                         android:layout_weight="0.4"
                         android:layout_height="wrap_content"
                         android:text="Proses"
+                        android:layout_marginTop="@dimen/default_margin_small"
+                        android:layout_marginBottom="@dimen/default_margin"
                         android:id="@+id/btn_proses"
                         android:textColor="@color/color_white"
                         android:background="@drawable/btn_login"/>

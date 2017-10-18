@@ -25,4 +25,7 @@ public class ServerURL {
     public static final String getSemuaPenjualan = baseURL + "api/penjualan/get_penjualan/";
     public static final String getPiutang = baseURL + "api/piutang/get_piutang/";
     public static final String getStok = baseURL + "api/stok/get_stok/";
+    public static final String getBanner = "http://49.128.182.219/semargresapi/" + "Info/get_info/";
+    public static final String getUserInfo = baseURL + "api/profile/get_user_info/";
+    public static final String getPromosi = baseURL + "api/promosi/get_promosi/";
 }

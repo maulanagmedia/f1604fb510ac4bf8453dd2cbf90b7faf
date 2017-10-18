@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ll_header"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/default_background">
 
         <AutoCompleteTextView
             android:layout_width="match_parent"
@@ -19,11 +20,6 @@
             style="@style/CustomAutoComplete"
             android:hint="Nama Pelanggan"
             android:id="@+id/actv_pelanggan"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/default_margin_small"
-            android:background="@color/default_background"></LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -54,6 +50,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="30dp"
         android:layout_marginBottom="30dp"
+        app:backgroundTint="@color/color_login_2"
         android:id="@+id/btn_add"/>
 
 </RelativeLayout>

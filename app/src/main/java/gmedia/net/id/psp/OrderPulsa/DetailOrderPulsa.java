@@ -10,8 +10,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,12 +52,16 @@ public class DetailOrderPulsa extends AppCompatActivity {
     private TextView tvHargaS5, tvHargaS10, tvHargaS20, tvHargaS25, tvHargaS50, tvHargaS100;
     private final String TAG = "DetailOrderPulsa";
     private boolean editMode = false;
+    private HorizontalScrollView hsvPulsa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_order_pulsa);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
         setTitle("Order Pulsa");
 
         initUI();
@@ -63,6 +69,7 @@ public class DetailOrderPulsa extends AppCompatActivity {
 
     private void initUI() {
 
+        hsvPulsa = (HorizontalScrollView) findViewById(R.id.hsv_pulsa);
         edtNonota = (EditText) findViewById(R.id.edt_nonota);
         edtNamaRS = (EditText) findViewById(R.id.edt_nama_reseller);
         edtS5 = (EditText) findViewById(R.id.edt_s5);

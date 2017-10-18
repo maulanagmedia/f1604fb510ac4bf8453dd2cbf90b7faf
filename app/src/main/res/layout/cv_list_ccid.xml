@@ -7,6 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="@dimen/default_margin_tiny"
+        android:layout_marginBottom="@dimen/default_margin_tiny"
         android:weightSum="1">
 
         <LinearLayout

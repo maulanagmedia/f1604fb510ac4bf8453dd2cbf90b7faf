@@ -1,7 +1,9 @@
 package gmedia.net.id.psp.OrderPerdana;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.support.annotation.IdRes;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -58,6 +61,9 @@ public class ListBarang extends AppCompatActivity {
     private boolean tunaiMode = true;
     private EditText edtNoBa;
     private String notelpCus = "";
+    private View bottomView;
+    private BottomSheetBehavior mBottomSheetBehavior2;
+    private View llHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +90,39 @@ public class ListBarang extends AppCompatActivity {
         actvBarang = (AutoCompleteTextView) findViewById(R.id.actv_barang);
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
 
+        //Bottom view
+        llHeader= findViewById(R.id.ll_header);
+        bottomView = findViewById(R.id.ns_barang);
+        mBottomSheetBehavior2 = BottomSheetBehavior.from(bottomView);
+        mBottomSheetBehavior2.setHideable(false);
+        int[] display = iv.getScreenResolution(ListBarang.this);
+        final TypedArray styledAttributes = getTheme().obtainStyledAttributes(
+                new int[] { android.R.attr.actionBarSize });
+        int mActionBarSize = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+        mBottomSheetBehavior2.setPeekHeight(display[1]/5 - mActionBarSize);
+        mBottomSheetBehavior2.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) lvBarang.getLayoutParams();
+        params.height = display[1] - (3 * mActionBarSize);
+        lvBarang.setLayoutParams(params);
+
+        actvBarang.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    mBottomSheetBehavior2.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+            }
+        });
+
+        actvBarang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBottomSheetBehavior2.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
+
         session = new SessionManager(ListBarang.this);
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
@@ -101,11 +140,11 @@ public class ListBarang extends AppCompatActivity {
 
                 if(i == R.id.rb_tunai){
                     edtTempo.setEnabled(false);
-                    edtTempo.setBackground(getResources().getDrawable(R.drawable.input_bg_disable));
+                    edtTempo.setBackground(getResources().getDrawable(R.drawable.bg_input_disable));
                     edtTempo.setText("1");
                     tunaiMode = true;
                 }else{
-                    edtTempo.setBackground(getResources().getDrawable(R.drawable.input_bg));
+                    edtTempo.setBackground(getResources().getDrawable(R.drawable.bg_input));
                     edtTempo.setEnabled(true);
                     edtTempo.setText("");
                     tunaiMode = false;
@@ -282,7 +321,11 @@ public class ListBarang extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+        if(mBottomSheetBehavior2 != null && mBottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_EXPANDED){
+            mBottomSheetBehavior2.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }else{
+            super.onBackPressed();
+            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+        }
     }
 }

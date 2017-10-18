@@ -15,14 +15,29 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="Theme.AppCompat.Light.NoActionBar.WithTitleBar" parent="@style/Theme.AppCompat.Light">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
     <style name="formControlLabel">
-        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textColor">@color/color_black</item>
         <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="formControlLabel2">
+        <item name="android:textColor">@color/color_black</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="formControlInput">
-        <item name="android:background">@drawable/input_bg</item>
+        <item name="android:background">@drawable/bg_input</item>
         <item name="android:singleLine">true</item>
         <item name="android:scrollHorizontally">true</item>
         <item name="android:ellipsize">none</item>
@@ -31,7 +46,7 @@
     </style>
 
     <style name="formControlTextarea">
-        <item name="android:background">@drawable/input_bg</item>
+        <item name="android:background">@drawable/bg_input</item>
         <item name="android:singleLine">false</item>
         <item name="android:scrollHorizontally">false</item>
         <item name="android:ellipsize">none</item>
@@ -44,7 +59,15 @@
     <style name="formControlInput.disable" parent="formControlInput">
         <item name="android:inputType">none</item>
         <item name="android:editable">false</item>
-        <item name="android:background">@drawable/input_bg_disable</item>
+        <item name="android:background">@drawable/bg_input_disable</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="formControlTextarea.disable" parent="formControlTextarea">
+        <item name="android:inputType">none</item>
+        <item name="android:editable">false</item>
+        <item name="android:background">@drawable/bg_input_disable</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="formControlDropdown">
@@ -89,26 +112,52 @@
     </style>
 
     <style name="titleList">
-        <item name="android:gravity">center_vertical</item>
+        <item name="android:gravity">center</item>
         <item name="android:padding">@dimen/default_margin_tiny</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/title_text_list</item>
         <item name="android:textColor">@color/color_white</item>
     </style>
 
-    <style name="subtitleList">
+    <style name="titleList2">
         <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">@dimen/default_margin_tiny</item>
+        <item name="android:textSize">@dimen/title_text_list</item>
+        <item name="android:textColor">@color/default_background</item>
+    </style>
+
+    <style name="subtitleList">
+        <item name="android:gravity">center</item>
         <item name="android:padding">@dimen/default_margin_tiny</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/subtitle_text_list</item>
         <item name="android:textColor">@color/color_white</item>
     </style>
 
+    <style name="subtitleList2">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">@dimen/default_margin_tiny</item>
+        <item name="android:textSize">@dimen/subtitle_text_list</item>
+        <item name="android:textColor">@color/color_black</item>
+    </style>
+
     <style name="CustomAutoComplete">
         <item name="android:imeOptions">actionSearch</item> <!--Search icon on soft keyboard-->
         <item name="android:singleLine">true</item>
-        <item name="android:background">@color/default_background2</item>
+        <item name="android:background">@drawable/bg_search_view</item>
         <item name="android:drawableLeft">@mipmap/ic_search</item>
+        <item name="android:layout_marginLeft">@dimen/default_margin</item>
+        <item name="android:layout_marginRight">@dimen/default_margin</item>
+        <item name="android:layout_marginTop">@dimen/default_margin_small</item>
+        <item name="android:layout_marginBottom">@dimen/default_margin</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

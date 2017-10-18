@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_akun"
+            android:icon="@drawable/ic_akun_anda"
+            android:title="Akun Anda" />
+        <item
+            android:id="@+id/nav_order_mkios"
+            android:icon="@drawable/nav_order_mkios"
+            android:title="Order Mkios" />
+        <item
+            android:id="@+id/nav_penjualan_mkios"
+            android:icon="@drawable/nav_penjualan_mkios"
+            android:title="Penjualan Mkios" />
+        <item
+            android:id="@+id/nav_order_perdana"
+            android:icon="@drawable/nav_order_perdana"
+            android:title="Order Perdana" />
+        <item
+            android:id="@+id/nav_penjualan_perdana"
+            android:icon="@drawable/nav_penjualan_perdana"
+            android:title="Penjualan Perdana" />
+        <item
+            android:id="@+id/nav_data_piutang"
+            android:icon="@drawable/nav_data_piutang"
+            android:title="Data Piutang" />
+        <item
+            android:id="@+id/nav_stok_sales"
+            android:icon="@drawable/nav_stock_sales"
+            android:title="Stok Sales" />
+        <item
+            android:id="@+id/nav_keluar"
+            android:icon="@drawable/ic_keluar"
+            android:title="Keluar" />
+    </group>
+</menu>

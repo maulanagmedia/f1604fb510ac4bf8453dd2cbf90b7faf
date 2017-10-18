@@ -11,4 +11,8 @@
     <dimen name="subtitle_text_list">13sp</dimen>
     <dimen name="value_text_list">15sp</dimen>
     <dimen name="default_line">0.75dp</dimen>
+
+    <dimen name="font_menu">12sp</dimen>
+    <dimen name="radius">3dp</dimen>
+    <dimen name="item_pulsa">340dp</dimen>
 </resources>
