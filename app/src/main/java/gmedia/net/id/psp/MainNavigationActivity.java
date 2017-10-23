@@ -1,10 +1,13 @@
 package gmedia.net.id.psp;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.maulana.custommodul.RuntimePermissionsActivity;
 import com.maulana.custommodul.SessionManager;
 
 import gmedia.net.id.psp.DaftarPiutang.DaftarPiutang;
@@ -25,13 +29,14 @@ import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
 import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
 import gmedia.net.id.psp.StokSales.StokSales;
 
-public class MainNavigationActivity extends AppCompatActivity
+public class MainNavigationActivity extends RuntimePermissionsActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static boolean doubleBackToExitPressedOnce;
     private boolean exitState = false;
     private int timerClose = 2000;
     private SessionManager session;
+    private static final int REQUEST_PERMISSIONS = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,19 @@ public class MainNavigationActivity extends AppCompatActivity
         setContentView(R.layout.activity_main_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (ContextCompat.checkSelfPermission(
+                MainNavigationActivity.this, Manifest.permission.WRITE_SETTINGS) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                MainNavigationActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                MainNavigationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                MainNavigationActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                MainNavigationActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
+
+            MainNavigationActivity.super.requestAppPermissions(new
+                            String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_SETTINGS, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, R.string
+                            .runtime_permissions_txt
+                    , REQUEST_PERMISSIONS);
+        }
 
         //Check close statement
         doubleBackToExitPressedOnce = false;
@@ -69,6 +87,11 @@ public class MainNavigationActivity extends AppCompatActivity
             fragment = new NavHome();
             callFragment(fragment);
         }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode) {
+
     }
 
     @Override

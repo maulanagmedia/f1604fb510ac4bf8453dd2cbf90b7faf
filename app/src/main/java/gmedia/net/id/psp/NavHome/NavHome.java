@@ -216,6 +216,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         tvNamaSales.setText(session.getUser());
 
         getListHeaderSlider();
+        getUserOmset();
     }
 
     //region Slider Header
@@ -250,6 +251,45 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
 
                     setHeaderSlider();
                     setUiPageViewController();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+
+            }
+        });
+    }
+
+    private void getUserOmset() {
+
+        JSONObject jBody = new JSONObject();
+        try {
+            jBody.put("nik", session.getUserInfo(SessionManager.TAG_UID));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getUserOmset, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                JSONObject responseAPI;
+                try {
+
+                    responseAPI = new JSONObject(result);
+                    String status = responseAPI.getJSONObject("metadata").getString("status");
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONObject item = responseAPI.getJSONObject("response");
+                        tvOmsetMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_mkios"))));
+                        tvOmsetPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_perdana"))));
+                        tvTotalOmset.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_mkios")) + iv.parseNullDouble(item.getString("omset_perdana"))));
+
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();

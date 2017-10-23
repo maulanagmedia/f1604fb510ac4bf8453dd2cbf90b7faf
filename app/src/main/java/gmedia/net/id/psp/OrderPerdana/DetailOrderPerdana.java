@@ -1,9 +1,17 @@
 package gmedia.net.id.psp.OrderPerdana;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -51,7 +59,7 @@ import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ServerURL;
 
-public class DetailOrderPerdana extends AppCompatActivity {
+public class DetailOrderPerdana extends AppCompatActivity implements LocationListener{
 
     private EditText edtSuratJalan, edtCCID, edtNamaBarangScan, edtHargaScan;
     private ImageView ivSuratJalan, ivAddCCID;
@@ -82,6 +90,20 @@ public class DetailOrderPerdana extends AppCompatActivity {
     private boolean editMode = false;
     private List<CustomItem> listCCIDLama;
     private Button btnRentangCCID;
+
+    // Location
+    private double latitude, longitude;
+    private LocationManager locationManager;
+    private Criteria criteria;
+    private String provider;
+    private Location location;
+    private final int REQUEST_PERMISSION_COARSE_LOCATION=2;
+    private final int REQUEST_PERMISSION_FINE_LOCATION=3;
+    public boolean isGPSEnabled = false;
+    boolean isNetworkEnabled = false;
+    boolean canGetLocation = false;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
+    private static final long MIN_TIME_BW_UPDATES = 1; // 1 minute
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,9 +184,141 @@ public class DetailOrderPerdana extends AppCompatActivity {
                 getNobukti();
             }
 
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            setCriteria();
+            latitude = 0;
+            longitude = 0;
+            location = new Location("set");
+            location.setLatitude(latitude);
+            location.setLongitude(longitude);
+            location = getLocation();
+
             getMasterCCID();
             initEvent();
         }
+    }
+
+    public Location getLocation() {
+        try {
+
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+            // getting GPS status
+            isGPSEnabled = locationManager
+                    .isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+            Log.v("isGPSEnabled", "=" + isGPSEnabled);
+
+            // getting network status
+            isNetworkEnabled = locationManager
+                    .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+            Log.v("isNetworkEnabled", "=" + isNetworkEnabled);
+
+            if (isGPSEnabled == false && isNetworkEnabled == false) {
+                // no network provider is enabled
+                Toast.makeText(DetailOrderPerdana.this, "Cannot identify the location.\nPlease turn on GPS or turn on your data.",
+                        Toast.LENGTH_LONG).show();
+
+            } else {
+                this.canGetLocation = true;
+                if (isNetworkEnabled) {
+                    location = null;
+
+                    // Granted the permission first
+                    if (ActivityCompat.checkSelfPermission(DetailOrderPerdana.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(DetailOrderPerdana.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(DetailOrderPerdana.this,
+                                Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                            showExplanation("Permission Needed", "Rationale", Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_PERMISSION_COARSE_LOCATION);
+                        } else {
+                            requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_PERMISSION_COARSE_LOCATION);
+                        }
+
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(DetailOrderPerdana.this,
+                                Manifest.permission.ACCESS_FINE_LOCATION)) {
+                            showExplanation("Permission Needed", "Rationale", Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_PERMISSION_FINE_LOCATION);
+                        } else {
+                            requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_PERMISSION_FINE_LOCATION);
+                        }
+                        return null;
+                    }
+
+                    locationManager.requestLocationUpdates(
+                            LocationManager.NETWORK_PROVIDER,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    Log.d("Network", "Network");
+
+                    if (locationManager != null) {
+                        location = locationManager
+                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        if (location != null) {
+                            onLocationChanged(location);
+                        }
+                    }
+                }
+
+                // if GPS Enabled get lat/long using GPS Services
+                if (isGPSEnabled) {
+                    location=null;
+                    if (location == null) {
+                        locationManager.requestLocationUpdates(
+                                LocationManager.GPS_PROVIDER,
+                                MIN_TIME_BW_UPDATES,
+                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                        Log.d("GPS Enabled", "GPS Enabled");
+
+                        if (locationManager != null) {
+                            location = locationManager
+                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            if (location != null) {
+                                onLocationChanged(location);
+                            }
+                        }
+                    }
+                }else{
+                    //Toast.makeText(context, "Turn on your GPS for better accuracy", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(location != null){
+            onLocationChanged(location);
+        }
+        return location;
+    }
+
+    public void setCriteria() {
+        criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setCostAllowed(true);
+        criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
+        provider = locationManager.getBestProvider(criteria, true);
+    }
+
+    private void showExplanation(String title,
+                                 String message,
+                                 final String permission,
+                                 final int permissionRequestCode) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(DetailOrderPerdana.this);
+        builder.setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        requestPermission(permission, permissionRequestCode);
+                    }
+                });
+        builder.create().show();
+    }
+
+    private void requestPermission(String permissionName, int permissionRequestCode) {
+        ActivityCompat.requestPermissions(DetailOrderPerdana.this,
+                new String[]{permissionName}, permissionRequestCode);
     }
 
     private void getNobukti() {
@@ -507,6 +661,7 @@ public class DetailOrderPerdana extends AppCompatActivity {
             jualH.put("crbayar", crBayar);
             jualH.put("kode_lokasi", session.getUserInfo(SessionManager.TAG_AREA));
             jualH.put("no_ba", noBa);
+            jualH.put("cluster", "");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -541,6 +696,8 @@ public class DetailOrderPerdana extends AppCompatActivity {
             }
             jBody.put("jual_d", jualD);
             jBody.put("jual_h", jualH);
+            jBody.put("latitude", iv.doubleToStringFull(location.getLatitude()));
+            jBody.put("longitude", iv.doubleToStringFull(location.getLongitude()));
             jBody.put("post_piutang", postPiutang);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -555,6 +712,7 @@ public class DetailOrderPerdana extends AppCompatActivity {
 
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
+                    String superMessage = response.getJSONObject("metadata").getString("message");
 
                     if(iv.parseNullInteger(status) == 200){
 
@@ -567,6 +725,8 @@ public class DetailOrderPerdana extends AppCompatActivity {
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish();
+                    }else{
+                        Toast.makeText(DetailOrderPerdana.this, superMessage, Toast.LENGTH_LONG).show();
                     }
 
                     isLoading(false);
@@ -1185,5 +1345,27 @@ public class DetailOrderPerdana extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        this.location = location;
+        this.latitude = location.getLatitude();
+        this.longitude = location.getLongitude();
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
     }
 }
