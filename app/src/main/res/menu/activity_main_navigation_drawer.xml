@@ -11,6 +11,18 @@
             android:icon="@drawable/ic_akun_anda"
             android:title="Akun Anda" />
         <item
+            android:id="@+id/nav_add_customer"
+            android:icon="@mipmap/ic_add_person"
+            android:title="Tambah Customer" />
+        <item
+            android:id="@+id/nav_checkin"
+            android:icon="@mipmap/ic_globe"
+            android:title="Check In" />
+        <item
+            android:id="@+id/nav_Complain"
+            android:icon="@mipmap/ic_complain"
+            android:title="Komplain" />
+        <item
             android:id="@+id/nav_order_mkios"
             android:icon="@drawable/nav_order_mkios"
             android:title="Order Mkios" />

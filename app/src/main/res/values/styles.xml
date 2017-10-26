@@ -36,6 +36,13 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="formControlLabel3">
+        <item name="android:textColor">@color/color_black</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">left</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="formControlInput">
         <item name="android:background">@drawable/bg_input</item>
         <item name="android:singleLine">true</item>

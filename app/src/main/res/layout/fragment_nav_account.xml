@@ -23,7 +23,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Nama"
-                    style="@style/formControlLabel2"/>
+                    style="@style/formControlLabel3"/>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="NIK GA"
-                    style="@style/formControlLabel2"/>
+                    style="@style/formControlLabel3"/>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -62,7 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="NIK MKIOS"
-                    style="@style/formControlLabel2"/>
+                    style="@style/formControlLabel3"/>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Alamat"
-                    style="@style/formControlLabel2"/>
+                    style="@style/formControlLabel3"/>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -102,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="No Telepon"
-                    style="@style/formControlLabel2"/>
+                    style="@style/formControlLabel3"/>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -121,7 +121,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Jabatan"
-                    style="@style/formControlLabel2"/>
+                    style="@style/formControlLabel3"/>
 
                 <EditText
                     android:layout_width="match_parent"

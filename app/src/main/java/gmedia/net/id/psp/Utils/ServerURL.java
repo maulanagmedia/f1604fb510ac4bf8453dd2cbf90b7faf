@@ -8,7 +8,7 @@ public class ServerURL {
 
     //private static final String baseURL = "http://192.168.12.203/psp/";
     //private static final String baseURL = "http://api.putmasaripratama.co.id/";
-    private static final String baseURL = "http://192.168.12.181/psp/";
+    private static final String baseURL = "http://192.168.12.180/psp/";
 
     public static final String login = baseURL + "api/auth/login/";
     public static final String getReseller = baseURL + "api/mkios/get_reseller/";

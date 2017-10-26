@@ -28,6 +28,7 @@ import gmedia.net.id.psp.OrderPulsa.ListReseller;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
 import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
 import gmedia.net.id.psp.StokSales.StokSales;
+import gmedia.net.id.psp.TambahCustomer.DetailCustomer;
 
 public class MainNavigationActivity extends RuntimePermissionsActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -135,7 +136,11 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         } else if (id == R.id.nav_akun) {
             fragment = new NavAccount();
             callFragment(fragment);
-        } else if (id == R.id.nav_order_mkios) {
+        } else if (id == R.id.nav_add_customer) {
+
+            Intent intent = new Intent(MainNavigationActivity.this, DetailCustomer.class);
+            startActivity(intent);
+        }else if (id == R.id.nav_order_mkios) {
 
             Intent intent = new Intent(MainNavigationActivity.this, ListReseller.class);
             startActivity(intent);
