@@ -1,10 +1,13 @@
 package gmedia.net.id.psp.TambahCustomer;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -12,17 +15,27 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,14 +47,32 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.maulana.custommodul.ApiVolley;
+import com.maulana.custommodul.ImageUtils;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.SessionManager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import gmedia.net.id.psp.CustomView.CustomMapView;
 import gmedia.net.id.psp.R;
+import gmedia.net.id.psp.TambahCustomer.Adapter.PhotosAdapter;
+import gmedia.net.id.psp.TambahCustomer.Model.AreaModel;
+import gmedia.net.id.psp.Utils.FormatItem;
+import gmedia.net.id.psp.Utils.ServerURL;
 
 public class DetailCustomer extends AppCompatActivity implements LocationListener{
 
@@ -72,6 +103,23 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
     private String address0 = "";
     private Button btnResetPosition;
     private boolean refreshMode = false;
+    private EditText edtNama, edtAlamat, edtKota, edtTelepon, edtNoHP, edtBank, edtRekening, edtCP, edtLatitude, edtLongitude, edtState;
+    private Spinner spArea;
+    private Button btnSimpan;
+    private List<AreaModel> listArea;
+    private SessionManager session;
+    private RecyclerView rvPhoto;
+    private ImageButton ibAddPhoto;
+
+    //Upload Handler
+    private static int RESULT_OK = -1;
+    private static int PICK_IMAGE_REQUEST = 1212;
+    private ImageUtils iu = new ImageUtils();
+    private Bitmap bitmap;
+    private List<Bitmap> photoList;
+    private PhotosAdapter adapter;
+    private ProgressDialog progressDialog;
+    private EditText edtEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +137,25 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         tvTitle = (TextView) findViewById(R.id.tv_title);
         btnResetPosition = (Button) findViewById(R.id.btn_reset);
+
+        edtNama = (EditText) findViewById(R.id.edt_nama);
+        edtAlamat = (EditText) findViewById(R.id.edt_alamat);
+        edtKota = (EditText) findViewById(R.id.edt_kota);
+        edtTelepon = (EditText) findViewById(R.id.edt_telepon);
+        edtNoHP = (EditText) findViewById(R.id.edt_nohp);
+        edtEmail = (EditText) findViewById(R.id.edt_email);
+        edtBank = (EditText) findViewById(R.id.edt_bank);
+        edtRekening = (EditText) findViewById(R.id.edt_rekening);
+        edtCP = (EditText) findViewById(R.id.edt_contant_person);
+        spArea = (Spinner) findViewById(R.id.sp_area);
+        edtLatitude = (EditText) findViewById(R.id.edt_latitude);
+        edtLongitude = (EditText) findViewById(R.id.edt_longitude);
+        edtState = (EditText) findViewById(R.id.edt_state);
+        rvPhoto = (RecyclerView) findViewById(R.id.rv_photo);
+        ibAddPhoto = (ImageButton) findViewById(R.id.ib_add_photo);
+        btnSimpan = (Button) findViewById(R.id.btn_simpan);
+
+        session = new SessionManager(DetailCustomer.this);
         mvMap = (CustomMapView) findViewById(R.id.mv_map);
         mvMap.onCreate(null);
         mvMap.onResume();
@@ -97,6 +164,19 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         } catch (Exception e) {
             e.printStackTrace();
         }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        photoList = new ArrayList<>();
+        LinearLayoutManager layoutManager= new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false);
+        adapter = new PhotosAdapter(DetailCustomer.this, photoList);
+        rvPhoto.setLayoutManager(layoutManager);
+        rvPhoto.setAdapter(adapter);
+
         tvToolbarTitle = (TextView) findViewById(R.id.tv_toolbar_title);
         title = "Tambah Customer";
         //tvTitle.setText(title);
@@ -104,6 +184,362 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
         initLocation();
 
+        getDataArea();
+
+        initEvent();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri filePath = data.getData();
+            /*File file = new File(String.valueOf(filePath));
+            long length = file.length();
+            length = length/1024; //in KB*/
+
+            InputStream imageStream = null;
+            try {
+                imageStream = getContentResolver().openInputStream(
+                        filePath);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            Bitmap bmp = BitmapFactory.decodeStream(imageStream);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.PNG, 70, stream);
+            byte[] byteArray = stream.toByteArray();
+            bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            bitmap = scaleDown(bitmap, 380, true);
+
+            try {
+                stream.close();
+                stream = null;
+            } catch (IOException e) {
+
+                e.printStackTrace();
+            }
+
+            if(bitmap != null){
+
+                photoList.add(bitmap);
+                adapter.notifyDataSetChanged();
+            }
+
+        }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+
+            try {
+
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(photoFromCameraURI));
+                bitmap = scaleDown(bitmap, 380, true);
+
+                if(bitmap != null){
+
+                    photoList.add(bitmap);
+                    adapter.notifyDataSetChanged();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
+                                   boolean filter) {
+        float ratio = Math.min(
+                (float) maxImageSize / realImage.getWidth(),
+                (float) maxImageSize / realImage.getHeight());
+        int width = Math.round((float) ratio * realImage.getWidth());
+        int height = Math.round((float) ratio * realImage.getHeight());
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                height, filter);
+        return newBitmap;
+    }
+
+    private void initEvent() {
+
+        btnSimpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                validateBeforeSave();
+            }
+        });
+
+        ibAddPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                loadChooserDialog();
+            }
+        });
+    }
+
+    private void loadChooserDialog(){
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(DetailCustomer.this);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.layout_chooser, null);
+        builder.setView(view);
+
+        final LinearLayout llBrowse= (LinearLayout) view.findViewById(R.id.ll_browse);
+        final LinearLayout llCamera = (LinearLayout) view.findViewById(R.id.ll_camera);
+
+        final AlertDialog alert = builder.create();
+
+        llBrowse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                showFileChooser();
+                alert.dismiss();
+            }
+        });
+
+        llCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                openCamera();
+                alert.dismiss();
+            }
+        });
+
+        alert.show();
+    }
+
+    //region File Chooser
+
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+
+    }
+
+    private final int REQUEST_IMAGE_CAPTURE = 1;
+    private String photoFromCameraURI;
+
+    private void openCamera(){
+
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Log.i(TAG, "IOException");
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  // prefix
+                ".jpg",         // suffix
+                storageDir      // directory
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        photoFromCameraURI = "file:" + image.getAbsolutePath();
+        return image;
+    }
+
+    private void validateBeforeSave() {
+
+        if(edtNama.getText().toString().length() == 0){
+
+            edtNama.setError("Nama harap diisi");
+            edtNama.requestFocus();
+            return;
+        }else{
+            edtNama.setError(null);
+        }
+
+        if(edtTelepon.getText().toString().length() == 0){
+
+            edtTelepon.setError("No Telepon harap diisi");
+            edtTelepon.requestFocus();
+            return;
+        }else{
+            edtTelepon.setError(null);
+        }
+
+        if(edtNoHP.getText().toString().length() == 0){
+
+            edtNoHP.setError("Nama harap diisi");
+            edtNoHP.requestFocus();
+            return;
+        }else{
+            edtNoHP.setError(null);
+        }
+
+        if(spArea.getCount() == 0){
+
+            Toast.makeText(DetailCustomer.this, "Tidak ada Area yang terpilih", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        saveData();
+    }
+
+    private void saveData() {
+
+        progressDialog = new ProgressDialog(DetailCustomer.this, R.style.AppTheme_Login_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Menyimpan...");
+        progressDialog.show();
+        btnSimpan.setEnabled(false);
+
+        JSONObject jDataCustomer = new JSONObject();
+
+        try {
+            jDataCustomer.put("nama", edtNama.getText().toString());
+            jDataCustomer.put("alamat", edtAlamat.getText().toString());
+            jDataCustomer.put("notelp", edtTelepon.getText().toString());
+            jDataCustomer.put("nohp", edtNoHP.getText().toString());
+            jDataCustomer.put("email", edtEmail.getText().toString());
+            jDataCustomer.put("bank", edtBank.getText().toString());
+            jDataCustomer.put("norekening", edtRekening.getText().toString());
+            jDataCustomer.put("status", "2");
+            jDataCustomer.put("contact_person", edtCP.getText().toString());
+
+            jDataCustomer.put("nik", session.getUserInfo(SessionManager.TAG_UID));
+            AreaModel area = (AreaModel) spArea.getSelectedItem();
+            jDataCustomer.put("kodearea", area.getValue());
+            jDataCustomer.put("tglmasuk", iv.getCurrentDate(FormatItem.formatDate));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject jDataLocation = new JSONObject();
+
+        try {
+            jDataLocation.put("kdcus", "");
+            jDataLocation.put("latitude", iv.doubleToStringFull(latitude));
+            jDataLocation.put("longitude", iv.doubleToStringFull(longitude));
+            jDataLocation.put("city", edtState.getText().toString());
+            jDataLocation.put("state", "");
+            jDataLocation.put("country", "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONArray jDataImages = new JSONArray();
+
+        for (Bitmap item : photoList){
+
+            JSONObject jo = new JSONObject();
+            try {
+                jo.put("image", ImageUtils.convert(item));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            jDataImages.put(jo);
+        }
+
+        JSONObject jBody = new JSONObject();
+        try {
+            jBody.put("data_customer", jDataCustomer);
+            jBody.put("data_location", jDataLocation);
+            jBody.put("data_images", jDataImages);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(DetailCustomer.this, jBody, "POST", ServerURL.saveCustomer, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        progressDialog.dismiss();
+                        String message = response.getJSONObject("response").getString("message");
+                        Toast.makeText(DetailCustomer.this, message, Toast.LENGTH_LONG).show();
+                        onBackPressed();
+                    }
+
+                } catch (JSONException e) {
+                    progressDialog.dismiss();
+                    Toast.makeText(DetailCustomer.this, "Terjadi kesalahan, mohon ulangi kembali", Toast.LENGTH_LONG).show();
+                }
+
+                btnSimpan.setEnabled(true);
+            }
+
+            @Override
+            public void onError(String result) {
+
+                progressDialog.dismiss();
+                Toast.makeText(DetailCustomer.this, "Terjadi kesalahan, mohon ulangi kembali", Toast.LENGTH_LONG).show();
+                btnSimpan.setEnabled(true);
+            }
+        });
+    }
+
+    private void getDataArea() {
+
+        ApiVolley request = new ApiVolley(DetailCustomer.this, new JSONObject(), "GET", ServerURL.getArea, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+                    listArea = new ArrayList<>();
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray items = response.getJSONArray("response");
+                        for(int i  = 0; i < items.length(); i++){
+
+                            JSONObject jo = items.getJSONObject(i);
+                            listArea.add(new AreaModel(jo.getString("kode_kota"), jo.getString("omo")));
+                        }
+
+                        setSPAreaEntry();
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+
+            }
+        });
+    }
+
+    private void setSPAreaEntry() {
+
+        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, listArea);
+        spArea.setAdapter(adapter);
     }
 
     private void initLocation() {
@@ -115,6 +551,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         location = new Location("set");
         location.setLatitude(latitude);
         location.setLongitude(longitude);
+
         refreshMode = true;
         location = getLocation();
 
@@ -323,6 +760,8 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(position).zoom(15).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+                updateKeterangan(position);
+
                 googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                     @Override
                     public void onMarkerDragStart(Marker marker) {
@@ -376,6 +815,10 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         if(addresses != null && addresses.size() > 0){
             address0 = addresses.get(0).getAddressLine(0);
         }
+
+        edtLatitude.setText(iv.doubleToStringFull(latitude));
+        edtLongitude.setText(iv.doubleToStringFull(longitude));
+        edtState.setText(address0);
     }
 
     @Override

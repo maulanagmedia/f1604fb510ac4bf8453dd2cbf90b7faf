@@ -93,6 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
+                app:navigationIcon="@mipmap/ic_back"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
 
                 <TextView
@@ -127,7 +128,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nama Outlet"
+                    android:text="Nama Outlet *"
                     style="@style/formControlLabel3"/>
 
                 <EditText
@@ -184,14 +185,15 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No Telepon"
-                    style="@style/formControlLabel3"/>
+                    android:text="No Telepon *"
+                    style="@style/formControlLabel3" />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/edt_telepon"
-                    style="@style/formControlInput"/>
+                    style="@style/formControlInput"
+                    android:inputType="phone"/>
 
             </LinearLayout>
 
@@ -203,14 +205,35 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No HP"
+                    android:text="No HP *"
                     style="@style/formControlLabel3"/>
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/edt_nohp"
-                    style="@style/formControlInput"/>
+                    style="@style/formControlInput"
+                    android:inputType="phone"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    style="@style/formControlLabel3"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edt_email"
+                    style="@style/formControlInput"
+                    android:inputType="textEmailAddress"/>
 
             </LinearLayout>
 
@@ -279,14 +302,13 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Area"
+                    android:text="Area *"
                     style="@style/formControlLabel3"/>
 
-                <EditText
+                <Spinner
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/edt_area"
-                    style="@style/formControlInput"/>
+                    android:id="@+id/sp_area"></Spinner>
 
             </LinearLayout>
 
@@ -305,7 +327,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/edt_latitude"
-                    style="@style/formControlInput"/>
+                    style="@style/formControlInput.disable"
+                    android:gravity="center_vertical|left"/>
 
             </LinearLayout>
 
@@ -324,7 +347,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/edt_longitude"
-                    style="@style/formControlInput"/>
+                    style="@style/formControlInput.disable"
+                    android:gravity="center_vertical|left"/>
 
             </LinearLayout>
 
@@ -343,8 +367,47 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/edt_state"
-                    style="@style/formControlInput"/>
+                    style="@style/formControlInput.disable"
+                    android:gravity="center_vertical|left"/>
 
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:id="@+id/rv_photo"></android.support.v7.widget.RecyclerView>
+
+                <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/ic_add_photo"
+                    android:scaleType="centerInside"
+                    android:id="@+id/ib_add_photo"
+                    android:padding="@dimen/default_margin_small"
+                    android:layout_marginRight="@dimen/default_margin_small"
+                    android:layout_marginBottom="@dimen/default_margin_small"
+                    android:background="@drawable/btn_round"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                style="@style/formGroup"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Geser gambar untuk melihat gambar lainnya"
+                    android:textColor="@color/default_background"/>
             </LinearLayout>
 
             <LinearLayout
@@ -352,7 +415,7 @@
                 android:layout_height="wrap_content"
                 style="@style/formGroup"
                 android:gravity="center"
-                android:layout_marginBottom="@dimen/default_margin">
+                android:layout_marginBottom="@dimen/default_margin_small">
 
                 <Button
                     android:layout_width="wrap_content"
@@ -362,7 +425,8 @@
                     android:paddingRight="@dimen/default_margin_small"
                     android:text=" Simpan Data Customer "
                     android:id="@+id/btn_simpan"
-                    android:textColor="@color/color_white"/>
+                    android:textColor="@color/color_white"
+                    android:layout_marginBottom="@dimen/default_margin_small"/>
 
             </LinearLayout>
 

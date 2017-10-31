@@ -28,4 +28,7 @@ public class ServerURL {
     public static final String getUserInfo = baseURL + "api/profile/get_user_info/";
     public static final String getUserOmset= baseURL + "api/profile/get_user_omset/";
     public static final String getPromosi = baseURL + "api/promosi/get_promosi/";
+    public static final String getArea = baseURL + "api/customer/get_area/";
+    public static final String saveCustomer = baseURL + "api/customer/save/";
+    public static final String getCustomer = baseURL + "api/customer/get_customer/";
 }

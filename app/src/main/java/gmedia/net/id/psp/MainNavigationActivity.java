@@ -23,6 +23,7 @@ import com.maulana.custommodul.SessionManager;
 import gmedia.net.id.psp.DaftarPiutang.DaftarPiutang;
 import gmedia.net.id.psp.NavAccount.NavAccount;
 import gmedia.net.id.psp.NavHome.NavHome;
+import gmedia.net.id.psp.NavTambahCustomer.NavCustomer;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
 import gmedia.net.id.psp.OrderPulsa.ListReseller;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
@@ -51,10 +52,11 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                 MainNavigationActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                MainNavigationActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
+                MainNavigationActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                MainNavigationActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
 
             MainNavigationActivity.super.requestAppPermissions(new
-                            String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_SETTINGS, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, R.string
+                            String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_SETTINGS, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, R.string
                             .runtime_permissions_txt
                     , REQUEST_PERMISSIONS);
         }
@@ -137,9 +139,8 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
             fragment = new NavAccount();
             callFragment(fragment);
         } else if (id == R.id.nav_add_customer) {
-
-            Intent intent = new Intent(MainNavigationActivity.this, DetailCustomer.class);
-            startActivity(intent);
+            fragment = new NavCustomer();
+            callFragment(fragment);
         }else if (id == R.id.nav_order_mkios) {
 
             Intent intent = new Intent(MainNavigationActivity.this, ListReseller.class);

@@ -104,6 +104,12 @@
         <item name="android:background">@color/default_background</item>
     </style>
 
+    <style name="Custom.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/color_white</item>
+        <item name="android:textColorPrimary">@color/default_background</item>
+        <item name="android:background">@color/color_white</item>
+    </style>
+
     <style name="AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <!--item RadioButton or CheckBox color-->
         <item name="colorControlNormal">@color/color_white</item>
