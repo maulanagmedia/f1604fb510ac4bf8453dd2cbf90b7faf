@@ -487,8 +487,12 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             @Override
             public void onClick(View view) {
 
-                String message = "Apakah anda yakin ingin memproses data?";
-                if(editMode) message = "Apakah anda yakin ingin mengubah "+noBukti+" ?";
+                ListCCIDAdapter adapter = (ListCCIDAdapter) lvCCID.getAdapter();
+                List<CustomItem> listItem = adapter.getDataList();
+
+                String message = "Apakah anda yakin ingin memproses data?\n\n";
+                if(editMode) message = "Apakah anda yakin ingin mengubah "+noBukti+" ?\n\n";
+                message += ("Total " + String.valueOf(listItem.size())+" CCID");
                 AlertDialog builder = new AlertDialog.Builder(DetailOrderPerdana.this)
                         .setTitle("Konfirmasi")
                         .setIcon(getResources().getDrawable(R.mipmap.ic_launcher))

@@ -31,4 +31,5 @@ public class ServerURL {
     public static final String getArea = baseURL + "api/customer/get_area/";
     public static final String saveCustomer = baseURL + "api/customer/save/";
     public static final String getCustomer = baseURL + "api/customer/get_customer/";
+    public static final String getImages = baseURL + "api/location/get_images/";
 }

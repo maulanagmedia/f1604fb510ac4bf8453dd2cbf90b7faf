@@ -454,8 +454,33 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             @Override
             public void onClick(View view) {
 
-                String message = "Apakah anda yakin ingin memproses data?";
-                if(editMode) message = "Apakah anda yakin ingin mengubah "+nonota+" ?";
+                String message = "Apakah anda yakin ingin memproses order?\n\n";
+                if(editMode) message = "Apakah anda yakin ingin mengubah "+nonota+" ?\n\n";
+
+                int maxLength = edtS5.getText().toString().length();
+                if(maxLength < edtS10.getText().toString().length()) maxLength =  edtS10.getText().toString().length();
+                if(maxLength < edtS20.getText().toString().length()) maxLength =  edtS20.getText().toString().length();
+                if(maxLength < edtS25.getText().toString().length()) maxLength =  edtS25.getText().toString().length();
+                if(maxLength < edtS50.getText().toString().length()) maxLength =  edtS50.getText().toString().length();
+                if(maxLength < edtS100.getText().toString().length()) maxLength =  edtS100.getText().toString().length();
+                if(maxLength < edtBulk.getText().toString().length()) maxLength =  edtBulk.getText().toString().length();
+
+                String vS5 = addWhiteSpace(String.valueOf(iv.parseNullInteger(edtS5.getText().toString())), maxLength);
+                String vS10 = addWhiteSpace(String.valueOf(iv.parseNullInteger(edtS10.getText().toString())), maxLength);
+                String vS20 = addWhiteSpace(String.valueOf(iv.parseNullInteger(edtS20.getText().toString())), maxLength);
+                String vS25 = addWhiteSpace(String.valueOf(iv.parseNullInteger(edtS25.getText().toString())), maxLength);
+                String vS50 = addWhiteSpace(String.valueOf(iv.parseNullInteger(edtS50.getText().toString())), maxLength);
+                String vS100 = addWhiteSpace(String.valueOf(iv.parseNullInteger(edtS100.getText().toString())), maxLength);
+                String vSBULK = addWhiteSpace(String.valueOf(iv.parseNullInteger(edtBulk.getText().toString())), maxLength);
+
+                message += (" \tS5\t\t\t\t\t"+ String.format("%15s", vS5) +"\n");
+                message += (" \tS10\t\t\t\t"+ String.format("%15s", vS10) +"\n");
+                message += (" \tS20\t\t\t\t"+ String.format("%15s", vS20) +"\n");
+                message += (" \tS25\t\t\t\t"+ String.format("%15s", vS25) +"\n");
+                message += (" \tS50\t\t\t\t"+ String.format("%15s", vS50)+"\n");
+                message += (" \tS100\t\t\t"+ String.format("%15s", vS100) +"\n");
+                message += (" \tBULK\t\t\t"+ String.format("%15s", iv.ChangeToRupiahFormat(iv.parseNullDouble(vSBULK)))+"\n");
+
                 AlertDialog builder = new AlertDialog.Builder(DetailOrderPulsa.this)
                         .setTitle("Konfirmasi")
                         .setIcon(getResources().getDrawable(R.mipmap.ic_launcher))
@@ -474,6 +499,17 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                         }).show();
             }
         });
+    }
+
+    private String addWhiteSpace(String awal, int max){
+
+        int gap = max - awal.length();
+
+        for(int i = 0; i < 0; i++){
+            awal = "\t"+awal;
+        }
+
+        return awal;
     }
 
     private void validasiBeforeSave() {

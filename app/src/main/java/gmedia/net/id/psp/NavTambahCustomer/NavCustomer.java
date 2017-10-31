@@ -78,7 +78,27 @@ public class NavCustomer extends Fragment {
         fabAdd = (FloatingActionButton) layout.findViewById(R.id.btn_add);
 
         session = new SessionManager(context);
+        //getDataCustomer();
+        initEvent();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getDataCustomer();
+    }
+
+    private void initEvent() {
+
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(context, DetailCustomer.class);
+                startActivity(intent);
+                ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
     }
 
     private void getDataCustomer() {
@@ -89,6 +109,7 @@ public class NavCustomer extends Fragment {
         JSONObject jBody = new JSONObject();
         try {
             jBody.put("nik", nik);
+            jBody.put("kdcus", "");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -199,7 +220,7 @@ public class NavCustomer extends Fragment {
                     CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
 
                     Intent intent = new Intent(context, DetailCustomer.class);
-                    intent.putExtra("koders", selectedItem.getItem1());
+                    intent.putExtra("kdcus", selectedItem.getItem1());
                     startActivity(intent);
                     ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
