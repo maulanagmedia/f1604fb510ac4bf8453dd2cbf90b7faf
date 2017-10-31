@@ -110,7 +110,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
                 new int[] { android.R.attr.actionBarSize });
         int mActionBarSize = (int) styledAttributes.getDimension(0, 0);
         styledAttributes.recycle();
-        mBottomSheetBehavior2.setPeekHeight(display[1]/3 - mActionBarSize);
+        mBottomSheetBehavior2.setPeekHeight((display[1] - mActionBarSize)/10);
         mBottomSheetBehavior2.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         ivExpand.setOnClickListener(new View.OnClickListener() {
