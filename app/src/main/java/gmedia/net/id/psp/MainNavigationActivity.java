@@ -1,6 +1,8 @@
 package gmedia.net.id.psp;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -22,7 +24,9 @@ import com.maulana.custommodul.SessionManager;
 
 import gmedia.net.id.psp.DaftarPiutang.DaftarPiutang;
 import gmedia.net.id.psp.NavAccount.NavAccount;
+import gmedia.net.id.psp.NavCheckin.NavCheckin;
 import gmedia.net.id.psp.NavHome.NavHome;
+import gmedia.net.id.psp.NavKomplain.NavKomplain;
 import gmedia.net.id.psp.NavTambahCustomer.NavCustomer;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
 import gmedia.net.id.psp.OrderPulsa.ListReseller;
@@ -39,6 +43,8 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
     private int timerClose = 2000;
     private SessionManager session;
     private static final int REQUEST_PERMISSIONS = 20;
+    private static NavigationView navigationView;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         setContentView(R.layout.activity_main_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        context = this;
 
         if (ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.WRITE_SETTINGS) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
@@ -53,10 +60,11 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                 MainNavigationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                MainNavigationActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
+                MainNavigationActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                MainNavigationActivity.this, Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED) {
 
             MainNavigationActivity.super.requestAppPermissions(new
-                            String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_SETTINGS, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, R.string
+                            String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_SETTINGS, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WAKE_LOCK}, R.string
                             .runtime_permissions_txt
                     , REQUEST_PERMISSIONS);
         }
@@ -78,17 +86,49 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         session = new SessionManager(MainNavigationActivity.this);
 
         if(savedInstanceState == null){
-            navigationView.setCheckedItem(R.id.nav_home);
-            /*FrameLayout flContainer = (FrameLayout) findViewById(R.id.fl_main_container);
-            flContainer.removeAllViews();*/
-            fragment = new NavHome();
-            callFragment(fragment);
+
+            if(bundle != null && bundle.getBoolean("tambahCustomer", false)){
+                navigationView.setCheckedItem(R.id.nav_add_customer);
+                setTitle(navigationView.getMenu().getItem(3).getTitle().toString());
+                fragment = new NavCustomer();
+                callFragment(context, fragment);
+            }else{
+                navigationView.setCheckedItem(R.id.nav_home);
+                setTitle(navigationView.getMenu().getItem(0).getTitle().toString());
+                /*FrameLayout flContainer = (FrameLayout) findViewById(R.id.fl_main_container);
+                flContainer.removeAllViews();*/
+                fragment = new NavHome();
+                callFragment(context, fragment);
+            }
+        }
+    }
+
+    public static void changeNavigationState(Context context, int position){
+        switch (position){
+            case 2:
+                navigationView.setCheckedItem(R.id.nav_add_customer);
+                ((Activity) context).setTitle(navigationView.getMenu().getItem(position).getTitle().toString());
+                fragment = new NavCustomer();
+                callFragment(context, fragment);
+                break;
+            case 9:
+                navigationView.setCheckedItem(R.id.nav_checkin);
+                ((Activity) context).setTitle(navigationView.getMenu().getItem(position).getTitle().toString());
+                fragment = new NavCheckin();
+                callFragment(context, fragment);
+                break;
+            case 10:
+                navigationView.setCheckedItem(R.id.nav_complain);
+                ((Activity) context).setTitle(navigationView.getMenu().getItem(position).getTitle().toString());
+                fragment = new NavKomplain();
+                callFragment(context, fragment);
+                break;
         }
     }
 
@@ -131,16 +171,17 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        setTitle(item.getTitle());
 
         if (id == R.id.nav_home) {
             fragment = new NavHome();
-            callFragment(fragment);
+            callFragment(context, fragment);
         } else if (id == R.id.nav_akun) {
             fragment = new NavAccount();
-            callFragment(fragment);
+            callFragment(context, fragment);
         } else if (id == R.id.nav_add_customer) {
             fragment = new NavCustomer();
-            callFragment(fragment);
+            callFragment(context, fragment);
         }else if (id == R.id.nav_order_mkios) {
 
             Intent intent = new Intent(MainNavigationActivity.this, ListReseller.class);
@@ -165,6 +206,14 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
 
             Intent intent = new Intent(MainNavigationActivity.this, StokSales.class);
             startActivity(intent);
+        } else if (id == R.id.nav_checkin) {
+
+            fragment = new NavCheckin();
+            callFragment(context, fragment);
+        } else if (id == R.id.nav_complain) {
+
+            fragment = new NavKomplain();
+            callFragment(context, fragment);
         } else if (id == R.id.nav_keluar) {
 
             Intent intent = new Intent(MainNavigationActivity.this, LoginScreen.class);
@@ -176,9 +225,9 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         return true;
     }
 
-    private Fragment fragment;
-    private void callFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
+    private static Fragment fragment;
+    private static void callFragment(Context context, Fragment fragment) {
+        ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fl_main_container, fragment, fragment.getClass().getSimpleName()).setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out).addToBackStack(null).commit();
     }
 }

@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.SessionManager;
@@ -23,6 +24,7 @@ import com.maulana.custommodul.SessionManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import gmedia.net.id.psp.NotificationUtil.InitFirebaseSetting;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class LoginScreen extends AppCompatActivity {
@@ -37,6 +39,7 @@ public class LoginScreen extends AppCompatActivity {
     private SessionManager session;
     private boolean visibleTapped;
     private ItemValidation iv = new ItemValidation();
+    private String refreshToken = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,8 @@ public class LoginScreen extends AppCompatActivity {
             }
         }
 
+        InitFirebaseSetting.getFirebaseSetting(LoginScreen.this);
+        refreshToken = FirebaseInstanceId.getInstance().getToken();
         initUI();
     }
 
@@ -156,6 +161,7 @@ public class LoginScreen extends AppCompatActivity {
         try {
             jBody.put("username", edtUsername.getText().toString());
             jBody.put("password", edtPassword.getText().toString());
+            jBody.put("fcm_id", refreshToken);
         } catch (JSONException e) {
             e.printStackTrace();
         }

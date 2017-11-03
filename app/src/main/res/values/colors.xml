@@ -25,6 +25,8 @@
     <color name="color_login_2">#432a75</color>
     <color name="color_login_2_active">#7248c7</color>
 
+    <color name="color_notif">#9a9b9b</color>
     <color name="color_grey">#9a9b9b</color>
     <color name="color_black">#000000</color>
+
 </resources>

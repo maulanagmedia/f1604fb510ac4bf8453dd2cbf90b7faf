@@ -1,8 +1,9 @@
-package gmedia.net.id.psp.NavTambahCustomer;
+package gmedia.net.id.psp.NavKomplain;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -32,32 +33,30 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import gmedia.net.id.psp.NavTambahCustomer.Adapter.ListCustomerAdapter;
-import gmedia.net.id.psp.OrderPulsa.Adapter.ListResellerAdapter;
-import gmedia.net.id.psp.OrderPulsa.ListReseller;
+import gmedia.net.id.psp.NavKomplain.Adapter.ListComplaintAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.TambahCustomer.DetailCustomer;
 import gmedia.net.id.psp.Utils.ServerURL;
 
-public class NavCustomer extends Fragment {
+public class NavKomplain extends Fragment {
 
     private Context context;
     private View layout;
-    private ListView lvCustomer;
-    private AutoCompleteTextView actvCustomer;
+    private ItemValidation iv = new ItemValidation();
+    private ListView lvComplaint;
+    private AutoCompleteTextView actvComplaint;
     private ProgressBar pbProses;
+    private FloatingActionButton fabAdd;
     private SessionManager session;
     private List<CustomItem> masterList;
-    private ItemValidation iv = new ItemValidation();
-    private FloatingActionButton fabAdd;
     private boolean firstLoad = true;
     private boolean isLoading = false;
     private int startIndex = 0, count = 0;
     private String keyword = "";
-    private ListCustomerAdapter adapter;
     private View footerList;
+    private ListComplaintAdapter adapter;
 
-    public NavCustomer() {
+    public NavKomplain() {
         // Required empty public constructor
     }
 
@@ -69,8 +68,8 @@ public class NavCustomer extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        layout = inflater.inflate(R.layout.fragment_nav_customer, container, false);
+        // Inflate the layout for this fragment
+        layout = inflater.inflate(R.layout.fragment_nav_komplain, container, false);
         context = getContext();
         initUI();
         return layout;
@@ -78,27 +77,28 @@ public class NavCustomer extends Fragment {
 
     private void initUI() {
 
-        lvCustomer = (ListView) layout.findViewById(R.id.lv_customer);
-        actvCustomer = (AutoCompleteTextView) layout.findViewById(R.id.actv_customer);
+        lvComplaint = (ListView) layout.findViewById(R.id.lv_complaint);
+        actvComplaint= (AutoCompleteTextView) layout.findViewById(R.id.actv_complaint);
         pbProses = (ProgressBar) layout.findViewById(R.id.pb_proses);
         fabAdd = (FloatingActionButton) layout.findViewById(R.id.btn_add);
         LayoutInflater li = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         footerList = li.inflate(R.layout.layout_footer_listview, null);
 
+        session = new SessionManager(context);
+        //getDataCustomer();
         startIndex = 0;
         count = getResources().getInteger(R.integer.count_table);
         keyword = "";
-        session = new SessionManager(context);
-        //getDataCustomer();
         initEvent();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        keyword = actvCustomer.getText().toString();
+
+        keyword = actvComplaint.getText().toString();
         startIndex = 0;
-        getDataCustomer();
+        getDataComplaint();
     }
 
     private void initEvent() {
@@ -107,13 +107,13 @@ public class NavCustomer extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(context, DetailCustomer.class);
+                Intent intent = new Intent(context, DetailComplaint.class);
                 startActivity(intent);
                 ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
-        lvCustomer.setOnScrollListener(new AbsListView.OnScrollListener() {
+        lvComplaint.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
 
@@ -122,9 +122,9 @@ public class NavCustomer extends Fragment {
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
 
-                if(absListView.getLastVisiblePosition() == i2-1 && lvCustomer.getCount() > (count-1) && !isLoading ){
+                if(absListView.getLastVisiblePosition() == i2-1 && lvComplaint.getCount() > (count-1) && !isLoading ){
                     isLoading = true;
-                    lvCustomer.addFooterView(footerList);
+                    lvComplaint.addFooterView(footerList);
                     startIndex += count;
                     getMoreData();
 
@@ -133,7 +133,7 @@ public class NavCustomer extends Fragment {
         });
     }
 
-    private void getDataCustomer() {
+    private void getDataComplaint() {
 
         masterList = new ArrayList<>();
         pbProses.setVisibility(View.VISIBLE);
@@ -141,7 +141,6 @@ public class NavCustomer extends Fragment {
         JSONObject jBody = new JSONObject();
         try {
             jBody.put("nik", nik);
-            jBody.put("kdcus", "");
             jBody.put("keyword", keyword);
             jBody.put("start", String.valueOf(startIndex));
             jBody.put("count", String.valueOf(count));
@@ -149,7 +148,7 @@ public class NavCustomer extends Fragment {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getCustomer, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getComplaint, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -164,7 +163,7 @@ public class NavCustomer extends Fragment {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("alamat"), jo.getString("notelp"), jo.getString("nohp"), jo.getString("status")));
+                            masterList.add(new CustomItem(jo.getString("id"), jo.getString("komplain"), jo.getString("balasan"), jo.getString("timestamp")));
                         }
                     }
 
@@ -199,7 +198,6 @@ public class NavCustomer extends Fragment {
         JSONObject jBody = new JSONObject();
         try {
             jBody.put("nik", nik);
-            jBody.put("kdcus", "");
             jBody.put("keyword", keyword);
             jBody.put("start", String.valueOf(startIndex));
             jBody.put("count", String.valueOf(count));
@@ -207,7 +205,7 @@ public class NavCustomer extends Fragment {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getCustomer, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getComplaint, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -222,18 +220,18 @@ public class NavCustomer extends Fragment {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            moreList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("alamat"), jo.getString("notelp"), jo.getString("nohp"), jo.getString("status")));
+                            moreList.add(new CustomItem(jo.getString("id"), jo.getString("komplain"), jo.getString("balasan"), jo.getString("timestamp")));
                         }
                     }
 
-                    lvCustomer.removeFooterView(footerList);
+                    lvComplaint.removeFooterView(footerList);
                     if(adapter != null) adapter.addMoreData(moreList);
                     isLoading = false;
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     isLoading = false;
-                    lvCustomer.removeFooterView(footerList);
+                    lvComplaint.removeFooterView(footerList);
                 }
             }
 
@@ -241,7 +239,7 @@ public class NavCustomer extends Fragment {
             public void onError(String result) {
 
                 isLoading = false;
-                lvCustomer.removeFooterView(footerList);
+                lvComplaint.removeFooterView(footerList);
             }
         });
     }
@@ -251,7 +249,7 @@ public class NavCustomer extends Fragment {
         if(firstLoad){
             firstLoad = false;
 
-            actvCustomer.addTextChangedListener(new TextWatcher() {
+            actvComplaint.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -265,24 +263,25 @@ public class NavCustomer extends Fragment {
                 @Override
                 public void afterTextChanged(Editable editable) {
 
-                    if(actvCustomer.getText().length() == 0){
+                    if(actvComplaint.getText().length() == 0){
+
                         keyword = "";
                         startIndex = 0;
-                        getDataCustomer();
+                        getDataComplaint();
                     }
                 }
             });
         }
 
-        actvCustomer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        actvComplaint.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
 
                 if(i == EditorInfo.IME_ACTION_SEARCH){
 
-                    keyword = actvCustomer.getText().toString();
+                    keyword = actvComplaint.getText().toString();
                     startIndex = 0;
-                    getDataCustomer();
+                    getDataComplaint();
 
                     iv.hideSoftKey(context);
                     return true;
@@ -295,21 +294,21 @@ public class NavCustomer extends Fragment {
 
     private void getTableList(List<CustomItem> tableList) {
 
-        lvCustomer.setAdapter(null);
+        lvComplaint.setAdapter(null);
 
         if(tableList != null && tableList.size() > 0){
 
-            adapter = new ListCustomerAdapter(((Activity)context), tableList);
-            lvCustomer.setAdapter(adapter);
+            adapter = new ListComplaintAdapter(((Activity)context), tableList);
+            lvComplaint.setAdapter(adapter);
 
-            lvCustomer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            lvComplaint.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                     CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
 
-                    Intent intent = new Intent(context, DetailCustomer.class);
-                    intent.putExtra("kdcus", selectedItem.getItem1());
+                    Intent intent = new Intent(context, DetailComplaint.class);
+                    intent.putExtra("id", selectedItem.getItem1());
                     startActivity(intent);
                     ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }

@@ -16,4 +16,5 @@
     <dimen name="radius">3dp</dimen>
     <dimen name="item_pulsa">340dp</dimen>
     <dimen name="pulsa_height">90dp</dimen>
+    <dimen name="scrollbar">3dp</dimen>
 </resources>

@@ -1,4 +1,4 @@
-package gmedia.net.id.psp.NavTambahCustomer.Adapter;
+package gmedia.net.id.psp.NavCheckin.Adapter;
 
 import android.app.Activity;
 import android.text.Html;
@@ -14,8 +14,6 @@ import com.maulana.custommodul.ItemValidation;
 import java.util.List;
 
 import gmedia.net.id.psp.R;
-import gmedia.net.id.psp.Utils.FormatItem;
-import gmedia.net.id.psp.Utils.ItemLength;
 import gmedia.net.id.psp.Utils.Status;
 
 
@@ -23,14 +21,14 @@ import gmedia.net.id.psp.Utils.Status;
  * Created by Shin on 1/8/2017.
  */
 
-public class ListCustomerAdapter extends ArrayAdapter{
+public class ListCheckinAdapter extends ArrayAdapter{
 
     private Activity context;
     private List<CustomItem> items;
     private ItemValidation iv = new ItemValidation();
 
-    public ListCustomerAdapter(Activity context, List<CustomItem> items) {
-        super(context, R.layout.cv_list_customer, items);
+    public ListCheckinAdapter(Activity context, List<CustomItem> items) {
+        super(context, R.layout.cv_list_customer_checkin, items);
         this.context = context;
         this.items = items;
     }
@@ -57,7 +55,7 @@ public class ListCustomerAdapter extends ArrayAdapter{
 
         if(convertView == null){
             LayoutInflater inflater = context.getLayoutInflater();
-            convertView = inflater.inflate(R.layout.cv_list_customer, null);
+            convertView = inflater.inflate(R.layout.cv_list_customer_checkin, null);
             holder.tvItem1 = (TextView) convertView.findViewById(R.id.tv_item1);
             holder.tvItem2 = (TextView) convertView.findViewById(R.id.tv_item2);
             holder.tvItem3 = (TextView) convertView.findViewById(R.id.tv_item3);

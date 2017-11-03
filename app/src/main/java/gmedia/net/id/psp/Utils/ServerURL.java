@@ -31,5 +31,10 @@ public class ServerURL {
     public static final String getArea = baseURL + "api/customer/get_area/";
     public static final String saveCustomer = baseURL + "api/customer/save/";
     public static final String getCustomer = baseURL + "api/customer/get_customer/";
+    public static final String getCustomerVerifikasi = baseURL + "api/customer/get_customer_verifikasi/";
+    public static final String getCustomerKunjungan = baseURL + "api/customer/get_customer_kunjungan/";
     public static final String getImages = baseURL + "api/location/get_images/";
+    public static final String getComplaint = baseURL + "api/complaint/get_complaint/";
+    public static final String saveComplaint = baseURL + "api/complaint/save/";
+    public static final String updateCustomer = baseURL + "api/customer/update_customer/";
 }

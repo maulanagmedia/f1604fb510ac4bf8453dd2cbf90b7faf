@@ -35,6 +35,7 @@ import java.util.TimerTask;
 
 import gmedia.net.id.psp.CustomView.WrapContentViewPager;
 import gmedia.net.id.psp.DaftarPiutang.DaftarPiutang;
+import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.NavHome.Adapter.HeaderSliderAdapter;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
 import gmedia.net.id.psp.OrderPerdana.DetailOrderPerdana;
@@ -71,6 +72,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
     private ImageView ivExpand;
     private LinearLayout llOrderMkios, llPenjualanMkios, llOrderPerdana, llPenjualanPerdana, llDaftarPiutang, llStokSales;
     private TextView tvNamaSales, tvTotalOmset, tvOmsetMkios, tvOmsetPerdana;
+    private LinearLayout llAddCustomer, llCheckIn, llKomplain;
 
     public NavHome() {
         // Required empty public constructor
@@ -159,6 +161,9 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         llPenjualanPerdana = (LinearLayout) layout.findViewById(R.id.ll_penjualan_perdana);
         llDaftarPiutang = (LinearLayout) layout.findViewById(R.id.ll_daftar_piutang);
         llStokSales = (LinearLayout) layout.findViewById(R.id.ll_stok_sales);
+        llAddCustomer = (LinearLayout) layout.findViewById(R.id.ll_add_customer);
+        llCheckIn = (LinearLayout) layout.findViewById(R.id.ll_checkin);
+        llKomplain = (LinearLayout) layout.findViewById(R.id.ll_complaint);
 
         tvNamaSales = (TextView) layout.findViewById(R.id.tv_nama_sales);
         tvTotalOmset = (TextView) layout.findViewById(R.id.tv_total_omset);
@@ -210,6 +215,29 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             public void onClick(View view) {
                 Intent intent = new Intent(context, StokSales.class);
                 context.startActivity(intent);
+            }
+        });
+
+        llAddCustomer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                MainNavigationActivity.changeNavigationState(context, 2);
+            }
+        });
+
+        llCheckIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                MainNavigationActivity.changeNavigationState(context, 9);
+            }
+        });
+
+        llKomplain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainNavigationActivity.changeNavigationState(context, 10);
             }
         });
 

@@ -1,6 +1,7 @@
 package gmedia.net.id.psp.PenjualanMKIOS.Adapter;
 
 import android.app.Activity;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import java.util.List;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ItemLength;
+import gmedia.net.id.psp.Utils.Status;
 
 
 /**
@@ -75,7 +77,7 @@ public class ListPenjualanMKIOSAdapter extends ArrayAdapter{
         holder.tvItem1.setText(itemSelected.getItem2());
         holder.tvItem2.setText(itemSelected.getItem3());
         holder.tvItem3.setText(itemSelected.getItem4());
-        holder.tvItem4.setText(itemSelected.getItem6());
+        holder.tvItem4.setText(Html.fromHtml(Status.mkios(itemSelected.getItem6())));
         holder.tvItem5.setText(iv.ChangeFormatDateString(itemSelected.getItem9(), FormatItem.formatTimestamp, FormatItem.formatDateDisplay));
         holder.tvItem6.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(itemSelected.getItem5())));
         return convertView;

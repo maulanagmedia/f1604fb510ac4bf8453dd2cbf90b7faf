@@ -5,6 +5,10 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.google.firebase.FirebaseApp;
+
+import gmedia.net.id.psp.NotificationUtil.InitFirebaseSetting;
+
 public class SplashScreen extends AppCompatActivity {
 
     private static boolean splashLoaded = false;
@@ -13,6 +17,8 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        FirebaseApp.initializeApp(this);
+        InitFirebaseSetting.getFirebaseSetting(SplashScreen.this);
 
         if (!splashLoaded) {
 
