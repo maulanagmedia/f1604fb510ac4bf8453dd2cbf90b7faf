@@ -13,7 +13,11 @@
         <item
             android:id="@+id/nav_add_customer"
             android:icon="@drawable/ic_add_customer_putih"
-            android:title="Daftar Customer" />
+            android:title="Tambah Outlet" />
+        <item
+            android:id="@+id/nav_verifikasi_outlet"
+            android:icon="@drawable/ic_add_customer_putih"
+            android:title="Verifikasi Outlet" />
         <item
             android:id="@+id/nav_order_mkios"
             android:icon="@drawable/nav_order_mkios"
@@ -41,7 +45,7 @@
         <item
             android:id="@+id/nav_checkin"
             android:icon="@drawable/ic_chekin_putih"
-            android:title="Check In" />
+            android:title="Kunjungan / Check-in" />
         <item
             android:id="@+id/nav_complain"
             android:icon="@drawable/ic_komplain_putih"

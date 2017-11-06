@@ -109,7 +109,8 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".TambahCustomer.DetailCustomer"
             android:screenOrientation="portrait"
@@ -136,8 +137,23 @@
 
         <service android:name=".NotificationUtil.TokenGetter" />
         <!-- Service -->
-        <activity android:name=".NavKomplain.DetailComplaint" />
-        <activity android:name=".NavCheckin.DetailCheckin"></activity>
+        <activity
+            android:name=".NavKomplain.DetailComplaint"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavCheckin.DetailCheckin"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".NavVerifikasiOutlet.DetailVerifikasiOutlet"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".NavCheckin.ActCheckin" />
+
+        <service
+            android:name="gmedia.net.id.psp.LocationService.LocationUpdater"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

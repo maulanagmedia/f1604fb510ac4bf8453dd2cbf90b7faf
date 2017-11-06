@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -38,8 +40,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.ImageUtils;
 import com.maulana.custommodul.ItemValidation;
@@ -61,6 +69,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import gmedia.net.id.psp.CustomView.CustomMapView;
 import gmedia.net.id.psp.R;
@@ -81,11 +90,11 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
     private ItemValidation iv = new ItemValidation();
 
     // Location
-    private double latitude, longitude;
+    private double latitude, longitude, latitudeOutlet, longitudeOutlet;
     private LocationManager locationManager;
     private Criteria criteria;
     private String provider;
-    private Location location;
+    private Location location, locationOutlet;
     private final int REQUEST_PERMISSION_COARSE_LOCATION=2;
     private final int REQUEST_PERMISSION_FINE_LOCATION=3;
     public boolean isGPSEnabled = false;
@@ -118,6 +127,7 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
     private boolean editMode = false;
     private String kdArea = "";
     private String statusAktif = "";
+    private EditText edtKeterangan;
 
     public DetailCheckin() {
     }
@@ -153,7 +163,9 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
         edtLongitude = (EditText) findViewById(R.id.edt_longitude);
         edtState = (EditText) findViewById(R.id.edt_state);
         rvPhoto = (RecyclerView) findViewById(R.id.rv_photo);
+        rvPhotoUpload = (RecyclerView) findViewById(R.id.rv_photo_upload);
         ibAddPhoto = (ImageButton) findViewById(R.id.ib_add_photo);
+        edtKeterangan = (EditText) findViewById(R.id.edt_keterangan);
         btnSimpan = (Button) findViewById(R.id.btn_simpan);
 
         session = new SessionManager(DetailCheckin.this);
@@ -175,6 +187,7 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
         photoList = new ArrayList<>();
         photoUploadList = new ArrayList<>();
         LinearLayoutManager layoutManager= new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager2= new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false);
 
         adapter = new PhotosAdapter(DetailCheckin.this, photoList);
         adapterUpload = new PhotosAdapter(DetailCheckin.this, photoUploadList);
@@ -182,17 +195,23 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
         rvPhoto.setLayoutManager(layoutManager);
         rvPhoto.setAdapter(adapter);
 
-        rvPhotoUpload.setLayoutManager(layoutManager);
+        rvPhotoUpload.setLayoutManager(layoutManager2);
         rvPhotoUpload.setAdapter(adapterUpload);
 
         tvToolbarTitle = (TextView) findViewById(R.id.tv_toolbar_title);
-        title = "Detail Customer";
+        title = "Detail Kunjungan";
         //tvTitle.setText(title);
         initCollapsingToolbar();
 
         initLocation();
 
         initEvent();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
     }
 
     private void initCollapsingToolbar() {
@@ -228,9 +247,14 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
         setCriteria();
         latitude = 0;
         longitude = 0;
+        latitudeOutlet = 0;
+        longitudeOutlet = 0;
         location = new Location("set");
+        locationOutlet = new Location("set");
         location.setLatitude(latitude);
         location.setLongitude(longitude);
+        locationOutlet.setLatitude(latitudeOutlet);
+        locationOutlet.setLongitude(longitudeOutlet);
 
         refreshMode = true;
         Bundle bundle = getIntent().getExtras();
@@ -417,8 +441,8 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
 
             if(bitmap != null){
 
-                photoList.add(bitmap);
-                adapter.notifyDataSetChanged();
+                photoUploadList.add(bitmap);
+                adapterUpload.notifyDataSetChanged();
             }
 
         }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -430,8 +454,8 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
 
                 if(bitmap != null){
 
-                    photoList.add(bitmap);
-                    adapter.notifyDataSetChanged();
+                    photoUploadList.add(bitmap);
+                    adapterUpload.notifyDataSetChanged();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -537,55 +561,13 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
 
     private void validateBeforeSave() {
 
-        if(editMode && iv.parseNullInteger(statusAktif) != 2){
+        if( edtKeterangan.getText().length() == 0){
 
-            Toast.makeText(DetailCheckin.this, "Outlet telah dirposes, tidak dapat diubah", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(edtNama.getText().toString().length() == 0){
-
-            edtNama.setError("Nama harap diisi");
-            edtNama.requestFocus();
+            edtKeterangan.setError("Keterangan Kunjungan harap diisi");
+            edtKeterangan.requestFocus();
             return;
         }else{
-            edtNama.setError(null);
-        }
-
-        if(edtTelepon.getText().toString().length() == 0){
-
-            edtTelepon.setError("No Telepon harap diisi");
-            edtTelepon.requestFocus();
-            return;
-        }else{
-            edtTelepon.setError(null);
-        }
-
-        if(edtNoHP.getText().toString().length() == 0){
-
-            edtNoHP.setError("Nama harap diisi");
-            edtNoHP.requestFocus();
-            return;
-        }else{
-            edtNoHP.setError(null);
-        }
-
-        if(spArea.getCount() == 0){
-
-            Toast.makeText(DetailCheckin.this, "Tidak ada Area yang terpilih", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(edtBank.getText().toString().length() > 0){
-
-            if(edtRekening.getText().toString().length() == 0){
-
-                edtRekening.setError("No Rekening harap diisi");
-                edtRekening.requestFocus();
-                return;
-            }else{
-                edtRekening.setError(null);
-            }
+            edtKeterangan.setError(null);
         }
 
         saveData();
@@ -600,44 +582,23 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
         progressDialog.show();
         btnSimpan.setEnabled(false);
 
-        JSONObject jDataCustomer = new JSONObject();
-
-        try {
-            jDataCustomer.put("nama", edtNama.getText().toString());
-            jDataCustomer.put("alamat", edtAlamat.getText().toString());
-            jDataCustomer.put("kota", edtKota.getText().toString());
-            jDataCustomer.put("notelp", edtTelepon.getText().toString());
-            jDataCustomer.put("nohp", edtNoHP.getText().toString());
-            jDataCustomer.put("email", edtEmail.getText().toString());
-            jDataCustomer.put("bank", edtBank.getText().toString());
-            jDataCustomer.put("norekening", edtRekening.getText().toString());
-            jDataCustomer.put("status", "2");
-            jDataCustomer.put("contact_person", edtCP.getText().toString());
-
-            jDataCustomer.put("nik", session.getUserInfo(SessionManager.TAG_UID));
-            AreaModel area = (AreaModel) spArea.getSelectedItem();
-            jDataCustomer.put("kodearea", area.getValue());
-            jDataCustomer.put("tglmasuk", iv.getCurrentDate(FormatItem.formatDate));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        String nik = session.getUserInfo(SessionManager.TAG_UID);
         JSONObject jDataLocation = new JSONObject();
 
         try {
-            jDataLocation.put("kdcus", "");
+            jDataLocation.put("kdcus", kdcus);
             jDataLocation.put("latitude", iv.doubleToStringFull(latitude));
             jDataLocation.put("longitude", iv.doubleToStringFull(longitude));
-            jDataLocation.put("city", edtState.getText().toString());
-            jDataLocation.put("state", "");
-            jDataLocation.put("country", "");
+            jDataLocation.put("keterangan", edtKeterangan.getText().toString());
+            jDataLocation.put("nik", nik);
+            jDataLocation.put("state", edtState.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         JSONArray jDataImages = new JSONArray();
 
-        for (Bitmap item : photoList){
+        for (Bitmap item : photoUploadList){
 
             JSONObject jo = new JSONObject();
             try {
@@ -650,27 +611,23 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
 
         String method = "POST";
         JSONObject jBody = new JSONObject();
+
         try {
-            if(editMode) {
-                method = "PUT";
-                jBody.put("kdcus", kdcus);
-            }
-            jBody.put("data_customer", jDataCustomer);
-            jBody.put("data_location", jDataLocation);
+            jBody.put("data", jDataLocation);
             jBody.put("data_images", jDataImages);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(DetailCheckin.this, jBody, method, ServerURL.saveCustomer, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(DetailCheckin.this, jBody, method, ServerURL.saveCheckin, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
+                progressDialog.dismiss();
                 try {
 
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
-                    progressDialog.dismiss();
 
                     if(iv.parseNullInteger(status) == 200){
 
@@ -683,7 +640,6 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
                     }
 
                 } catch (JSONException e) {
-                    progressDialog.dismiss();
                     Toast.makeText(DetailCheckin.this, "Terjadi kesalahan, mohon ulangi kembali", Toast.LENGTH_LONG).show();
                 }
 
@@ -736,23 +692,23 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
                             edtRekening.setText(jo.getString("norekening"));
                             edtCP.setText(jo.getString("contact_person"));
                             kdArea = jo.getString("kodearea");
-                            edtLatitude.setText(jo.getString("latitude"));
+                            /*edtLatitude.setText(jo.getString("latitude"));
                             edtLongitude.setText(jo.getString("longitude"));
-                            edtState.setText(jo.getString("state"));
+                            edtState.setText(jo.getString("state"));*/
 
                             if(jo.getString("latitude").length() > 0){
-                                latitude = iv.parseNullDouble(jo.getString("latitude"));
-                                longitude = iv.parseNullDouble(jo.getString("longitude"));
-                                location.setLatitude(latitude);
-                                location.setLongitude(longitude);
+                                latitudeOutlet = iv.parseNullDouble(jo.getString("latitude"));
+                                longitudeOutlet = iv.parseNullDouble(jo.getString("longitude"));
+                                locationOutlet.setLatitude(latitudeOutlet);
+                                locationOutlet.setLongitude(longitudeOutlet);
                                 refreshMode = true;
                                 onLocationChanged(location);
                             }
 
                             statusAktif = jo.getString("status");
-                            if(iv.parseNullInteger(statusAktif) != 2){
+                            /*if(iv.parseNullInteger(statusAktif) != 2){
                                 btnSimpan.setEnabled(false);
-                            }
+                            }*/
                         }
                     }
 
@@ -942,9 +898,71 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
         return stream;
     }
 
+    private void setPointMap(){
+
+        mvMap.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+
+                googleMap = mMap;
+                googleMap.clear();
+                googleMap.addMarker(new MarkerOptions()
+                        .anchor(0.0f, 1.0f)
+                        .position(new LatLng(latitude, longitude)));
+
+                googleMap.addMarker(new MarkerOptions()
+                        .anchor(0.0f, 1.0f)
+                        .title("Outlet")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                        .position(new LatLng(latitudeOutlet, longitudeOutlet)));
+
+                if (ActivityCompat.checkSelfPermission(DetailCheckin.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(DetailCheckin.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(DetailCheckin.this, "Please allow location access from your app permission", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //googleMap.setMyLocationEnabled(true);
+                googleMap.getUiSettings().setZoomControlsEnabled(true);
+                MapsInitializer.initialize(DetailCheckin.this);
+                LatLng position = new LatLng(latitude, longitude);
+                // For zooming automatically to the location of the marker
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(position).zoom(15).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                updateKeterangan(position);
+            }
+        });
+    }
+
+    private void updateKeterangan(LatLng position){
+
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        latitude = position.latitude;
+        longitude = position.longitude;
+
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(position.latitude, position.longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(addresses != null && addresses.size() > 0){
+            address0 = addresses.get(0).getAddressLine(0);
+        }
+
+        edtLatitude.setText(iv.doubleToStringFull(latitude));
+        edtLongitude.setText(iv.doubleToStringFull(longitude));
+        edtState.setText(address0);
+    }
+
     @Override
     public void onLocationChanged(Location location) {
-
+        refreshMode = false;
+        this.location = location;
+        this.latitude = location.getLatitude();
+        this.longitude = location.getLongitude();
+        setPointMap();
     }
 
     @Override

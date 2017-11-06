@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import gmedia.net.id.psp.LoginScreen;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.OrderPulsa.DetailOrderPulsa;
 import gmedia.net.id.psp.OrderPulsa.ListReseller;
@@ -83,6 +84,10 @@ public class PenjualanMKIOS extends AppCompatActivity {
         startIndex = 0;
         count = getResources().getInteger(R.integer.count_table);
         session = new SessionManager(PenjualanMKIOS.this);
+        if(!session.isLoggedIn()){
+            Intent intent = new Intent(PenjualanMKIOS.this, LoginScreen.class);
+            session.logoutUser(intent);
+        }
         keyword = "";
         getData();
 

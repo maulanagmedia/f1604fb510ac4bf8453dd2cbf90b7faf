@@ -1,4 +1,4 @@
-package gmedia.net.id.psp.TambahCustomer;
+package gmedia.net.id.psp.NavVerifikasiOutlet;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
@@ -35,7 +36,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +52,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.maulana.custommodul.ApiVolley;
-import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ImageUtils;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.SessionManager;
@@ -79,7 +81,7 @@ import gmedia.net.id.psp.TambahCustomer.Model.AreaModel;
 import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ServerURL;
 
-public class DetailCustomer extends AppCompatActivity implements LocationListener{
+public class DetailVerifikasiOutlet extends AppCompatActivity  implements LocationListener {
 
     private Toolbar toolbar;
     private TextView tvToolbarTitle;
@@ -129,11 +131,20 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
     private boolean editMode = false;
     private String kdArea = "";
     private String statusAktif = "";
+    private LinearLayout llUploadKTP;
+    private RadioGroup rgPersetujuan;
+    private boolean statusCustomer = true;
+    private boolean uploadKTP = true;
+    private Bitmap bitmapKTP;
+    private ImageView ivKTP;
+
+    public DetailVerifikasiOutlet() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_customer);
+        setContentView(R.layout.activity_detail_verifikasi_outlet);
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
@@ -163,13 +174,16 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         rvPhoto = (RecyclerView) findViewById(R.id.rv_photo);
         ibAddPhoto = (ImageButton) findViewById(R.id.ib_add_photo);
         btnSimpan = (Button) findViewById(R.id.btn_simpan);
+        llUploadKTP = (LinearLayout) findViewById(R.id.ll_upload_ktp);
+        rgPersetujuan = (RadioGroup) findViewById(R.id.rg_persetujuan);
+        ivKTP = (ImageView) findViewById(R.id.iv_ktp);
 
-        session = new SessionManager(DetailCustomer.this);
+        session = new SessionManager(DetailVerifikasiOutlet.this);
         mvMap = (CustomMapView) findViewById(R.id.mv_map);
         mvMap.onCreate(null);
         mvMap.onResume();
         try {
-            MapsInitializer.initialize(DetailCustomer.this);
+            MapsInitializer.initialize(DetailVerifikasiOutlet.this);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -182,12 +196,12 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
         photoList = new ArrayList<>();
         LinearLayoutManager layoutManager= new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false);
-        adapter = new PhotosAdapter(DetailCustomer.this, photoList);
+        adapter = new PhotosAdapter(DetailVerifikasiOutlet.this, photoList);
         rvPhoto.setLayoutManager(layoutManager);
         rvPhoto.setAdapter(adapter);
 
         tvToolbarTitle = (TextView) findViewById(R.id.tv_toolbar_title);
-        title = "Detail Customer";
+        title = "Detail Verifikasi Outlet";
         //tvTitle.setText(title);
         initCollapsingToolbar();
 
@@ -232,8 +246,13 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
             if(bitmap != null){
 
-                photoList.add(bitmap);
-                adapter.notifyDataSetChanged();
+                if(uploadKTP){
+                    bitmapKTP = bitmap;
+                    ivKTP.setImageBitmap(bitmap);
+                }else{
+                    photoList.add(bitmap);
+                    adapter.notifyDataSetChanged();
+                }
             }
 
         }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -245,8 +264,13 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
                 if(bitmap != null){
 
-                    photoList.add(bitmap);
-                    adapter.notifyDataSetChanged();
+                    if(uploadKTP){
+                        bitmapKTP = bitmap;
+                        ivKTP.setImageBitmap(bitmap);
+                    }else{
+                        photoList.add(bitmap);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -281,6 +305,30 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             @Override
             public void onClick(View view) {
 
+                uploadKTP = false;
+                loadChooserDialog();
+            }
+        });
+
+        rgPersetujuan.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+
+                if(i == R.id.rb_setuju){
+
+                    statusCustomer = true;
+                }else if(i == R.id.rb_tolak){
+
+                    statusCustomer = false;
+                }
+            }
+        });
+
+        llUploadKTP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                uploadKTP = true;
                 loadChooserDialog();
             }
         });
@@ -288,7 +336,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
     private void loadChooserDialog(){
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(DetailCustomer.this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(DetailVerifikasiOutlet.this);
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.layout_chooser, null);
         builder.setView(view);
@@ -373,7 +421,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
         if(editMode && iv.parseNullInteger(statusAktif) != 2){
 
-            Toast.makeText(DetailCustomer.this, "Outlet telah dirposes, tidak dapat diubah", Toast.LENGTH_LONG).show();
+            Toast.makeText(DetailVerifikasiOutlet.this, "Outlet telah dirposes, tidak dapat diubah", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -386,15 +434,6 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             edtNama.setError(null);
         }
 
-        if(edtNoHP.getText().toString().length() == 0){
-
-            edtNoHP.setError("Nama harap diisi");
-            edtNoHP.requestFocus();
-            return;
-        }else{
-            edtNoHP.setError(null);
-        }
-
         /*if(edtTelepon.getText().toString().length() == 0){
 
             edtTelepon.setError("No Telepon harap diisi");
@@ -402,6 +441,15 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             return;
         }else{
             edtTelepon.setError(null);
+        }
+
+        if(edtNoHP.getText().toString().length() == 0){
+
+            edtNoHP.setError("Nama harap diisi");
+            edtNoHP.requestFocus();
+            return;
+        }else{
+            edtNoHP.setError(null);
         }
 
         if(spArea.getCount() == 0){
@@ -421,11 +469,11 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                 edtRekening.setError(null);
             }
         }*/
-
-
-        AlertDialog konfirmasi = new AlertDialog.Builder(DetailCustomer.this)
+        String message = "Anda yakin ingin memverifikasi "+ edtNama.getText().toString()+" ?";
+        if(!statusCustomer) message = "Anda yakin ingin menolak "+ edtNama.getText().toString()+" ?";
+        AlertDialog alert = new AlertDialog.Builder(DetailVerifikasiOutlet.this)
                 .setTitle("Konfirmasi")
-                .setMessage( (editMode) ? "Apakah anda yakin ingin menyimpan perubahan ?" : "Apakah anda yakin ingin menyimpan data ?")
+                .setMessage(message)
                 .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -439,11 +487,12 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                     }
                 })
                 .show();
+
     }
 
     private void saveData() {
 
-        progressDialog = new ProgressDialog(DetailCustomer.this, R.style.AppTheme_Login_Dialog);
+        progressDialog = new ProgressDialog(DetailVerifikasiOutlet.this, R.style.AppTheme_Login_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Menyimpan...");
         progressDialog.setCancelable(false);
@@ -452,7 +501,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
         JSONObject jDataCustomer = new JSONObject();
 
-        /*try {
+        try {
             jDataCustomer.put("nama", edtNama.getText().toString());
             jDataCustomer.put("alamat", edtAlamat.getText().toString());
             jDataCustomer.put("kota", edtKota.getText().toString());
@@ -461,32 +510,12 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             jDataCustomer.put("email", edtEmail.getText().toString());
             jDataCustomer.put("bank", edtBank.getText().toString());
             jDataCustomer.put("norekening", edtRekening.getText().toString());
-            jDataCustomer.put("status", "2");
+            jDataCustomer.put("status", (statusCustomer) ? "3" : "0");
             jDataCustomer.put("contact_person", edtCP.getText().toString());
 
             jDataCustomer.put("nik", session.getUserInfo(SessionManager.TAG_UID));
             AreaModel area = (AreaModel) spArea.getSelectedItem();
             jDataCustomer.put("kodearea", area.getValue());
-            jDataCustomer.put("tglmasuk", iv.getCurrentDate(FormatItem.formatDate));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
-
-        try {
-            jDataCustomer.put("nama", edtNama.getText().toString());
-            jDataCustomer.put("alamat", edtAlamat.getText().toString());
-            jDataCustomer.put("kota", "");
-            jDataCustomer.put("notelp", "");
-            jDataCustomer.put("nohp", edtNoHP.getText().toString());
-            jDataCustomer.put("email", "");
-            jDataCustomer.put("bank", "");
-            jDataCustomer.put("norekening", "");
-            jDataCustomer.put("status", "2");
-            jDataCustomer.put("contact_person", "");
-
-            jDataCustomer.put("nik", session.getUserInfo(SessionManager.TAG_UID));
-            AreaModel area = (AreaModel) spArea.getSelectedItem();
-            jDataCustomer.put("kodearea", "");
             jDataCustomer.put("tglmasuk", iv.getCurrentDate(FormatItem.formatDate));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -517,22 +546,18 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             }
             jDataImages.put(jo);
         }
-
-        String method = "POST";
         JSONObject jBody = new JSONObject();
         try {
-            if(editMode) {
-                method = "PUT";
-                jBody.put("kdcus", kdcus);
-            }
+            jBody.put("kdcus", kdcus);
             jBody.put("data_customer", jDataCustomer);
             jBody.put("data_location", jDataLocation);
             jBody.put("data_images", jDataImages);
+            jBody.put("data_ktp", (bitmapKTP != null) ? ImageUtils.convert(bitmapKTP) : "");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(DetailCustomer.this, jBody, method, ServerURL.saveCustomer, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(DetailVerifikasiOutlet.this, jBody, "PUT", ServerURL.verifikasiOutlet, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -545,16 +570,16 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                     if(iv.parseNullInteger(status) == 200){
 
                         String message = response.getJSONObject("response").getString("message");
-                        Toast.makeText(DetailCustomer.this, message, Toast.LENGTH_LONG).show();
+                        Toast.makeText(DetailVerifikasiOutlet.this, message, Toast.LENGTH_LONG).show();
                         onBackPressed();
                     }else{
                         String message = response.getJSONObject("metadata").getString("message");
-                        Toast.makeText(DetailCustomer.this, message, Toast.LENGTH_LONG).show();
+                        Toast.makeText(DetailVerifikasiOutlet.this, message, Toast.LENGTH_LONG).show();
                     }
 
                 } catch (JSONException e) {
                     progressDialog.dismiss();
-                    Toast.makeText(DetailCustomer.this, "Terjadi kesalahan, mohon ulangi kembali", Toast.LENGTH_LONG).show();
+                    Toast.makeText(DetailVerifikasiOutlet.this, "Terjadi kesalahan, mohon ulangi kembali", Toast.LENGTH_LONG).show();
                 }
 
                 btnSimpan.setEnabled(true);
@@ -564,7 +589,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             public void onError(String result) {
 
                 progressDialog.dismiss();
-                Toast.makeText(DetailCustomer.this, "Terjadi kesalahan, mohon ulangi kembali", Toast.LENGTH_LONG).show();
+                Toast.makeText(DetailVerifikasiOutlet.this, "Terjadi kesalahan, mohon ulangi kembali", Toast.LENGTH_LONG).show();
                 btnSimpan.setEnabled(true);
             }
         });
@@ -572,7 +597,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
     private void getDataArea() {
 
-        ApiVolley request = new ApiVolley(DetailCustomer.this, new JSONObject(), "GET", ServerURL.getArea, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(DetailVerifikasiOutlet.this, new JSONObject(), "GET", ServerURL.getArea, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -667,7 +692,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
     private void getPhotos() {
 
-        ApiVolley request = new ApiVolley(DetailCustomer.this, new JSONObject(), "GET", ServerURL.getImages+kdcus, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(DetailVerifikasiOutlet.this, new JSONObject(), "GET", ServerURL.getImages+kdcus, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -780,7 +805,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(DetailCustomer.this, jBody, "POST", ServerURL.getCustomer, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(DetailVerifikasiOutlet.this, jBody, "POST", ServerURL.getCustomer, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -860,7 +885,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
             if (isGPSEnabled == false && isNetworkEnabled == false) {
                 // no network provider is enabled
-                Toast.makeText(DetailCustomer.this, "Cannot identify the location.\nPlease turn on GPS or turn on your data.",
+                Toast.makeText(DetailVerifikasiOutlet.this, "Cannot identify the location.\nPlease turn on GPS or turn on your data.",
                         Toast.LENGTH_LONG).show();
 
             } else {
@@ -869,15 +894,15 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                     location = null;
 
                     // Granted the permission first
-                    if (ActivityCompat.checkSelfPermission(DetailCustomer.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(DetailCustomer.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(DetailCustomer.this,
+                    if (ActivityCompat.checkSelfPermission(DetailVerifikasiOutlet.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(DetailVerifikasiOutlet.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(DetailVerifikasiOutlet.this,
                                 Manifest.permission.ACCESS_COARSE_LOCATION)) {
                             showExplanation("Permission Needed", "Rationale", Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_PERMISSION_COARSE_LOCATION);
                         } else {
                             requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_PERMISSION_COARSE_LOCATION);
                         }
 
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(DetailCustomer.this,
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(DetailVerifikasiOutlet.this,
                                 Manifest.permission.ACCESS_FINE_LOCATION)) {
                             showExplanation("Permission Needed", "Rationale", Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_PERMISSION_FINE_LOCATION);
                         } else {
@@ -948,7 +973,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                                  String message,
                                  final String permission,
                                  final int permissionRequestCode) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(DetailCustomer.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(DetailVerifikasiOutlet.this);
         builder.setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -960,7 +985,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
     }
 
     private void requestPermission(String permissionName, int permissionRequestCode) {
-        ActivityCompat.requestPermissions(DetailCustomer.this,
+        ActivityCompat.requestPermissions(DetailVerifikasiOutlet.this,
                 new String[]{permissionName}, permissionRequestCode);
     }
 
@@ -1002,7 +1027,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         if (mapIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(mapIntent);
         } else {
-            Toast.makeText(DetailCustomer.this, "Cannot find google map, Please install latest google map.",
+            Toast.makeText(DetailVerifikasiOutlet.this, "Cannot find google map, Please install latest google map.",
                     Toast.LENGTH_LONG).show();
 
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.apps.maps"));
@@ -1023,14 +1048,14 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                         .draggable(true)
                         .position(new LatLng(latitude, longitude)));
 
-                if (ActivityCompat.checkSelfPermission(DetailCustomer.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(DetailCustomer.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(DetailCustomer.this, "Please allow location access from your app permission", Toast.LENGTH_SHORT).show();
+                if (ActivityCompat.checkSelfPermission(DetailVerifikasiOutlet.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(DetailVerifikasiOutlet.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(DetailVerifikasiOutlet.this, "Please allow location access from your app permission", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 //googleMap.setMyLocationEnabled(true);
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
-                MapsInitializer.initialize(DetailCustomer.this);
+                MapsInitializer.initialize(DetailVerifikasiOutlet.this);
                 LatLng position = new LatLng(latitude, longitude);
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(position).zoom(15).build();

@@ -58,7 +58,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:padding="@dimen/default_margin_tiny"
+                        android:paddingLeft="@dimen/default_margin_tiny"
+                        android:paddingRight="@dimen/default_margin_tiny"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
                         android:text="Komplain"
                         android:textColor="@color/color_black"
                         android:textSize="@dimen/subtitle_text_list" />
@@ -95,7 +98,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:padding="@dimen/default_margin_tiny"
+                        android:paddingLeft="@dimen/default_margin_tiny"
+                        android:paddingRight="@dimen/default_margin_tiny"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
                         android:text="Balasan"
                         android:textColor="@color/color_black"
                         android:textSize="@dimen/subtitle_text_list" />

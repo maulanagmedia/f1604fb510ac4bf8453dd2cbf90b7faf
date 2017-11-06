@@ -23,11 +23,13 @@ import com.maulana.custommodul.RuntimePermissionsActivity;
 import com.maulana.custommodul.SessionManager;
 
 import gmedia.net.id.psp.DaftarPiutang.DaftarPiutang;
+import gmedia.net.id.psp.LocationService.LocationUpdater;
 import gmedia.net.id.psp.NavAccount.NavAccount;
 import gmedia.net.id.psp.NavCheckin.NavCheckin;
 import gmedia.net.id.psp.NavHome.NavHome;
 import gmedia.net.id.psp.NavKomplain.NavKomplain;
 import gmedia.net.id.psp.NavTambahCustomer.NavCustomer;
+import gmedia.net.id.psp.NavVerifikasiOutlet.NavVerifikasiOutlet;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
 import gmedia.net.id.psp.OrderPulsa.ListReseller;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
@@ -75,7 +77,11 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         if(bundle != null){
             if(bundle.getBoolean("exit", false)){
                 exitState = true;
-                finish();
+                //finish();
+                Intent startMain = new Intent(Intent.ACTION_MAIN);
+                startMain.addCategory(Intent.CATEGORY_HOME);
+                startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(startMain);
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         }
@@ -90,6 +96,11 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         session = new SessionManager(MainNavigationActivity.this);
+
+        if(!session.isLoggedIn()){
+            Intent intent = new Intent(MainNavigationActivity.this, LoginScreen.class);
+            session.logoutUser(intent);
+        }
 
         if(savedInstanceState == null){
 
@@ -106,6 +117,12 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                 fragment = new NavHome();
                 callFragment(context, fragment);
             }
+        }
+
+        try {
+            startService(new Intent(MainNavigationActivity.this, LocationUpdater.class));
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -135,6 +152,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
     @Override
     public void onPermissionsGranted(int requestCode) {
 
+        startService(new Intent(MainNavigationActivity.this, LocationUpdater.class));
     }
 
     @Override
@@ -181,6 +199,9 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
             callFragment(context, fragment);
         } else if (id == R.id.nav_add_customer) {
             fragment = new NavCustomer();
+            callFragment(context, fragment);
+        } else if (id == R.id.nav_verifikasi_outlet) {
+            fragment = new NavVerifikasiOutlet();
             callFragment(context, fragment);
         }else if (id == R.id.nav_order_mkios) {
 

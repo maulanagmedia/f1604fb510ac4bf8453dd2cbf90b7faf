@@ -1,14 +1,11 @@
-package gmedia.net.id.psp.NavCheckin;
+package gmedia.net.id.psp.NavVerifikasiOutlet;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,11 +17,9 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
@@ -44,7 +39,7 @@ import gmedia.net.id.psp.Utils.ServerURL;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
-public class NavCheckin extends Fragment {
+public class NavVerifikasiOutlet extends Fragment {
 
     private Context context;
     private View layout;
@@ -61,21 +56,20 @@ public class NavCheckin extends Fragment {
     private List<CustomItem> masterList;
     private ListCheckinAdapter adapter;
 
-    public NavCheckin() {
-        // Required empty public constructor
+    public NavVerifikasiOutlet(){
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        layout = inflater.inflate(R.layout.fragment_nav_checkin, container, false);
+        layout = inflater.inflate(R.layout.fragment_nav_verifikasi_outlet, container, false);
         context = getContext();
         initUI();
         return layout;
@@ -111,13 +105,7 @@ public class NavCheckin extends Fragment {
                 }
             }
         });
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        keyword = actvCustomer.getText().toString();
-        startIndex = 0;
         getDataCustomer();
     }
 
@@ -137,7 +125,7 @@ public class NavCheckin extends Fragment {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getCustomerKunjungan, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getCustomerVerifikasi, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -196,7 +184,7 @@ public class NavCheckin extends Fragment {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getCustomerKunjungan, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getCustomerVerifikasi, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -297,7 +285,7 @@ public class NavCheckin extends Fragment {
 
                     CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
 
-                    Intent intent = new Intent(context, DetailCheckin.class);
+                    Intent intent = new Intent(context, DetailVerifikasiOutlet.class);
                     intent.putExtra("kdcus", selectedItem.getItem1());
                     ((Activity) context).startActivity(intent);
                 }

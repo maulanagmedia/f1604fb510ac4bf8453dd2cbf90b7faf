@@ -8,7 +8,7 @@
     <color name="color_white_transparant">#ccffffff</color>
     <color name="color_white_transparant2">#70ffffff</color>
     <color name="btn_color">#ec1c25</color>
-    <color name="btn_color_active">#ff545b</color>
+    <color name="btn_color_active">#c99b9d</color>
     <color name="color_hint">#86ec1d25</color>
 
     <color name="color_input">#fafafa</color>
@@ -24,6 +24,8 @@
 
     <color name="color_login_2">#432a75</color>
     <color name="color_login_2_active">#7248c7</color>
+    <color name="color_blue">#027fe5</color>
+    <color name="color_blue_2">#72abda</color>
 
     <color name="color_notif">#9a9b9b</color>
     <color name="color_grey">#9a9b9b</color>

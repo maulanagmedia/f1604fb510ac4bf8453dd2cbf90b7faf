@@ -161,7 +161,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
@@ -181,7 +180,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
@@ -222,7 +220,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
@@ -243,7 +240,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
@@ -263,7 +259,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
@@ -283,7 +278,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
@@ -303,7 +297,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
@@ -387,9 +380,18 @@
                 android:layout_height="wrap_content"
                 style="@style/formGroup">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Foto"
+                    android:id="@+id/tv_foto"
+                    android:layout_marginBottom="@dimen/default_margin_tiny"
+                    style="@style/formControlLabel3"/>
+
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="160dp"
+                    android:layout_below="@id/tv_foto"
                     android:id="@+id/rv_photo"></android.support.v7.widget.RecyclerView>
 
                 <ImageButton
@@ -423,6 +425,85 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="KTP"
+                    android:layout_marginBottom="@dimen/default_margin_tiny"
+                    style="@style/formControlLabel3"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:id="@+id/iv_ktp"></ImageView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@drawable/bg_upload"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:id="@+id/ll_upload_ktp"
+                    android:padding="12dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitCenter"
+                        android:src="@mipmap/ic_upload"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Upload ktp"
+                        android:textAllCaps="true"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/color_white"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Persetujuan"
+                    style="@style/formControlLabel3"/>
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/rg_persetujuan"
+                    android:weightSum="2">
+
+                    <RadioButton
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Setujui"
+                        android:checked="true"
+                        android:id="@+id/rb_setuju"/>
+
+                    <RadioButton
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Tidak disetujui"
+                        android:id="@+id/rb_tolak"/>
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 style="@style/formGroup"
                 android:gravity="center"
                 android:layout_marginBottom="@dimen/default_margin_small">
@@ -433,7 +514,7 @@
                     android:background="@drawable/btn_login"
                     android:paddingLeft="@dimen/default_margin_small"
                     android:paddingRight="@dimen/default_margin_small"
-                    android:text=" Simpan Data Customer "
+                    android:text=" Verifikasi Data Outlet "
                     android:id="@+id/btn_simpan"
                     android:textColor="@color/color_white"
                     android:layout_marginBottom="@dimen/default_margin_small"/>

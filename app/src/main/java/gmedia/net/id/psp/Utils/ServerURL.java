@@ -33,8 +33,11 @@ public class ServerURL {
     public static final String getCustomer = baseURL + "api/customer/get_customer/";
     public static final String getCustomerVerifikasi = baseURL + "api/customer/get_customer_verifikasi/";
     public static final String getCustomerKunjungan = baseURL + "api/customer/get_customer_kunjungan/";
+    public static final String verifikasiOutlet = baseURL + "api/customer/verifikasi_outlet/";
     public static final String getImages = baseURL + "api/location/get_images/";
     public static final String getComplaint = baseURL + "api/complaint/get_complaint/";
     public static final String saveComplaint = baseURL + "api/complaint/save/";
     public static final String updateCustomer = baseURL + "api/customer/update_customer/";
+    public static final String saveCheckin = baseURL + "api/checkin/save/";
+    public static final String logLocation = baseURL + "api/location/log_location/";
 }

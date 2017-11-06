@@ -1,30 +1,24 @@
 package gmedia.net.id.psp.NavCheckin;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
@@ -42,12 +36,9 @@ import gmedia.net.id.psp.NavCheckin.Adapter.ListCheckinAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
 
-import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-
-public class NavCheckin extends Fragment {
+public class ActCheckin extends AppCompatActivity {
 
     private Context context;
-    private View layout;
     private ItemValidation iv = new ItemValidation();
     private SessionManager session;
     private AutoCompleteTextView actvCustomer;
@@ -61,31 +52,23 @@ public class NavCheckin extends Fragment {
     private List<CustomItem> masterList;
     private ListCheckinAdapter adapter;
 
-    public NavCheckin() {
-        // Required empty public constructor
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        layout = inflater.inflate(R.layout.fragment_nav_checkin, container, false);
-        context = getContext();
+        setContentView(R.layout.activity_act_checkin);
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
+        setTitle("Kunjungan Outlet");
+        context = this;
         initUI();
-        return layout;
     }
 
     private void initUI() {
 
-        actvCustomer = (AutoCompleteTextView) layout.findViewById(R.id.actv_customer);
-        lvCustomer = (ListView) layout.findViewById(R.id.lv_customer);
-        pbLoading = (ProgressBar) layout.findViewById(R.id.pb_proses);
+        actvCustomer = (AutoCompleteTextView) findViewById(R.id.actv_customer);
+        lvCustomer = (ListView) findViewById(R.id.lv_customer);
+        pbLoading = (ProgressBar) findViewById(R.id.pb_proses);
         LayoutInflater li = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         footerList = li.inflate(R.layout.layout_footer_listview, null);
         session = new SessionManager(context);
@@ -114,7 +97,7 @@ public class NavCheckin extends Fragment {
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
         keyword = actvCustomer.getText().toString();
         startIndex = 0;
@@ -303,5 +286,22 @@ public class NavCheckin extends Fragment {
                 }
             });
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
     }
 }

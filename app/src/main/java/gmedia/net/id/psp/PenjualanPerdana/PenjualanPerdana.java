@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import gmedia.net.id.psp.LoginScreen;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
 import gmedia.net.id.psp.OrderPerdana.DetailOrderPerdana;
@@ -84,6 +85,12 @@ public class PenjualanPerdana extends AppCompatActivity {
         count = getResources().getInteger(R.integer.count_table);
         keyword = "";
         session = new SessionManager(PenjualanPerdana.this);
+
+        if(!session.isLoggedIn()){
+            Intent intent = new Intent(PenjualanPerdana.this, LoginScreen.class);
+            session.logoutUser(intent);
+        }
+
         getData();
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
