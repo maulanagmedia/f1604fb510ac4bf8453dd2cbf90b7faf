@@ -116,14 +116,21 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                 flContainer.removeAllViews();*/
                 fragment = new NavHome();
                 callFragment(context, fragment);
+
+                try {
+                    startService(new Intent(MainNavigationActivity.this, LocationUpdater.class));
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
+    }
 
-        try {
-            startService(new Intent(MainNavigationActivity.this, LocationUpdater.class));
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        doubleBackToExitPressedOnce = false;
+        exitState = false;
     }
 
     public static void changeNavigationState(Context context, int position){

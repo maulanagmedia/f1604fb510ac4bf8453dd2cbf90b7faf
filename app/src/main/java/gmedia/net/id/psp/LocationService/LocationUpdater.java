@@ -49,7 +49,7 @@ public class LocationUpdater extends Service implements LocationListener {
     public boolean isGPSEnabled = false;
     boolean isNetworkEnabled = false;
     boolean canGetLocation = false;
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
     private static final long MIN_TIME_BW_UPDATES = 10; // 10 minute
     private String TAG = "locationUpdater";
     private String address0 = "";
