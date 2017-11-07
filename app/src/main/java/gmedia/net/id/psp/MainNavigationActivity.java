@@ -129,8 +129,15 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
     @Override
     protected void onResume() {
         super.onResume();
+
         doubleBackToExitPressedOnce = false;
         exitState = false;
+
+        session = new SessionManager(MainNavigationActivity.this);
+        if(!session.isLoggedIn()){
+            Intent intent = new Intent(MainNavigationActivity.this, LoginScreen.class);
+            session.logoutUser(intent);
+        }
     }
 
     public static void changeNavigationState(Context context, int position){

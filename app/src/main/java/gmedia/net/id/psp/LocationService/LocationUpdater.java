@@ -50,7 +50,7 @@ public class LocationUpdater extends Service implements LocationListener {
     boolean isNetworkEnabled = false;
     boolean canGetLocation = false;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
-    private static final long MIN_TIME_BW_UPDATES = 10; // 10 minute
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 10; // 10 minute
     private String TAG = "locationUpdater";
     private String address0 = "";
     private SessionManager session;
