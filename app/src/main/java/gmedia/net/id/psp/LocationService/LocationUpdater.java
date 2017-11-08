@@ -31,6 +31,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import gmedia.net.id.psp.TambahCustomer.DetailCustomer;
 import gmedia.net.id.psp.Utils.ServerURL;
@@ -49,13 +51,16 @@ public class LocationUpdater extends Service implements LocationListener {
     public boolean isGPSEnabled = false;
     boolean isNetworkEnabled = false;
     boolean canGetLocation = false;
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 10; // 10 minute
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 1 meters
+    private static final long MIN_TIME_BW_UPDATES = 1; // 1 minute
     private String TAG = "locationUpdater";
     private String address0 = "";
     private SessionManager session;
     private String nik = "";
     private ItemValidation iv = new ItemValidation();
+    private static Timer timer = new Timer();
+    private int timerTime = 1000 * 60 * 10; // 10 minute refresh
+    public static boolean isActive = false;
 
     public LocationUpdater() {
     }
@@ -76,7 +81,16 @@ public class LocationUpdater extends Service implements LocationListener {
         session = new SessionManager(context);
         nik = session.getUserInfo(SessionManager.TAG_UID);
 
-        initLocation();
+        if(!isActive){
+            isActive = true;
+            initLocation();
+        }else{
+
+            if(location == null){
+                initLocation();
+            }
+        }
+
     }
 
     @Override
@@ -223,6 +237,8 @@ public class LocationUpdater extends Service implements LocationListener {
         if(location != null){
             onLocationChanged(location);
         }
+
+        timer.scheduleAtFixedRate(new mainTask(), 0, timerTime);
         return location;
     }
 
@@ -230,55 +246,66 @@ public class LocationUpdater extends Service implements LocationListener {
 
         JSONObject jData = new JSONObject();
 
-        try {
-            jData.put("nik", nik);
-            jData.put("keterangan", "LOG_UPDATE");
-            jData.put("latitude", iv.doubleToStringFull(latitude));
-            jData.put("longitude", iv.doubleToStringFull(longitude));
-            jData.put("state", address0);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        if(session.isLoggedIn()){
+            try {
+                jData.put("nik", nik);
+                jData.put("keterangan", "LOG_UPDATE");
+                jData.put("latitude", iv.doubleToStringFull(latitude));
+                jData.put("longitude", iv.doubleToStringFull(longitude));
+                jData.put("state", address0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-        String method = "POST";
-        JSONObject jBody = new JSONObject();
-        try {
-            jBody.put("data", jData);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            String method = "POST";
+            JSONObject jBody = new JSONObject();
+            try {
+                jBody.put("data", jData);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-        ApiVolley request = new ApiVolley(context, jBody, method, ServerURL.logLocation, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
-            @Override
-            public void onSuccess(String result) {
+            ApiVolley request = new ApiVolley(context, jBody, method, ServerURL.logLocation, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+                @Override
+                public void onSuccess(String result) {
 
-                try {
+                    try {
 
-                    JSONObject response = new JSONObject(result);
-                    String status = response.getJSONObject("metadata").getString("status");
+                        JSONObject response = new JSONObject(result);
+                        String status = response.getJSONObject("metadata").getString("status");
 
-                    String message = "";
-                    if(iv.parseNullInteger(status) == 200){
+                        String message = "";
+                        if(iv.parseNullInteger(status) == 200){
 
-                        message = response.getJSONObject("response").getString("message");
-                    }else{
-                        message = response.getJSONObject("metadata").getString("message");
+                            message = response.getJSONObject("response").getString("message");
+                        }else{
+                            message = response.getJSONObject("metadata").getString("message");
+                        }
+
+                        Log.d(TAG, "onSuccess: " + message);
+
+                    } catch (JSONException e) {
+                        Log.d(TAG, "onSuccess: " + e.toString());
                     }
 
-                    Log.d(TAG, "onSuccess: " + message);
-
-                } catch (JSONException e) {
-                    Log.d(TAG, "onSuccess: " + e.toString());
                 }
 
-            }
+                @Override
+                public void onError(String result) {
 
-            @Override
-            public void onError(String result) {
+                    Log.d(TAG, "onError: " + result);
+                }
+            });
+        }
+    }
 
-                Log.d(TAG, "onError: " + result);
-            }
-        });
+    private class mainTask extends TimerTask
+    {
+        public void run()
+        {
+            Log.d(TAG, "onLocationChanged: " +String.valueOf(latitude)+" , "+ String.valueOf(longitude));
+            saveLocation();
+        }
     }
 
     @Override
@@ -302,8 +329,7 @@ public class LocationUpdater extends Service implements LocationListener {
         if(addresses != null && addresses.size() > 0){
             address0 = addresses.get(0).getAddressLine(0);
         }
-        Log.d(TAG, "onLocationChanged: " +String.valueOf(latitude)+" , "+ String.valueOf(longitude));
-        saveLocation();
+
     }
 
     @Override

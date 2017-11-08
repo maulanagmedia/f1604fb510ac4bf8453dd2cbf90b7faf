@@ -21,6 +21,7 @@ import java.util.Map;
 
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.PelunasanPenjualan.PelunasanPenjualan;
+import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
 import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
 import gmedia.net.id.psp.R;
@@ -69,10 +70,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         switch (typeContent){
             case 1:
-                intent = new Intent(this, PenjualanMKIOS.class);
+                intent = new Intent(this, PenjualanHariIni.class);
                 break;
             case 2:
-                intent = new Intent(this, PenjualanPerdana.class);
+                intent = new Intent(this, PenjualanHariIni.class);
                 break;
             default:
                 intent = new Intent(this, MainNavigationActivity.class);

@@ -30,6 +30,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
@@ -151,9 +161,21 @@
         <activity android:name=".NavCheckin.ActCheckin" />
 
         <service
-            android:name="gmedia.net.id.psp.LocationService.LocationUpdater"
+            android:name=".LocationService.LocationUpdater"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity
+            android:name=".NavVerifikasiOutlet.ActVerifikasiOutlet"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavCheckin.DetailKunjungan"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PenjualanHariIni.PenjualanHariIni"
+            android:screenOrientation="portrait" />
+        <activity android:name=".RiwayatPenjualan.RiwayatPenjualan"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

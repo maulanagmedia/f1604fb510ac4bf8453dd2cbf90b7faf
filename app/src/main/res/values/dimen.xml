@@ -17,4 +17,6 @@
     <dimen name="item_pulsa">340dp</dimen>
     <dimen name="pulsa_height">90dp</dimen>
     <dimen name="scrollbar">3dp</dimen>
+
+    <dimen name="menu_height">110dp</dimen>
 </resources>

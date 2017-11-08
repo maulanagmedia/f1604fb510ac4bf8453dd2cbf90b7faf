@@ -15,10 +15,6 @@
             android:icon="@drawable/ic_add_customer_putih"
             android:title="Tambah Outlet" />
         <item
-            android:id="@+id/nav_verifikasi_outlet"
-            android:icon="@drawable/ic_add_customer_putih"
-            android:title="Verifikasi Outlet" />
-        <item
             android:id="@+id/nav_order_mkios"
             android:icon="@drawable/nav_order_mkios"
             android:title="Order Mkios" />
@@ -27,13 +23,27 @@
             android:icon="@drawable/nav_order_perdana"
             android:title="Order Perdana" />
         <item
+            android:id="@+id/nav_order_tcash"
+            android:icon="@drawable/ic_tcash_putih"
+            android:title="Order TCash" />
+        <item
             android:id="@+id/nav_penjualan_mkios"
             android:icon="@drawable/nav_penjualan_mkios"
-            android:title="Penjualan Mkios" />
+            android:title="Penjualan Mkios"
+            android:visible="false"/>
         <item
             android:id="@+id/nav_penjualan_perdana"
             android:icon="@drawable/nav_penjualan_perdana"
-            android:title="Penjualan Perdana" />
+            android:title="Penjualan Perdana"
+            android:visible="false"/>
+        <item
+            android:id="@+id/nav_penjualan"
+            android:icon="@drawable/nav_penjualan_mkios"
+            android:title="Penjualan Hari Ini"/>
+        <item
+            android:id="@+id/nav_riwayat_penjualan"
+            android:icon="@drawable/ic_history_putih"
+            android:title="Riwayat Penjualan"/>
         <item
             android:id="@+id/nav_data_piutang"
             android:icon="@drawable/nav_data_piutang"
@@ -43,13 +53,21 @@
             android:icon="@drawable/nav_stock_sales"
             android:title="Stok Sales" />
         <item
+            android:id="@+id/nav_complain"
+            android:icon="@drawable/ic_komplain_putih"
+            android:title="Komplain" />
+        <item
+            android:id="@+id/nav_verifikasi_outlet"
+            android:icon="@drawable/ic_verif_outlet_putih"
+            android:title="Verifikasi Outlet" />
+        <item
             android:id="@+id/nav_checkin"
             android:icon="@drawable/ic_chekin_putih"
             android:title="Kunjungan / Check-in" />
         <item
-            android:id="@+id/nav_complain"
-            android:icon="@drawable/ic_komplain_putih"
-            android:title="Komplain" />
+            android:id="@+id/nav_info_deposit"
+            android:icon="@drawable/nav_order_perdana"
+            android:title="Info Deposit" />
         <item
             android:id="@+id/nav_keluar"
             android:icon="@drawable/ic_keluar"

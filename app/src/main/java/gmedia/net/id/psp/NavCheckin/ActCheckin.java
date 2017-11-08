@@ -56,6 +56,7 @@ public class ActCheckin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_act_checkin);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
@@ -280,7 +281,7 @@ public class ActCheckin extends AppCompatActivity {
 
                     CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
 
-                    Intent intent = new Intent(context, DetailCheckin.class);
+                    Intent intent = new Intent(context, DetailKunjungan.class);
                     intent.putExtra("kdcus", selectedItem.getItem1());
                     ((Activity) context).startActivity(intent);
                 }

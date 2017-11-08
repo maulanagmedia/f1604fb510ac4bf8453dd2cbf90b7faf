@@ -2,10 +2,14 @@ package gmedia.net.id.psp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -25,13 +29,16 @@ import com.maulana.custommodul.SessionManager;
 import gmedia.net.id.psp.DaftarPiutang.DaftarPiutang;
 import gmedia.net.id.psp.LocationService.LocationUpdater;
 import gmedia.net.id.psp.NavAccount.NavAccount;
+import gmedia.net.id.psp.NavCheckin.ActCheckin;
 import gmedia.net.id.psp.NavCheckin.NavCheckin;
 import gmedia.net.id.psp.NavHome.NavHome;
 import gmedia.net.id.psp.NavKomplain.NavKomplain;
 import gmedia.net.id.psp.NavTambahCustomer.NavCustomer;
+import gmedia.net.id.psp.NavVerifikasiOutlet.ActVerifikasiOutlet;
 import gmedia.net.id.psp.NavVerifikasiOutlet.NavVerifikasiOutlet;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
 import gmedia.net.id.psp.OrderPulsa.ListReseller;
+import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
 import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
 import gmedia.net.id.psp.StokSales.StokSales;
@@ -47,6 +54,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
     private static final int REQUEST_PERMISSIONS = 20;
     private static NavigationView navigationView;
     private Context context;
+    private boolean dialogActive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +63,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         context = this;
+        dialogActive = false;
 
         if (ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.WRITE_SETTINGS) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
@@ -98,6 +107,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         session = new SessionManager(MainNavigationActivity.this);
 
         if(!session.isLoggedIn()){
+            stopCurrentService();
             Intent intent = new Intent(MainNavigationActivity.this, LoginScreen.class);
             session.logoutUser(intent);
         }
@@ -117,13 +127,60 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                 fragment = new NavHome();
                 callFragment(context, fragment);
 
-                try {
-                    startService(new Intent(MainNavigationActivity.this, LocationUpdater.class));
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
             }
         }
+    }
+
+    public void statusCheck() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            buildAlertMessageNoGps();
+        }else{
+
+            try {
+                new CountDownTimer(4000, 1000) {
+
+                    public void onTick(long millisUntilFinished) {
+                        //here you can have your logic to set text to edittext
+                    }
+
+                    public void onFinish() {
+                        if(!LocationUpdater.isActive){
+                            startService(new Intent(MainNavigationActivity.this, LocationUpdater.class));
+                        }
+                    }
+
+                }.start();
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void buildAlertMessageNoGps() {
+        if(!dialogActive){
+            dialogActive = true;
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Mohon Hidupkan Akses Lokasi (GPS) Anda.")
+                    .setCancelable(false)
+                    .setPositiveButton("Hidupkan", new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    });
+            final AlertDialog alert = builder.create();
+            alert.show();
+
+            alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    dialogActive = false;
+                }
+            });
+        }
+
     }
 
     @Override
@@ -135,9 +192,12 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
 
         session = new SessionManager(MainNavigationActivity.this);
         if(!session.isLoggedIn()){
+            stopCurrentService();
             Intent intent = new Intent(MainNavigationActivity.this, LoginScreen.class);
             session.logoutUser(intent);
         }
+
+        statusCheck();
     }
 
     public static void changeNavigationState(Context context, int position){
@@ -148,13 +208,13 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                 fragment = new NavCustomer();
                 callFragment(context, fragment);
                 break;
-            case 9:
+            case 14:
                 navigationView.setCheckedItem(R.id.nav_checkin);
                 ((Activity) context).setTitle(navigationView.getMenu().getItem(position).getTitle().toString());
                 fragment = new NavCheckin();
                 callFragment(context, fragment);
                 break;
-            case 10:
+            case 12:
                 navigationView.setCheckedItem(R.id.nav_complain);
                 ((Activity) context).setTitle(navigationView.getMenu().getItem(position).getTitle().toString());
                 fragment = new NavKomplain();
@@ -166,7 +226,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
     @Override
     public void onPermissionsGranted(int requestCode) {
 
-        startService(new Intent(MainNavigationActivity.this, LocationUpdater.class));
+        statusCheck();
     }
 
     @Override
@@ -203,21 +263,23 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        setTitle(item.getTitle());
 
         if (id == R.id.nav_home) {
+
+            setTitle(item.getTitle());
             fragment = new NavHome();
             callFragment(context, fragment);
         } else if (id == R.id.nav_akun) {
+
+            setTitle(item.getTitle());
             fragment = new NavAccount();
             callFragment(context, fragment);
         } else if (id == R.id.nav_add_customer) {
+
+            setTitle(item.getTitle());
             fragment = new NavCustomer();
             callFragment(context, fragment);
-        } else if (id == R.id.nav_verifikasi_outlet) {
-            fragment = new NavVerifikasiOutlet();
-            callFragment(context, fragment);
-        }else if (id == R.id.nav_order_mkios) {
+        } else if (id == R.id.nav_order_mkios) {
 
             Intent intent = new Intent(MainNavigationActivity.this, ListReseller.class);
             startActivity(intent);
@@ -233,6 +295,12 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
 
             Intent intent = new Intent(MainNavigationActivity.this, PenjualanPerdana.class);
             startActivity(intent);
+        } else if (id == R.id.nav_order_tcash) {
+
+        } else if (id == R.id.nav_penjualan) {
+
+            Intent intent = new Intent(MainNavigationActivity.this, PenjualanHariIni.class);
+            startActivity(intent);
         } else if (id == R.id.nav_data_piutang) {
 
             Intent intent = new Intent(MainNavigationActivity.this, DaftarPiutang.class);
@@ -241,16 +309,24 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
 
             Intent intent = new Intent(MainNavigationActivity.this, StokSales.class);
             startActivity(intent);
-        } else if (id == R.id.nav_checkin) {
-
-            fragment = new NavCheckin();
-            callFragment(context, fragment);
         } else if (id == R.id.nav_complain) {
 
+            setTitle(item.getTitle());
             fragment = new NavKomplain();
             callFragment(context, fragment);
+        } else if (id == R.id.nav_verifikasi_outlet) {
+
+            Intent intent = new Intent(MainNavigationActivity.this, ActVerifikasiOutlet.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_checkin) {
+
+            Intent intent = new Intent(MainNavigationActivity.this, ActCheckin.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_info_deposit) {
+
         } else if (id == R.id.nav_keluar) {
 
+            stopCurrentService();
             Intent intent = new Intent(MainNavigationActivity.this, LoginScreen.class);
             session.logoutUser(intent);
         }
@@ -258,6 +334,15 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void stopCurrentService(){
+        try {
+            stopService(new Intent(MainNavigationActivity.this, LocationUpdater.class));
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private static Fragment fragment;

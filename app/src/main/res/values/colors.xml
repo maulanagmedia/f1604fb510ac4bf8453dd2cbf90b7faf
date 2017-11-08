@@ -29,6 +29,8 @@
 
     <color name="color_notif">#9a9b9b</color>
     <color name="color_grey">#9a9b9b</color>
+    <color name="color_grey_2">#d7d7d7</color>
+    <color name="color_grey_3">#e6e4e4</color>
     <color name="color_black">#000000</color>
 
 </resources>

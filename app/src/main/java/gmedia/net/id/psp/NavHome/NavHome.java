@@ -36,11 +36,14 @@ import java.util.TimerTask;
 import gmedia.net.id.psp.CustomView.WrapContentViewPager;
 import gmedia.net.id.psp.DaftarPiutang.DaftarPiutang;
 import gmedia.net.id.psp.MainNavigationActivity;
+import gmedia.net.id.psp.NavCheckin.ActCheckin;
 import gmedia.net.id.psp.NavHome.Adapter.HeaderSliderAdapter;
+import gmedia.net.id.psp.NavVerifikasiOutlet.ActVerifikasiOutlet;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
 import gmedia.net.id.psp.OrderPerdana.DetailOrderPerdana;
 import gmedia.net.id.psp.OrderPerdana.ListBarang;
 import gmedia.net.id.psp.OrderPulsa.ListReseller;
+import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
 import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
 import gmedia.net.id.psp.R;
@@ -73,6 +76,12 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
     private LinearLayout llOrderMkios, llPenjualanMkios, llOrderPerdana, llPenjualanPerdana, llDaftarPiutang, llStokSales;
     private TextView tvNamaSales, tvTotalOmset, tvOmsetMkios, tvOmsetPerdana;
     private LinearLayout llAddCustomer, llCheckIn, llKomplain;
+    private LinearLayout ll1, ll2, ll3, ll4;
+    private LinearLayout llOrderTcash;
+    private LinearLayout llPenjualan;
+    private LinearLayout llRiwayatPenjualan;
+    private LinearLayout llVerifikasiOutlet;
+    private LinearLayout llInfoDeposit;
 
     public NavHome() {
         // Required empty public constructor
@@ -155,20 +164,61 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         });
 
         //button
-        llOrderMkios = (LinearLayout) layout.findViewById(R.id.ll_order_mkios);
+        ll1 = (LinearLayout) layout.findViewById(R.id.ll_1);
+        ll2 = (LinearLayout) layout.findViewById(R.id.ll_2);
+        ll3 = (LinearLayout) layout.findViewById(R.id.ll_3);
+        ll4 = (LinearLayout) layout.findViewById(R.id.ll_4);
+
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ll1.getLayoutParams();
+
+        lp.width = display[0];
+        lp.height = (display[1] - mActionBarSize) * 15/100;
+
+        ll1.setLayoutParams(lp);
+        ll2.setLayoutParams(lp);
+        ll3.setLayoutParams(lp);
+        ll4.setLayoutParams(lp);
+
+        llAddCustomer = (LinearLayout) layout.findViewById(R.id.ll_add_customer);           // 1
+        llOrderMkios = (LinearLayout) layout.findViewById(R.id.ll_order_mkios);             // 2
+        llOrderPerdana = (LinearLayout) layout.findViewById(R.id.ll_order_perdana);         // 3
+        llOrderTcash = (LinearLayout) layout.findViewById(R.id.ll_order_tcash);             // 4
+        llPenjualan = (LinearLayout) layout.findViewById(R.id.ll_penjualan);                // 5
+        llRiwayatPenjualan = (LinearLayout) layout.findViewById(R.id.ll_riwayat_penjualan); // 6
+        llDaftarPiutang = (LinearLayout) layout.findViewById(R.id.ll_daftar_piutang);       // 7
+        llStokSales = (LinearLayout) layout.findViewById(R.id.ll_stok_sales);               // 8
+        llKomplain = (LinearLayout) layout.findViewById(R.id.ll_complaint);                 // 9
+        llVerifikasiOutlet = (LinearLayout) layout.findViewById(R.id.ll_verifikasi_outlet); // 10
+        llCheckIn = (LinearLayout) layout.findViewById(R.id.ll_checkin);                    // 11
+        llInfoDeposit = (LinearLayout) layout.findViewById(R.id.ll_info_deposit);           // 12
+
         llPenjualanMkios = (LinearLayout) layout.findViewById(R.id.ll_penjualan_mkios);
-        llOrderPerdana = (LinearLayout) layout.findViewById(R.id.ll_order_perdana);
         llPenjualanPerdana = (LinearLayout) layout.findViewById(R.id.ll_penjualan_perdana);
-        llDaftarPiutang = (LinearLayout) layout.findViewById(R.id.ll_daftar_piutang);
-        llStokSales = (LinearLayout) layout.findViewById(R.id.ll_stok_sales);
-        llAddCustomer = (LinearLayout) layout.findViewById(R.id.ll_add_customer);
-        llCheckIn = (LinearLayout) layout.findViewById(R.id.ll_checkin);
-        llKomplain = (LinearLayout) layout.findViewById(R.id.ll_complaint);
 
         tvNamaSales = (TextView) layout.findViewById(R.id.tv_nama_sales);
         tvTotalOmset = (TextView) layout.findViewById(R.id.tv_total_omset);
         tvOmsetMkios = (TextView) layout.findViewById(R.id.tv_omset_mkios);
         tvOmsetPerdana = (TextView) layout.findViewById(R.id.tv_omset_perdana);
+
+
+
+        initEvent();
+
+        tvNamaSales.setText(session.getUser());
+
+        getListHeaderSlider();
+        getUserOmset();
+    }
+
+    private void initEvent() {
+
+        llAddCustomer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                MainNavigationActivity.changeNavigationState(context, 2);
+            }
+        });
 
         llOrderMkios.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,6 +252,14 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             }
         });
 
+        llPenjualan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, PenjualanHariIni.class);
+                startActivity(intent);
+            }
+        });
+
         llDaftarPiutang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,33 +276,30 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             }
         });
 
-        llAddCustomer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                MainNavigationActivity.changeNavigationState(context, 2);
-            }
-        });
-
         llCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                MainNavigationActivity.changeNavigationState(context, 9);
+                Intent intent = new Intent(context, ActCheckin.class);
+                startActivity(intent);
             }
         });
 
         llKomplain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainNavigationActivity.changeNavigationState(context, 10);
+                MainNavigationActivity.changeNavigationState(context, 12);
             }
         });
 
-        tvNamaSales.setText(session.getUser());
+        llVerifikasiOutlet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        getListHeaderSlider();
-        getUserOmset();
+                Intent intent = new Intent(context, ActVerifikasiOutlet.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     //region Slider Header

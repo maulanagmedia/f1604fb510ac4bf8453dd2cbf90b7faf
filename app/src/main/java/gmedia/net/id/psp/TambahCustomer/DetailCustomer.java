@@ -21,6 +21,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -72,6 +73,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import gmedia.net.id.psp.BuildConfig;
 import gmedia.net.id.psp.CustomView.CustomMapView;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.TambahCustomer.Adapter.PhotosAdapter;
@@ -338,7 +340,12 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         if (cameraIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
+            Uri photoURL = null;
             try {
+                photoURL = FileProvider.getUriForFile(DetailCustomer.this,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        createImageFile());
+                photoFromCameraURI = photoURL.toString();
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 // Error occurred while creating the File
@@ -346,7 +353,8 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURL);
                 startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
@@ -365,7 +373,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        photoFromCameraURI = "file:" + image.getAbsolutePath();
+        //photoFromCameraURI = "file:" + image.getAbsolutePath();
         return image;
     }
 
@@ -488,6 +496,9 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             AreaModel area = (AreaModel) spArea.getSelectedItem();
             jDataCustomer.put("kodearea", "");
             jDataCustomer.put("tglmasuk", iv.getCurrentDate(FormatItem.formatDate));
+            jDataCustomer.put("userid", session.getUserInfo(SessionManager.TAG_UID));
+            jDataCustomer.put("useru", session.getUserInfo(SessionManager.TAG_UID));
+            jDataCustomer.put("useru_tgl", iv.getCurrentDate(FormatItem.formatTimestamp));
         } catch (JSONException e) {
             e.printStackTrace();
         }

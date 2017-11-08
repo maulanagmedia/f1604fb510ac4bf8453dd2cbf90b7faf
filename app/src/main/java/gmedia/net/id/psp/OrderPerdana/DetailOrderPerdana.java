@@ -54,6 +54,7 @@ import java.util.Random;
 import gmedia.net.id.psp.OrderPerdana.Adapter.ListCCIDAdapter;
 import gmedia.net.id.psp.OrderPerdana.Adapter.ListCCIDCBAdapter;
 import gmedia.net.id.psp.OrderPerdana.Adapter.ListRentangCCIDAdapter;
+import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
@@ -725,7 +726,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                         isLoading(false);
                         Toast.makeText(DetailOrderPerdana.this, message, Toast.LENGTH_LONG).show();
                         //Snackbar.make(findViewById(android.R.id.content), "Order Pulsa berhasil ditambahkan", Snackbar.LENGTH_LONG).show();
-                        Intent intent = new Intent(DetailOrderPerdana.this, PenjualanPerdana.class);
+                        Intent intent = new Intent(DetailOrderPerdana.this, PenjualanHariIni.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish();

@@ -22,6 +22,7 @@ import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -74,6 +75,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import gmedia.net.id.psp.BuildConfig;
 import gmedia.net.id.psp.CustomView.CustomMapView;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.TambahCustomer.Adapter.PhotosAdapter;
@@ -386,7 +388,12 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
         if (cameraIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
+            Uri photoURL = null;
             try {
+                photoURL = FileProvider.getUriForFile(DetailVerifikasiOutlet.this,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        createImageFile());
+                photoFromCameraURI = photoURL.toString();
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 // Error occurred while creating the File
@@ -394,7 +401,8 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURL);
                 startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
@@ -413,7 +421,7 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        photoFromCameraURI = "file:" + image.getAbsolutePath();
+        //photoFromCameraURI = "file:" + image.getAbsolutePath();
         return image;
     }
 
@@ -513,10 +521,10 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
             jDataCustomer.put("status", (statusCustomer) ? "3" : "0");
             jDataCustomer.put("contact_person", edtCP.getText().toString());
 
-            jDataCustomer.put("nik", session.getUserInfo(SessionManager.TAG_UID));
             AreaModel area = (AreaModel) spArea.getSelectedItem();
             jDataCustomer.put("kodearea", area.getValue());
-            jDataCustomer.put("tglmasuk", iv.getCurrentDate(FormatItem.formatDate));
+            jDataCustomer.put("useru", session.getUserInfo(SessionManager.TAG_UID));
+            jDataCustomer.put("useru_tgl", iv.getCurrentDate(FormatItem.formatTimestamp));
         } catch (JSONException e) {
             e.printStackTrace();
         }

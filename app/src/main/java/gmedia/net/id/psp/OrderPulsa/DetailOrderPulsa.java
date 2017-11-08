@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
@@ -715,7 +716,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                         if(editMode) message = "Order "+ nonota+ " berhasil diubah";
                         Toast.makeText(DetailOrderPulsa.this, message, Toast.LENGTH_LONG).show();
                         //Snackbar.make(findViewById(android.R.id.content), "Order Pulsa berhasil ditambahkan", Snackbar.LENGTH_LONG).show();
-                        Intent intent = new Intent(DetailOrderPulsa.this, PenjualanMKIOS.class);
+                        Intent intent = new Intent(DetailOrderPulsa.this, PenjualanHariIni.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish();
