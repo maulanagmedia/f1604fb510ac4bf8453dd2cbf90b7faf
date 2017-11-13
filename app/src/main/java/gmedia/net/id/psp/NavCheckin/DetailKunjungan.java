@@ -281,7 +281,11 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            edtJarak.setText(jo.getString("jarak") + " km");
+                            if(iv.parseNullDouble(jo.getString("jarak")) <= 1){
+                                edtJarak.setText(iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")) * 1000, "4") + " m");
+                            }else{
+                                edtJarak.setText(iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")), "4") + " km");
+                            }
                         }
                     }
 

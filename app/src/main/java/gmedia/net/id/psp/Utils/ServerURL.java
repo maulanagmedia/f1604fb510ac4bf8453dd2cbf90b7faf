@@ -25,6 +25,7 @@ public class ServerURL {
     public static final String getPenjualanPerdana = baseURL + "api/perdana/get_penjualan_perdana/";
     public static final String getPenjualanHariIni = baseURL + "api/perdana/get_all_penjualan/";
     public static final String getDetailPenjualanHariIni = baseURL + "api/perdana/get_detail_all_penjualan/";
+    public static final String getRiwayatPenjualan = baseURL + "api/perdana/get_riwayat_penjualan/";
 
     public static final String getSemuaPenjualan = baseURL + "api/penjualan/get_penjualan/";
 
@@ -45,6 +46,7 @@ public class ServerURL {
     public static final String getCustomerKunjungan = baseURL + "api/customer/get_customer_kunjungan/";
     public static final String verifikasiOutlet = baseURL + "api/customer/verifikasi_outlet/";
     public static final String updateCustomer = baseURL + "api/customer/update_customer/";
+    public static final String getCustomerDeposit = baseURL + "api/customer/get_customer_deposit/";
 
     public static final String getImages = baseURL + "api/location/get_images/";
     public static final String logLocation = baseURL + "api/location/log_location/";

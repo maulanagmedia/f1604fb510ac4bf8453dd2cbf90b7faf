@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.NavCheckin.Adapter.ListCheckinAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
@@ -302,7 +303,10 @@ public class ActCheckin extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        Intent intent = new Intent(ActCheckin.this, MainNavigationActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
     }
 }

@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.OrderPulsa.Adapter.ListResellerAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
@@ -198,7 +199,10 @@ public class ListReseller extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        Intent intent = new Intent(ListReseller.this, MainNavigationActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
     }
 }

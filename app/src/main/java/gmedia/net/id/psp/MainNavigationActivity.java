@@ -23,16 +23,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.RuntimePermissionsActivity;
 import com.maulana.custommodul.SessionManager;
 
 import gmedia.net.id.psp.DaftarPiutang.DaftarPiutang;
+import gmedia.net.id.psp.InfoDeposit.ActDeposit;
+import gmedia.net.id.psp.InfoDeposit.InfoDeposit;
 import gmedia.net.id.psp.LocationService.LocationUpdater;
 import gmedia.net.id.psp.NavAccount.NavAccount;
 import gmedia.net.id.psp.NavCheckin.ActCheckin;
 import gmedia.net.id.psp.NavCheckin.NavCheckin;
 import gmedia.net.id.psp.NavHome.NavHome;
+import gmedia.net.id.psp.NavKomplain.ActKomplain;
 import gmedia.net.id.psp.NavKomplain.NavKomplain;
+import gmedia.net.id.psp.NavTambahCustomer.ActTambahOutlet;
 import gmedia.net.id.psp.NavTambahCustomer.NavCustomer;
 import gmedia.net.id.psp.NavVerifikasiOutlet.ActVerifikasiOutlet;
 import gmedia.net.id.psp.NavVerifikasiOutlet.NavVerifikasiOutlet;
@@ -41,6 +46,7 @@ import gmedia.net.id.psp.OrderPulsa.ListReseller;
 import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
 import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
+import gmedia.net.id.psp.RiwayatPenjualan.RiwayatPenjualan;
 import gmedia.net.id.psp.StokSales.StokSales;
 import gmedia.net.id.psp.TambahCustomer.DetailCustomer;
 
@@ -55,6 +61,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
     private static NavigationView navigationView;
     private Context context;
     private boolean dialogActive = false;
+    private ItemValidation iv = new ItemValidation();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +153,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                     }
 
                     public void onFinish() {
-                        if(!LocationUpdater.isActive){
+                        if(!iv.isServiceRunning(MainNavigationActivity.this, LocationUpdater.class)){
                             startService(new Intent(MainNavigationActivity.this, LocationUpdater.class));
                         }
                     }
@@ -192,7 +199,10 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
 
         session = new SessionManager(MainNavigationActivity.this);
         if(!session.isLoggedIn()){
-            stopCurrentService();
+
+            if(iv.isServiceRunning(MainNavigationActivity.this, LocationUpdater.class)){
+                stopCurrentService();
+            }
             Intent intent = new Intent(MainNavigationActivity.this, LoginScreen.class);
             session.logoutUser(intent);
         }
@@ -276,57 +286,76 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
             callFragment(context, fragment);
         } else if (id == R.id.nav_add_customer) {
 
-            setTitle(item.getTitle());
-            fragment = new NavCustomer();
-            callFragment(context, fragment);
+            Intent intent = new Intent(MainNavigationActivity.this, ActTambahOutlet.class);
+            startActivity(intent);
+            finish();
         } else if (id == R.id.nav_order_mkios) {
 
             Intent intent = new Intent(MainNavigationActivity.this, ListReseller.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_penjualan_mkios) {
 
             Intent intent = new Intent(MainNavigationActivity.this, PenjualanMKIOS.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_order_perdana) {
 
             Intent intent = new Intent(MainNavigationActivity.this, CustomerPerdana.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_penjualan_perdana) {
 
             Intent intent = new Intent(MainNavigationActivity.this, PenjualanPerdana.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_order_tcash) {
 
         } else if (id == R.id.nav_penjualan) {
 
             Intent intent = new Intent(MainNavigationActivity.this, PenjualanHariIni.class);
             startActivity(intent);
+            finish();
+        } else if (id == R.id.nav_riwayat_penjualan) {
+
+            Intent intent = new Intent(MainNavigationActivity.this, RiwayatPenjualan.class);
+            startActivity(intent);
+            finish();
         } else if (id == R.id.nav_data_piutang) {
 
             Intent intent = new Intent(MainNavigationActivity.this, DaftarPiutang.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_stok_sales) {
 
             Intent intent = new Intent(MainNavigationActivity.this, StokSales.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_complain) {
 
-            setTitle(item.getTitle());
-            fragment = new NavKomplain();
-            callFragment(context, fragment);
+            Intent intent = new Intent(MainNavigationActivity.this, ActKomplain.class);
+            startActivity(intent);
+            finish();
         } else if (id == R.id.nav_verifikasi_outlet) {
 
             Intent intent = new Intent(MainNavigationActivity.this, ActVerifikasiOutlet.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_checkin) {
 
             Intent intent = new Intent(MainNavigationActivity.this, ActCheckin.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_info_deposit) {
 
+            Intent intent = new Intent(MainNavigationActivity.this, ActDeposit.class);
+            startActivity(intent);
+            finish();
         } else if (id == R.id.nav_keluar) {
 
-            stopCurrentService();
+            if(iv.isServiceRunning(MainNavigationActivity.this, LocationUpdater.class)){
+                stopCurrentService();
+            }
             Intent intent = new Intent(MainNavigationActivity.this, LoginScreen.class);
             session.logoutUser(intent);
         }

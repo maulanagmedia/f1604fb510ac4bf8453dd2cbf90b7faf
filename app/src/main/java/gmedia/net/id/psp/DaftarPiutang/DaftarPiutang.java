@@ -1,6 +1,7 @@
 package gmedia.net.id.psp.DaftarPiutang;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gmedia.net.id.psp.DaftarPiutang.Adapter.ListPiutangAdapter;
+import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
 
@@ -289,7 +291,10 @@ public class DaftarPiutang extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        Intent intent = new Intent(DaftarPiutang.this, MainNavigationActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
     }
 }

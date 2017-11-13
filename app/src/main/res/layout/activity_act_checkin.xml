@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="gmedia.net.id.psp.NavCheckin.ActCheckin">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -20,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/CustomAutoComplete"
-                android:hint="Nama Customer"
+                android:hint="Nama Outlet"
                 android:id="@+id/actv_customer"/>
         </LinearLayout>
 

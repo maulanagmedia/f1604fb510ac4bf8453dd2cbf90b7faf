@@ -5,4 +5,23 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="default_margin_tiny">4dp</dimen>
+    <dimen name="default_margin_tiny_reverse">-4dp</dimen>
+    <dimen name="default_margin_small">8dp</dimen>
+    <dimen name="default_corner">2dp</dimen>
+    <dimen name="default_margin">16dp</dimen>
+
+    <dimen name="title_text_list">18sp</dimen>
+    <dimen name="subtitle_text_list">12sp</dimen>
+    <dimen name="value_text_list">15sp</dimen>
+    <dimen name="default_line">0.75dp</dimen>
+
+    <dimen name="font_menu">12sp</dimen>
+    <dimen name="radius">3dp</dimen>
+    <dimen name="item_pulsa">340dp</dimen>
+    <dimen name="pulsa_height">90dp</dimen>
+    <dimen name="scrollbar">3dp</dimen>
+
+    <dimen name="menu_height">110dp</dimen>
 </resources>

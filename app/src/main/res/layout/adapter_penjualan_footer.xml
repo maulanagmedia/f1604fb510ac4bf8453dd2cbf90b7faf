@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tv_item1"
             android:gravity="right"
+            android:textStyle="bold"
             android:textColor="@color/color_black"/>
     </LinearLayout>
 </RelativeLayout>

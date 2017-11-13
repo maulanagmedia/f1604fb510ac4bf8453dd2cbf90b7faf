@@ -72,13 +72,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".PenjualanMKIOS.PenjualanMKIOS"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="ACT_MKIOS" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".PenjualanPerdana.PenjualanPerdana"
             android:screenOrientation="portrait" />
@@ -174,8 +168,31 @@
         <activity
             android:name=".PenjualanHariIni.PenjualanHariIni"
             android:screenOrientation="portrait" />
-        <activity android:name=".RiwayatPenjualan.RiwayatPenjualan"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".RiwayatPenjualan.RiwayatPenjualan"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="ACT_MKIOS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="ACT_GA" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".NavTambahCustomer.ActTambahOutlet"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavKomplain.ActKomplain"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".InfoDeposit.InfoDeposit"
+            android:screenOrientation="portrait" />
+        <activity android:name=".InfoDeposit.ActDeposit" />
+        <activity android:name=".InfoDeposit.DetailDeposit"></activity>
     </application>
 
 </manifest>

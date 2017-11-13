@@ -60,7 +60,6 @@ public class LocationUpdater extends Service implements LocationListener {
     private ItemValidation iv = new ItemValidation();
     private static Timer timer = new Timer();
     private int timerTime = 1000 * 60 * 10; // 10 minute refresh
-    public static boolean isActive = false;
 
     public LocationUpdater() {
     }
@@ -81,16 +80,7 @@ public class LocationUpdater extends Service implements LocationListener {
         session = new SessionManager(context);
         nik = session.getUserInfo(SessionManager.TAG_UID);
 
-        if(!isActive){
-            isActive = true;
-            initLocation();
-        }else{
-
-            if(location == null){
-                initLocation();
-            }
-        }
-
+        initLocation();
     }
 
     @Override
@@ -238,7 +228,7 @@ public class LocationUpdater extends Service implements LocationListener {
             onLocationChanged(location);
         }
 
-        timer.scheduleAtFixedRate(new mainTask(), 0, timerTime);
+        timer.scheduleAtFixedRate(new mainTask(), 1000, timerTime);
         return location;
     }
 
@@ -246,10 +236,13 @@ public class LocationUpdater extends Service implements LocationListener {
 
         JSONObject jData = new JSONObject();
 
+        String deviceName = android.os.Build.MODEL;
+        String deviceMan = android.os.Build.MANUFACTURER;
+
         if(session.isLoggedIn()){
             try {
                 jData.put("nik", nik);
-                jData.put("keterangan", "LOG_UPDATE");
+                jData.put("keterangan", "LOG_UPDATE , deviceName : "+ deviceName +" , deviceManufacture : "+ deviceMan);
                 jData.put("latitude", iv.doubleToStringFull(latitude));
                 jData.put("longitude", iv.doubleToStringFull(longitude));
                 jData.put("state", address0);

@@ -1,6 +1,7 @@
 package com.maulana.custommodul;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.Resources;
@@ -455,6 +456,32 @@ public class ItemValidation {
 
     //region Number
    /* Change Number to Rupiah*/
+    public String ChangeToCurrencyFormat(String number){
+
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        DecimalFormatSymbols symbols = ((DecimalFormat) format).getDecimalFormatSymbols();
+
+        symbols.setCurrencySymbol("");
+        ((DecimalFormat) format).setDecimalFormatSymbols(symbols);
+        format.setMaximumFractionDigits(0);
+
+        String hasil = String.valueOf(format.format(parseNullDouble(number)));
+
+        /*String stringConvert = "0";
+        try {
+            stringConvert = format.format(1000);
+        }catch (NumberFormatException e){
+            e.printStackTrace();
+        }
+
+
+        if(!stringConvert.contains(",")){
+            hasil += ",00";
+        }*/
+
+        return hasil;
+    }
+
     public String ChangeToRupiahFormat(Float number){
 
         NumberFormat format = NumberFormat.getCurrencyInstance();
@@ -583,6 +610,10 @@ public class ItemValidation {
             }
         }
         return result;
+    }
+
+    public String doubleToString(Double number, String numberOfDouble){
+        return String.format("%."+ numberOfDouble+"f", number).replace(",",".");
     }
 
     public String doubleToString(Double number){
@@ -786,5 +817,14 @@ public class ItemValidation {
         );
     }
 
+    public boolean isServiceRunning(Context context, Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

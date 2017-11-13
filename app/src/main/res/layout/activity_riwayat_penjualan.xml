@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             style="@style/CustomAutoComplete"
             android:hint="Nama Outlet"
-            android:id="@+id/actv_outlet"/>
+            android:id="@+id/actv_outlet"
+            android:layout_marginBottom="@dimen/default_margin_tiny"/>
     </LinearLayout>
 
     <LinearLayout
@@ -29,54 +30,87 @@
         android:id="@+id/ll_date"
         android:padding="@dimen/default_margin_tiny"
         android:background="@color/colorPrimary"
-        android:weightSum="2">
+        android:weightSum="1">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="0.4"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
+                android:id="@+id/tv_from"
+                android:textStyle="bold"
                 android:textColor="@color/color_white"
-                android:text="Dari"/>
+                android:drawableRight="@mipmap/ic_date"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_line"
+                android:background="@color/color_white"
+                android:layout_marginRight="@dimen/default_margin_small"
+                android:layout_marginLeft="@dimen/default_margin_small"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.05"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginLeft="@dimen/default_margin_tiny"
+                android:layout_marginRight="@dimen/default_margin_tiny"
+                android:background="@color/color_white"
+                android:gravity="center"
+                android:textColor="@color/color_white"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft=""/>
+                android:gravity="center"
+                android:id="@+id/tv_to"
+                android:text=""
+                android:textStyle="bold"
+                android:textColor="@color/color_white"
+                android:drawableRight="@mipmap/ic_date"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_line"
+                android:background="@color/color_white"
+                android:layout_marginRight="@dimen/default_margin_small"
+                android:layout_marginLeft="@dimen/default_margin_small"/>
         </LinearLayout>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@id/ll_date"
-        android:layout_marginTop="@dimen/default_margin_tiny"
-        android:layout_marginBottom="@dimen/default_margin_tiny"
-        android:id="@+id/ll_title"
-        android:weightSum="1">
-
-        <TextView
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_black"
-            android:textSize="@dimen/title_text_list"
+            android:layout_weight="0.15"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:text="Nama"/>
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_black"
-            android:textSize="@dimen/title_text_list"
-            android:gravity="center"
-            android:text="Total"/>
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/ib_show"
+                android:background="@drawable/btn_round_blue"
+                android:src="@mipmap/ic_next"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -110,7 +144,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_below="@id/ll_title"
+        android:layout_below="@id/ll_date"
         android:layout_above="@id/ll_footer"
         android:background="@drawable/login_container">
 

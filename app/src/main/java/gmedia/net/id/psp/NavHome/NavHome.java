@@ -35,9 +35,12 @@ import java.util.TimerTask;
 
 import gmedia.net.id.psp.CustomView.WrapContentViewPager;
 import gmedia.net.id.psp.DaftarPiutang.DaftarPiutang;
+import gmedia.net.id.psp.InfoDeposit.ActDeposit;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.NavCheckin.ActCheckin;
 import gmedia.net.id.psp.NavHome.Adapter.HeaderSliderAdapter;
+import gmedia.net.id.psp.NavKomplain.ActKomplain;
+import gmedia.net.id.psp.NavTambahCustomer.ActTambahOutlet;
 import gmedia.net.id.psp.NavVerifikasiOutlet.ActVerifikasiOutlet;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
 import gmedia.net.id.psp.OrderPerdana.DetailOrderPerdana;
@@ -47,6 +50,7 @@ import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
 import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
 import gmedia.net.id.psp.R;
+import gmedia.net.id.psp.RiwayatPenjualan.RiwayatPenjualan;
 import gmedia.net.id.psp.StokSales.StokSales;
 import gmedia.net.id.psp.Utils.ServerURL;
 
@@ -216,7 +220,9 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             @Override
             public void onClick(View view) {
 
-                MainNavigationActivity.changeNavigationState(context, 2);
+                Intent intent = new Intent(context, ActTambahOutlet.class);
+                context.startActivity(intent);
+                ((Activity)context).finish();
             }
         });
 
@@ -225,6 +231,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             public void onClick(View view) {
                 Intent intent = new Intent(context, ListReseller.class);
                 context.startActivity(intent);
+                ((Activity)context).finish();
             }
         });
 
@@ -233,6 +240,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             public void onClick(View view) {
                 Intent intent = new Intent(context, PenjualanMKIOS.class);
                 context.startActivity(intent);
+                ((Activity)context).finish();
             }
         });
 
@@ -241,6 +249,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             public void onClick(View view) {
                 Intent intent = new Intent(context, CustomerPerdana.class);
                 context.startActivity(intent);
+                ((Activity)context).finish();
             }
         });
 
@@ -249,6 +258,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             public void onClick(View view) {
                 Intent intent = new Intent(context, PenjualanPerdana.class);
                 context.startActivity(intent);
+                ((Activity)context).finish();
             }
         });
 
@@ -256,7 +266,17 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, PenjualanHariIni.class);
-                startActivity(intent);
+                context.startActivity(intent);
+                ((Activity)context).finish();
+            }
+        });
+
+        llRiwayatPenjualan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, RiwayatPenjualan.class);
+                context.startActivity(intent);
+                ((Activity)context).finish();
             }
         });
 
@@ -265,6 +285,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             public void onClick(View view) {
                 Intent intent = new Intent(context, DaftarPiutang.class);
                 context.startActivity(intent);
+                ((Activity)context).finish();
             }
         });
 
@@ -273,6 +294,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             public void onClick(View view) {
                 Intent intent = new Intent(context, StokSales.class);
                 context.startActivity(intent);
+                ((Activity)context).finish();
             }
         });
 
@@ -281,14 +303,18 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             public void onClick(View view) {
 
                 Intent intent = new Intent(context, ActCheckin.class);
-                startActivity(intent);
+                context.startActivity(intent);
+                ((Activity)context).finish();
             }
         });
 
         llKomplain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainNavigationActivity.changeNavigationState(context, 12);
+
+                Intent intent = new Intent(context, ActKomplain.class);
+                context.startActivity(intent);
+                ((Activity)context).finish();
             }
         });
 
@@ -298,6 +324,17 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
 
                 Intent intent = new Intent(context, ActVerifikasiOutlet.class);
                 context.startActivity(intent);
+                ((Activity)context).finish();
+            }
+        });
+
+        llInfoDeposit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(context, ActDeposit.class);
+                context.startActivity(intent);
+                ((Activity)context).finish();
             }
         });
     }
