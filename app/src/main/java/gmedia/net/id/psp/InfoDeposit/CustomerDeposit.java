@@ -1,9 +1,7 @@
 package gmedia.net.id.psp.InfoDeposit;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -34,11 +32,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gmedia.net.id.psp.InfoDeposit.Adapter.ListCustomerDepositAdapter;
-import gmedia.net.id.psp.NavTambahCustomer.Adapter.ListCustomerAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
 
-public class InfoDeposit extends AppCompatActivity {
+public class CustomerDeposit extends AppCompatActivity {
 
     private AutoCompleteTextView actvOtlet;
     private ListView lvOutlet;
@@ -74,7 +71,7 @@ public class InfoDeposit extends AppCompatActivity {
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
         LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         footerList = li.inflate(R.layout.layout_footer_listview, null);
-        session = new SessionManager(InfoDeposit.this);
+        session = new SessionManager(CustomerDeposit.this);
 
         startIndex = 0;
         count = getResources().getInteger(R.integer.count_table);
@@ -100,7 +97,7 @@ public class InfoDeposit extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(InfoDeposit.this, jBody, "POST", ServerURL.getCustomerDeposit, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(CustomerDeposit.this, jBody, "POST", ServerURL.getCustomerDeposit, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -116,7 +113,7 @@ public class InfoDeposit extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("alamat")));
+                            masterList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("nomor"), jo.getString("alamat")));
                         }
                     }
 
@@ -181,7 +178,7 @@ public class InfoDeposit extends AppCompatActivity {
                     startIndex = 0;
                     getDataOutlet();
 
-                    iv.hideSoftKey(InfoDeposit.this);
+                    iv.hideSoftKey(CustomerDeposit.this);
                     return true;
                 }
 
@@ -196,7 +193,7 @@ public class InfoDeposit extends AppCompatActivity {
 
         if(tableList != null && tableList.size() > 0){
 
-            adapter = new ListCustomerDepositAdapter(InfoDeposit.this, tableList);
+            adapter = new ListCustomerDepositAdapter(CustomerDeposit.this, tableList);
             lvOutlet.setAdapter(adapter);
 
             lvOutlet.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -205,8 +202,9 @@ public class InfoDeposit extends AppCompatActivity {
 
                     CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
 
-                    Intent intent = new Intent(InfoDeposit.this, DetailDeposit.class);
+                    Intent intent = new Intent(CustomerDeposit.this, DetailDeposit.class);
                     intent.putExtra("kdcus", selectedItem.getItem1());
+                    intent.putExtra("nomor", selectedItem.getItem3());
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
@@ -229,7 +227,7 @@ public class InfoDeposit extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(InfoDeposit.this, jBody, "POST", ServerURL.getCustomerDeposit, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(CustomerDeposit.this, jBody, "POST", ServerURL.getCustomerDeposit, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -244,7 +242,7 @@ public class InfoDeposit extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            moreList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("alamat")));
+                            moreList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("nomor"), jo.getString("alamat")));
                         }
                     }
 

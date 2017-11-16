@@ -189,10 +189,12 @@
             android:name=".NavKomplain.ActKomplain"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".InfoDeposit.InfoDeposit"
+            android:name=".InfoDeposit.CustomerDeposit"
             android:screenOrientation="portrait" />
-        <activity android:name=".InfoDeposit.ActDeposit" />
-        <activity android:name=".InfoDeposit.DetailDeposit"></activity>
+        <activity android:name=".InfoDeposit.ActDeposit"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".InfoDeposit.DetailDeposit"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

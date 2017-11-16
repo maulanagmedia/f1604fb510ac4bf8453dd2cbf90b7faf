@@ -37,8 +37,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import gmedia.net.id.psp.InfoDeposit.Adapter.DepositAdapter;
 import gmedia.net.id.psp.MainNavigationActivity;
-import gmedia.net.id.psp.PenjualanHariIni.Adapter.PenjualanHariIniAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ServerURL;
@@ -188,7 +188,7 @@ public class ActDeposit extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(ActDeposit.this, InfoDeposit.class);
+                Intent intent = new Intent(ActDeposit.this, CustomerDeposit.class);
                 startActivity(intent);
             }
         });
@@ -210,7 +210,7 @@ public class ActDeposit extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(ActDeposit.this, jBody, "POST", ServerURL.getRiwayatPenjualan, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(ActDeposit.this, jBody, "POST", ServerURL.getDeposite, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -218,9 +218,9 @@ public class ActDeposit extends AppCompatActivity {
 
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
+                    masterList = new ArrayList<>();
 
-                    long total = 0, totalPerNama = 0;
-                    String nama = "";
+                    long total = 0, totalPerTanggal = 0;
                     String lastTaggal = "";
 
                     if(iv.parseNullInteger(status) == 200){
@@ -237,26 +237,26 @@ public class ActDeposit extends AppCompatActivity {
                                 lastTaggal = jo.getString("tgl");
                             }
 
-                            masterList.add(new CustomItem("I", jo.getString("nonota"), jo.getString("nama"), jo.getString("piutang"), jo.getString("flag"), jo.getString("tgl")));
-                            total += iv.parseNullLong(jo.getString("piutang"));
+                            masterList.add(new CustomItem("I", jo.getString("id"), jo.getString("nama"), jo.getString("masuk"), jo.getString("nomor"), jo.getString("keterangan")));
+                            total += iv.parseNullLong(jo.getString("masuk"));
 
                             if(i < items.length() - 1){
 
                                 JSONObject jo2 = items.getJSONObject(i+1);
-                                if(jo2.getString("kdcus").equals(jo.getString("kdcus"))){
+                                if(jo2.getString("tgl").equals(jo.getString("tgl"))){
 
-                                    totalPerNama += iv.parseNullLong(jo.getString("piutang"));
+                                    totalPerTanggal += iv.parseNullLong(jo.getString("masuk"));
                                 }else{
 
-                                    totalPerNama += iv.parseNullLong(jo.getString("piutang"));
-                                    masterList.add(new CustomItem("F", String.valueOf(totalPerNama)));
-                                    totalPerNama = 0;
+                                    totalPerTanggal += iv.parseNullLong(jo.getString("masuk"));
+                                    masterList.add(new CustomItem("F", String.valueOf(totalPerTanggal)));
+                                    totalPerTanggal = 0;
                                 }
                             }else{
 
-                                totalPerNama += iv.parseNullLong(jo.getString("piutang"));
-                                masterList.add(new CustomItem("F", String.valueOf(totalPerNama)));
-                                totalPerNama = 0;
+                                totalPerTanggal += iv.parseNullLong(jo.getString("masuk"));
+                                masterList.add(new CustomItem("F", String.valueOf(totalPerTanggal)));
+                                totalPerTanggal = 0;
                             }
                         }
                     }
@@ -337,21 +337,24 @@ public class ActDeposit extends AppCompatActivity {
 
         if(tableList != null && tableList.size() > 0){
 
-            PenjualanHariIniAdapter adapter = new PenjualanHariIniAdapter(ActDeposit.this, tableList);
+            DepositAdapter adapter = new DepositAdapter(ActDeposit.this, tableList);
             lvDeposit.setAdapter(adapter);
 
             lvDeposit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                    /*CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
+                    CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
 
                     if(selectedItem.getItem1().equals("I")){
 
-                        currentFlag = selectedItem.getItem5();
-
-                        getDetailPenjualan(selectedItem.getItem2(), currentFlag);
-                    }*/
+                        Intent intent = new Intent(ActDeposit.this, DetailDeposit.class);
+                        intent.putExtra("nama", selectedItem.getItem3());
+                        intent.putExtra("total", selectedItem.getItem4());
+                        intent.putExtra("nomor", selectedItem.getItem5());
+                        intent.putExtra("keterangan", selectedItem.getItem6());
+                        startActivity(intent);
+                    }
                 }
             });
         }

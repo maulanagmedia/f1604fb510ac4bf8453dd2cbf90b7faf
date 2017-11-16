@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="gmedia.net.id.psp.InfoDeposit.InfoDeposit">
+    tools:context="gmedia.net.id.psp.InfoDeposit.CustomerDeposit">
 
     <RelativeLayout
         android:layout_width="match_parent"

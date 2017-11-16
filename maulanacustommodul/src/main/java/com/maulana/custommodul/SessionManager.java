@@ -26,8 +26,8 @@ public class SessionManager {
 	
 	// All Shared Preferences Keys
 	private static final String IS_LOGIN = "IsLoggedIn";
-	public static final String TAG_UID = "uid";
-	public static final String TAG_NIK = "nik";
+	public static final String TAG_UID = "uid"; //GA
+	public static final String TAG_NIK = "nik"; // MKIOS
 	public static final String TAG_NAMA = "nama";
 	public static final String TAG_USERNAME = "username";
 	public static final String TAG_PASSWORD = "password";

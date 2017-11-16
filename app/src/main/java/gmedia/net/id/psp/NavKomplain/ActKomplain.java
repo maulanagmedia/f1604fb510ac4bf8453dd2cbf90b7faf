@@ -64,7 +64,7 @@ public class ActKomplain extends AppCompatActivity {
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
-        setTitle("Tambah Outlet");
+        setTitle("Komplain");
 
         context = this;
         initUI();

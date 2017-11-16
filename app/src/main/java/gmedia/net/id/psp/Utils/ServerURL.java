@@ -56,4 +56,7 @@ public class ServerURL {
     public static final String saveComplaint = baseURL + "api/complaint/save/";
 
     public static final String saveCheckin = baseURL + "api/checkin/save/";
+
+    public static final String getDeposite = baseURL + "api/deposit/get_deposit/";
+    public static final String saveDeposite = baseURL + "api/deposit/save/";
 }

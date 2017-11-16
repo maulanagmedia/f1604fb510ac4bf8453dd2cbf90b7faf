@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tv_item1"
             android:textStyle="bold"
+            android:textSize="17sp"
             android:layout_marginLeft="@dimen/default_margin_tiny"
             android:textColor="@color/color_black"/>
 
@@ -27,6 +28,7 @@
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:id="@+id/tv_item2"
+            android:textSize="17sp"
             android:gravity="right"
             android:textColor="@color/color_black"/>
     </LinearLayout>

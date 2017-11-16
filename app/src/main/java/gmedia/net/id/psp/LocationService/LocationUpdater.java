@@ -242,7 +242,7 @@ public class LocationUpdater extends Service implements LocationListener {
         if(session.isLoggedIn()){
             try {
                 jData.put("nik", nik);
-                jData.put("keterangan", "LOG_UPDATE , deviceName : "+ deviceName +" , deviceManufacture : "+ deviceMan);
+                jData.put("keterangan", "LOG_UPDATE , " + deviceMan + " "+ deviceName);
                 jData.put("latitude", iv.doubleToStringFull(latitude));
                 jData.put("longitude", iv.doubleToStringFull(longitude));
                 jData.put("state", address0);

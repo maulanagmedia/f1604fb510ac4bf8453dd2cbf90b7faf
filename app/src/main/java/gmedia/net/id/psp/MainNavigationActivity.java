@@ -19,7 +19,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -29,7 +28,6 @@ import com.maulana.custommodul.SessionManager;
 
 import gmedia.net.id.psp.DaftarPiutang.DaftarPiutang;
 import gmedia.net.id.psp.InfoDeposit.ActDeposit;
-import gmedia.net.id.psp.InfoDeposit.InfoDeposit;
 import gmedia.net.id.psp.LocationService.LocationUpdater;
 import gmedia.net.id.psp.NavAccount.NavAccount;
 import gmedia.net.id.psp.NavCheckin.ActCheckin;
@@ -40,7 +38,6 @@ import gmedia.net.id.psp.NavKomplain.NavKomplain;
 import gmedia.net.id.psp.NavTambahCustomer.ActTambahOutlet;
 import gmedia.net.id.psp.NavTambahCustomer.NavCustomer;
 import gmedia.net.id.psp.NavVerifikasiOutlet.ActVerifikasiOutlet;
-import gmedia.net.id.psp.NavVerifikasiOutlet.NavVerifikasiOutlet;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
 import gmedia.net.id.psp.OrderPulsa.ListReseller;
 import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
@@ -48,7 +45,6 @@ import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
 import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
 import gmedia.net.id.psp.RiwayatPenjualan.RiwayatPenjualan;
 import gmedia.net.id.psp.StokSales.StokSales;
-import gmedia.net.id.psp.TambahCustomer.DetailCustomer;
 
 public class MainNavigationActivity extends RuntimePermissionsActivity
         implements NavigationView.OnNavigationItemSelectedListener {
