@@ -20,6 +20,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/ll_nonota"
                 style="@style/formGroup">
 
                 <TextView
@@ -70,19 +71,19 @@
                     android:text="Pulsa"
                     style="@style/formControlLabel"/>
 
-                <HorizontalScrollView
+                <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:overScrollMode="never"
                     android:id="@+id/hsv_pulsa">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:layout_width="@dimen/item_pulsa"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/color_white"
                             android:orientation="horizontal"
@@ -184,11 +185,10 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="@dimen/item_pulsa"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/color_white"
                             android:orientation="horizontal"
-                            android:layout_marginLeft="@dimen/default_margin_small"
                             android:layout_marginTop="@dimen/default_margin_small"
                             android:weightSum="1">
 
@@ -287,11 +287,10 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="@dimen/item_pulsa"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/color_white"
                             android:orientation="horizontal"
-                            android:layout_marginLeft="@dimen/default_margin_small"
                             android:layout_marginTop="@dimen/default_margin_small"
                             android:weightSum="1">
 
@@ -390,11 +389,10 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="@dimen/item_pulsa"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/color_white"
                             android:orientation="horizontal"
-                            android:layout_marginLeft="@dimen/default_margin_small"
                             android:layout_marginTop="@dimen/default_margin_small"
                             android:weightSum="1">
 
@@ -493,11 +491,10 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="@dimen/item_pulsa"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/color_white"
                             android:orientation="horizontal"
-                            android:layout_marginLeft="@dimen/default_margin_small"
                             android:layout_marginTop="@dimen/default_margin_small"
                             android:weightSum="1">
 
@@ -596,11 +593,10 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="@dimen/item_pulsa"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/color_white"
                             android:orientation="horizontal"
-                            android:layout_marginLeft="@dimen/default_margin_small"
                             android:layout_marginTop="@dimen/default_margin_small"
                             android:weightSum="1">
 
@@ -699,11 +695,10 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="@dimen/item_pulsa"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/color_white"
                             android:orientation="horizontal"
-                            android:layout_marginLeft="@dimen/default_margin_small"
                             android:layout_marginTop="@dimen/default_margin_small"
                             android:weightSum="1">
 
@@ -783,7 +778,7 @@
                         </LinearLayout>
 
                     </LinearLayout>
-                </HorizontalScrollView>
+                </ScrollView>
             </LinearLayout>
 
             <LinearLayout
@@ -827,6 +822,41 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/ll_jarak"
+                style="@style/formGroup">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_weight="0.9"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edt_jarak"
+                        android:background="@null"
+                        android:inputType="none"
+                        android:editable="false"
+                        android:text="Menunggu proses perhitungan jarak..."/>
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.1"
+                        android:background="?attr/selectableItemBackground"
+                        android:layout_marginLeft="@dimen/default_margin_tiny"
+                        android:layout_marginRight="@dimen/default_margin_tiny"
+                        android:scaleType="centerInside"
+                        android:id="@+id/iv_refresh_position"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/ic_sync"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/default_margin_small"
                 style="@style/formGroup">
 
@@ -836,6 +866,23 @@
                     android:orientation="horizontal"
                     android:weightSum="1"
                     android:gravity="center">
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:layout_height="wrap_content"
+                        android:text="Peta Outlet"
+                        android:id="@+id/btn_maps_outlet"
+                        android:textColor="@color/color_white"
+                        android:layout_marginTop="@dimen/default_margin_tiny"
+                        android:layout_marginBottom="@dimen/default_margin_small"
+                        android:background="@drawable/btn_form"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.1"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"></LinearLayout>
 
                     <Button
                         android:layout_width="0dp"

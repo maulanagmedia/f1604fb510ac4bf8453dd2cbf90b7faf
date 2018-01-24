@@ -77,6 +77,7 @@ import java.util.Locale;
 
 import gmedia.net.id.psp.BuildConfig;
 import gmedia.net.id.psp.CustomView.CustomMapView;
+import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.TambahCustomer.Adapter.PhotosAdapter;
 import gmedia.net.id.psp.TambahCustomer.Model.AreaModel;
@@ -139,6 +140,7 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
     private boolean uploadKTP = true;
     private Bitmap bitmapKTP;
     private ImageView ivKTP;
+    private boolean isVerifikasi = true, approved = true;
 
     public DetailVerifikasiOutlet() {
     }
@@ -204,6 +206,17 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
 
         tvToolbarTitle = (TextView) findViewById(R.id.tv_toolbar_title);
         title = "Detail Verifikasi Outlet";
+
+        Bundle bundle = getIntent().getExtras();
+
+        if(bundle != null){
+            isVerifikasi = bundle.getBoolean("isverifikasi", true);
+            if(!isVerifikasi){
+                title = "Detail Aktivasi Outlet";
+                btnSimpan.setText(" Simpan Data Aktivasi ");
+            }
+        }
+
         //tvTitle.setText(title);
         initCollapsingToolbar();
 
@@ -427,7 +440,13 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
 
     private void validateBeforeSave() {
 
-        if(editMode && iv.parseNullInteger(statusAktif) != 2){
+        if(editMode && iv.parseNullInteger(statusAktif) != 2 && isVerifikasi){
+
+            Toast.makeText(DetailVerifikasiOutlet.this, "Outlet telah dirposes, tidak dapat diubah", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(editMode && iv.parseNullInteger(statusAktif) != 3 && !isVerifikasi){
 
             Toast.makeText(DetailVerifikasiOutlet.this, "Outlet telah dirposes, tidak dapat diubah", Toast.LENGTH_LONG).show();
             return;
@@ -442,15 +461,34 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
             edtNama.setError(null);
         }
 
-        /*if(edtTelepon.getText().toString().length() == 0){
+        if(edtAlamat.getText().toString().length() == 0){
 
-            edtTelepon.setError("No Telepon harap diisi");
+            edtAlamat.setError("Alamat harap diisi");
+            edtAlamat.requestFocus();
+            return;
+        }else{
+            edtAlamat.setError(null);
+        }
+
+        if(edtTelepon.getText().toString().length() == 0){
+
+            edtTelepon.setError("Nomor Reseller harap diisi");
             edtTelepon.requestFocus();
             return;
         }else{
             edtTelepon.setError(null);
         }
 
+        if(edtCP.getText().toString().length() == 0){
+
+            edtCP.setError("Contact Person harap diisi");
+            edtCP.requestFocus();
+            return;
+        }else{
+            edtCP.setError(null);
+        }
+
+        /*
         if(edtNoHP.getText().toString().length() == 0){
 
             edtNoHP.setError("Nama harap diisi");
@@ -478,7 +516,12 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
             }
         }*/
         String message = "Anda yakin ingin memverifikasi "+ edtNama.getText().toString()+" ?";
-        if(!statusCustomer) message = "Anda yakin ingin menolak "+ edtNama.getText().toString()+" ?";
+        if(!isVerifikasi) message = "Anda yakin ingin mengaktivasi "+ edtNama.getText().toString()+" ?";
+        approved = true;
+        if(!statusCustomer){
+            message = "Anda yakin ingin menolak "+ edtNama.getText().toString()+" ?";
+            approved = false;
+        }
         AlertDialog alert = new AlertDialog.Builder(DetailVerifikasiOutlet.this)
                 .setTitle("Konfirmasi")
                 .setMessage(message)
@@ -495,7 +538,6 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
                     }
                 })
                 .show();
-
     }
 
     private void saveData() {
@@ -518,7 +560,7 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
             jDataCustomer.put("email", edtEmail.getText().toString());
             jDataCustomer.put("bank", edtBank.getText().toString());
             jDataCustomer.put("norekening", edtRekening.getText().toString());
-            jDataCustomer.put("status", (statusCustomer) ? "3" : "0");
+            jDataCustomer.put("status", (statusCustomer) ? ((isVerifikasi) ? "3" : "4") : "0");
             jDataCustomer.put("contact_person", edtCP.getText().toString());
 
             AreaModel area = (AreaModel) spArea.getSelectedItem();
@@ -577,9 +619,14 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
 
                     if(iv.parseNullInteger(status) == 200){
 
-                        String message = response.getJSONObject("response").getString("message");
-                        Toast.makeText(DetailVerifikasiOutlet.this, message, Toast.LENGTH_LONG).show();
-                        onBackPressed();
+                        if(!isVerifikasi && approved){
+
+                            saveTransaksiAktivasi();
+                        }else{
+                            String message = response.getJSONObject("response").getString("message");
+                            Toast.makeText(DetailVerifikasiOutlet.this, message, Toast.LENGTH_LONG).show();
+                            onBackPressed();
+                        }
                     }else{
                         String message = response.getJSONObject("metadata").getString("message");
                         Toast.makeText(DetailVerifikasiOutlet.this, message, Toast.LENGTH_LONG).show();
@@ -603,6 +650,123 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
         });
     }
 
+    private void saveTransaksiAktivasi() {
+
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jBody1 = new JSONObject();
+        try {
+            jBody1.put("status", "PENDING");
+            jBody1.put("tgl", iv.getCurrentDate(FormatItem.formatTimestamp));
+            jBody1.put("kode_cv", session.getUserDetails().get(SessionManager.TAG_NIK));
+            jBody1.put("kode", "");
+            jBody1.put("nomor", edtTelepon.getText().toString());
+            jBody1.put("nama", edtNama.getText().toString());
+            jBody1.put("level", "RS");
+            jBody1.put("nomor_upline", "");
+            jBody1.put("pin", "");
+            jBody1.put("pin_upline", "");
+            jBody1.put("pesan", "AKTIVASI_RS RS "+ edtNama.getText().toString());
+            jBody1.put("crbayar", "-");
+            jBody1.put("keterangan", "-");
+            jBody1.put("keterangan_order", "");
+            jBody1.put("flag", "1");
+            jBody1.put("order_format", "*772*1*"+edtTelepon.getText().toString()+"#");
+            jBody1.put("status_transaksi", "AKTIVASI_RS");
+            jBody1.put("flag_injek", "SMS");
+            jBody1.put("proses", "1");
+            jBody1.put("nonota", "");
+            jBody1.put("cluster", "");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject jBody2 = new JSONObject();
+        try {
+            jBody2.put("status", "PENDING");
+            jBody2.put("tgl", iv.getCurrentDate(FormatItem.formatTimestamp));
+            jBody2.put("kode_cv", session.getUserDetails().get(SessionManager.TAG_NIK));
+            jBody2.put("kode", edtTelepon.getText().toString());
+            jBody2.put("nomor", edtTelepon.getText().toString());
+            jBody2.put("nama", edtNama.getText().toString());
+            jBody2.put("level", "RS");
+            jBody2.put("nomor_upline", "");
+            jBody2.put("pin", "");
+            jBody2.put("pin_upline", "");
+            jBody2.put("pesan", "AKTIVASI_RS RS "+ edtNama.getText().toString());
+            jBody2.put("crbayar", "-");
+            jBody2.put("keterangan", "-");
+            jBody2.put("keterangan_order", "");
+            jBody2.put("flag", "1");
+            jBody2.put("order_format", "1");
+            jBody2.put("status_transaksi", "AKTIVASI_RS1");
+            jBody2.put("flag_injek", "SMS");
+            jBody2.put("proses", "1");
+            jBody2.put("nonota", "");
+            jBody2.put("cluster", "");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        jsonArray.put(jBody2);
+
+        String nik = session.getUserDetails().get(SessionManager.TAG_NIK);
+        JSONObject jBody = new JSONObject();
+
+        try {
+            jBody.put("data", jsonArray);
+            jBody.put("kode", edtTelepon.getText().toString());
+            jBody.put("nomor", edtTelepon.getText().toString());
+            jBody.put("kdcus", kdcus);
+            jBody.put("latitude", iv.doubleToStringFull(location.getLatitude()));
+            jBody.put("longitude", iv.doubleToStringFull(location.getLongitude()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        progressDialog = new ProgressDialog(DetailVerifikasiOutlet.this, R.style.AppTheme_Login_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Injecting...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        btnSimpan.setEnabled(false);
+
+        ApiVolley request = new ApiVolley(DetailVerifikasiOutlet.this, jBody, "POST", ServerURL.aktivasiOutlet, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+                    String superMessage = response.getJSONObject("metadata").getString("message");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        progressDialog.dismiss();
+                        String message = response.getJSONObject("response").getString("message");
+                        Toast.makeText(DetailVerifikasiOutlet.this, message, Toast.LENGTH_LONG).show();
+                        onBackPressed();
+
+                    }else{
+                        Toast.makeText(DetailVerifikasiOutlet.this, superMessage, Toast.LENGTH_LONG).show();
+                    }
+
+                    progressDialog.dismiss();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+                progressDialog.dismiss();
+            }
+        });
+    }
+
     private void getDataArea() {
 
         ApiVolley request = new ApiVolley(DetailVerifikasiOutlet.this, new JSONObject(), "GET", ServerURL.getArea, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
@@ -618,10 +782,12 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
                     if(iv.parseNullInteger(status) == 200){
 
                         JSONArray items = response.getJSONArray("response");
+                        String area = session.getUserInfo(SessionManager.TAG_AREA);
+
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            listArea.add(new AreaModel(jo.getString("kode_kota"), jo.getString("omo")));
+                            if(jo.getString("kode_kota").equals(area)) listArea.add(new AreaModel(jo.getString("kode_kota"), jo.getString("omo")));
                         }
 
                         setSPAreaEntry();
@@ -674,11 +840,13 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
         if(bundle != null){
 
             kdcus = bundle.getString("kdcus");
+            isVerifikasi = bundle.getBoolean("isverifikasi", true);
             if(kdcus != null && kdcus.length() > 0){
 
                 editMode = true;
                 getDataCustomer();
                 getPhotos();
+
             }else{
                 location = getLocation();
                 getDataArea();
@@ -802,6 +970,35 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
         return stream;
     }
 
+    private class AsyncGettingKTPBitmap extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+
+            System.out.println("doInBackground");
+
+            bitmapKTP = null;
+
+            bitmapKTP = downloadImage(params[0]);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    ivKTP.setImageBitmap(bitmapKTP);
+                }
+            });
+            return bitmapKTP;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+
+            System.out.println("bitmap" + bitmap);
+
+        }
+    }
+
     private void getDataCustomer() {
 
         String nik = session.getUserDetails().get(SessionManager.TAG_UID);
@@ -841,6 +1038,10 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
                             edtLatitude.setText(jo.getString("latitude"));
                             edtLongitude.setText(jo.getString("longitude"));
                             edtState.setText(jo.getString("state"));
+                            String urlKTP = jo.getString("ktp");
+                            if(urlKTP.length() > 0){
+                                new AsyncGettingKTPBitmap().execute(urlKTP);
+                            }
 
                             if(jo.getString("latitude").length() > 0){
                                 latitude = iv.parseNullDouble(jo.getString("latitude"));
@@ -852,7 +1053,13 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
                             }
 
                             statusAktif = jo.getString("status");
-                            if(iv.parseNullInteger(statusAktif) != 2){
+                            if(iv.parseNullInteger(statusAktif) == 2 && isVerifikasi){
+
+                                btnSimpan.setEnabled(true);
+                            }else if(iv.parseNullInteger(statusAktif) == 3 && !isVerifikasi){
+
+                                btnSimpan.setEnabled(true);
+                            }else{
                                 btnSimpan.setEnabled(false);
                             }
                         }
@@ -929,27 +1136,26 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
                         location = locationManager
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if (location != null) {
-                            onLocationChanged(location);
+                            //onLocationChanged(location);
                         }
                     }
                 }
 
                 // if GPS Enabled get lat/long using GPS Services
                 if (isGPSEnabled) {
-                    location=null;
-                    if (location == null) {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        Log.d("GPS Enabled", "GPS Enabled");
 
-                        if (locationManager != null) {
-                            location = locationManager
-                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                            if (location != null) {
-                                onLocationChanged(location);
-                            }
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    Log.d("GPS Enabled", "GPS Enabled");
+
+                    if (locationManager != null) {
+                        Location bufferLocation = locationManager
+                                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        if (bufferLocation != null) {
+
+                            location = bufferLocation;
                         }
                     }
                 }else{
@@ -1110,24 +1316,60 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
 
     private void updateKeterangan(LatLng position){
 
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         latitude = position.latitude;
         longitude = position.longitude;
 
-        List<Address> addresses = null;
-        try {
-            addresses = geocoder.getFromLocation(position.latitude, position.longitude, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if(addresses != null && addresses.size() > 0){
-            address0 = addresses.get(0).getAddressLine(0);
-        }
+        //get address
+        new Thread(new Runnable(){
+            public void run(){
+                address0 = getAddress(location);
+            }
+        }).start();
 
         edtLatitude.setText(iv.doubleToStringFull(latitude));
         edtLongitude.setText(iv.doubleToStringFull(longitude));
         edtState.setText(address0);
+    }
+
+    private String getAddress(Location location)
+    {
+        List<Address> addresses;
+        try{
+            addresses = new Geocoder(this,Locale.getDefault()).getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            return findAddress(addresses);
+        }
+        catch (Exception e) {
+
+            return "";
+        }
+    }
+
+    private String findAddress(List<Address> addresses)
+    {
+        String address="";
+        if(addresses!=null)
+        {
+            for(int i=0 ; i < addresses.size() ; i++){
+
+                Address addre = addresses.get(i);
+                String street = addre.getAddressLine(0);
+                if(null == street)
+                    street="";
+
+                String city = addre.getLocality();
+                if(city == null) city = "";
+
+                String state=addre.getAdminArea();
+                if(state == null) state="";
+
+                String country = addre.getCountryName();
+                if(country == null) country = "";
+
+                address = street+", "+city+", "+state+", "+country;
+            }
+            return address;
+        }
+        return address;
     }
 
     @Override

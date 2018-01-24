@@ -1,10 +1,13 @@
 package gmedia.net.id.psp.OrderPulsa;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -16,15 +19,20 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +50,7 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import gmedia.net.id.psp.MapsOutletActivity;
 import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
 import gmedia.net.id.psp.R;
@@ -63,7 +72,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
     private TextView tvHargaS5, tvHargaS10, tvHargaS20, tvHargaS25, tvHargaS50, tvHargaS100;
     private final String TAG = "DetailOrderPulsa";
     private boolean editMode = false;
-    private HorizontalScrollView hsvPulsa;
+    private ScrollView hsvPulsa;
 
     // Location
     private double latitude, longitude;
@@ -78,6 +87,11 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
     boolean canGetLocation = false;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
     private static final long MIN_TIME_BW_UPDATES = 1; // 1 minute
+    private LinearLayout llNonota;
+    private EditText edtJarak;
+    private ImageView ivRefreshPosition;
+    private String jarak = "",range = "", latitudeOutlet = "", longitudeOutlet = "";
+    private Button btnMapsOutlet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,9 +108,12 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
 
     private void initUI() {
 
-        hsvPulsa = (HorizontalScrollView) findViewById(R.id.hsv_pulsa);
+        hsvPulsa = (ScrollView) findViewById(R.id.hsv_pulsa);
+        llNonota = (LinearLayout) findViewById(R.id.ll_nonota);
         edtNonota = (EditText) findViewById(R.id.edt_nonota);
         edtNamaRS = (EditText) findViewById(R.id.edt_nama_reseller);
+        edtJarak = (EditText) findViewById(R.id.edt_jarak);
+        ivRefreshPosition = (ImageView) findViewById(R.id.iv_refresh_position);
         edtS5 = (EditText) findViewById(R.id.edt_s5);
         edtS10 = (EditText) findViewById(R.id.edt_s10);
         edtS20 = (EditText) findViewById(R.id.edt_s20);
@@ -121,6 +138,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
         edtKeterangan = (EditText) findViewById(R.id.edt_keterangan);
         btnProses = (Button) findViewById(R.id.btn_proses);
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
+        btnMapsOutlet = (Button) findViewById(R.id.btn_maps_outlet);
 
         isProses = false;
         session = new SessionManager(DetailOrderPulsa.this);
@@ -135,6 +153,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                 editMode = true;
                 flag = bundle.getString("flag");
                 edtNonota.setText(nonota);
+                btnProses.setEnabled(false);
             }
 
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -151,7 +170,27 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
         }
     }
 
+    private boolean isOnLocation(Location detectedLocation){
+
+        boolean hasil = false;
+
+        if(jarak != "" && range != "" && latitudeOutlet != "" && longitudeOutlet != "" && detectedLocation != null){
+
+            double latOutlet = iv.parseNullDouble(latitudeOutlet);
+            double longOutlet = iv.parseNullDouble(longitudeOutlet);
+
+            double detectedJarak = (6371 * Math.acos(Math.sin(Math.toRadians(latOutlet)) * Math.sin(Math.toRadians(detectedLocation.getLatitude())) + Math.cos(Math.toRadians(longOutlet - detectedLocation.getLongitude())) * Math.cos(Math.toRadians(latOutlet)) * Math.cos(Math.toRadians(detectedLocation.getLatitude()))));
+            double rangeDouble = iv.parseNullDouble(range);
+
+            if(detectedJarak <= rangeDouble) hasil = true;
+        }
+
+        return hasil;
+    }
+
     public Location getLocation() {
+
+        isUpdateLocation = true;
         try {
 
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -193,6 +232,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                         } else {
                             requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_PERMISSION_FINE_LOCATION);
                         }
+                        isUpdateLocation = false;
                         return null;
                     }
 
@@ -203,30 +243,56 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                     Log.d("Network", "Network");
 
                     if (locationManager != null) {
-                        location = locationManager
-                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                        if(jarak != ""){ // Jarak sudah terdeteksi
+
+                            Location locationBuffer = locationManager
+                                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                            if(isOnLocation(locationBuffer)){
+
+                                location = locationBuffer;
+                            }
+
+                        }else{
+                            location = locationManager
+                                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        }
+
                         if (location != null) {
-                            onLocationChanged(location);
+                            //Changed(location);
                         }
                     }
                 }
 
                 // if GPS Enabled get lat/long using GPS Services
                 if (isGPSEnabled) {
-                    location=null;
-                    if (location == null) {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        Log.d("GPS Enabled", "GPS Enabled");
 
-                        if (locationManager != null) {
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    Log.d("GPS Enabled", "GPS Enabled");
+
+                    if (locationManager != null) {
+
+                        if(jarak != ""){ // Jarak sudah terdeteksi
+
+                            Location locationBuffer = locationManager
+                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                            if(isOnLocation(locationBuffer)){
+
+                                location = locationBuffer;
+                            }
+
+                        }else{
                             location = locationManager
                                     .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                            if (location != null) {
-                                onLocationChanged(location);
-                            }
+                        }
+
+                        if (location != null) {
+                            //onLocationChanged(location);
                         }
                     }
                 }else{
@@ -238,9 +304,11 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             e.printStackTrace();
         }
 
+        isUpdateLocation = false;
         if(location != null){
             onLocationChanged(location);
         }
+
         return location;
     }
 
@@ -282,6 +350,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             @Override
             public void onSuccess(String result) {
 
+                isLoading(false);
                 try {
 
                     JSONObject response = new JSONObject(result);
@@ -313,23 +382,24 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                             tvHargaS25.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(hargaS25)));
                             tvHargaS50.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(hargaS50)));
                             tvHargaS100.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(hargaS100)));
+                            hitungTotal();
 
                             edtNamaRS.setText(namaRS);
 
                             if(editMode){
                                 getDetailMkios();
                             }else{
-                                getNonota();
+                                //getNonota();
+                                llNonota.setVisibility(View.GONE);
+                                nonota = "";
                             }
                             break;
                         }
                     }
 
-                    isLoading(false);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    isLoading(false);
+                    showDialog(DetailOrderPulsa.this, 3, "Terjadi kesalahan saat memuat data reseller, harap ulangi");
                 }
             }
 
@@ -337,20 +407,26 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             public void onError(String result) {
 
                 isLoading(false);
+                showDialog(DetailOrderPulsa.this, 3, "Terjadi kesalahan saat memuat data reseller, harap ulangi");
             }
         });
     }
 
-    private void getDetailMkios() throws JSONException {
+    private void getDetailMkios() {
 
         isLoading(true);
         String nik = session.getUserDetails().get(SessionManager.TAG_NIK);
         JSONObject jBody = new JSONObject();
-        jBody.put("nonota", nonota);
+        try {
+            jBody.put("nonota", nonota);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         ApiVolley request = new ApiVolley(DetailOrderPulsa.this, jBody, "POST", ServerURL.getMkios+nik, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
+                isLoading(false);
                 try {
 
                     JSONObject response = new JSONObject(result);
@@ -392,11 +468,9 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                         hitungTotal();
                     }
 
-                    isLoading(false);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    isLoading(false);
                 }
             }
 
@@ -406,6 +480,84 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                 isLoading(false);
             }
         });
+    }
+
+    private void showDialog(Context context, int state, String message){
+
+        if(state == 1){
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            LayoutInflater inflater = (LayoutInflater) ((Activity) context).getSystemService(LAYOUT_INFLATER_SERVICE);
+            View viewDialog = inflater.inflate(R.layout.layout_success, null);
+            builder.setView(viewDialog);
+            builder.setCancelable(false);
+
+            final TextView tvText1 = (TextView) viewDialog.findViewById(R.id.tv_text1);
+            tvText1.setText(message);
+            final Button btnOK = (Button) viewDialog.findViewById(R.id.btn_ok);
+
+            final AlertDialog alert = builder.create();
+            alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+            btnOK.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view2) {
+
+                    if(alert != null) alert.dismiss();
+                }
+            });
+
+            alert.show();
+        }else if(state == 2){ // failed
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            LayoutInflater inflater = (LayoutInflater) ((Activity) context).getSystemService(LAYOUT_INFLATER_SERVICE);
+            View viewDialog = inflater.inflate(R.layout.layout_failed, null);
+            builder.setView(viewDialog);
+            builder.setCancelable(false);
+
+            final TextView tvText1 = (TextView) viewDialog.findViewById(R.id.tv_text1);
+            tvText1.setText(message);
+            final Button btnOK = (Button) viewDialog.findViewById(R.id.btn_ok);
+
+            final AlertDialog alert = builder.create();
+            alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+            btnOK.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view2) {
+
+                    if(alert != null) alert.dismiss();
+                }
+            });
+
+            alert.show();
+        }else if(state == 3){
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            LayoutInflater inflater = (LayoutInflater) ((Activity) context).getSystemService(LAYOUT_INFLATER_SERVICE);
+            View viewDialog = inflater.inflate(R.layout.layout_warning, null);
+            builder.setView(viewDialog);
+            builder.setCancelable(false);
+
+            final TextView tvText1 = (TextView) viewDialog.findViewById(R.id.tv_text1);
+            tvText1.setText(message);
+            final Button btnOK = (Button) viewDialog.findViewById(R.id.btn_ok);
+            btnOK.setText("Ulangi Proses");
+
+            final AlertDialog alert = builder.create();
+            alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+            btnOK.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view2) {
+
+                    if(alert != null) alert.dismiss();
+                    getRSDetail();
+                }
+            });
+
+            alert.show();
+        }
     }
 
     private void getNonota() {
@@ -500,6 +652,35 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                         }).show();
             }
         });
+
+        ivRefreshPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(!isUpdateLocation)location = getLocation();
+            }
+        });
+
+        btnMapsOutlet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(latitudeOutlet != "" && longitudeOutlet != ""){
+
+                    Intent intent = new Intent(DetailOrderPulsa.this, MapsOutletActivity.class);
+                    intent.putExtra("lat", iv.doubleToStringFull(latitude));
+                    intent.putExtra("long", iv.doubleToStringFull(longitude));
+                    intent.putExtra("lat_outlet", latitudeOutlet);
+                    intent.putExtra("long_outlet", longitudeOutlet);
+                    intent.putExtra("nama", namaRS);
+
+                    startActivity(intent);
+                }else{
+
+                    Toast.makeText(DetailOrderPulsa.this, "Harap tunggu hingga proses pencarian lokasi selesai", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private String addWhiteSpace(String awal, int max){
@@ -525,13 +706,23 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             return;
         }
 
-        if(nonota == null || nonota.equals("")){
-            Snackbar.make(findViewById(android.R.id.content), "Tidak dapat membuat no nota", Snackbar.LENGTH_LONG).show();
-            return;
+        if(editMode){
+            if(nonota == null || nonota.equals("")){
+                Snackbar.make(findViewById(android.R.id.content), "Tidak dapat membuat no nota", Snackbar.LENGTH_LONG).show();
+                return;
+            }
         }
+
 
         if(kodeRS.equals("")){
             Snackbar.make(findViewById(android.R.id.content), "Reseller tidak ditemukan", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        if(jarak.equals("")){
+
+            Snackbar.make(findViewById(android.R.id.content), "Mohon tunggu hinggan posisi diketahui / tekan refresh pada bagian jarak", Snackbar.LENGTH_LONG).show();
+            edtJarak.requestFocus();
             return;
         }
 
@@ -539,6 +730,18 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
 
             Snackbar.make(findViewById(android.R.id.content), "Harap isi minimal salah satu order", Snackbar.LENGTH_LONG).show();
             edtS5.requestFocus();
+            return;
+        }
+
+        if(totalHarga <= 0){
+
+            Snackbar.make(findViewById(android.R.id.content), "Tunggu hingga harga terisi dan ulangi proses input denom", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        if(location == null){
+
+            Toast.makeText(DetailOrderPulsa.this, "Harap tunggu hingga posisi diketahui", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -659,7 +862,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             jBody.put("total", total);
             jBody.put("keterangan", "-");
             jBody.put("keterangan_order", keteranganOrder);
-            jBody.put("flag", "1");
+            jBody.put("flag", "2");
             jBody.put("order_format", orderFormat);
             jBody.put("status_transaksi", "INJECK");
             jBody.put("flag_injek", "SMS");
@@ -680,9 +883,22 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
         String nik = session.getUserDetails().get(SessionManager.TAG_NIK);
         JSONObject jBody = new JSONObject();
 
+        PackageInfo pInfo = null;
+        String version = "";
+
         try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        version = pInfo.versionName;
+
+        try {
+            jBody.put("version", version);
             jBody.put("data", jsonArray);
             jBody.put("kode", kodeRS);
+            jBody.put("nomor", nomorRS);
             jBody.put("latitude", iv.doubleToStringFull(location.getLatitude()));
             jBody.put("longitude", iv.doubleToStringFull(location.getLongitude()));
         } catch (JSONException e) {
@@ -704,6 +920,8 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             @Override
             public void onSuccess(String result) {
 
+                isLoading(false);
+
                 try {
 
                     JSONObject response = new JSONObject(result);
@@ -712,7 +930,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
 
                     if(iv.parseNullInteger(status) == 200){
 
-                        String message = "Order Pulsa berhasil ditambahkan";
+                        String message = response.getJSONObject("response").getString("message");
                         if(editMode) message = "Order "+ nonota+ " berhasil diubah";
                         Toast.makeText(DetailOrderPulsa.this, message, Toast.LENGTH_LONG).show();
                         //Snackbar.make(findViewById(android.R.id.content), "Order Pulsa berhasil ditambahkan", Snackbar.LENGTH_LONG).show();
@@ -724,11 +942,8 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                         Toast.makeText(DetailOrderPulsa.this, superMessage, Toast.LENGTH_LONG).show();
                     }
 
-                    isLoading(false);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    isLoading(false);
                 }
             }
 
@@ -828,20 +1043,115 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        this.location = location;
-        this.latitude = location.getLatitude();
-        this.longitude = location.getLongitude();
+    public void onLocationChanged(Location clocation) {
+
+        if(jarak != ""){
+
+            if(isOnLocation(clocation)){
+
+                this.location = clocation;
+                this.latitude = location.getLatitude();
+                this.longitude = location.getLongitude();
+            }
+
+        }else{
+
+            this.location = clocation;
+            this.latitude = location.getLatitude();
+            this.longitude = location.getLongitude();
+        }
+
+        if(!isUpdateLocation){
+            getJarak();
+        }
+    }
+
+    private boolean isUpdateLocation = false;
+
+    private void getJarak() {
+
+        isUpdateLocation = true;
+        pbProses.setVisibility(View.VISIBLE);
+        String nik = session.getUserDetails().get(SessionManager.TAG_UID);
+        JSONObject jBody = new JSONObject();
+        try {
+            jBody.put("kode", kodeRS);
+            jBody.put("kdcus", "");
+            jBody.put("lat", iv.doubleToStringFull(latitude));
+            jBody.put("long", iv.doubleToStringFull(longitude));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(DetailOrderPulsa.this, jBody, "POST", ServerURL.getJarak, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                isUpdateLocation = false;
+                pbProses.setVisibility(View.GONE);
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray items = response.getJSONArray("response");
+                        for(int i  = 0; i < items.length(); i++){
+
+                            JSONObject jo = items.getJSONObject(i);
+                            range = jo.getString("range");
+                            jarak = jo.getString("jarak");
+                            latitudeOutlet = jo.getString("latitude");
+                            longitudeOutlet = jo.getString("longitude");
+                            String pesan = jo.getString("pesan");
+                            String keteranganJarak = "";
+                            if(iv.parseNullDouble(jo.getString("jarak")) <= 6371){
+                                if(iv.parseNullDouble(jo.getString("jarak")) <= 1){
+                                    keteranganJarak = iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")) * 1000, "2") + " m";
+                                }else{
+                                    keteranganJarak = iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")), "2") + " km";
+                                }
+
+                                if(iv.parseNullDouble(jarak) > iv.parseNullDouble(range)){
+
+                                    keteranganJarak = "<font color='#ec1c25'>"+keteranganJarak+"</font>";
+                                }
+
+                            }else{
+
+
+                                keteranganJarak = "<font color='#ec1c25'>Lokasi outlet tidak diketahui</font>";
+                            }
+
+                            edtJarak.setText(Html.fromHtml(pesan + keteranganJarak));
+
+                            break;
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+                isUpdateLocation = false;
+                pbProses.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
 
+        //location = getLocation();
     }
 
     @Override
     public void onProviderEnabled(String s) {
 
+        //location = getLocation();
     }
 
     @Override

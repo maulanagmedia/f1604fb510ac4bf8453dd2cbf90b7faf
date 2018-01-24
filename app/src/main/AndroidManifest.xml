@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="gmedia.net.id.psp">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,6 +13,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -152,7 +154,9 @@
             android:name=".NavVerifikasiOutlet.DetailVerifikasiOutlet"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".NavCheckin.ActCheckin" />
+        <activity
+            android:name=".NavCheckin.ActKunjunganOutlet"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".LocationService.LocationUpdater"
@@ -191,9 +195,34 @@
         <activity
             android:name=".InfoDeposit.CustomerDeposit"
             android:screenOrientation="portrait" />
-        <activity android:name=".InfoDeposit.ActDeposit"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".InfoDeposit.DetailDeposit"
+        <activity
+            android:name=".InfoDeposit.ActDeposit"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".InfoDeposit.DetailDeposit"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OrderTcash.ResellerTcash"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OrderTcash.DetailTcashOrder"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OrderTcash.ActOrderTcash"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DaftarPiutang.PiutangPerOutlet"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavCheckin.ActKunjungan"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavCheckin.ListSalesKunjungan"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavMapsKunjungan.MapsKunjunganActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".MapsOutletActivity"
             android:screenOrientation="portrait"></activity>
     </application>
 

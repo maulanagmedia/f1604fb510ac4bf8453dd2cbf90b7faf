@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="gmedia.net.id.psp.NavCheckin.ActKunjungan">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:visibility="gone"
+            android:id="@+id/ll_top"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/btn_red"
+            android:paddingLeft="@dimen/default_margin"
+            android:paddingRight="@dimen/default_margin"
+            android:paddingBottom="@dimen/default_margin_small">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:id="@+id/tv_date"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/color_white"
+                    android:paddingLeft="24dp"
+                    android:drawableRight="@mipmap/ic_date"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_line"
+                    android:background="@color/color_white"
+                    android:layout_marginRight="@dimen/default_margin_small"
+                    android:layout_marginLeft="@dimen/default_margin_small"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/ll_bottom"
+            android:background="@drawable/btn_red"
+            android:padding="@dimen/default_margin">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/ic_position"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kunjungan Sales"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginRight="@dimen/default_margin_small"
+                android:layout_marginLeft="@dimen/default_margin_small"
+                android:textColor="@color/color_white"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/ll_top"
+            android:layout_above="@id/ll_bottom">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/login_container">
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ll_footer"
+                    android:orientation="horizontal"
+                    android:layout_alignParentBottom="true"
+                    android:padding="@dimen/default_margin_small"
+                    android:gravity="center_vertical|right">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:background="@color/color_red"
+                        android:layout_marginLeft="@dimen/default_margin_small"
+                        android:layout_marginRight="@dimen/default_margin_small"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_black"
+                        android:layout_marginRight="@dimen/default_margin_small"
+                        android:text="Sesuai PJP"/>
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:background="@color/color_yellow"
+                        android:layout_marginLeft="@dimen/default_margin_small"
+                        android:layout_marginRight="@dimen/default_margin_small"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_black"
+                        android:text="Diluar PJP"/>
+                </LinearLayout>
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@id/ll_footer"
+                    android:divider="@null"
+                    android:id="@+id/lv_kunjungan"></ListView>
+            </RelativeLayout>
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:id="@+id/pb_proses"
+                android:visibility="gone"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_add_white"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="30dp"
+                app:backgroundTint="@color/color_login_2"
+                android:id="@+id/btn_add"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

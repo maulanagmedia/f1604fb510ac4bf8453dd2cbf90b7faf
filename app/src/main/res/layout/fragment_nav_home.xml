@@ -524,6 +524,72 @@
                         </LinearLayout>
                     </LinearLayout>
 
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/menu_height"
+                        android:id="@+id/ll_5"
+                        android:visibility="gone"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/default_margin_small"
+                        android:layout_marginBottom="@dimen/default_margin_small"
+                        android:weightSum="3">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingRight="@dimen/default_margin_small"
+                            android:paddingLeft="@dimen/default_margin_small"
+                            android:gravity="center"
+                            android:weightSum="1">
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:id="@+id/ll_maps_kunjungan"
+                            android:background="?attr/selectableItemBackground"
+                            android:paddingRight="@dimen/default_margin_small"
+                            android:paddingLeft="@dimen/default_margin_small"
+                            android:gravity="center"
+                            android:weightSum="1">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.8"
+                                android:padding="@dimen/default_margin_small"
+                                android:src="@drawable/ic_map_kunjungan"
+                                android:scaleType="fitCenter"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.2"
+                                android:gravity="center"
+                                android:textSize="@dimen/font_menu"
+                                android:textColor="@color/color_black"
+                                android:text="Maps Kunjungan"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingRight="@dimen/default_margin_small"
+                            android:paddingLeft="@dimen/default_margin_small"
+                            android:gravity="center"
+                            android:weightSum="1">
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
@@ -541,7 +607,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
 
                     <RelativeLayout
@@ -592,7 +658,8 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/color_white"
                                 android:textSize="@dimen/value_text_list"
-                                android:text="Sales"/>
+                                android:id="@+id/tv_jabatan"
+                                android:text=""/>
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -623,68 +690,157 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
+                    <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/default_margin"
-                        android:layout_margin="@dimen/default_margin_small"
-                        android:background="@color/color_white"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:scrollbarSize="3dp"
+                        android:layout_marginTop="@dimen/default_margin_small"
+                        android:nestedScrollingEnabled="true">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/color_black"
-                            android:gravity="center"
-                            android:textSize="@dimen/value_text_list"
-                            android:paddingTop="@dimen/default_margin_small"
-                            android:text="Omset MKIOS"/>
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/color_black"
-                            android:gravity="center"
-                            android:id="@+id/tv_omset_mkios"
-                            android:layout_marginTop="@dimen/default_margin_tiny"
-                            android:textSize="@dimen/title_text_list"
-                            android:paddingBottom="@dimen/default_margin_small"
-                            android:text=""/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/default_margin_small"
+                                android:layout_margin="@dimen/default_margin_tiny"
+                                android:background="@color/color_white"
+                                android:gravity="center"
+                                android:orientation="vertical">
 
-                    </LinearLayout>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="Omset MKIOS"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/default_margin"
-                        android:layout_margin="@dimen/default_margin_small"
-                        android:background="@color/color_white"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/tv_omset_mkios"
+                                    style="@style/home_subtitle"/>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/color_black"
-                            android:gravity="center"
-                            android:textSize="@dimen/value_text_list"
-                            android:paddingTop="@dimen/default_margin_small"
-                            android:text="Omset Perdana"/>
+                            </LinearLayout>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/color_black"
-                            android:gravity="center"
-                            android:id="@+id/tv_omset_perdana"
-                            android:layout_marginTop="@dimen/default_margin_tiny"
-                            android:textSize="@dimen/title_text_list"
-                            android:paddingBottom="@dimen/default_margin_small"
-                            android:text=""/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/default_margin_small"
+                                android:layout_margin="@dimen/default_margin_tiny"
+                                android:background="@color/color_white"
+                                android:gravity="center"
+                                android:orientation="vertical">
 
-                    </LinearLayout>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="Omset Perdana"/>
 
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_subtitle"
+                                    android:id="@+id/tv_omset_perdana"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/default_margin_small"
+                                android:layout_margin="@dimen/default_margin_tiny"
+                                android:background="@color/color_white"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="Target Bulan Ini"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_subtitle"
+                                    android:id="@+id/tv_target"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/default_margin_small"
+                                android:layout_margin="@dimen/default_margin_tiny"
+                                android:background="@color/color_white"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="Pencapaian Bulan Ini"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_subtitle"
+                                    android:id="@+id/tv_pencapain"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/default_margin_small"
+                                android:layout_margin="@dimen/default_margin_tiny"
+                                android:background="@color/color_white"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="GAP Bulan Ini"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_subtitle"
+                                    android:id="@+id/tv_gap"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/default_margin_small"
+                                android:layout_margin="@dimen/default_margin_tiny"
+                                android:background="@color/color_white"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="Outlet Baru Bulan Ini"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_subtitle"
+                                    android:id="@+id/tv_outlet_baru"/>
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </ScrollView>
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>
         </android.support.design.widget.CoordinatorLayout>

@@ -37,6 +37,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -131,6 +132,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
     private boolean editMode = false;
     private String kdArea = "";
     private String statusAktif = "";
+    private ProgressBar pbProses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +167,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         rvPhoto = (RecyclerView) findViewById(R.id.rv_photo);
         ibAddPhoto = (ImageButton) findViewById(R.id.ib_add_photo);
         btnSimpan = (Button) findViewById(R.id.btn_simpan);
+        pbProses = (ProgressBar) findViewById(R.id.pb_proses);
 
         session = new SessionManager(DetailCustomer.this);
         mvMap = (CustomMapView) findViewById(R.id.mv_map);
@@ -394,13 +397,22 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             edtNama.setError(null);
         }
 
-        if(edtNoHP.getText().toString().length() == 0){
+        if(edtAlamat.getText().toString().length() == 0){
 
-            edtNoHP.setError("Nama harap diisi");
-            edtNoHP.requestFocus();
+            edtAlamat.setError("Alamat harap diisi");
+            edtAlamat.requestFocus();
             return;
         }else{
-            edtNoHP.setError(null);
+            edtAlamat.setError(null);
+        }
+
+        if(edtTelepon.getText().toString().length() == 0){
+
+            edtTelepon.setError("Nomor Reseller harap diisi");
+            edtTelepon.requestFocus();
+            return;
+        }else{
+            edtTelepon.setError(null);
         }
 
         /*if(edtTelepon.getText().toString().length() == 0){
@@ -484,7 +496,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             jDataCustomer.put("nama", edtNama.getText().toString());
             jDataCustomer.put("alamat", edtAlamat.getText().toString());
             jDataCustomer.put("kota", "");
-            jDataCustomer.put("notelp", "");
+            jDataCustomer.put("notelp", edtTelepon.getText().toString());
             jDataCustomer.put("nohp", edtNoHP.getText().toString());
             jDataCustomer.put("email", "");
             jDataCustomer.put("bank", "");
@@ -566,6 +578,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                 } catch (JSONException e) {
                     progressDialog.dismiss();
                     Toast.makeText(DetailCustomer.this, "Terjadi kesalahan, mohon ulangi kembali", Toast.LENGTH_LONG).show();
+                    btnSimpan.setEnabled(true);
                 }
 
                 btnSimpan.setEnabled(true);
@@ -592,6 +605,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
                     listArea = new ArrayList<>();
+                    String area = session.getUserInfo(SessionManager.TAG_AREA);
 
                     if(iv.parseNullInteger(status) == 200){
 
@@ -599,7 +613,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            listArea.add(new AreaModel(jo.getString("kode_kota"), jo.getString("omo")));
+                            if(jo.getString("kode_kota").equals(area)) listArea.add(new AreaModel(jo.getString("kode_kota"), jo.getString("omo")));
                         }
 
                         setSPAreaEntry();
@@ -782,6 +796,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
     private void getDataCustomer() {
 
+        pbProses.setVisibility(View.VISIBLE);
         String nik = session.getUserDetails().get(SessionManager.TAG_UID);
         JSONObject jBody = new JSONObject();
         try {
@@ -841,12 +856,14 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                     e.printStackTrace();
                 }
 
+                pbProses.setVisibility(View.GONE);
                 getDataArea();
             }
 
             @Override
             public void onError(String result) {
 
+                pbProses.setVisibility(View.GONE);
                 getDataArea();
             }
         });
@@ -907,27 +924,26 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                         location = locationManager
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if (location != null) {
-                            onLocationChanged(location);
+                            //onLocationChanged(location);
                         }
                     }
                 }
 
                 // if GPS Enabled get lat/long using GPS Services
                 if (isGPSEnabled) {
-                    location=null;
-                    if (location == null) {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        Log.d("GPS Enabled", "GPS Enabled");
 
-                        if (locationManager != null) {
-                            location = locationManager
-                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                            if (location != null) {
-                                onLocationChanged(location);
-                            }
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    Log.d("GPS Enabled", "GPS Enabled");
+
+                    if (locationManager != null) {
+                        Location bufferLocation = locationManager
+                                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        if (bufferLocation != null) {
+
+                            location = bufferLocation;
                         }
                     }
                 }else{
@@ -1088,24 +1104,61 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
     private void updateKeterangan(LatLng position){
 
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         latitude = position.latitude;
         longitude = position.longitude;
 
-        List<Address> addresses = null;
-        try {
-            addresses = geocoder.getFromLocation(position.latitude, position.longitude, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if(addresses != null && addresses.size() > 0){
-            address0 = addresses.get(0).getAddressLine(0);
-        }
+        //get address
+        new Thread(new Runnable(){
+            public void run(){
+                address0 = getAddress(location);
+            }
+        }).start();
 
         edtLatitude.setText(iv.doubleToStringFull(latitude));
         edtLongitude.setText(iv.doubleToStringFull(longitude));
         edtState.setText(address0);
+    }
+
+    private String getAddress(Location location)
+    {
+        List<Address> addresses;
+        try{
+            addresses = new Geocoder(this,Locale.getDefault()).getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            return findAddress(addresses);
+        }
+        catch (Exception e) {
+
+            return "";
+
+        }
+    }
+
+    private String findAddress(List<Address> addresses)
+    {
+        String address="";
+        if(addresses!=null)
+        {
+            for(int i=0 ; i < addresses.size() ; i++){
+
+                Address addre = addresses.get(i);
+                String street = addre.getAddressLine(0);
+                if(null == street)
+                    street="";
+
+                String city = addre.getLocality();
+                if(city == null) city = "";
+
+                String state=addre.getAdminArea();
+                if(state == null) state="";
+
+                String country = addre.getCountryName();
+                if(country == null) country = "";
+
+                address = street+", "+city+", "+state+", "+country;
+            }
+            return address;
+        }
+        return address;
     }
 
     @Override
@@ -1129,11 +1182,13 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
 
+        location = getLocation();
     }
 
     @Override
     public void onProviderEnabled(String s) {
 
+        location = getLocation();
     }
 
     @Override

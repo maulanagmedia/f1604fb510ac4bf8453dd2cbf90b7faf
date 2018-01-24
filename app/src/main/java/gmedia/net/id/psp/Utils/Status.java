@@ -20,6 +20,8 @@ public class Status {
                 return "<font color='#0f65ba'>Sedang diproses</font>";
             case 3:
                 return "<font color='#ecda3c'>Disetujui SPV</font>";
+            case 4:
+                return "<font color='#12aacc'>Proses Aktivasi</font>";
             default:
                 return "<font color='#000000'>Tidak Aktif</font>";
         }

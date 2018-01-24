@@ -73,7 +73,16 @@ public class CustomerPerdana extends AppCompatActivity {
         masterList = new ArrayList<>();
         pbProses.setVisibility(View.VISIBLE);
         String area = session.getUserInfo(SessionManager.TAG_AREA);
-        ApiVolley request = new ApiVolley(CustomerPerdana.this, new JSONObject(), "GET", ServerURL.getCustomerPerdana+area, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        String nik = session.getUserInfo(SessionManager.TAG_UID);
+        JSONObject jBody = new JSONObject();
+        try {
+            jBody.put("nik", nik);
+            jBody.put("area", area);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(CustomerPerdana.this, jBody, "POST", ServerURL.getCustomerPerdana, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 

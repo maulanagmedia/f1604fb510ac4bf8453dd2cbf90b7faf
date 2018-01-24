@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -16,11 +17,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -51,9 +54,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import gmedia.net.id.psp.MapsOutletActivity;
 import gmedia.net.id.psp.OrderPerdana.Adapter.ListCCIDAdapter;
 import gmedia.net.id.psp.OrderPerdana.Adapter.ListCCIDCBAdapter;
 import gmedia.net.id.psp.OrderPerdana.Adapter.ListRentangCCIDAdapter;
+import gmedia.net.id.psp.OrderPulsa.DetailOrderPulsa;
 import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
 import gmedia.net.id.psp.R;
@@ -105,6 +110,12 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
     boolean canGetLocation = false;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
     private static final long MIN_TIME_BW_UPDATES = 1; // 1 minute
+    private LinearLayout llNobukti;
+    private static EditText edtTotalCCID;
+    private EditText edtJarak;
+    private ImageView ivRefreshPosition;
+    private String jarak = "",range = "", latitudeOutlet = "", longitudeOutlet = "";
+    private Button btnMapsOutlet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,13 +136,17 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         edtNamaBarang = (EditText) findViewById(R.id.edt_nama_barang);
         edtHarga = (EditText) findViewById(R.id.edt_harga);
         edtSuratJalan = (EditText) findViewById(R.id.edt_surat_jalan);
+        edtJarak = (EditText) findViewById(R.id.edt_jarak);
+        ivRefreshPosition = (ImageView) findViewById(R.id.iv_refresh_position);
         ivSuratJalan = (ImageView) findViewById(R.id.iv_suran_jalan);
+        llNobukti = (LinearLayout) findViewById(R.id.ll_nobukti);
         edtNobukti = (EditText) findViewById(R.id.edt_nobukti);
         edtCCID = (EditText) findViewById(R.id.edt_ccid);
         ivAddCCID = (ImageView) findViewById(R.id.iv_add_ccid);
         edtNamaBarangScan = (EditText) findViewById(R.id.edt_nama_barang_scan);
         edtHargaScan = (EditText) findViewById(R.id.edt_harga_scan);
         btnUbahHarga = (Button) findViewById(R.id.btn_ubah_harga);
+        btnMapsOutlet = (Button) findViewById(R.id.btn_maps_outlet);
 
         lvCCID = (ListView) findViewById(R.id.lv_perdana);
         pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
@@ -142,6 +157,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
 
         llScanCCID = (LinearLayout) findViewById(R.id.ll_scan_ccid);
 
+        edtTotalCCID = (EditText) findViewById(R.id.edt_total_ccid);
         edtTotalHarga = (EditText) findViewById(R.id.edt_total_harga);
         btnProses = (Button) findViewById(R.id.btn_proses);
 
@@ -172,17 +188,20 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             updateHargaTotal();
             lvCCID.setAdapter(adapter);
 
+
             noBukti = bundle.getString("nobukti");
             if(noBukti != null && noBukti.length() > 0 ){
 
                 editMode = true;
                 edtNobukti.setText(noBukti);
                 status = bundle.getString("status");
+                btnProses.setEnabled(false);
             }else{
 
                 editMode = false;
                 noBukti = "";
-                getNobukti();
+                llNobukti.setVisibility(View.GONE);
+                //getNobukti();
             }
 
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -199,7 +218,41 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         }
     }
 
+    private void setListViewBehaviour(){
+        lvCCID.setOnTouchListener(new View.OnTouchListener() {
+            // Setting on Touch Listener for handling the touch inside ScrollView
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Disallow the touch request for parent scroll on touch of child view
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
+
+        iv.setListViewHeightBasedOnChildren(lvCCID);
+    }
+
+    private boolean isOnLocation(Location detectedLocation){
+
+        boolean hasil = false;
+
+        if(jarak != "" && range != "" && latitudeOutlet != "" && longitudeOutlet != "" && detectedLocation != null){
+
+            double latOutlet = iv.parseNullDouble(latitudeOutlet);
+            double longOutlet = iv.parseNullDouble(longitudeOutlet);
+
+            double detectedJarak = (6371 * Math.acos(Math.sin(Math.toRadians(latOutlet)) * Math.sin(Math.toRadians(detectedLocation.getLatitude())) + Math.cos(Math.toRadians(longOutlet - detectedLocation.getLongitude())) * Math.cos(Math.toRadians(latOutlet)) * Math.cos(Math.toRadians(detectedLocation.getLatitude()))));
+            double rangeDouble = iv.parseNullDouble(range);
+
+            if(detectedJarak <= rangeDouble) hasil = true;
+        }
+
+        return hasil;
+    }
+
     public Location getLocation() {
+
+        isUpdateLocation = true;
         try {
 
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -241,6 +294,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                         } else {
                             requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_PERMISSION_FINE_LOCATION);
                         }
+                        isUpdateLocation = false;
                         return null;
                     }
 
@@ -251,30 +305,52 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                     Log.d("Network", "Network");
 
                     if (locationManager != null) {
-                        location = locationManager
-                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        if(jarak != ""){ // Jarak sudah terdeteksi
+
+                            Location locationBuffer = locationManager
+                                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                            if(isOnLocation(locationBuffer)){
+
+                                location = locationBuffer;
+                            }
+
+                        }else{
+                            location = locationManager
+                                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        }
                         if (location != null) {
-                            onLocationChanged(location);
+                            //onLocationChanged(location);
                         }
                     }
                 }
 
                 // if GPS Enabled get lat/long using GPS Services
                 if (isGPSEnabled) {
-                    location=null;
-                    if (location == null) {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        Log.d("GPS Enabled", "GPS Enabled");
 
-                        if (locationManager != null) {
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    Log.d("GPS Enabled", "GPS Enabled");
+
+                    if (locationManager != null) {
+                        if(jarak != ""){ // Jarak sudah terdeteksi
+
+                            Location locationBuffer = locationManager
+                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                            if(isOnLocation(locationBuffer)){
+
+                                location = locationBuffer;
+                            }
+
+                        }else{
                             location = locationManager
                                     .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                            if (location != null) {
-                                onLocationChanged(location);
-                            }
+                        }
+                        if (location != null) {
+                            //onLocationChanged(location);
                         }
                     }
                 }else{
@@ -286,9 +362,11 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             e.printStackTrace();
         }
 
+        isUpdateLocation = false;
         if(location != null){
             onLocationChanged(location);
         }
+
         return location;
     }
 
@@ -512,6 +590,35 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                         }).show();
             }
         });
+
+        ivRefreshPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(!isUpdateLocation) location = getLocation();
+            }
+        });
+
+        btnMapsOutlet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(latitudeOutlet != "" && longitudeOutlet != ""){
+
+                    Intent intent = new Intent(DetailOrderPerdana.this, MapsOutletActivity.class);
+                    intent.putExtra("lat", iv.doubleToStringFull(latitude));
+                    intent.putExtra("long", iv.doubleToStringFull(longitude));
+                    intent.putExtra("lat_outlet", latitudeOutlet);
+                    intent.putExtra("long_outlet", longitudeOutlet);
+                    intent.putExtra("nama", namaCus);
+
+                    startActivity(intent);
+                }else{
+
+                    Toast.makeText(DetailOrderPerdana.this, "Harap tunggu hingga proses pencarian lokasi selesai", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private void validateSaveData() {
@@ -540,6 +647,13 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             return;
         }
 
+        if(jarak.equals("")){
+
+            Snackbar.make(findViewById(android.R.id.content), "Mohon tunggu hinggan posisi diketahui / tekan refresh pada bagian jarak", Snackbar.LENGTH_LONG).show();
+            edtJarak.requestFocus();
+            return;
+        }
+
         if(iv.parseNullDouble(edtHarga.getText().toString()) < iv.parseNullDouble(hargaBrg)){
 
             Snackbar.make(findViewById(android.R.id.content), "Harga minimal "+ iv.ChangeToRupiahFormat(iv.parseNullDouble(hargaBrg)), Snackbar.LENGTH_LONG)
@@ -565,7 +679,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             return;
         }
 
-        if(edtNobukti.getText().length() == 0){
+        if(editMode && edtNobukti.getText().length() == 0){
 
             Snackbar.make(findViewById(android.R.id.content), "Nomor nota tidak termuat, harap ulangi proses", Snackbar.LENGTH_LONG)
                     .setAction("Ok", new View.OnClickListener() {
@@ -574,6 +688,18 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
 
                         }
                     }).show();
+            return;
+        }
+
+        if(totalHarga  <= 0 ){
+
+            Snackbar.make(findViewById(android.R.id.content), "Total Harga masih kosong, periksa apakah data anda sudah benar", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        if(location == null){
+
+            Toast.makeText(DetailOrderPerdana.this, "Harap tunggu hingga posisi diketahui", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -597,6 +723,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
 
     private void saveData(List<CustomItem> listItem) {
 
+        btnProses.setEnabled(false);
         // Jual D lama
         JSONArray jualDLama = new JSONArray();
 
@@ -608,7 +735,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                 try {
                     joLama.put("nobukti", noBukti);
                     joLama.put("kodebrg", item.getItem1());
-                    joLama.put("ccid", item.getItem2());
+                    joLama.put("ccid", item.getItem8());
                     joLama.put("harga", item.getItem4());
                     joLama.put("jumlah", "1");
                     joLama.put("hpp", item.getItem5());
@@ -638,7 +765,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                 jo.put("harga", item.getItem4());
                 jo.put("jumlah", "1");
                 jo.put("hpp", item.getItem5());
-                jo.put("nopengeluaran", suratJalan);
+                jo.put("nopengeluaran", item.getItem8());
                 jo.put("tgl_do", item.getItem6());
                 jo.put("nodo", item.getItem7());
             } catch (JSONException e) {
@@ -659,7 +786,8 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             jualH.put("nik", session.getUserInfo(SessionManager.TAG_UID));
             jualH.put("total", iv.doubleToStringRound(totalHarga));
             jualH.put("totalhpp", iv.doubleToStringRound(totalHPP));
-            jualH.put("keterangan", namaCus + " | " + notelpCus + " | " + session.getUserInfo(SessionManager.TAG_FLAG) + " " + session.getUserInfo(SessionManager.TAG_NAMA));
+            //jualH.put("keterangan", namaCus + " | " + notelpCus + " | " + session.getUserInfo(SessionManager.TAG_FLAG) + " " + session.getUserInfo(SessionManager.TAG_NAMA));
+            jualH.put("keterangan", suratJalan);
             jualH.put("userid", session.getUserInfo(SessionManager.TAG_USERNAME));
             jualH.put("status", "1");
             jualH.put("nomutasi", suratJalan);
@@ -690,6 +818,17 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             e.printStackTrace();
         }
 
+        PackageInfo pInfo = null;
+        String version = "";
+
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        version = pInfo.versionName;
+
         String method = (editMode) ? "PUT" : "POST";
         String url = ServerURL.savePerdana;
         JSONObject jBody = new JSONObject();
@@ -699,6 +838,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                 jBody.put("nobukti", noBukti);
                 jBody.put("jual_d_lama", jualDLama);
             }
+            jBody.put("version", version);
             jBody.put("jual_d", jualD);
             jBody.put("jual_h", jualH);
             jBody.put("latitude", iv.doubleToStringFull(location.getLatitude()));
@@ -721,7 +861,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
 
                     if(iv.parseNullInteger(status) == 200){
 
-                        String message = "Order Pulsa berhasil ditambahkan";
+                        String message = "Order Perdana berhasil disimpan";
                         if(editMode) message = "Order "+ noBukti + " berhasil diubah";
                         isLoading(false);
                         Toast.makeText(DetailOrderPerdana.this, message, Toast.LENGTH_LONG).show();
@@ -734,16 +874,20 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                         Toast.makeText(DetailOrderPerdana.this, superMessage, Toast.LENGTH_LONG).show();
                     }
 
+                    btnProses.setEnabled(true);
                     isLoading(false);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    btnProses.setEnabled(true);
                     isLoading(false);
                 }
             }
 
             @Override
             public void onError(String result) {
+
+                btnProses.setEnabled(true);
                 isLoading(false);
             }
         });
@@ -777,7 +921,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            masterCCID.add(new OptionItem(jo.getString("kodebrg"), jo.getString("ccid"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("hpp"), jo.getString("tgl_do"), jo.getString("nodo") , false));
+                            masterCCID.add(new OptionItem(jo.getString("kodebrg"), jo.getString("ccid"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("hpp"), jo.getString("tgl_do"), jo.getString("nodo"), jo.getString("nobukti") , false));
                         }
                     }
                     isLoading(false);
@@ -831,9 +975,9 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            ccidList.add(new CustomItem(jo.getString("kodebrg"), jo.getString("ccid"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("hpp"), jo.getString("tgl_do"), jo.getString("nodo")));
-                            listCCIDLama.add(new CustomItem(jo.getString("kodebrg"), jo.getString("ccid"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("hpp"), jo.getString("tgl_do"), jo.getString("nodo")));
-                            masterCCID.add(i, new OptionItem(jo.getString("kodebrg"), jo.getString("ccid"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("hpp"), jo.getString("tgl_do"), jo.getString("nodo") , true));
+                            ccidList.add(new CustomItem(jo.getString("kodebrg"), jo.getString("ccid"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("hpp"), jo.getString("tgl_do"), jo.getString("nodo"), jo.getString("nobukti")));
+                            listCCIDLama.add(new CustomItem(jo.getString("kodebrg"), jo.getString("ccid"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("hpp"), jo.getString("tgl_do"), jo.getString("nodo"), jo.getString("nobukti")));
+                            masterCCID.add(i, new OptionItem(jo.getString("kodebrg"), jo.getString("ccid"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("hpp"), jo.getString("tgl_do"), jo.getString("nodo"), jo.getString("nobukti") , true));
                         }
                     }
 
@@ -938,7 +1082,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                     for(OptionItem item: masterCCID){
 
                         if(item.getText().equals(finalCCID)){
-                            barang = new CustomItem(item.getValue(), item.getText(), item.getAtt1(), item.getAtt2(), item.getAtt3(), item.getAtt4(), item.getAtt5());
+                            barang = new CustomItem(item.getValue(), item.getText(), item.getAtt1(), item.getAtt2(), item.getAtt3(), item.getAtt4(), item.getAtt5(), item.getAtt6());
                             found = true;
                             break;
                         }
@@ -1187,7 +1331,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
 
                     if(item.isSelected()){
 
-                        ccidList.add(new CustomItem(item.getValue(), item.getText(), item.getAtt1(), item.getAtt2(), item.getAtt3(), item.getAtt4(), item.getAtt5()));
+                        ccidList.add(new CustomItem(item.getValue(), item.getText(), item.getAtt1(), item.getAtt2(), item.getAtt3(), item.getAtt4(), item.getAtt5(), item.getAtt6()));
                     }
 
                     masterCCID.get(x).setSelected(item.isSelected());
@@ -1293,7 +1437,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                     if(selectedRentang[x]){
                         OptionItem item = masterCCID.get(x);
                         masterCCID.get(x).setSelected(true);
-                        ccidList.add(new CustomItem(item.getValue(), item.getText(), item.getAtt1(), item.getAtt2(), item.getAtt3(), item.getAtt4(), item.getAtt5()));
+                        ccidList.add(new CustomItem(item.getValue(), item.getText(), item.getAtt1(), item.getAtt2(), item.getAtt3(), item.getAtt4(), item.getAtt5(), item.getAtt6()));
                     }
                 }
 
@@ -1322,16 +1466,20 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         ListCCIDAdapter adapter = (ListCCIDAdapter) lvCCID.getAdapter();
 
         totalHarga = 0;
+        long banyak = 0;
 
         if(adapter != null && adapter.getDataList() != null){
             final List<CustomItem> items = new ArrayList<>(adapter.getDataList());
+            banyak = items.size();
 
             for(CustomItem item: items){
 
                 totalHarga += iv.parseNullDouble(item.getItem4());
             }
+
         }
 
+        edtTotalCCID.setText(String.valueOf(banyak));
         edtTotalHarga.setText(iv.ChangeToRupiahFormat(totalHarga));
     }
 
@@ -1353,20 +1501,118 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        this.location = location;
-        this.latitude = location.getLatitude();
-        this.longitude = location.getLongitude();
+    public void onLocationChanged(Location clocation) {
+
+        if(jarak != ""){
+
+            if(isOnLocation(clocation)){
+
+                this.location = clocation;
+                this.latitude = location.getLatitude();
+                this.longitude = location.getLongitude();
+            }
+
+        }else{
+
+            this.location = clocation;
+            this.latitude = location.getLatitude();
+            this.longitude = location.getLongitude();
+        }
+
+        if(!isUpdateLocation){
+            getJarak();
+        }
+    }
+
+    private boolean isUpdateLocation = false;
+
+    private void getJarak() {
+
+        isUpdateLocation = true;
+        pbLoading.setVisibility(View.VISIBLE);
+        String nik = session.getUserDetails().get(SessionManager.TAG_UID);
+        JSONObject jBody = new JSONObject();
+        try {
+            jBody.put("kode", "");
+            jBody.put("kdcus", noCus);
+            jBody.put("lat", iv.doubleToStringFull(latitude));
+            jBody.put("long", iv.doubleToStringFull(longitude));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(DetailOrderPerdana.this, jBody, "POST", ServerURL.getJarak, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray items = response.getJSONArray("response");
+                        for(int i  = 0; i < items.length(); i++){
+
+                            JSONObject jo = items.getJSONObject(i);
+                            range = jo.getString("range");
+                            jarak = jo.getString("jarak");
+                            latitudeOutlet = jo.getString("latitude");
+                            longitudeOutlet = jo.getString("longitude");
+                            String pesan = jo.getString("pesan");
+                            String keteranganJarak = "";
+                            if(iv.parseNullDouble(jo.getString("jarak")) <= 6371){
+                                if(iv.parseNullDouble(jo.getString("jarak")) <= 1){
+                                    keteranganJarak = iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")) * 1000, "2") + " m";
+                                }else{
+                                    keteranganJarak = iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")), "2") + " km";
+                                }
+
+                                if(iv.parseNullDouble(jarak) > iv.parseNullDouble(range)){
+
+                                    keteranganJarak = "<font color='#ec1c25'>"+keteranganJarak+"</font>";
+                                }
+
+                            }else{
+
+
+                                keteranganJarak = "<font color='#ec1c25'>Lokasi outlet tidak diketahui</font>";
+                            }
+
+                            edtJarak.setText(Html.fromHtml(pesan + keteranganJarak));
+
+                            break;
+                        }
+                    }
+
+                    isUpdateLocation = false;
+                    pbLoading.setVisibility(View.GONE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isUpdateLocation = false;
+                    pbLoading.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+                isUpdateLocation = false;
+                pbLoading.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
 
+        location = getLocation();
     }
 
     @Override
     public void onProviderEnabled(String s) {
 
+        location = getLocation();
     }
 
     @Override

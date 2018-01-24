@@ -87,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_margin_small"
                     android:buttonTint="@color/color_white"
-                    android:text="Remenber me"
+                    android:text="Remember me"
                     android:id="@+id/cb_remeber_me"
                     android:textColor="@color/color_white"/>
             </LinearLayout>
@@ -104,10 +104,25 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/btn_login_3"
+                    android:visibility="gone"
+                    android:paddingLeft="@dimen/default_margin"
+                    android:paddingRight="@dimen/default_margin"
+                    android:text="    Change APN    "
+                    android:textSize="20sp"
+                    android:layout_marginRight="@dimen/default_margin"
+                    android:textAllCaps="false"
+                    android:id="@+id/btn_change_apn"
+                    android:textColor="@color/color_white"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/btn_login_2"
                     android:paddingLeft="@dimen/default_margin"
                     android:paddingRight="@dimen/default_margin"
                     android:text="    Login    "
+                    android:gravity="center"
                     android:textSize="20sp"
                     android:textAllCaps="false"
                     android:id="@+id/btn_login"

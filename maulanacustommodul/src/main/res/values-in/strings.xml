@@ -1,5 +1,4 @@
 <resources>
-
     <string name="api_error">Terjadi kesalahan saat mengakses data, mohon coba kembali</string>
     <string name="api_unauthorized">Anda tidak memiliki akses ke halaman ini</string>
     <string name="app_exit">Tekan kembali untuk keluar</string>

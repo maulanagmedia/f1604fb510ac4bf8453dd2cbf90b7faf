@@ -340,19 +340,20 @@ public class RiwayatPenjualan extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                    /*CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
+                    CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
 
                     if(selectedItem.getItem1().equals("I")){
 
                         currentFlag = selectedItem.getItem5();
 
                         getDetailPenjualan(selectedItem.getItem2(), currentFlag);
-                    }*/
+                    }
                 }
             });
         }
     }
 
+    //TODO: get detail order Mkios / GA
     private void getDetailPenjualan(String nonota, final String flag) {
 
         pbProses.setVisibility(View.VISIBLE);
@@ -403,12 +404,14 @@ public class RiwayatPenjualan extends AppCompatActivity {
                                     intent.putExtra("noba", jo.getString("no_ba"));
                                     intent.putExtra("status", jo.getString("status"));
                                     startActivity(intent);
+                                    break;
                                 }else if (flag.equals("MKIOS")){
                                     Intent intent = new Intent(RiwayatPenjualan.this, DetailOrderPulsa.class);
                                     intent.putExtra("nonota", jo.getString("nonota"));
                                     intent.putExtra("flag", jo.getString("flag"));
                                     intent.putExtra("koders", jo.getString("kode"));
                                     startActivity(intent);
+                                    break;
                                 }
                             }
                         }else{

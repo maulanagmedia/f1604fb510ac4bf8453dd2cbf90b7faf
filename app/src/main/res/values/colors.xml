@@ -19,11 +19,15 @@
     <color name="color_btn2">#58a8f9</color>
 
     <color name="default_text">#9b9b9b</color>
+    <color name="color_red">#e2332d</color>
+    <color name="color_red_active">#e97a76</color>
     <color name="default_background">#e2332d</color>
     <color name="default_background2">#ffc3c1</color>
 
     <color name="color_login_2">#432a75</color>
     <color name="color_login_2_active">#7248c7</color>
+    <color name="color_login_3">#ff8800</color>
+    <color name="color_login_3_active">#e99c45</color>
     <color name="color_blue">#027fe5</color>
     <color name="color_blue_2">#72abda</color>
 
@@ -33,5 +37,6 @@
     <color name="color_grey_3">#e6e4e4</color>
     <color name="color_grey_4">#5e5e5e</color>
     <color name="color_black">#000000</color>
+    <color name="color_yellow">#ece81b</color>
 
 </resources>

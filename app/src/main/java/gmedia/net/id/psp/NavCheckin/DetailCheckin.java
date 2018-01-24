@@ -328,7 +328,7 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
                         location = locationManager
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if (location != null) {
-                            onLocationChanged(location);
+                            //onLocationChanged(location);
                         }
                     }
                 }
@@ -347,7 +347,7 @@ public class DetailCheckin extends AppCompatActivity implements LocationListener
                             location = locationManager
                                     .getLastKnownLocation(LocationManager.GPS_PROVIDER);
                             if (location != null) {
-                                onLocationChanged(location);
+                                //onLocationChanged(location);
                             }
                         }
                     }

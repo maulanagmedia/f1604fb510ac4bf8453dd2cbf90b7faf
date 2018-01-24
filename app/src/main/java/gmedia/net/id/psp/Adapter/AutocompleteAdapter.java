@@ -27,8 +27,8 @@ public class AutocompleteAdapter extends ArrayAdapter {
     private int rowPerAutocompleteItem; // list 50 item only
     private String flagDisplay = "C"; // custom
 
-    public AutocompleteAdapter(Context context, int resource, List<CustomItem> items, String flagDisplay) {
-        super(context, resource, items);
+    public AutocompleteAdapter(Context context, List<CustomItem> items, String flagDisplay) {
+        super(context, android.R.layout.simple_list_item_1, items);
         this.context = context;
         this.resource = resource;
         this.items = items;

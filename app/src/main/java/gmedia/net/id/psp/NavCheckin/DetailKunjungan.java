@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Criteria;
@@ -15,16 +16,21 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.maulana.custommodul.ApiVolley;
+import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.SessionManager;
 
@@ -33,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -65,6 +72,15 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
     private ItemValidation iv = new ItemValidation();
     private ProgressDialog progressDialog;
     private Geocoder geocoder;
+    private boolean showMode = false;
+    private Context context;
+    private ProgressBar pbLoading;
+    private String nikDetail = "", timestampDetail = "", idKunjungan = "";
+    private boolean flag = true;
+    private LinearLayout llJarak, llJarak1;
+    private EditText edtJarak1;
+    private ImageView ivRefreshJarak;
+    private boolean isLocationRefresh = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +90,7 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
+        context = this;
         setTitle("Rincian Kunjungan");
 
         initUI();
@@ -84,8 +101,61 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
         edtNama = (EditText) findViewById(R.id.edt_nama);
         edtJarak = (EditText) findViewById(R.id.edt_jarak);
         edtKeterangan = (EditText) findViewById(R.id.edt_keterangan);
+        pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
         btnSimpan = (Button) findViewById(R.id.btn_simpan);
+
+        llJarak = (LinearLayout) findViewById(R.id.ll_jarak);
+        llJarak1 = (LinearLayout) findViewById(R.id.ll_jarak_1);
+
+        edtJarak1 = (EditText) findViewById(R.id.edt_jarak_1);
+        ivRefreshJarak = (ImageView) findViewById(R.id.iv_refresh_position);
         session = new SessionManager(DetailKunjungan.this);
+        flag = true;
+        isLocationRefresh = false;
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+
+            kdcus = bundle.getString("kdcus");
+            nikDetail = bundle.getString("nik");
+            timestampDetail = bundle.getString("timestamp");
+
+            if(nikDetail != null && nikDetail.length() > 0){
+                showMode = true;
+                getDetailKunjungan(nikDetail, timestampDetail, kdcus);
+                flag = bundle.getBoolean("flag", false);
+
+                if(nikDetail.equals(session.getUserInfo(SessionManager.TAG_UID))){ //kunjungan sendiri
+
+                    idKunjungan = bundle.getString("id");
+                    btnSimpan.setEnabled(true);
+                }else{ // lihat kunjungan sales
+                    btnSimpan.setEnabled(false);
+                    String namaSales = bundle.getString("nama");
+                    if(namaSales != null && namaSales.length() > 0){
+                        getSupportActionBar().setSubtitle("a/n "+ namaSales);
+                    }
+                }
+            }else{
+
+                showMode = false;
+                btnSimpan.setEnabled(true);
+                if(kdcus != null && kdcus.length() > 0){
+
+                    getDataCustomer();
+                }
+            }
+
+            if(showMode){
+
+                llJarak.setVisibility(View.VISIBLE);
+                llJarak1.setVisibility(View.GONE);
+            }else{
+
+                llJarak.setVisibility(View.GONE);
+                llJarak1.setVisibility(View.VISIBLE);
+            }
+        }
 
         initLocation();
     }
@@ -100,19 +170,68 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
         location.setLatitude(latitude);
         location.setLongitude(longitude);
 
-        Bundle bundle = getIntent().getExtras();
-        if(bundle != null){
-
-            kdcus = bundle.getString("kdcus");
-            if(kdcus != null && kdcus.length() > 0){
-
-                getDataCustomer();
-            }
-        }
-
         location = getLocation();
 
         initEvent();
+    }
+
+    private void getDetailKunjungan(String nik, String timestamp, String kdcus) {
+
+        pbLoading.setVisibility(View.VISIBLE);
+        JSONObject jBody = new JSONObject();
+        try {
+            jBody.put("nik", nik);
+            jBody.put("timestamp", timestamp);
+            jBody.put("kdcus", kdcus);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getDetailKunjungan, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray items = response.getJSONArray("response");
+                        for(int i  = 0; i < items.length(); i++){
+
+                            JSONObject jo = items.getJSONObject(i);
+                            edtNama.setText(jo.getString("nama"));
+                            if(iv.parseNullDouble(jo.getString("jarak")) <= 6371){
+                                if(iv.parseNullDouble(jo.getString("jarak")) <= 1){
+                                    edtJarak.setText(iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")) * 1000, "2") + " m");
+                                }else{
+                                    edtJarak.setText(iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")), "2") + " km");
+                                }
+                            }else{
+                                edtJarak.setText("Jarak outlet tidak diketahui");
+                            }
+
+                            edtJarak1.setText("Posisi anda dengan outlet adalah: " + edtJarak.getText().toString());
+
+                            edtKeterangan.setText(jo.getString("keterangan"));
+                            break;
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                pbLoading.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError(String result) {
+
+                pbLoading.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void initEvent() {
@@ -122,6 +241,17 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
             public void onClick(View view) {
 
                 validateBeforeSave();
+            }
+        });
+
+        ivRefreshJarak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!showMode){
+                    if(!isLocationRefresh){
+                        location = getLocation();
+                    }
+                }
             }
         });
     }
@@ -171,6 +301,15 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
         try {
             jBody.put("data", jDataLocation);
             jBody.put("data_images", jDataImages);
+            if(showMode){ // edit kunjungan
+                method = "PUT";
+                JSONObject jUpdate = new JSONObject();
+                jUpdate.put("id", idKunjungan);
+                jUpdate.put("kdcus", kdcus);
+                jUpdate.put("nik", nik);
+                jUpdate.put("timestamp", timestampDetail);
+                jBody.put("data_update", jUpdate);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -189,7 +328,14 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
 
                         String message = response.getJSONObject("response").getString("message");
                         Toast.makeText(DetailKunjungan.this, message, Toast.LENGTH_LONG).show();
-                        onBackPressed();
+                        if(flag){
+                            Intent intent = new Intent(DetailKunjungan.this, ActKunjungan.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+                        }else{
+                            onBackPressed();
+                        }
                     }else{
                         String message = response.getJSONObject("metadata").getString("message");
                         Toast.makeText(DetailKunjungan.this, message, Toast.LENGTH_LONG).show();
@@ -256,7 +402,9 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
 
     private void getJarak() {
 
+        isLocationRefresh = true;
         String nik = session.getUserDetails().get(SessionManager.TAG_UID);
+        pbLoading.setVisibility(View.VISIBLE);
         JSONObject jBody = new JSONObject();
         try {
             jBody.put("kdcus", kdcus);
@@ -281,22 +429,54 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            if(iv.parseNullDouble(jo.getString("jarak")) <= 1){
-                                edtJarak.setText(iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")) * 1000, "4") + " m");
+                            String range = jo.getString("range");
+                            String jarak = jo.getString("jarak");
+                            String pesan = jo.getString("pesan");
+                            String keteranganJarak = "";
+
+                            if(iv.parseNullDouble(jo.getString("jarak")) <= 6371){
+                                if(iv.parseNullDouble(jo.getString("jarak")) <= 1){
+                                    edtJarak.setText(iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")) * 1000, "2") + " m");
+                                }else{
+                                    edtJarak.setText(iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")), "2") + " km");
+                                }
                             }else{
-                                edtJarak.setText(iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")), "4") + " km");
+                                edtJarak.setText("Jarak outlet tidak diketahui");
                             }
+
+                            if(iv.parseNullDouble(jo.getString("jarak")) <= 6371){
+                                if(iv.parseNullDouble(jo.getString("jarak")) <= 1){
+                                    keteranganJarak = iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")) * 1000, "2") + " m";
+                                }else{
+                                    keteranganJarak = iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")), "2") + " km";
+                                }
+
+                                if(iv.parseNullDouble(jarak) > iv.parseNullDouble(range)){
+
+                                    keteranganJarak = "<font color='#ec1c25'>"+keteranganJarak+"</font>";
+                                }
+
+                            }else{
+
+
+                                keteranganJarak = "<font color='#ec1c25'>Lokasi outlet tidak diketahui</font>";
+                            }
+
+                            edtJarak1.setText(Html.fromHtml(pesan + keteranganJarak));
                         }
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                pbLoading.setVisibility(View.GONE);
+                isLocationRefresh = false;
             }
 
             @Override
             public void onError(String result) {
-
+                pbLoading.setVisibility(View.GONE);
+                isLocationRefresh = false;
             }
         });
     }
@@ -312,6 +492,9 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
     }
 
     public Location getLocation() {
+
+        isLocationRefresh = true;
+
         try {
 
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -353,6 +536,7 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
                         } else {
                             requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_PERMISSION_FINE_LOCATION);
                         }
+                        isLocationRefresh = false;
                         return null;
                     }
 
@@ -366,27 +550,25 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
                         location = locationManager
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if (location != null) {
-                            onLocationChanged(location);
+                            //onLocationChanged(location);
                         }
                     }
                 }
 
                 // if GPS Enabled get lat/long using GPS Services
                 if (isGPSEnabled) {
-                    location=null;
-                    if (location == null) {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        Log.d("GPS Enabled", "GPS Enabled");
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    Log.d("GPS Enabled", "GPS Enabled");
 
-                        if (locationManager != null) {
-                            location = locationManager
-                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                            if (location != null) {
-                                onLocationChanged(location);
-                            }
+                    if (locationManager != null) {
+                        Location bufferLocation = locationManager
+                                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        if (bufferLocation != null) {
+
+                            location = bufferLocation;
                         }
                     }
                 }else{
@@ -398,9 +580,11 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
             e.printStackTrace();
         }
 
+        isLocationRefresh = false;
         if(location != null){
             onLocationChanged(location);
         }
+
         return location;
     }
 
@@ -442,33 +626,78 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
     }
 
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(Location clocation) {
 
-        this.location = location;
+        this.location = clocation;
         this.latitude = location.getLatitude();
         this.longitude = location.getLongitude();
-        List<Address> addresses = null;
-        geocoder = new Geocoder(this, Locale.getDefault());
-        try {
-            addresses = geocoder.getFromLocation(latitude, longitude, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        if(addresses != null && addresses.size() > 0){
-            address0 = addresses.get(0).getAddressLine(0);
+        //get address
+        new Thread(new Runnable(){
+            public void run(){
+                address0 = getAddress(location);
+            }
+        }).start();
+
+        if(!showMode){
+            if(!isLocationRefresh){
+                getJarak();
+            }
         }
-        getJarak();
+    }
+
+    private String getAddress(Location location)
+    {
+        List<Address> addresses;
+        try{
+            addresses = new Geocoder(this,Locale.getDefault()).getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            return findAddress(addresses);
+        }
+        catch (Exception e) {
+
+            return "";
+
+        }
+    }
+
+    private String findAddress(List<Address> addresses)
+    {
+        String address="";
+        if(addresses!=null)
+        {
+            for(int i=0 ; i < addresses.size() ; i++){
+
+                Address addre = addresses.get(i);
+                String street = addre.getAddressLine(0);
+                if(null == street)
+                    street="";
+
+                String city = addre.getLocality();
+                if(city == null) city = "";
+
+                String state=addre.getAdminArea();
+                if(state == null) state="";
+
+                String country = addre.getCountryName();
+                if(country == null) country = "";
+
+                address = street+", "+city+", "+state+", "+country;
+            }
+            return address;
+        }
+        return address;
     }
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
 
+        location = getLocation();
     }
 
     @Override
     public void onProviderEnabled(String s) {
 
+        location = getLocation();
     }
 
     @Override

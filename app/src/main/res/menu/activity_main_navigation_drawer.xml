@@ -7,10 +7,6 @@
             android:icon="@drawable/home"
             android:title="Home" />
         <item
-            android:id="@+id/nav_akun"
-            android:icon="@drawable/ic_akun_anda"
-            android:title="Akun Anda" />
-        <item
             android:id="@+id/nav_add_customer"
             android:icon="@drawable/ic_add_customer_putih"
             android:title="Tambah Outlet" />
@@ -65,12 +61,34 @@
             android:icon="@drawable/ic_chekin_putih"
             android:title="Kunjungan / Check-in" />
         <item
+            android:id="@+id/nav_map_kunjungan"
+            android:icon="@mipmap/ic_map_kunjungan_putih"
+            android:title="Maps Kunjungan"
+            android:visible="false"/>
+        <item
             android:id="@+id/nav_info_deposit"
             android:icon="@drawable/nav_order_perdana"
             android:title="Info Deposit" />
+
         <item
-            android:id="@+id/nav_keluar"
-            android:icon="@drawable/ic_keluar"
-            android:title="Keluar" />
+            android:title="Akun">
+            <menu>
+                <item
+                    android:id="@+id/nav_akun"
+                    android:icon="@drawable/ic_akun_anda"
+                    android:title="Akun Anda" />
+
+                <item
+                    android:id="@+id/nav_change_password"
+                    android:icon="@mipmap/ic_lock"
+                    android:title="Ubah Password" />
+
+                <item
+                    android:id="@+id/nav_keluar"
+                    android:icon="@drawable/ic_keluar"
+                    android:title="Keluar" />
+            </menu>
+
+        </item>
     </group>
 </menu>

@@ -3,6 +3,7 @@ package gmedia.net.id.psp.NavVerifikasiOutlet;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -54,6 +55,9 @@ public class ActVerifikasiOutlet extends AppCompatActivity {
     private View footerList;
     private List<CustomItem> masterList;
     private ListCheckinAdapter adapter;
+    private TabLayout tlJenis;
+    private boolean verifiskasiMode = true;
+    private boolean stateBack = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +79,7 @@ public class ActVerifikasiOutlet extends AppCompatActivity {
         lvCustomer = (ListView) findViewById(R.id.lv_customer);
         pbLoading = (ProgressBar) findViewById(R.id.pb_proses);
         LayoutInflater li = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        tlJenis = (TabLayout) findViewById(R.id.tl_jenis);
         footerList = li.inflate(R.layout.layout_footer_listview, null);
         session = new SessionManager(context);
         startIndex = 0;
@@ -100,6 +105,42 @@ public class ActVerifikasiOutlet extends AppCompatActivity {
             }
         });
 
+        tlJenis.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                setTabPosition(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        TabLayout.Tab tab = tlJenis.getTabAt(0);
+        tab.select();
+        setTabPosition(0);
+    }
+
+    private void setTabPosition(int position) {
+
+        if(position == 0){
+
+            verifiskasiMode = true;
+        }else{
+            verifiskasiMode = false;
+        }
+
+        actvCustomer.setText("");
+        keyword = actvCustomer.getText().toString();
+        startIndex = 0;
+        stateBack = false;
+        checkSupervisor();
     }
 
     @Override
@@ -137,12 +178,18 @@ public class ActVerifikasiOutlet extends AppCompatActivity {
 
                             getDataCustomer();
                         }else{
-                            Toast.makeText(ActVerifikasiOutlet.this, "Anda tidak berhak mengakses halaman ini", Toast.LENGTH_LONG).show();
-                            onBackPressed();
+                            if(!stateBack){
+                                Toast.makeText(ActVerifikasiOutlet.this, "Anda tidak berhak mengakses halaman ini", Toast.LENGTH_LONG).show();
+                                onBackPressed();
+                                stateBack = true;
+                            }
                         }
                     }else{
-                        Toast.makeText(ActVerifikasiOutlet.this, "Anda tidak berhak mengakses halaman ini", Toast.LENGTH_LONG).show();
-                        onBackPressed();
+                        if(!stateBack){
+                            Toast.makeText(ActVerifikasiOutlet.this, "Anda tidak berhak mengakses halaman ini", Toast.LENGTH_LONG).show();
+                            onBackPressed();
+                            stateBack = true;
+                        }
                     }
 
                 } catch (JSONException e) {
@@ -175,7 +222,10 @@ public class ActVerifikasiOutlet extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getCustomerVerifikasi, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        String url = ServerURL.getCustomerVerifikasi;
+        if(!verifiskasiMode) url = ServerURL.getCustomerAktivasi;
+
+        ApiVolley request = new ApiVolley(context, jBody, "POST", url, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -236,7 +286,10 @@ public class ActVerifikasiOutlet extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getCustomerVerifikasi, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        String url = ServerURL.getCustomerVerifikasi;
+        if(!verifiskasiMode) url = ServerURL.getCustomerAktivasi;
+
+        ApiVolley request = new ApiVolley(context, jBody, "POST", url, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -339,6 +392,7 @@ public class ActVerifikasiOutlet extends AppCompatActivity {
 
                     Intent intent = new Intent(context, DetailVerifikasiOutlet.class);
                     intent.putExtra("kdcus", selectedItem.getItem1());
+                    intent.putExtra("isverifikasi", verifiskasiMode);
                     ((Activity) context).startActivity(intent);
                 }
             });

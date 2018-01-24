@@ -21,15 +21,45 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/CustomAutoComplete"
+                android:layout_marginBottom="0dp"
                 android:hint="Nama Customer"
                 android:id="@+id/actv_customer"/>
         </LinearLayout>
+
+        <android.support.design.widget.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_below="@id/ll_header"
+            android:background="@color/colorPrimary"
+            android:id="@+id/tl_jenis"
+            app:tabTextColor="@color/color_white"
+            app:tabSelectedTextColor="@color/color_white"
+            app:tabMaxWidth="0dp"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabIndicatorColor="@color/color_white"
+            android:weightSum="2">
+
+            <android.support.design.widget.TabItem
+                android:text="Verifikasi"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:id="@+id/ti_verifikasi"/>
+
+            <android.support.design.widget.TabItem
+                android:text="Aktivasi"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:id="@+id/ti_aktivasi"/>
+        </android.support.design.widget.TabLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_below="@id/ll_header"
+            android:layout_below="@id/tl_jenis"
             android:background="@drawable/login_container">
 
             <ListView

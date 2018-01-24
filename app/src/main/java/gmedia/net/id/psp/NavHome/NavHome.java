@@ -4,14 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,18 +31,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import gmedia.net.id.psp.CustomView.WrapContentViewPager;
-import gmedia.net.id.psp.DaftarPiutang.DaftarPiutang;
+import gmedia.net.id.psp.DaftarPiutang.PiutangPerOutlet;
 import gmedia.net.id.psp.InfoDeposit.ActDeposit;
-import gmedia.net.id.psp.MainNavigationActivity;
-import gmedia.net.id.psp.NavCheckin.ActCheckin;
+import gmedia.net.id.psp.NavCheckin.ActKunjungan;
 import gmedia.net.id.psp.NavHome.Adapter.HeaderSliderAdapter;
 import gmedia.net.id.psp.NavKomplain.ActKomplain;
+import gmedia.net.id.psp.NavMapsKunjungan.MapsKunjunganActivity;
 import gmedia.net.id.psp.NavTambahCustomer.ActTambahOutlet;
 import gmedia.net.id.psp.NavVerifikasiOutlet.ActVerifikasiOutlet;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
-import gmedia.net.id.psp.OrderPerdana.DetailOrderPerdana;
-import gmedia.net.id.psp.OrderPerdana.ListBarang;
 import gmedia.net.id.psp.OrderPulsa.ListReseller;
+import gmedia.net.id.psp.OrderTcash.ActOrderTcash;
 import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
 import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
@@ -80,12 +76,15 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
     private LinearLayout llOrderMkios, llPenjualanMkios, llOrderPerdana, llPenjualanPerdana, llDaftarPiutang, llStokSales;
     private TextView tvNamaSales, tvTotalOmset, tvOmsetMkios, tvOmsetPerdana;
     private LinearLayout llAddCustomer, llCheckIn, llKomplain;
-    private LinearLayout ll1, ll2, ll3, ll4;
+    private LinearLayout ll1, ll2, ll3, ll4, ll5;
     private LinearLayout llOrderTcash;
     private LinearLayout llPenjualan;
     private LinearLayout llRiwayatPenjualan;
     private LinearLayout llVerifikasiOutlet;
     private LinearLayout llInfoDeposit;
+    private TextView tvJabatan;
+    private TextView tvTarget, tvPencapaian, tvGap, tvOutletBaru;
+    private LinearLayout llMapsKunjungan;
 
     public NavHome() {
         // Required empty public constructor
@@ -172,6 +171,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         ll2 = (LinearLayout) layout.findViewById(R.id.ll_2);
         ll3 = (LinearLayout) layout.findViewById(R.id.ll_3);
         ll4 = (LinearLayout) layout.findViewById(R.id.ll_4);
+        ll5 = (LinearLayout) layout.findViewById(R.id.ll_5);
 
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ll1.getLayoutParams();
 
@@ -182,6 +182,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         ll2.setLayoutParams(lp);
         ll3.setLayoutParams(lp);
         ll4.setLayoutParams(lp);
+        ll5.setLayoutParams(lp);
 
         llAddCustomer = (LinearLayout) layout.findViewById(R.id.ll_add_customer);           // 1
         llOrderMkios = (LinearLayout) layout.findViewById(R.id.ll_order_mkios);             // 2
@@ -198,20 +199,26 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
 
         llPenjualanMkios = (LinearLayout) layout.findViewById(R.id.ll_penjualan_mkios);
         llPenjualanPerdana = (LinearLayout) layout.findViewById(R.id.ll_penjualan_perdana);
+        llMapsKunjungan = (LinearLayout) layout.findViewById(R.id.ll_maps_kunjungan);           // 13
+
 
         tvNamaSales = (TextView) layout.findViewById(R.id.tv_nama_sales);
         tvTotalOmset = (TextView) layout.findViewById(R.id.tv_total_omset);
         tvOmsetMkios = (TextView) layout.findViewById(R.id.tv_omset_mkios);
         tvOmsetPerdana = (TextView) layout.findViewById(R.id.tv_omset_perdana);
-
-
+        tvTarget = (TextView) layout.findViewById(R.id.tv_target);
+        tvPencapaian = (TextView) layout.findViewById(R.id.tv_pencapain);
+        tvGap = (TextView) layout.findViewById(R.id.tv_gap);
+        tvOutletBaru = (TextView) layout.findViewById(R.id.tv_outlet_baru);
+        tvJabatan = (TextView) layout.findViewById(R.id.tv_jabatan);
 
         initEvent();
 
         tvNamaSales.setText(session.getUser());
 
         getListHeaderSlider();
-        getUserOmset();
+        //getUserOmset();
+        getDataAkun();
     }
 
     private void initEvent() {
@@ -271,6 +278,15 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             }
         });
 
+        llOrderTcash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ActOrderTcash.class);
+                context.startActivity(intent);
+                ((Activity)context).finish();
+            }
+        });
+
         llRiwayatPenjualan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -283,7 +299,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         llDaftarPiutang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, DaftarPiutang.class);
+                Intent intent = new Intent(context, PiutangPerOutlet.class);
                 context.startActivity(intent);
                 ((Activity)context).finish();
             }
@@ -302,7 +318,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(context, ActCheckin.class);
+                Intent intent = new Intent(context, ActKunjungan.class);
                 context.startActivity(intent);
                 ((Activity)context).finish();
             }
@@ -333,6 +349,15 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             public void onClick(View view) {
 
                 Intent intent = new Intent(context, ActDeposit.class);
+                context.startActivity(intent);
+                ((Activity)context).finish();
+            }
+        });
+
+        llMapsKunjungan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, MapsKunjunganActivity.class);
                 context.startActivity(intent);
                 ((Activity)context).finish();
             }
@@ -384,6 +409,44 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         });
     }
 
+    private void getDataAkun() {
+
+        JSONObject jBody = new JSONObject();
+        try {
+            jBody.put("nik", session.getUserInfo(SessionManager.TAG_UID));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getUserInfo, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONObject jo = response.getJSONObject("response");
+                        tvNamaSales.setText(jo.getString("nama"));
+                        tvJabatan.setText(jo.getString("jabatan"));
+
+                        getUserOmset();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    getUserOmset();
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+
+                getUserOmset();
+            }
+        });
+    }
+
     private void getUserOmset() {
 
         JSONObject jBody = new JSONObject();
@@ -407,6 +470,11 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
                         JSONObject item = responseAPI.getJSONObject("response");
                         tvOmsetMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_mkios"))));
                         tvOmsetPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_perdana"))));
+                        tvTarget.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("target"))));
+                        tvPencapaian.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("pencapaian"))));
+                        tvGap.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("gap"))));
+                        tvOutletBaru.setText(item.getString("outlet_baru"));
+
                         tvTotalOmset.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_mkios")) + iv.parseNullDouble(item.getString("omset_perdana"))));
 
                     }

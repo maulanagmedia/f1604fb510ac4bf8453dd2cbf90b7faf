@@ -3,7 +3,9 @@ package gmedia.net.id.psp.OrderPerdana;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -64,6 +67,7 @@ public class ListBarang extends AppCompatActivity {
     private View bottomView;
     private BottomSheetBehavior mBottomSheetBehavior2;
     private View llHeader;
+    private ImageView ivExpand;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +93,7 @@ public class ListBarang extends AppCompatActivity {
         lvBarang = (ListView) findViewById(R.id.lv_barang);
         actvBarang = (AutoCompleteTextView) findViewById(R.id.actv_barang);
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
+        ivExpand = (ImageView) findViewById(R.id.iv_expand);
 
         //Bottom view
         llHeader= findViewById(R.id.ll_header);
@@ -100,8 +105,48 @@ public class ListBarang extends AppCompatActivity {
                 new int[] { android.R.attr.actionBarSize });
         int mActionBarSize = (int) styledAttributes.getDimension(0, 0);
         styledAttributes.recycle();
-        mBottomSheetBehavior2.setPeekHeight(display[1]/5 - mActionBarSize);
+        mBottomSheetBehavior2.setPeekHeight(display[1]/5 - mActionBarSize + iv.dpToPx(ListBarang.this, 40));
         mBottomSheetBehavior2.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        //bottomView.setLayoutParams(new CoordinatorLayout.LayoutParams(display[0], display[1]- iv.dpToPx(ListBarang.this, 40)));
+
+        ivExpand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mBottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                    mBottomSheetBehavior2.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    ivExpand.setImageDrawable(getResources().getDrawable(R.mipmap.ic_arrow_up));
+                }
+                else if(mBottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    mBottomSheetBehavior2.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    ivExpand.setImageDrawable(getResources().getDrawable(R.mipmap.ic_arrow_down));
+                }
+                else if(mBottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+                    mBottomSheetBehavior2.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    ivExpand.setImageDrawable(getResources().getDrawable(R.mipmap.ic_arrow_down));
+                }
+            }
+        });
+
+        mBottomSheetBehavior2.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+                if(mBottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                    ivExpand.setImageDrawable(getResources().getDrawable(R.mipmap.ic_arrow_down));
+                }
+                else if(mBottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    ivExpand.setImageDrawable(getResources().getDrawable(R.mipmap.ic_arrow_up));
+                }
+                else if(mBottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+                    ivExpand.setImageDrawable(getResources().getDrawable(R.mipmap.ic_arrow_up));
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
 
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) lvBarang.getLayoutParams();
         params.height = display[1] - (3 * mActionBarSize);

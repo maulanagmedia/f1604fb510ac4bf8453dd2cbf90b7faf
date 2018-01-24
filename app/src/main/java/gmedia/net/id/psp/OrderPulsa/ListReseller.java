@@ -147,12 +147,14 @@ public class ListReseller extends AppCompatActivity {
                     List<CustomItem> items = new ArrayList<CustomItem>();
                     String keyword = actvReseller.getText().toString().trim().toUpperCase();
 
-                    for (CustomItem item: tableList){
+                    if(tableList != null){
+                        for (CustomItem item: tableList){
 
-                        if(item.getItem2().toUpperCase().contains(keyword)) items.add(item);
+                            if(item.getItem2().toUpperCase().contains(keyword)) items.add(item);
+                        }
+
+                        getTableList(items);
                     }
-
-                    getTableList(items);
                     iv.hideSoftKey(ListReseller.this);
                     return true;
                 }

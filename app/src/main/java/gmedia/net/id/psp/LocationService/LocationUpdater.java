@@ -51,15 +51,16 @@ public class LocationUpdater extends Service implements LocationListener {
     public boolean isGPSEnabled = false;
     boolean isNetworkEnabled = false;
     boolean canGetLocation = false;
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 1 meters
-    private static final long MIN_TIME_BW_UPDATES = 1; // 1 minute
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 5 meters
+    private static final long MIN_TIME_BW_UPDATES = 1; // 5 minute
     private String TAG = "locationUpdater";
     private String address0 = "";
     private SessionManager session;
     private String nik = "";
     private ItemValidation iv = new ItemValidation();
-    private static Timer timer = new Timer();
+    private static Timer timer;
     private int timerTime = 1000 * 60 * 10; // 10 minute refresh
+    private boolean onUpdate = false;
 
     public LocationUpdater() {
     }
@@ -79,6 +80,7 @@ public class LocationUpdater extends Service implements LocationListener {
         context = this;
         session = new SessionManager(context);
         nik = session.getUserInfo(SessionManager.TAG_UID);
+        onUpdate = false;
 
         initLocation();
     }
@@ -138,6 +140,8 @@ public class LocationUpdater extends Service implements LocationListener {
     }
 
     public Location getLocation() {
+
+        onUpdate = true;
         try {
 
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -179,6 +183,7 @@ public class LocationUpdater extends Service implements LocationListener {
                         } else {
                             requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_PERMISSION_FINE_LOCATION);
                         }
+                        onUpdate = false;
                         return null;
                     }
 
@@ -192,27 +197,26 @@ public class LocationUpdater extends Service implements LocationListener {
                         location = locationManager
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if (location != null) {
-                            onLocationChanged(location);
+                            //onLocationChanged(location);
                         }
                     }
                 }
 
                 // if GPS Enabled get lat/long using GPS Services
                 if (isGPSEnabled) {
-                    location=null;
-                    if (location == null) {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        Log.d("GPS Enabled", "GPS Enabled");
 
-                        if (locationManager != null) {
-                            location = locationManager
-                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                            if (location != null) {
-                                onLocationChanged(location);
-                            }
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    Log.d("GPS Enabled", "GPS Enabled");
+
+                    if (locationManager != null) {
+                        Location bufferLocation = locationManager
+                                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        if (bufferLocation != null) {
+                            //onLocationChanged(location);
+                            location = bufferLocation;
                         }
                     }
                 }else{
@@ -228,12 +232,21 @@ public class LocationUpdater extends Service implements LocationListener {
             onLocationChanged(location);
         }
 
+        onUpdate = false;
+        timer = new Timer();
         timer.scheduleAtFixedRate(new mainTask(), 1000, timerTime);
         return location;
     }
 
+    @Override
+    public void onDestroy() {
+        timer.cancel();
+        super.onDestroy();
+    }
+
     private void saveLocation(){
 
+        onUpdate = true;
         JSONObject jData = new JSONObject();
 
         String deviceName = android.os.Build.MODEL;
@@ -281,12 +294,14 @@ public class LocationUpdater extends Service implements LocationListener {
                         Log.d(TAG, "onSuccess: " + e.toString());
                     }
 
+                    onUpdate = false;
                 }
 
                 @Override
                 public void onError(String result) {
 
                     Log.d(TAG, "onError: " + result);
+                    onUpdate = false;
                 }
             });
         }
@@ -297,7 +312,14 @@ public class LocationUpdater extends Service implements LocationListener {
         public void run()
         {
             Log.d(TAG, "onLocationChanged: " +String.valueOf(latitude)+" , "+ String.valueOf(longitude));
-            saveLocation();
+            if(nik != null && nik.length() > 0){ // nik ada
+                if(latitude != 0 && longitude != 0 && !onUpdate){ // lat long tidak kosong
+                    saveLocation();
+                }
+            }else if(nik == null){
+                //onDestroy();
+            }
+
         }
     }
 
@@ -307,22 +329,61 @@ public class LocationUpdater extends Service implements LocationListener {
     }
 
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(final Location location) {
         this.location = location;
         this.latitude = location.getLatitude();
         this.longitude = location.getLongitude();
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        List<Address> addresses = null;
-        try {
-            addresses = geocoder.getFromLocation(latitude, longitude, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        if(addresses != null && addresses.size() > 0){
-            address0 = addresses.get(0).getAddressLine(0);
-        }
+        //get state
+        new Thread(new Runnable(){
+            public void run(){
+                address0=getAddress(location);
+            }
+        }).start();
 
+    }
+
+    private String getAddress(Location location)
+    {
+        List<Address> addresses;
+        try{
+            addresses = new Geocoder(this,Locale.getDefault()).getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            return findAddress(addresses);
+        }
+        catch (Exception e) {
+
+            return "";
+
+        }
+        //return "Address not available";
+    }
+
+    private String findAddress(List<Address> addresses)
+    {
+        String address="";
+        if(addresses!=null)
+        {
+            for(int i=0 ; i < addresses.size() ; i++){
+
+                Address addre = addresses.get(i);
+                String street = addre.getAddressLine(0);
+                if(null == street)
+                    street="";
+
+                String city = addre.getLocality();
+                if(city == null) city = "";
+
+                String state=addre.getAdminArea();
+                if(state == null) state="";
+
+                String country = addre.getCountryName();
+                if(country == null) country = "";
+
+                address = street+", "+city+", "+state+", "+country;
+            }
+            return address;
+        }
+        return address;
     }
 
     @Override

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="gmedia.net.id.psp.OrderTcash.ActOrderTcash">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_header"
+        android:orientation="vertical"
+        android:background="@color/default_background">
+
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/CustomAutoComplete"
+            android:hint="Nama Outlet"
+            android:id="@+id/actv_outlet"
+            android:layout_marginBottom="@dimen/default_margin_tiny"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/ll_header"
+        android:id="@+id/ll_date"
+        android:padding="@dimen/default_margin_tiny"
+        android:background="@color/colorPrimary"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:id="@+id/tv_from"
+                android:textStyle="bold"
+                android:textColor="@color/color_white"
+                android:drawableRight="@mipmap/ic_date"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_line"
+                android:background="@color/color_white"
+                android:layout_marginRight="@dimen/default_margin_small"
+                android:layout_marginLeft="@dimen/default_margin_small"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.05"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginLeft="@dimen/default_margin_tiny"
+                android:layout_marginRight="@dimen/default_margin_tiny"
+                android:background="@color/color_white"
+                android:gravity="center"
+                android:textColor="@color/color_white"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:id="@+id/tv_to"
+                android:text=""
+                android:textStyle="bold"
+                android:textColor="@color/color_white"
+                android:drawableRight="@mipmap/ic_date"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_line"
+                android:background="@color/color_white"
+                android:layout_marginRight="@dimen/default_margin_small"
+                android:layout_marginLeft="@dimen/default_margin_small"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.15"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/ib_show"
+                android:background="@drawable/btn_round_blue"
+                android:src="@mipmap/ic_next"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_footer"
+        android:padding="@dimen/default_margin_small"
+        android:background="@color/color_grey_2"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total"
+            android:textStyle="bold"
+            android:textColor="@color/color_black"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rp 0"
+            android:id="@+id/tv_total"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="right"
+            android:textColor="@color/color_black"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_date"
+        android:layout_above="@id/ll_footer"
+        android:background="@drawable/login_container">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/lv_tcash"></ListView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_add_white"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="30dp"
+            app:backgroundTint="@color/color_login_2"
+            android:id="@+id/fab_add"/>
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/pb_proses"
+        android:visibility="gone"/>
+
+</RelativeLayout>

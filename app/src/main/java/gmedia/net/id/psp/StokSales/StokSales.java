@@ -30,17 +30,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.StokSales.Adapter.ListStokAdapter;
+import gmedia.net.id.psp.StokSales.Adapter.ListStokDetailAdapter;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class StokSales extends AppCompatActivity {
 
     private ListView lvStok;
     private List<CustomItem> masterList;
+    private HashMap<String, List<CustomItem>> detailList;
     private AutoCompleteTextView actvBarang;
     private ProgressBar pbProses;
     private ItemValidation iv = new ItemValidation();
@@ -51,7 +54,7 @@ public class StokSales extends AppCompatActivity {
     private boolean isLoading = false;
     private final String TAG = "TAG";
     private View footerList;
-    private ListStokAdapter adapterStok;
+    private ListStokDetailAdapter adapterStok;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +106,7 @@ public class StokSales extends AppCompatActivity {
     private void getData() {
 
         masterList = new ArrayList<>();
+        detailList = new HashMap<>();
         pbProses.setVisibility(View.VISIBLE);
         String nik = session.getUserDetails().get(SessionManager.TAG_UID);
         JSONObject jBody = new JSONObject();
@@ -115,7 +119,7 @@ public class StokSales extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(StokSales.this, jBody, "POST", ServerURL.getStok+nik, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(StokSales.this, jBody, "POST", ServerURL.getStokDetail+nik, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -123,6 +127,8 @@ public class StokSales extends AppCompatActivity {
 
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
+                    masterList = new ArrayList<>();
+                    detailList = new HashMap<>();
 
                     if(iv.parseNullInteger(status) == 200){
 
@@ -130,7 +136,15 @@ public class StokSales extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("nobukti"), jo.getString("namabrg"), jo.getString("jumlah"), jo.getString("harga")));
+                            masterList.add(new CustomItem(jo.getString("nobukti"), jo.getString("namabrg"), jo.getString("jumlah"), jo.getString("harga"), jo.getString("jumlah_lama"), jo.getString("id")));
+
+                            JSONArray details = jo.getJSONArray("detail");
+                            List<CustomItem> detailTerjual = new ArrayList<>();
+                            for(int j = 0; j < details.length(); j++){
+                                JSONObject jo2 = details.getJSONObject(j);
+                                detailTerjual.add(new CustomItem(jo2.getString("nama"), jo2.getString("jumlah")));
+                            }
+                            detailList.put(jo.getString("id"),detailTerjual);
                         }
                     }
 
@@ -157,6 +171,8 @@ public class StokSales extends AppCompatActivity {
         });
     }
 
+
+
     private void getMoreData() {
 
         final List<CustomItem> moreList = new ArrayList<>();
@@ -171,7 +187,7 @@ public class StokSales extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(StokSales.this, jBody, "POST", ServerURL.getStok+nik, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(StokSales.this, jBody, "POST", ServerURL.getStokDetail+nik, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -186,13 +202,21 @@ public class StokSales extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            moreList.add(new CustomItem(jo.getString("nobukti"), jo.getString("namabrg"), jo.getString("jumlah"), jo.getString("harga")));
+                            moreList.add(new CustomItem(jo.getString("nobukti"), jo.getString("namabrg"), jo.getString("jumlah"), jo.getString("harga"), jo.getString("jumlah_lama"), jo.getString("id")));
+
+                            JSONArray details = jo.getJSONArray("detail");
+                            List<CustomItem> detailTerjual = new ArrayList<>();
+                            for(int j = 0; j < details.length(); j++){
+                                JSONObject jo2 = details.getJSONObject(j);
+                                detailTerjual.add(new CustomItem(jo2.getString("nama"), jo2.getString("jumlah")));
+                            }
+                            detailList.put(jo.getString("id"),detailTerjual);
                         }
                     }
 
                     isLoading = false;
                     lvStok.removeFooterView(footerList);
-                    if(adapterStok != null) adapterStok.addMoreData(moreList);
+                    if(adapterStok != null) adapterStok.addMoreData(moreList, detailList);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -264,7 +288,7 @@ public class StokSales extends AppCompatActivity {
 
         if(tableList != null && tableList.size() > 0){
 
-            adapterStok = new ListStokAdapter(StokSales.this, tableList);
+            adapterStok = new ListStokDetailAdapter(StokSales.this, tableList, detailList);
             lvStok.setAdapter(adapterStok);
 
             lvStok.setOnItemClickListener(new AdapterView.OnItemClickListener() {

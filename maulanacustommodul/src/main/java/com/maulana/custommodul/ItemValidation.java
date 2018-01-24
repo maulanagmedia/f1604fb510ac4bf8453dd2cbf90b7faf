@@ -1,18 +1,26 @@
 package com.maulana.custommodul;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.widget.AppCompatDrawableManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
@@ -20,6 +28,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import java.text.DecimalFormat;
@@ -482,6 +492,22 @@ public class ItemValidation {
         return hasil;
     }
 
+    public String ChangeToRupiahFormat(String number){
+
+        double value = parseNullDouble(number);
+
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        DecimalFormatSymbols symbols = ((DecimalFormat) format).getDecimalFormatSymbols();
+
+        symbols.setCurrencySymbol("Rp ");
+        ((DecimalFormat) format).setDecimalFormatSymbols(symbols);
+        format.setMaximumFractionDigits(0);
+
+        String hasil = String.valueOf(format.format(value));
+
+        return hasil;
+    }
+
     public String ChangeToRupiahFormat(Float number){
 
         NumberFormat format = NumberFormat.getCurrencyInstance();
@@ -560,7 +586,7 @@ public class ItemValidation {
     //region Nullable value
     public int parseNullInteger(String s){
         int result = 0;
-        if(s != null){
+        if(s != null && s.length() > 0){
             try {
                 result = Integer.parseInt(s);
             }catch (Exception e){
@@ -574,7 +600,7 @@ public class ItemValidation {
     //region Nullable value
     public long parseNullLong(String s){
         long result = 0;
-        if(s != null){
+        if(s != null && s.length() > 0){
             try {
                 result = Long.parseLong(s);
             }catch (Exception e){
@@ -588,7 +614,7 @@ public class ItemValidation {
     //nullable value
     public float parseNullFloat(String s){
         float result = 0;
-        if(s != null){
+        if(s != null && s.length() > 0){
             try {
                 result = Float.parseFloat(s);
             }catch (Exception e){
@@ -601,7 +627,7 @@ public class ItemValidation {
 
     public Double parseNullDouble(String s){
         double result = 0;
-        if(s != null){
+        if(s != null && s.length() > 0){
             try {
                 result = Double.parseDouble(s);
             }catch (Exception e){
@@ -807,14 +833,19 @@ public class ItemValidation {
     //endregion
 
     public void hideSoftKey(Context context){
-        InputMethodManager inputManager =
-                (InputMethodManager) context.
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(
-                ((Activity) context).getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS); ((Activity) context).getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-        );
+        try {
+
+            InputMethodManager inputManager =
+                    (InputMethodManager) context.
+                            getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(
+                    ((Activity) context).getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS); ((Activity) context).getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+            );
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public boolean isServiceRunning(Context context, Class<?> serviceClass) {
@@ -827,4 +858,40 @@ public class ItemValidation {
         return false;
     }
 
+
+    public Bitmap getBitmapFromVectorDrawable(Context context, int drawableId) {
+        @SuppressLint("RestrictedApi") Drawable drawable = AppCompatDrawableManager.get().getDrawable(context, drawableId);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            drawable = (DrawableCompat.wrap(drawable)).mutate();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+    }
 }

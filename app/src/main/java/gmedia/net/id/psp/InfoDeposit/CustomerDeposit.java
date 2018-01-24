@@ -113,7 +113,7 @@ public class CustomerDeposit extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("nomor"), jo.getString("alamat")));
+                            masterList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("alamat")));
                         }
                     }
 
@@ -204,7 +204,6 @@ public class CustomerDeposit extends AppCompatActivity {
 
                     Intent intent = new Intent(CustomerDeposit.this, DetailDeposit.class);
                     intent.putExtra("kdcus", selectedItem.getItem1());
-                    intent.putExtra("nomor", selectedItem.getItem3());
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
@@ -242,7 +241,7 @@ public class CustomerDeposit extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            moreList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("nomor"), jo.getString("alamat")));
+                            moreList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("alamat")));
                         }
                     }
 

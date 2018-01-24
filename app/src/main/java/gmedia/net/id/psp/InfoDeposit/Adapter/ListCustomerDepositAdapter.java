@@ -64,7 +64,7 @@ public class ListCustomerDepositAdapter extends ArrayAdapter{
 
         final CustomItem itemSelected = items.get(position);
         holder.tvItem1.setText(itemSelected.getItem2());
-        holder.tvItem2.setText(itemSelected.getItem4() + " ("+ itemSelected.getItem3()+")");
+        holder.tvItem2.setText(itemSelected.getItem3());
         return convertView;
 
     }

@@ -39,7 +39,6 @@ public class DetailDeposit extends AppCompatActivity {
     private boolean firstLoad = true;
     private String kdcus = "";
     private String newString = "", totalFinal = "";
-    private EditText edtNomor;
     private ProgressBar pbProses;
 
     @Override
@@ -59,7 +58,6 @@ public class DetailDeposit extends AppCompatActivity {
     private void initUI() {
 
         edtNama = (EditText) findViewById(R.id.edt_nama);
-        edtNomor = (EditText) findViewById(R.id.edt_nomor);
         edtJumlah = (EditText) findViewById(R.id.edt_jumlah);
         edtKeterangan = (EditText) findViewById(R.id.edt_keterangan);
         btnSimpan = (Button) findViewById(R.id.btn_simpan);
@@ -69,9 +67,6 @@ public class DetailDeposit extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
-
-            String nomor = bundle.getString("nomor");
-            edtNomor.setText(nomor);
 
             kdcus = bundle.getString("kdcus");
             if(kdcus !=  null && kdcus.length() >0){

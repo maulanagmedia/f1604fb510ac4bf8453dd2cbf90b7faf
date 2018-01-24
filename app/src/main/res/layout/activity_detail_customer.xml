@@ -147,7 +147,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Alamat"
+                    android:text="Alamat *"
                     style="@style/formControlLabel3"/>
 
                 <EditText
@@ -181,13 +181,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No Telepon *"
+                    android:text="Nomor Reseller *"
                     style="@style/formControlLabel3" />
 
                 <EditText
@@ -207,7 +206,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No HP *"
+                    android:text="Nomor Pemilik (HP Owner)"
                     style="@style/formControlLabel3"/>
 
                 <EditText
@@ -443,5 +442,16 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/pb_proses"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

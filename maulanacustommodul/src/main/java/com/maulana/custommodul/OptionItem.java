@@ -6,7 +6,7 @@ package com.maulana.custommodul;
 
 public class OptionItem {
 
-    private String value, text, att1, att2, att3, att4, att5;
+    private String value, text, att1, att2, att3, att4, att5, att6;
     private boolean selected;
 
     @Override
@@ -19,7 +19,7 @@ public class OptionItem {
         this.text = text;
     }
 
-    public OptionItem(String value, String text, String att1, String att2, String att3, String att4, String att5, boolean selected) {
+    public OptionItem(String value, String text, String att1, String att2, String att3, String att4, String att5, String att6,boolean selected) {
         this.value = value;
         this.text = text;
         this.att1 = att1;
@@ -27,6 +27,7 @@ public class OptionItem {
         this.att3 = att3;
         this.att4 = att4;
         this.att5 = att5;
+        this.att6 = att6;
         this.selected = selected;
     }
 
@@ -92,5 +93,13 @@ public class OptionItem {
 
     public void setAtt5(String att5) {
         this.att5 = att5;
+    }
+
+    public String getAtt6() {
+        return att6;
+    }
+
+    public void setAtt6(String att6) {
+        this.att6 = att6;
     }
 }

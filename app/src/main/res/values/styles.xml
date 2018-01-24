@@ -43,6 +43,13 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="formControlLabel4">
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">left</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="formControlInput">
         <item name="android:background">@drawable/bg_input</item>
         <item name="android:singleLine">true</item>
@@ -174,9 +181,24 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
+    
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
+    
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    
+    <style name="home_title">
+        <item name="android:textColor">@color/color_black</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/home_title</item>
+        <item name="android:paddingTop">@dimen/default_margin_tiny</item>
+    </style>
+
+    <style name="home_subtitle">
+        <item name="android:textColor">@color/color_black</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/default_margin_tiny</item>
+        <item name="android:textSize">@dimen/home_subtitle</item>
+        <item name="android:paddingBottom">@dimen/default_margin_tiny</item>
+    </style>
 
 </resources>

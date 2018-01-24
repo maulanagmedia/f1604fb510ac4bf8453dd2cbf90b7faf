@@ -6,8 +6,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -22,29 +24,37 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.RuntimePermissionsActivity;
 import com.maulana.custommodul.SessionManager;
 
-import gmedia.net.id.psp.DaftarPiutang.DaftarPiutang;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import gmedia.net.id.psp.DaftarPiutang.PiutangPerOutlet;
 import gmedia.net.id.psp.InfoDeposit.ActDeposit;
 import gmedia.net.id.psp.LocationService.LocationUpdater;
 import gmedia.net.id.psp.NavAccount.NavAccount;
-import gmedia.net.id.psp.NavCheckin.ActCheckin;
+import gmedia.net.id.psp.NavChangePassword.NavChangePassword;
+import gmedia.net.id.psp.NavCheckin.ActKunjungan;
 import gmedia.net.id.psp.NavCheckin.NavCheckin;
 import gmedia.net.id.psp.NavHome.NavHome;
 import gmedia.net.id.psp.NavKomplain.ActKomplain;
 import gmedia.net.id.psp.NavKomplain.NavKomplain;
+import gmedia.net.id.psp.NavMapsKunjungan.MapsKunjunganActivity;
 import gmedia.net.id.psp.NavTambahCustomer.ActTambahOutlet;
 import gmedia.net.id.psp.NavTambahCustomer.NavCustomer;
 import gmedia.net.id.psp.NavVerifikasiOutlet.ActVerifikasiOutlet;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
 import gmedia.net.id.psp.OrderPulsa.ListReseller;
+import gmedia.net.id.psp.OrderTcash.ActOrderTcash;
 import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
 import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
 import gmedia.net.id.psp.RiwayatPenjualan.RiwayatPenjualan;
 import gmedia.net.id.psp.StokSales.StokSales;
+import gmedia.net.id.psp.Utils.ServerURL;
 
 public class MainNavigationActivity extends RuntimePermissionsActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -58,6 +68,11 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
     private Context context;
     private boolean dialogActive = false;
     private ItemValidation iv = new ItemValidation();
+
+    private String version = "";
+    private String latestVersion = "";
+    private String link = "";
+    private boolean updateRequired = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +90,11 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                 MainNavigationActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                MainNavigationActivity.this, Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED) {
+                MainNavigationActivity.this, Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                MainNavigationActivity.this, Manifest.permission.WRITE_APN_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
 
             MainNavigationActivity.super.requestAppPermissions(new
-                            String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_SETTINGS, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WAKE_LOCK}, R.string
+                            String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_SETTINGS, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WAKE_LOCK, Manifest.permission.WRITE_APN_SETTINGS}, R.string
                             .runtime_permissions_txt
                     , REQUEST_PERMISSIONS);
         }
@@ -134,6 +150,89 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         }
     }
 
+    private void checkVersion(){
+
+        PackageInfo pInfo = null;
+        version = "";
+
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        version = pInfo.versionName;
+        getSupportActionBar().setSubtitle(getResources().getString(R.string.app_name) + " v "+ version);
+        latestVersion = "";
+        link = "";
+
+        ApiVolley request = new ApiVolley(MainNavigationActivity.this, new JSONObject(), "GET", ServerURL.getLatestVersion, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+
+            @Override
+            public void onSuccess(String result) {
+
+                JSONObject responseAPI;
+                try {
+                    responseAPI = new JSONObject(result);
+                    String status = responseAPI.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+                        latestVersion = responseAPI.getJSONObject("response").getString("versi");
+                        link = responseAPI.getJSONObject("response").getString("link");
+                        updateRequired = (iv.parseNullInteger(responseAPI.getJSONObject("response").getString("wajib")) == 1) ? true : false;
+
+                        if(!version.trim().equals(latestVersion.trim()) && link.length() > 0){
+
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(MainNavigationActivity.this);
+                            if(updateRequired){
+
+                                builder.setIcon(R.mipmap.ic_launcher)
+                                        .setTitle("Update")
+                                        .setMessage("Versi terbaru "+latestVersion+" telah tersedia, mohon download versi terbaru.")
+                                        .setPositiveButton("Update Sekarang", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                                                startActivity(browserIntent);
+                                            }
+                                        })
+                                        .setCancelable(false)
+                                        .show();
+                            }else{
+
+                                builder.setIcon(R.mipmap.ic_launcher)
+                                        .setTitle("Update")
+                                        .setMessage("Versi terbaru "+latestVersion+" telah tersedia, mohon download versi terbaru.")
+                                        .setPositiveButton("Update Sekarang", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                                                startActivity(browserIntent);
+                                            }
+                                        })
+                                        .setNegativeButton("Update Nanti", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }).show();
+                            }
+                        }
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+
+            }
+        });
+    }
+
     public void statusCheck() {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -150,7 +249,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
 
                     public void onFinish() {
                         if(!iv.isServiceRunning(MainNavigationActivity.this, LocationUpdater.class)){
-                            startService(new Intent(MainNavigationActivity.this, LocationUpdater.class));
+                            startService(new Intent(getApplicationContext(), LocationUpdater.class));
                         }
                     }
 
@@ -204,6 +303,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         }
 
         statusCheck();
+        checkVersion();
     }
 
     public static void changeNavigationState(Context context, int position){
@@ -275,11 +375,6 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
             setTitle(item.getTitle());
             fragment = new NavHome();
             callFragment(context, fragment);
-        } else if (id == R.id.nav_akun) {
-
-            setTitle(item.getTitle());
-            fragment = new NavAccount();
-            callFragment(context, fragment);
         } else if (id == R.id.nav_add_customer) {
 
             Intent intent = new Intent(MainNavigationActivity.this, ActTambahOutlet.class);
@@ -307,6 +402,10 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
             finish();
         } else if (id == R.id.nav_order_tcash) {
 
+            Intent intent = new Intent(MainNavigationActivity.this, ActOrderTcash.class);
+            startActivity(intent);
+            finish();
+
         } else if (id == R.id.nav_penjualan) {
 
             Intent intent = new Intent(MainNavigationActivity.this, PenjualanHariIni.class);
@@ -319,7 +418,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
             finish();
         } else if (id == R.id.nav_data_piutang) {
 
-            Intent intent = new Intent(MainNavigationActivity.this, DaftarPiutang.class);
+            Intent intent = new Intent(MainNavigationActivity.this, PiutangPerOutlet.class);
             startActivity(intent);
             finish();
         } else if (id == R.id.nav_stok_sales) {
@@ -339,7 +438,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
             finish();
         } else if (id == R.id.nav_checkin) {
 
-            Intent intent = new Intent(MainNavigationActivity.this, ActCheckin.class);
+            Intent intent = new Intent(MainNavigationActivity.this, ActKunjungan.class);
             startActivity(intent);
             finish();
         } else if (id == R.id.nav_info_deposit) {
@@ -347,6 +446,21 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
             Intent intent = new Intent(MainNavigationActivity.this, ActDeposit.class);
             startActivity(intent);
             finish();
+        } else if (id == R.id.nav_map_kunjungan) {
+
+            Intent intent = new Intent(MainNavigationActivity.this, MapsKunjunganActivity.class);
+            startActivity(intent);
+            finish();
+        } else if (id == R.id.nav_akun) {
+
+            setTitle(item.getTitle());
+            fragment = new NavAccount();
+            callFragment(context, fragment);
+        } else if (id == R.id.nav_change_password) {
+
+            setTitle(item.getTitle());
+            fragment = new NavChangePassword();
+            callFragment(context, fragment);
         } else if (id == R.id.nav_keluar) {
 
             if(iv.isServiceRunning(MainNavigationActivity.this, LocationUpdater.class)){
@@ -363,7 +477,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
 
     private void stopCurrentService(){
         try {
-            stopService(new Intent(MainNavigationActivity.this, LocationUpdater.class));
+            stopService(new Intent(getApplicationContext(), LocationUpdater.class));
 
         }catch (Exception e){
             e.printStackTrace();

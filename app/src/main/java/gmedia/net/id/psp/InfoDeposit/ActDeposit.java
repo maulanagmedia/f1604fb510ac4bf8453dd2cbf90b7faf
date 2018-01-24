@@ -237,7 +237,7 @@ public class ActDeposit extends AppCompatActivity {
                                 lastTaggal = jo.getString("tgl");
                             }
 
-                            masterList.add(new CustomItem("I", jo.getString("id"), jo.getString("nama"), jo.getString("masuk"), jo.getString("nomor"), jo.getString("keterangan")));
+                            masterList.add(new CustomItem("I", jo.getString("id"), jo.getString("nama"), jo.getString("masuk"), jo.getString("keterangan")));
                             total += iv.parseNullLong(jo.getString("masuk"));
 
                             if(i < items.length() - 1){
@@ -351,8 +351,7 @@ public class ActDeposit extends AppCompatActivity {
                         Intent intent = new Intent(ActDeposit.this, DetailDeposit.class);
                         intent.putExtra("nama", selectedItem.getItem3());
                         intent.putExtra("total", selectedItem.getItem4());
-                        intent.putExtra("nomor", selectedItem.getItem5());
-                        intent.putExtra("keterangan", selectedItem.getItem6());
+                        intent.putExtra("keterangan", selectedItem.getItem5());
                         startActivity(intent);
                     }
                 }
