@@ -402,6 +402,9 @@ public class LoginScreen extends RuntimePermissionsActivity {
             public void onSuccess(String result) {
 
                 String message = "";
+                if(progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
 
                 try {
 
@@ -423,19 +426,22 @@ public class LoginScreen extends RuntimePermissionsActivity {
                         startActivity(intent);
                         finish();
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    }else{
+                        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
                 }
 
-                if(progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
-                Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
             }
 
             @Override
             public void onError(String result) {
                 Snackbar.make(findViewById(android.R.id.content), "Terjadi kesalahan koneksi, harap ulangi kembali nanti", Snackbar.LENGTH_LONG).show();
-                if(progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+                if(progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
             }
         });
     }

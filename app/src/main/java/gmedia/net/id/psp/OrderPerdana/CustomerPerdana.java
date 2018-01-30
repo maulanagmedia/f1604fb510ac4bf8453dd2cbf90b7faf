@@ -157,9 +157,11 @@ public class CustomerPerdana extends AppCompatActivity {
                     List<CustomItem> items = new ArrayList<CustomItem>();
                     String keyword = actvPelanggan.getText().toString().trim().toUpperCase();
 
-                    for (CustomItem item: tableList){
+                    if(tableList != null && tableList.size()>0){
+                        for (CustomItem item: tableList){
 
-                        if(item.getItem2().toUpperCase().contains(keyword) || item.getItem3().toUpperCase().contains(keyword)) items.add(item);
+                            if(item.getItem2().toUpperCase().contains(keyword) || item.getItem3().toUpperCase().contains(keyword)) items.add(item);
+                        }
                     }
 
                     getTableList(items);

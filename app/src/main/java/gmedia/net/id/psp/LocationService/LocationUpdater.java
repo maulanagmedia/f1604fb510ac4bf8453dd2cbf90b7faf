@@ -335,11 +335,11 @@ public class LocationUpdater extends Service implements LocationListener {
         this.longitude = location.getLongitude();
 
         //get state
-        new Thread(new Runnable(){
+        /*new Thread(new Runnable(){
             public void run(){
                 address0=getAddress(location);
             }
-        }).start();
+        }).start();*/
 
     }
 

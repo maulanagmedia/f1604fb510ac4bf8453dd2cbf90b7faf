@@ -2,6 +2,7 @@ package gmedia.net.id.psp.OrderPerdana;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -165,6 +166,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         totalHarga = 0;
         session = new SessionManager(DetailOrderPerdana.this);
         Bundle bundle = getIntent().getExtras();
+        masterCCID = new ArrayList<>();
         ccidList = new ArrayList<>();
         if(bundle != null){
 
@@ -277,7 +279,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             } else {
                 this.canGetLocation = true;
                 if (isNetworkEnabled) {
-                    location = null;
+                    //location = null;
 
                     // Granted the permission first
                     if (ActivityCompat.checkSelfPermission(DetailOrderPerdana.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(DetailOrderPerdana.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -407,6 +409,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             @Override
             public void onSuccess(String result) {
 
+                isLoading(false);
                 try {
 
                     JSONObject response = new JSONObject(result);
@@ -418,11 +421,8 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                         edtNobukti.setText(noBukti);
                     }
 
-                    isLoading(false);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    isLoading(false);
                 }
             }
 
@@ -849,21 +849,31 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         }
 
         isLoading(true);
+
+        final ProgressDialog progressDialog = new ProgressDialog(DetailOrderPerdana.this, R.style.AppTheme_Login_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Menyimpan...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         ApiVolley request = new ApiVolley(DetailOrderPerdana.this, jBody, method, url, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
+
+                String superMessage = "Terjadi kesalahan saat menyimpan data, harap ulangi";
+                isLoading(false);
+                progressDialog.dismiss();
 
                 try {
 
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
-                    String superMessage = response.getJSONObject("metadata").getString("message");
+                    superMessage = response.getJSONObject("metadata").getString("message");
 
                     if(iv.parseNullInteger(status) == 200){
 
                         String message = "Order Perdana berhasil disimpan";
                         if(editMode) message = "Order "+ noBukti + " berhasil diubah";
-                        isLoading(false);
                         Toast.makeText(DetailOrderPerdana.this, message, Toast.LENGTH_LONG).show();
                         //Snackbar.make(findViewById(android.R.id.content), "Order Pulsa berhasil ditambahkan", Snackbar.LENGTH_LONG).show();
                         Intent intent = new Intent(DetailOrderPerdana.this, PenjualanHariIni.class);
@@ -875,12 +885,10 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                     }
 
                     btnProses.setEnabled(true);
-                    isLoading(false);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(DetailOrderPerdana.this, superMessage, Toast.LENGTH_LONG).show();
                     btnProses.setEnabled(true);
-                    isLoading(false);
                 }
             }
 
@@ -889,6 +897,8 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
 
                 btnProses.setEnabled(true);
                 isLoading(false);
+                Toast.makeText(DetailOrderPerdana.this, "Terjadi kesalahan saat menyimpan data, harap ulangi", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
             }
         });
     }
@@ -914,6 +924,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
 
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
+                    masterCCID = new ArrayList<>();
 
                     if(iv.parseNullInteger(status) == 200){
 
@@ -964,10 +975,13 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             @Override
             public void onSuccess(String result) {
 
+                isLoading(false);
                 try {
 
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
+                    ccidList = new ArrayList<>();
+                    listCCIDLama = new ArrayList<>();
 
                     if(iv.parseNullInteger(status) == 200){
 
@@ -985,11 +999,10 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                     lvCCID.setAdapter(adapter);
                     updateHargaTotal();
                     setRadioButtonEvent();
-                    isLoading(false);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    isLoading(false);
+                    updateHargaTotal();
                     setRadioButtonEvent();
                 }
             }
@@ -1173,7 +1186,6 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         }
         updateHargaTotal();
     }
-
 
     //region ============================================ Ambil dari list =====================================================
     private boolean[] selectedOptionList;
@@ -1545,6 +1557,9 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             @Override
             public void onSuccess(String result) {
 
+                isUpdateLocation = false;
+                pbLoading.setVisibility(View.GONE);
+
                 try {
 
                     JSONObject response = new JSONObject(result);
@@ -1581,17 +1596,13 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                             }
 
                             edtJarak.setText(Html.fromHtml(pesan + keteranganJarak));
-
                             break;
                         }
                     }
 
-                    isUpdateLocation = false;
-                    pbLoading.setVisibility(View.GONE);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    isUpdateLocation = false;
-                    pbLoading.setVisibility(View.GONE);
                 }
             }
 

@@ -2,6 +2,7 @@ package gmedia.net.id.psp.OrderPulsa;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -215,7 +216,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             } else {
                 this.canGetLocation = true;
                 if (isNetworkEnabled) {
-                    location = null;
+                    //location = null;
 
                     // Granted the permission first
                     if (ActivityCompat.checkSelfPermission(DetailOrderPulsa.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(DetailOrderPulsa.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -399,7 +400,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    showDialog(DetailOrderPulsa.this, 3, "Terjadi kesalahan saat memuat data reseller, harap ulangi");
+                    showDialog(3, "Terjadi kesalahan saat memuat data reseller, harap ulangi");
                 }
             }
 
@@ -407,7 +408,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             public void onError(String result) {
 
                 isLoading(false);
-                showDialog(DetailOrderPulsa.this, 3, "Terjadi kesalahan saat memuat data reseller, harap ulangi");
+                showDialog(3, "Terjadi kesalahan saat memuat data reseller, harap ulangi");
             }
         });
     }
@@ -482,12 +483,12 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
         });
     }
 
-    private void showDialog(Context context, int state, String message){
+    private void showDialog(int state, String message){
 
         if(state == 1){
 
-            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            LayoutInflater inflater = (LayoutInflater) ((Activity) context).getSystemService(LAYOUT_INFLATER_SERVICE);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(DetailOrderPulsa.this);
+            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
             View viewDialog = inflater.inflate(R.layout.layout_success, null);
             builder.setView(viewDialog);
             builder.setCancelable(false);
@@ -509,8 +510,8 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
 
             alert.show();
         }else if(state == 2){ // failed
-            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            LayoutInflater inflater = (LayoutInflater) ((Activity) context).getSystemService(LAYOUT_INFLATER_SERVICE);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(DetailOrderPulsa.this);
+            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
             View viewDialog = inflater.inflate(R.layout.layout_failed, null);
             builder.setView(viewDialog);
             builder.setCancelable(false);
@@ -533,8 +534,8 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             alert.show();
         }else if(state == 3){
 
-            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            LayoutInflater inflater = (LayoutInflater) ((Activity) context).getSystemService(LAYOUT_INFLATER_SERVICE);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(DetailOrderPulsa.this);
+            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
             View viewDialog = inflater.inflate(R.layout.layout_warning, null);
             builder.setView(viewDialog);
             builder.setCancelable(false);
@@ -880,6 +881,12 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
     private void saveData() {
 
         isLoading(true);
+        final ProgressDialog progressDialog = new ProgressDialog(DetailOrderPulsa.this, R.style.AppTheme_Login_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Menyimpan...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         String nik = session.getUserDetails().get(SessionManager.TAG_NIK);
         JSONObject jBody = new JSONObject();
 
@@ -921,12 +928,14 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             public void onSuccess(String result) {
 
                 isLoading(false);
+                progressDialog.dismiss();
 
+                String superMessage = "Terjadi kesalahan saat menyimpan data, harap ulangi";
                 try {
 
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
-                    String superMessage = response.getJSONObject("metadata").getString("message");
+                    superMessage = response.getJSONObject("metadata").getString("message");
 
                     if(iv.parseNullInteger(status) == 200){
 
@@ -944,12 +953,15 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(DetailOrderPulsa.this, superMessage, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onError(String result) {
                 isLoading(false);
+                progressDialog.dismiss();
+                Toast.makeText(DetailOrderPulsa.this, "Terjadi kesalahan saat menyimpan data, harap ulangi kembali", Toast.LENGTH_LONG).show();
             }
         });
     }

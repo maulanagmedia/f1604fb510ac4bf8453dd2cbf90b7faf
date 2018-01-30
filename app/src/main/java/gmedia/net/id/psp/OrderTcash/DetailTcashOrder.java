@@ -250,7 +250,7 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
             } else {
                 this.canGetLocation = true;
                 if (isNetworkEnabled) {
-                    location = null;
+                    //location = null;
 
                     // Granted the permission first
                     if (ActivityCompat.checkSelfPermission(DetailTcashOrder.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(DetailTcashOrder.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -497,6 +497,10 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
             @Override
             public void onSuccess(String result) {
 
+                isLoading(false);
+                btnProses.setEnabled(true);
+                progressDialog.dismiss();
+
                 try {
 
                     JSONObject response = new JSONObject(result);
@@ -505,8 +509,6 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
 
                     if(iv.parseNullInteger(status) == 200){
 
-                        isLoading(false);
-                        progressDialog.dismiss();
                         String message = response.getJSONObject("response").getString("message");
                         Toast.makeText(DetailTcashOrder.this, message, Toast.LENGTH_LONG).show();
                         //Snackbar.make(findViewById(android.R.id.content), "Order Pulsa berhasil ditambahkan", Snackbar.LENGTH_LONG).show();
@@ -515,18 +517,11 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
                         startActivity(intent);
                         finish();
                     }else{
-                        progressDialog.dismiss();
                         Toast.makeText(DetailTcashOrder.this, superMessage, Toast.LENGTH_LONG).show();
                     }
 
-                    btnProses.setEnabled(true);
-                    isLoading(false);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    isLoading(false);
-                    btnProses.setEnabled(true);
-                    progressDialog.dismiss();
                 }
             }
 

@@ -105,7 +105,7 @@ public class ListBarang extends AppCompatActivity {
                 new int[] { android.R.attr.actionBarSize });
         int mActionBarSize = (int) styledAttributes.getDimension(0, 0);
         styledAttributes.recycle();
-        mBottomSheetBehavior2.setPeekHeight(display[1]/5 - mActionBarSize + iv.dpToPx(ListBarang.this, 40));
+        mBottomSheetBehavior2.setPeekHeight(mActionBarSize + iv.dpToPx(ListBarang.this, 68));
         mBottomSheetBehavior2.setState(BottomSheetBehavior.STATE_COLLAPSED);
         //bottomView.setLayoutParams(new CoordinatorLayout.LayoutParams(display[0], display[1]- iv.dpToPx(ListBarang.this, 40)));
 

@@ -211,15 +211,44 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             long length = file.length();
             length = length/1024; //in KB*/
 
-            InputStream imageStream = null;
+            InputStream imageStream = null, copyStream = null;
             try {
                 imageStream = getContentResolver().openInputStream(
+                        filePath);
+                copyStream = getContentResolver().openInputStream(
                         filePath);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
 
-            Bitmap bmp = BitmapFactory.decodeStream(imageStream);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            //options.inJustDecodeBounds = false;
+            options.inPreferredConfig = Bitmap.Config.RGB_565;
+            //options.inDither = true;
+
+            // Get bitmap dimensions before reading...
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(copyStream, null, options);
+            int width = options.outWidth;
+            int height = options.outHeight;
+            int largerSide = Math.max(width, height);
+            options.inJustDecodeBounds = false; // This time it's for real!
+            int sampleSize = 1; // Calculate your sampleSize here
+            if(largerSide <= 1000){
+                sampleSize = 1;
+            }else if(largerSide > 1000 && largerSide <= 2000){
+                sampleSize = 2;
+            }else if(largerSide > 2000 && largerSide <= 3000){
+                sampleSize = 3;
+            }else if(largerSide > 3000 && largerSide <= 4000){
+                sampleSize = 4;
+            }else{
+                sampleSize = 6;
+            }
+            options.inSampleSize = sampleSize;
+            //options.inDither = true;
+
+            Bitmap bmp = BitmapFactory.decodeStream(imageStream, null, options);
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bmp.compress(Bitmap.CompressFormat.PNG, 70, stream);
@@ -247,6 +276,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(photoFromCameraURI));
                 bitmap = scaleDown(bitmap, 380, true);
+
 
                 if(bitmap != null){
 
