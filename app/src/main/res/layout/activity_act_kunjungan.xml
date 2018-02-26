@@ -87,43 +87,116 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/login_container">
 
-
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/ll_footer"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:layout_alignParentBottom="true"
                     android:padding="@dimen/default_margin_small"
                     android:gravity="center_vertical|right">
 
-                    <ImageView
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:background="@color/color_red"
-                        android:layout_marginLeft="@dimen/default_margin_small"
-                        android:layout_marginRight="@dimen/default_margin_small"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/color_black"
-                        android:layout_marginRight="@dimen/default_margin_small"
-                        android:text="Sesuai PJP"/>
+                        android:orientation="horizontal"
+                        android:weightSum="2">
 
-                    <ImageView
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:background="@color/color_yellow"
-                        android:layout_marginLeft="@dimen/default_margin_small"
-                        android:layout_marginRight="@dimen/default_margin_small"/>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:background="@color/color_green"
+                                android:layout_marginLeft="@dimen/default_margin_small"
+                                android:layout_marginRight="@dimen/default_margin_small"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="10sp"
+                                android:textColor="@color/color_black"
+                                android:layout_marginRight="@dimen/default_margin_small"
+                                android:text="PJP Terkunjungi"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:background="@color/color_red"
+                                android:layout_marginLeft="@dimen/default_margin_small"
+                                android:layout_marginRight="@dimen/default_margin_small"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/color_black"
+                                android:layout_marginRight="@dimen/default_margin_small"
+                                android:textSize="10sp"
+                                android:text="PJP Belum terkunjungi"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/color_black"
-                        android:text="Diluar PJP"/>
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/default_margin_small"
+                        android:weightSum="2">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:background="@color/color_yellow"
+                                android:layout_marginLeft="@dimen/default_margin_small"
+                                android:layout_marginRight="@dimen/default_margin_small"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/color_black"
+                                android:textSize="10sp"
+                                android:text="Diluar PJP"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:background="@color/color_blue"
+                                android:layout_marginLeft="@dimen/default_margin_small"
+                                android:layout_marginRight="@dimen/default_margin_small"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/color_black"
+                                android:textSize="10sp"
+                                android:text="Terkunjungi tidak belanja"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <ListView
@@ -148,7 +221,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="30dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="50dp"
                 app:backgroundTint="@color/color_login_2"
                 android:id="@+id/btn_add"/>
         </RelativeLayout>

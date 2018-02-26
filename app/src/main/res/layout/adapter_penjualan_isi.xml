@@ -13,15 +13,31 @@
         android:paddingBottom="@dimen/default_margin_tiny"
         android:weightSum="1">
 
-        <TextView
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_item1"
-            android:textStyle="bold"
-            android:textSize="17sp"
-            android:layout_marginLeft="@dimen/default_margin_tiny"
-            android:textColor="@color/color_black"/>
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_item1"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:layout_marginLeft="@dimen/default_margin_tiny"
+                android:textColor="@color/color_black"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_status"
+                android:layout_margin="@dimen/default_margin_tiny"
+                android:visibility="gone"
+                android:textSize="17sp"
+                android:layout_marginLeft="@dimen/default_margin_tiny"/>
+        </LinearLayout>
+
 
         <TextView
             android:layout_width="0dp"

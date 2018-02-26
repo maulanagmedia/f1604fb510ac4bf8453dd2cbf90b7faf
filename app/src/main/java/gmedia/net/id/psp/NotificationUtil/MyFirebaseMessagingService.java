@@ -22,6 +22,7 @@ import java.util.Map;
 
 import gmedia.net.id.psp.LocationService.LocationUpdater;
 import gmedia.net.id.psp.MainNavigationActivity;
+import gmedia.net.id.psp.NavVerifikasiOutlet.ActVerifikasiOutlet;
 import gmedia.net.id.psp.PelunasanPenjualan.PelunasanPenjualan;
 import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
@@ -92,6 +93,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     typeContent = 2;
                 } else if(extra.get(key).trim().toUpperCase().equals("TRACE")){
                     typeContent = 3;
+                }else if(extra.get(key).trim().toUpperCase().equals("VERSPV")){
+                    typeContent = 4;
                 }
             }
         }
@@ -103,6 +106,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     break;
                 case 2:
                     intent = new Intent(this, PenjualanHariIni.class);
+                    break;
+                case 4:
+                    intent = new Intent(this, ActVerifikasiOutlet.class);
                     break;
                 default:
                     intent = new Intent(this, MainNavigationActivity.class);

@@ -27,7 +27,7 @@ public class ApiVolley {
 
     public static RequestQueue requestQueue;
 
-    public ApiVolley(final Context context, JSONObject jsonBody, String requestMethod, String REST_URL, final String successDialog, final String failDialog, final int showDialogFlag, final String user, final String pass , final VolleyCallback callback){
+    public ApiVolley(final Context context, JSONObject jsonBody, String requestMethod, String REST_URL, final String successDialog, final String failDialog, final int showDialogFlag, final String t1, final String t2, final VolleyCallback callback){
 
         /*
         NOTE: you have to customize this class before you use it (haeder, etc)
@@ -105,12 +105,17 @@ public class ApiVolley {
             // Request Header
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
+
+                ItemValidation iv = new ItemValidation();
+                String token1 = iv.encodeBase64(t1);
+                String token2 = iv.encodeBase64(t2);
+
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
                 params.put("Client-Service", "frontend-client");
                 params.put("Auth-Key", "gmedia_psp");
-                params.put("user", user);
-                params.put("pass", pass);
+                params.put("token1", token1);
+                params.put("token2", token2);
                 return params;
             }
 

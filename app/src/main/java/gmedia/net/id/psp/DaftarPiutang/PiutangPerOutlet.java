@@ -288,6 +288,7 @@ public class PiutangPerOutlet extends AppCompatActivity {
                                     intent.putExtra("nonota", jo.getString("nonota"));
                                     intent.putExtra("flag", jo.getString("flag"));
                                     intent.putExtra("koders", jo.getString("kode"));
+                                    intent.putExtra("kode_cv", jo.getString("kode_cv"));
                                     startActivity(intent);
                                     break;
                                 }

@@ -6,17 +6,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,12 +59,17 @@ public class RiwayatPenjualan extends AppCompatActivity {
     private SessionManager session;
     private TextView tvTotal;
     private String keyword = "";
-    private List<CustomItem> masterList;
+    private List<CustomItem> masterList, salesList;
     private boolean firstLoad = true;
     private String currentFlag = "";
     private TextView tvFrom, tvTo;
     private String dateFrom, dateTo;
     private ImageButton ibShow;
+    private LinearLayout llTop;
+    private Spinner spSales;
+    private String nik = "";
+    private String flagJabatan = "";
+    private int selectedSalesPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,14 +99,172 @@ public class RiwayatPenjualan extends AppCompatActivity {
         tvTo = (TextView) findViewById(R.id.tv_to);
         tvTotal = (TextView) findViewById(R.id.tv_total);
         ibShow = (ImageButton) findViewById(R.id.ib_show);
+        llTop = (LinearLayout) findViewById(R.id.ll_top);
+        spSales = (Spinner) findViewById(R.id.sp_sales);
         keyword = "";
         dateFrom = iv.sumDate(iv.getCurrentDate(FormatItem.formatDateDisplay), -7, FormatItem.formatDateDisplay) ;
         dateTo = iv.getCurrentDate(FormatItem.formatDateDisplay);
+        nik = session.getUserDetails().get(SessionManager.TAG_UID);
 
         tvFrom.setText(dateFrom);
         tvTo.setText(dateTo);
 
+        checkSupervisor();
+
         initEvent();
+    }
+
+
+    private void checkSupervisor(){
+
+        String nikCurrent = session.getUserDetails().get(SessionManager.TAG_UID);
+        JSONObject jBody = new JSONObject();
+        try {
+            jBody.put("nik", nikCurrent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(RiwayatPenjualan.this, jBody, "POST", ServerURL.checkSupervisor, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray items = response.getJSONArray("response");
+                        if(items.length() > 0){
+                            JSONObject jo = items.getJSONObject(0);
+                            flagJabatan = jo.getString("status_jabatan"); // spv atau bm
+                            llTop.setVisibility(View.VISIBLE);
+
+                            getSalesList();
+                        }else{
+                            llTop.setVisibility(View.GONE);
+                        }
+                    }else{
+                        llTop.setVisibility(View.GONE);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+                Log.d("TAG", "onError: " + result);
+            }
+        });
+    }
+
+    private void getSalesList() {
+
+        salesList = new ArrayList<>();
+        String nikCurrent = session.getUserDetails().get(SessionManager.TAG_UID);
+        JSONObject jBody = new JSONObject();
+        try {
+            jBody.put("nik", nikCurrent);
+            jBody.put("flag", flagJabatan);
+            jBody.put("keyword", "");
+            jBody.put("start", "0");
+            jBody.put("count", "0");
+            jBody.put("all", "1");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(RiwayatPenjualan.this, jBody, "POST", ServerURL.getSalesKunjungan, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+                    salesList = new ArrayList<>();
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray items = response.getJSONArray("response");
+                        for(int i  = 0; i < items.length(); i++){
+
+                            JSONObject jo = items.getJSONObject(i);
+                            salesList.add(new CustomItem(jo.getString("nik"), jo.getString("nama")));
+                        }
+                    }
+
+                    setSalesAdapter(salesList);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    setSalesAdapter(null);
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+
+                setSalesAdapter(null);
+            }
+        });
+    }
+
+    private void setSalesAdapter(List<CustomItem> listItem) {
+
+        if(listItem != null && listItem.size() > 0){
+
+            String nikCurrent = session.getUserDetails().get(SessionManager.TAG_UID);
+
+            int x = 0;
+            int selected = 0;
+            for(CustomItem item: listItem){
+
+                if(item.getItem1().equals(nikCurrent)){
+                    selected = x;
+                }
+                x++;
+            }
+
+            final CustomItem itemCurrentNik = listItem.get(selected);
+            listItem.remove(selected);
+            listItem.add(0,itemCurrentNik);
+
+            List<String> listNamaSales = new ArrayList<>();
+
+            for(CustomItem item: listItem){
+
+                listNamaSales.add(item.getItem2());
+            }
+
+            salesList = new ArrayList<>(listItem);
+
+            ArrayAdapter adapter = new ArrayAdapter(RiwayatPenjualan.this, R.layout.layout_simple_list, listNamaSales);
+            spSales.setAdapter(adapter);
+            selectedSalesPosition = 0;
+            spSales.setSelection(selectedSalesPosition);
+
+            spSales.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    if(spSales.getAdapter() != null){
+
+                        ((TextView) spSales.getSelectedView()).setTextColor(getResources().getColor(R.color.color_white));
+                        selectedSalesPosition = position;
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        }
     }
 
     private void initEvent() {
@@ -176,6 +343,11 @@ public class RiwayatPenjualan extends AppCompatActivity {
                 keyword = actvOutlet.getText().toString();
                 dateFrom = tvFrom.getText().toString();
                 dateTo = tvTo.getText().toString();
+                if(salesList!= null && salesList.size() >0){
+
+                    CustomItem salesAtPosition = salesList.get(selectedSalesPosition);
+                    nik = salesAtPosition.getItem1();
+                }
                 getPenjualan();
             }
         });
@@ -194,7 +366,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
 
         masterList = new ArrayList<>();
         pbProses.setVisibility(View.VISIBLE);
-        String nik = session.getUserDetails().get(SessionManager.TAG_UID);
+
         JSONObject jBody = new JSONObject();
 
         try {
@@ -233,7 +405,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
                                 lastTaggal = jo.getString("tgl");
                             }
 
-                            masterList.add(new CustomItem("I", jo.getString("nonota"), jo.getString("nama"), jo.getString("piutang"), jo.getString("flag"), jo.getString("tgl")));
+                            masterList.add(new CustomItem("I", jo.getString("nonota"), jo.getString("nama"), jo.getString("piutang"), jo.getString("flag"), jo.getString("tgl"), jo.getString("app_flag"), jo.getString("jarak")));
                             total += iv.parseNullLong(jo.getString("piutang"));
 
                             if(i < items.length() - 1){
@@ -346,7 +518,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
 
                         currentFlag = selectedItem.getItem5();
 
-                        getDetailPenjualan(selectedItem.getItem2(), currentFlag);
+                        getDetailPenjualan(selectedItem.getItem2(), currentFlag, selectedItem.getItem8());
                     }
                 }
             });
@@ -354,7 +526,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
     }
 
     //TODO: get detail order Mkios / GA
-    private void getDetailPenjualan(String nonota, final String flag) {
+    private void getDetailPenjualan(String nonota, final String flag, final String jarak) {
 
         pbProses.setVisibility(View.VISIBLE);
         JSONObject jBody = new JSONObject();
@@ -403,6 +575,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
                                     intent.putExtra("harga", jo.getString("harga"));
                                     intent.putExtra("noba", jo.getString("no_ba"));
                                     intent.putExtra("status", jo.getString("status"));
+                                    intent.putExtra("jarak", jarak);
                                     startActivity(intent);
                                     break;
                                 }else if (flag.equals("MKIOS")){
@@ -410,6 +583,8 @@ public class RiwayatPenjualan extends AppCompatActivity {
                                     intent.putExtra("nonota", jo.getString("nonota"));
                                     intent.putExtra("flag", jo.getString("flag"));
                                     intent.putExtra("koders", jo.getString("kode"));
+                                    intent.putExtra("kode_cv", jo.getString("kode_cv"));
+                                    intent.putExtra("jarak", jarak);
                                     startActivity(intent);
                                     break;
                                 }

@@ -86,7 +86,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".PelunasanPenjualan.VerifikasiPelunasan"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+        </activity>
         <activity
             android:name=".DaftarPiutang.DaftarPiutang"
             android:screenOrientation="portrait" />
@@ -165,7 +166,14 @@
 
         <activity
             android:name=".NavVerifikasiOutlet.ActVerifikasiOutlet"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+
+            <intent-filter>
+                <action android:name="ACT_VERSPV" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".NavCheckin.DetailKunjungan"
             android:screenOrientation="portrait" />

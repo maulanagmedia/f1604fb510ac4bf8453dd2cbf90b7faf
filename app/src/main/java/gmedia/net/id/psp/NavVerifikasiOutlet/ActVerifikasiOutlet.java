@@ -35,6 +35,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import gmedia.net.id.psp.LoginScreen;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.NavCheckin.Adapter.ListCheckinAdapter;
 import gmedia.net.id.psp.R;
@@ -58,6 +59,7 @@ public class ActVerifikasiOutlet extends AppCompatActivity {
     private TabLayout tlJenis;
     private boolean verifiskasiMode = true;
     private boolean stateBack = false;
+    private boolean isGrantedAccess = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,12 @@ public class ActVerifikasiOutlet extends AppCompatActivity {
         tlJenis = (TabLayout) findViewById(R.id.tl_jenis);
         footerList = li.inflate(R.layout.layout_footer_listview, null);
         session = new SessionManager(context);
+        isGrantedAccess = true;
+
+        if(!session.isLoggedIn()){
+            onBackPressed();
+        }
+
         startIndex = 0;
         count = getResources().getInteger(R.integer.count_table);
         keyword = "";
@@ -176,6 +184,7 @@ public class ActVerifikasiOutlet extends AppCompatActivity {
                         JSONArray items = response.getJSONArray("response");
                         if(items.length() > 0){
 
+                            isGrantedAccess = true;
                             getDataCustomer();
                         }else{
                             if(!stateBack){
@@ -205,6 +214,10 @@ public class ActVerifikasiOutlet extends AppCompatActivity {
     }
 
     private void getDataCustomer() {
+
+        if(!isGrantedAccess){
+            return;
+        }
 
         masterList = new ArrayList<>();
         pbLoading.setVisibility(View.VISIBLE);

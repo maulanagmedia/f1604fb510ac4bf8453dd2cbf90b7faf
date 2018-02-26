@@ -1,10 +1,12 @@
 package gmedia.net.id.psp.TambahCustomer;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,7 +19,9 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.Looper;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
@@ -42,6 +46,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -50,6 +65,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ImageUtils;
@@ -68,6 +87,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -82,7 +102,7 @@ import gmedia.net.id.psp.TambahCustomer.Model.AreaModel;
 import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ServerURL;
 
-public class DetailCustomer extends AppCompatActivity implements LocationListener{
+public class DetailCustomer extends AppCompatActivity implements LocationListener {
 
     private Toolbar toolbar;
     private TextView tvToolbarTitle;
@@ -99,8 +119,8 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
     private Criteria criteria;
     private String provider;
     private Location location;
-    private final int REQUEST_PERMISSION_COARSE_LOCATION=2;
-    private final int REQUEST_PERMISSION_FINE_LOCATION=3;
+    private final int REQUEST_PERMISSION_COARSE_LOCATION = 2;
+    private final int REQUEST_PERMISSION_FINE_LOCATION = 3;
     public boolean isGPSEnabled = false;
     boolean isNetworkEnabled = false;
     boolean canGetLocation = false;
@@ -134,6 +154,18 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
     private String statusAktif = "";
     private ProgressBar pbProses;
 
+    private FusedLocationProviderClient mFusedLocationClient;
+    private LocationCallback mLocationCallback;
+    private LocationRequest mLocationRequest;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
+            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+    private LocationSettingsRequest mLocationSettingsRequest;
+    private SettingsClient mSettingsClient;
+    private static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private Boolean mRequestingLocationUpdates;
+    private Location mCurrentLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,6 +173,15 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
+
+        // getLocation update by google
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mSettingsClient = LocationServices.getSettingsClient(this);
+        mRequestingLocationUpdates = false;
+
+        createLocationCallback();
+        createLocationRequest();
+        buildLocationSettingsRequest();
 
         initUI();
     }
@@ -186,7 +227,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         });
 
         photoList = new ArrayList<>();
-        LinearLayoutManager layoutManager= new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         adapter = new PhotosAdapter(DetailCustomer.this, photoList);
         rvPhoto.setLayoutManager(layoutManager);
         rvPhoto.setAdapter(adapter);
@@ -201,11 +242,153 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         initEvent();
     }
 
+    private void createLocationRequest() {
+
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    private void createLocationCallback() {
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+
+                mCurrentLocation = locationResult.getLastLocation();
+                //mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+                onLocationChanged(mCurrentLocation);
+            }
+        };
+    }
+
+    private void buildLocationSettingsRequest() {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        mLocationSettingsRequest = builder.build();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
+
+    private void stopLocationUpdates() {
+        if (!mRequestingLocationUpdates) {
+            Log.d(TAG, "stopLocationUpdates: updates never requested, no-op.");
+            return;
+        }
+
+        // It is a good practice to remove location requests when the activity is in a paused or
+        // stopped state. Doing so helps battery performance and is especially
+        // recommended in applications that request frequent location updates.
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        mRequestingLocationUpdates = false;
+                    }
+                });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        /*if (mRequestingLocationUpdates && checkPermissions()) {
+            startLocationUpdates();
+        }*/
+
+    }
+
+    private boolean checkPermissions() {
+        int permissionState = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        return permissionState == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void startLocationUpdates() {
+        // Begin by checking if the device has the necessary location settings.
+        mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
+                .addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+                    @Override
+                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                        Log.i(TAG, "All location settings are satisfied.");
+
+                        //noinspection MissingPermission
+                        if (ActivityCompat.checkSelfPermission(DetailCustomer.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(DetailCustomer.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                            return;
+                        }
+                        mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                                mLocationCallback, Looper.myLooper());
+
+                        mFusedLocationClient.getLastLocation()
+                                .addOnSuccessListener(DetailCustomer.this, new OnSuccessListener<Location>() {
+                                    @Override
+                                    public void onSuccess(Location clocation) {
+
+                                        if (clocation != null) {
+
+                                            location = clocation;
+                                            refreshMode = true;
+                                            onLocationChanged(location);
+                                        }else{
+                                            location = getLocation();
+                                        }
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        int statusCode = ((ApiException) e).getStatusCode();
+                        switch (statusCode) {
+                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                                Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " +
+                                        "location settings ");
+                                try {
+                                    // Show the dialog by calling startResolutionForResult(), and check the
+                                    // result in onActivityResult().
+                                    ResolvableApiException rae = (ResolvableApiException) e;
+                                    rae.startResolutionForResult(DetailCustomer.this, REQUEST_CHECK_SETTINGS);
+                                } catch (IntentSender.SendIntentException sie) {
+                                    Log.i(TAG, "PendingIntent unable to execute request.");
+                                }
+                                break;
+                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                                String errorMessage = "Location settings are inadequate, and cannot be " +
+                                        "fixed here. Fix in Settings.";
+                                Log.e(TAG, errorMessage);
+                                Toast.makeText(DetailCustomer.this, errorMessage, Toast.LENGTH_LONG).show();
+                                mRequestingLocationUpdates = false;
+                                //refreshMode = false;
+                        }
+
+                        //get Location
+                        location = getLocation();
+                    }
+                });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if(requestCode == REQUEST_CHECK_SETTINGS){
+
+            if(resultCode == Activity.RESULT_CANCELED){
+
+                mRequestingLocationUpdates = false;
+            }else if(resultCode == Activity.RESULT_OK){
+
+                startLocationUpdates();
+            }
+
+        }else if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri filePath = data.getData();
             /*File file = new File(String.valueOf(filePath));
             long length = file.length();
@@ -364,7 +547,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
     }
 
-    private final int REQUEST_IMAGE_CAPTURE = 1;
+    private final int REQUEST_IMAGE_CAPTURE = 2;
     private String photoFromCameraURI;
 
     private void openCamera(){
@@ -536,7 +719,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
             jDataCustomer.put("nik", session.getUserInfo(SessionManager.TAG_UID));
             AreaModel area = (AreaModel) spArea.getSelectedItem();
-            jDataCustomer.put("kodearea", "");
+            jDataCustomer.put("kodearea", area.getValue());
             jDataCustomer.put("tglmasuk", iv.getCurrentDate(FormatItem.formatDate));
             jDataCustomer.put("userid", session.getUserInfo(SessionManager.TAG_UID));
             jDataCustomer.put("useru", session.getUserInfo(SessionManager.TAG_UID));
@@ -702,11 +885,15 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                 getDataCustomer();
                 getPhotos();
             }else{
-                location = getLocation();
+
+                //location = getLocation();
+                updateAllLocation();
+
                 getDataArea();
             }
         }else{
-            location = getLocation();
+            //location = getLocation();
+            updateAllLocation();
             getDataArea();
         }
 
@@ -715,9 +902,15 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             public void onClick(View view) {
 
                 refreshMode = true;
-                location = getLocation();
+                //location = getLocation();
+                updateAllLocation();
             }
         });
+    }
+
+    private void updateAllLocation(){
+        mRequestingLocationUpdates = true;
+        startLocationUpdates();
     }
 
     private void getPhotos() {
@@ -900,6 +1093,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
     }
 
     public Location getLocation() {
+
         try {
 
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -979,15 +1173,17 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                 }else{
                     //Toast.makeText(context, "Turn on your GPS for better accuracy", Toast.LENGTH_SHORT).show();
                 }
+
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(location != null){
+        if(location != null && location.getLongitude() != 0 && location.getLatitude() != 0){
             onLocationChanged(location);
         }
+
         return location;
     }
 
@@ -1212,13 +1408,13 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
 
-        location = getLocation();
+        //location = getLocation();
     }
 
     @Override
     public void onProviderEnabled(String s) {
 
-        location = getLocation();
+        //location = getLocation();
     }
 
     @Override

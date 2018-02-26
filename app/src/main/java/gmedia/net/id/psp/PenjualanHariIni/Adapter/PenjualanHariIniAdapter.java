@@ -2,6 +2,7 @@ package gmedia.net.id.psp.PenjualanHariIni.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class PenjualanHariIniAdapter extends ArrayAdapter {
     }
 
     private static class ViewHolder {
-        private TextView tvItem1, tvItem2 ;
+        private TextView tvItem1, tvItem2, tvStatus;
     }
 
     @Override
@@ -81,6 +82,7 @@ public class PenjualanHariIniAdapter extends ArrayAdapter {
                 convertView = inflater.inflate(R.layout.adapter_penjualan_isi, null);
                 holder.tvItem1 = (TextView) convertView.findViewById(R.id.tv_item1);
                 holder.tvItem2 = (TextView) convertView.findViewById(R.id.tv_item2);
+                holder.tvStatus = (TextView) convertView.findViewById(R.id.tv_status);
             }else if(tipeViewList == 2){
                 convertView = inflater.inflate(R.layout.adapter_penjualan_footer, null);
                 holder.tvItem1 = (TextView) convertView.findViewById(R.id.tv_item1);
@@ -92,11 +94,35 @@ public class PenjualanHariIniAdapter extends ArrayAdapter {
         }
 
         if(tipeViewList == 0){
+
             holder.tvItem1.setText(item.getItem2());
         }else if(tipeViewList == 1){
+
+            String appFlag = item.getItem7();
+            if(appFlag != null){
+                if(appFlag.equals("1")){
+
+                    holder.tvItem1.setTextColor(context.getResources().getColor(R.color.color_black));
+                    holder.tvItem2.setTextColor(context.getResources().getColor(R.color.color_black));
+                }else{
+                    holder.tvItem1.setTextColor(context.getResources().getColor(R.color.color_red));
+                    holder.tvItem2.setTextColor(context.getResources().getColor(R.color.color_red));
+                }
+            }
             holder.tvItem1.setText(item.getItem3());
             holder.tvItem2.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getItem4())));
+
+            if(item.getItem9() != null && item.getItem9().length() > 0){
+
+                holder.tvStatus.setVisibility(View.VISIBLE);
+                holder.tvStatus.setText(Html.fromHtml(item.getItem9()));
+
+            }else{
+
+                holder.tvStatus.setVisibility(View.GONE);
+            }
         }else if(tipeViewList == 2){
+
             holder.tvItem1.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getItem2())));
         }
 

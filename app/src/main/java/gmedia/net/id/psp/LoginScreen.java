@@ -440,7 +440,12 @@ public class LoginScreen extends RuntimePermissionsActivity {
             public void onError(String result) {
                 Snackbar.make(findViewById(android.R.id.content), "Terjadi kesalahan koneksi, harap ulangi kembali nanti", Snackbar.LENGTH_LONG).show();
                 if(progressDialog != null && progressDialog.isShowing()) {
-                    progressDialog.dismiss();
+                    try {
+
+                        progressDialog.dismiss();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
         });

@@ -91,50 +91,50 @@ public class SessionManager {
 	public HashMap<String, String> getUserDetails(){
 		HashMap<String, String> user = new HashMap<String, String>();
 		// user uid
-		user.put(TAG_UID, pref.getString(TAG_UID, null));
+		user.put(TAG_UID, pref.getString(TAG_UID, ""));
 		
 		// user nik
-		user.put(TAG_NIK, pref.getString(TAG_NIK, null));
+		user.put(TAG_NIK, pref.getString(TAG_NIK, ""));
 
-		user.put(TAG_NAMA, pref.getString(TAG_NAMA, null));
+		user.put(TAG_NAMA, pref.getString(TAG_NAMA, ""));
 
-		user.put(TAG_USERNAME, pref.getString(TAG_USERNAME, null));
+		user.put(TAG_USERNAME, pref.getString(TAG_USERNAME, ""));
 
-		user.put(TAG_PASSWORD, pref.getString(TAG_PASSWORD, null));
+		user.put(TAG_PASSWORD, pref.getString(TAG_PASSWORD, ""));
 
-		user.put(TAG_SAVED, pref.getString(TAG_SAVED, null));
+		user.put(TAG_SAVED, pref.getString(TAG_SAVED, ""));
 
-		user.put(TAG_TOKEN, pref.getString(TAG_TOKEN, null));
+		user.put(TAG_TOKEN, pref.getString(TAG_TOKEN, ""));
 
-		user.put(TAG_EXP, pref.getString(TAG_EXP, null));
+		user.put(TAG_EXP, pref.getString(TAG_EXP, ""));
 
-		user.put(TAG_LEVEL, pref.getString(TAG_LEVEL, null));
+		user.put(TAG_LEVEL, pref.getString(TAG_LEVEL, ""));
 
-		user.put(TAG_AREA, pref.getString(TAG_AREA, null));
+		user.put(TAG_AREA, pref.getString(TAG_AREA, ""));
 
-		user.put(TAG_FLAG, pref.getString(TAG_FLAG, null));
+		user.put(TAG_FLAG, pref.getString(TAG_FLAG, ""));
 		// return user
 		return user;
 	}
 
 	public String getUserInfo(String key){
-		return pref.getString(key, null);
+		return pref.getString(key, "");
 	}
 
 	public String getUser(){
-		return pref.getString(TAG_NAMA, null);
+		return pref.getString(TAG_NAMA, "");
 	}
 
 	public String getUsername(){
-		return pref.getString(TAG_USERNAME, null);
+		return pref.getString(TAG_USERNAME, "");
 	}
 
 	public String getPassword(){
-		return pref.getString(TAG_PASSWORD, null);
+		return pref.getString(TAG_PASSWORD, "");
 	}
 
 	public String getLevel(){
-		return pref.getString(TAG_LEVEL, null);
+		return pref.getString(TAG_LEVEL, "");
 	}
 
 	/**
@@ -161,7 +161,7 @@ public class SessionManager {
 	 * **/
 	// Get Login State
 	public boolean isLoggedIn(){
-		if(getUserDetails().get(TAG_UID) != null){
+		if(!getUserDetails().get(TAG_UID).equals("")){
 			return true;
 		}else{
 			return false;
@@ -170,7 +170,7 @@ public class SessionManager {
 	}
 
 	public boolean isSaved(){
-		if(getUserDetails().get(TAG_SAVED) != null && getUserDetails().get(TAG_SAVED).equals("1")){
+		if(!getUserDetails().get(TAG_SAVED).equals("") && getUserDetails().get(TAG_SAVED).equals("1")){
 
 			return true;
 		}else{

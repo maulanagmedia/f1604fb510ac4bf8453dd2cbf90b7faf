@@ -54,7 +54,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ll_footer"
-        android:padding="@dimen/default_margin_small"
+        android:paddingTop="@dimen/default_margin_small"
+        android:paddingLeft="@dimen/default_margin_small"
+        android:paddingRight="@dimen/default_margin_small"
+        android:paddingBottom="@dimen/default_margin_tiny"
         android:background="@color/color_grey_2"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
@@ -75,6 +78,13 @@
             android:textSize="20sp"
             android:gravity="right"
             android:textColor="@color/color_black"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:textColor="@color/color_black"
+            android:text="* Transaksi MKIOS yang pending/ gagal tidak dihitung total"/>
     </LinearLayout>
 
     <LinearLayout

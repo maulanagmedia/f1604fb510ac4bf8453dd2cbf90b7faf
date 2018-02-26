@@ -14,8 +14,10 @@ import android.os.Build;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.AppCompatDrawableManager;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -32,11 +34,13 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -893,5 +897,60 @@ public class ItemValidation {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+
+    public String encodeBase64(String value){
+
+        String hasil = value;
+        try {
+            byte[] encodeValue = Base64.encode(value.getBytes(), Base64.DEFAULT);
+            hasil = new String(encodeValue);
+        }catch (Exception e){
+            e.printStackTrace();
+            hasil = "";
+        }
+        return hasil;
+    }
+
+    public String decodeBase64(String value){
+
+        String hasil = value;
+        try {
+            byte[] decodeValue = Base64.decode(value.getBytes(), Base64.DEFAULT);
+            hasil = new String(decodeValue);
+        }catch (Exception e){
+            hasil = "";
+        }
+
+        return hasil;
+    }
+
+    public ArrayList<String> getIMEI(Context context){
+
+        ArrayList<String> imeiList = new ArrayList<>();
+        TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        try {
+
+            Class<?> telephonyClass = Class.forName(telephony.getClass().getName());
+            Class<?>[] parameter = new Class[1];
+            parameter[0] = int.class;
+            Method getFirstMethod = telephonyClass.getMethod("getDeviceId", parameter);
+            //Log.d("SimData", getFirstMethod.toString());
+            Object[] obParameter = new Object[1];
+            obParameter[0] = 0;
+            TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            String first = (String) getFirstMethod.invoke(telephony, obParameter);
+            if(first != null && !first.equals("")) imeiList.add(first);
+            //Log.d("SimData", "first :" + first);
+            obParameter[0] = 1;
+            String second = (String) getFirstMethod.invoke(telephony, obParameter);
+            if(second != null && !second.equals("")) imeiList.add(second);
+            //Log.d("SimData", "Second :" + second);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return imeiList;
     }
 }

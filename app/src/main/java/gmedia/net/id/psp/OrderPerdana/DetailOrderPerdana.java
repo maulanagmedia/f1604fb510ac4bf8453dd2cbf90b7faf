@@ -6,12 +6,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -39,6 +42,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.maulana.custommodul.ApiVolley;
@@ -118,6 +136,18 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
     private String jarak = "",range = "", latitudeOutlet = "", longitudeOutlet = "";
     private Button btnMapsOutlet;
 
+    private FusedLocationProviderClient mFusedLocationClient;
+    private LocationCallback mLocationCallback;
+    private LocationRequest mLocationRequest;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
+            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+    private LocationSettingsRequest mLocationSettingsRequest;
+    private SettingsClient mSettingsClient;
+    private static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private Boolean mRequestingLocationUpdates;
+    private Location mCurrentLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +158,15 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         );
 
         setTitle("Order Perdana");
+
+        // getLocation update by google
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mSettingsClient = LocationServices.getSettingsClient(this);
+        mRequestingLocationUpdates = false;
+
+        createLocationCallback();
+        createLocationRequest();
+        buildLocationSettingsRequest();
 
         initUI();
     }
@@ -198,6 +237,25 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                 edtNobukti.setText(noBukti);
                 status = bundle.getString("status");
                 btnProses.setEnabled(false);
+
+                String jarak = bundle.getString("jarak");
+
+                String keteranganJarak = "";
+                if(jarak != null && iv.parseNullDouble(jarak) <= 6371 && !jarak.equals("Tidak diketahui")){
+                    if(iv.parseNullDouble(jarak) <= 1){
+                        keteranganJarak = iv.doubleToString(iv.parseNullDouble(jarak) * 1000, "2") + " m";
+                    }else{
+                        keteranganJarak = iv.doubleToString(iv.parseNullDouble(jarak), "2") + " km";
+                    }
+
+                    keteranganJarak = "Jarak sales dengan outlet saat order yaitu " + keteranganJarak;
+                }else{
+
+
+                    keteranganJarak = "<font color='#ec1c25'>Lokasi outlet tidak diketahui</font>";
+                }
+
+                edtJarak.setText(Html.fromHtml( keteranganJarak));
             }else{
 
                 editMode = false;
@@ -213,11 +271,142 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             location = new Location("set");
             location.setLatitude(latitude);
             location.setLongitude(longitude);
-            location = getLocation();
+
+            updateAllLocation();
+            //location = getLocation();
 
             getMasterCCID();
             initEvent();
         }
+    }
+
+    private void createLocationRequest() {
+
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    private void createLocationCallback() {
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+
+                mCurrentLocation = locationResult.getLastLocation();
+                //mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+                onLocationChanged(mCurrentLocation);
+            }
+        };
+    }
+
+    private void buildLocationSettingsRequest() {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        mLocationSettingsRequest = builder.build();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
+
+    private void stopLocationUpdates() {
+        if (!mRequestingLocationUpdates) {
+            Log.d(TAG, "stopLocationUpdates: updates never requested, no-op.");
+            return;
+        }
+
+        // It is a good practice to remove location requests when the activity is in a paused or
+        // stopped state. Doing so helps battery performance and is especially
+        // recommended in applications that request frequent location updates.
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        mRequestingLocationUpdates = false;
+                    }
+                });
+    }
+
+    private boolean checkPermissions() {
+        int permissionState = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        return permissionState == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void startLocationUpdates() {
+        // Begin by checking if the device has the necessary location settings.
+
+        isUpdateLocation = true;
+        mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
+                .addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+                    @Override
+                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                        Log.i(TAG, "All location settings are satisfied.");
+
+                        isUpdateLocation = false;
+                        //noinspection MissingPermission
+                        if (ActivityCompat.checkSelfPermission(DetailOrderPerdana.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(DetailOrderPerdana.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                            return;
+                        }
+                        mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                                mLocationCallback, Looper.myLooper());
+
+                        mFusedLocationClient.getLastLocation()
+                                .addOnSuccessListener(DetailOrderPerdana.this, new OnSuccessListener<Location>() {
+                                    @Override
+                                    public void onSuccess(Location clocation) {
+
+                                        if (clocation != null) {
+
+                                            onLocationChanged(clocation);
+                                        }else{
+                                            location = getLocation();
+                                        }
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        int statusCode = ((ApiException) e).getStatusCode();
+                        switch (statusCode) {
+                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                                Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " +
+                                        "location settings ");
+                                try {
+                                    // Show the dialog by calling startResolutionForResult(), and check the
+                                    // result in onActivityResult().
+                                    ResolvableApiException rae = (ResolvableApiException) e;
+                                    rae.startResolutionForResult(DetailOrderPerdana.this, REQUEST_CHECK_SETTINGS);
+                                } catch (IntentSender.SendIntentException sie) {
+                                    Log.i(TAG, "PendingIntent unable to execute request.");
+                                }
+                                break;
+                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                                String errorMessage = "Location settings are inadequate, and cannot be " +
+                                        "fixed here. Fix in Settings.";
+                                Log.e(TAG, errorMessage);
+                                Toast.makeText(DetailOrderPerdana.this, errorMessage, Toast.LENGTH_LONG).show();
+                                mRequestingLocationUpdates = false;
+                                //refreshMode = false;
+                        }
+
+                        //get Location
+                        isUpdateLocation = false;
+                        location = getLocation();
+                    }
+                });
+    }
+
+    private void updateAllLocation(){
+        mRequestingLocationUpdates = true;
+        startLocationUpdates();
     }
 
     private void setListViewBehaviour(){
@@ -595,7 +784,9 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             @Override
             public void onClick(View view) {
 
-                if(!isUpdateLocation) location = getLocation();
+                if(!isUpdateLocation){
+                    updateAllLocation();
+                }
             }
         });
 
@@ -920,6 +1111,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             @Override
             public void onSuccess(String result) {
 
+                isLoading(false);
                 try {
 
                     JSONObject response = new JSONObject(result);
@@ -935,7 +1127,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                             masterCCID.add(new OptionItem(jo.getString("kodebrg"), jo.getString("ccid"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("hpp"), jo.getString("tgl_do"), jo.getString("nodo"), jo.getString("nobukti") , false));
                         }
                     }
-                    isLoading(false);
+
                     if(editMode){
                         getSelectedCCID();
                     }else{
@@ -944,7 +1136,6 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    isLoading(false);
                 }
             }
 
@@ -1063,18 +1254,30 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
-            if(result.getContents() == null) {
+        if(requestCode == REQUEST_CHECK_SETTINGS){
 
-                Log.d(TAG, "onActivityResult: Scan failed ");
-            } else {
+            if(resultCode == Activity.RESULT_CANCELED){
 
-                updateCCID(result.getContents());
+                mRequestingLocationUpdates = false;
+            }else if(resultCode == Activity.RESULT_OK){
+
+                startLocationUpdates();
             }
-        } else {
-            // This is important, otherwise the result will not be passed to the fragment
-            super.onActivityResult(requestCode, resultCode, data);
+
+        }else{
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if(result != null) {
+                if(result.getContents() == null) {
+
+                    Log.d(TAG, "onActivityResult: Scan failed ");
+                } else {
+
+                    updateCCID(result.getContents());
+                }
+            } else {
+                // This is important, otherwise the result will not be passed to the fragment
+                super.onActivityResult(requestCode, resultCode, data);
+            }
         }
     }
 
@@ -1531,7 +1734,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             this.longitude = location.getLongitude();
         }
 
-        if(!isUpdateLocation){
+        if(!isUpdateLocation && !editMode){
             getJarak();
         }
     }
@@ -1617,13 +1820,13 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
 
-        location = getLocation();
+        //location = getLocation();
     }
 
     @Override
     public void onProviderEnabled(String s) {
 
-        location = getLocation();
+        //location = getLocation();
     }
 
     @Override

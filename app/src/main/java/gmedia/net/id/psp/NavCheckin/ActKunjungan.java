@@ -103,6 +103,7 @@ public class ActKunjungan extends AppCompatActivity {
                 selfCheckin = true;
             }else{
                 namaSales = bundle.getString("nama");
+                setTitle("Kunjungan Sales");
                 getSupportActionBar().setSubtitle("a/n "+ namaSales);
                 llTop.setVisibility(View.VISIBLE);
                 dateString = iv.getCurrentDate(FormatItem.formatDateDisplay);
@@ -373,14 +374,16 @@ public class ActKunjungan extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                     CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
-                    Intent intent = new Intent(context, DetailKunjungan.class);
-                    intent.putExtra("kdcus", selectedItem.getItem1());
-                    intent.putExtra("timestamp", selectedItem.getItem2());
-                    intent.putExtra("nik", selectedItem.getItem7());
-                    intent.putExtra("flag", selfCheckin);
-                    intent.putExtra("nama", namaSales);
-                    intent.putExtra("id", selectedItem.getItem9());
-                    ((Activity) context).startActivity(intent);
+                    if(!selectedItem.getItem9().equals("0")){
+                        Intent intent = new Intent(context, DetailKunjungan.class);
+                        intent.putExtra("kdcus", selectedItem.getItem1());
+                        intent.putExtra("timestamp", selectedItem.getItem2());
+                        intent.putExtra("nik", selectedItem.getItem7());
+                        intent.putExtra("flag", selfCheckin);
+                        intent.putExtra("nama", namaSales);
+                        intent.putExtra("id", selectedItem.getItem9());
+                        ((Activity) context).startActivity(intent);
+                    }
                 }
             });
         }

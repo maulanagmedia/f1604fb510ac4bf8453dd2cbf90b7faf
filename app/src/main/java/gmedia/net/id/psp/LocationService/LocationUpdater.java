@@ -21,6 +21,9 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.SessionManager;
@@ -29,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -56,11 +60,13 @@ public class LocationUpdater extends Service implements LocationListener {
     private String TAG = "locationUpdater";
     private String address0 = "";
     private SessionManager session;
-    private String nik = "";
+    private String nik = "", kdarea = "";
     private ItemValidation iv = new ItemValidation();
     private static Timer timer;
-    private int timerTime = 1000 * 60 * 10; // 10 minute refresh
+    private int timerTime = 1000 * 60 * 15; // 15 minute refresh
     private boolean onUpdate = false;
+    private String imei1 = "", imei2 = "";
+    private FusedLocationProviderClient mFusedLocationClient;
 
     public LocationUpdater() {
     }
@@ -80,8 +86,22 @@ public class LocationUpdater extends Service implements LocationListener {
         context = this;
         session = new SessionManager(context);
         nik = session.getUserInfo(SessionManager.TAG_UID);
+        kdarea = session.getUserInfo(SessionManager.TAG_AREA);
+        ArrayList<String>imeiList = iv.getIMEI(context);
+
+        if(imeiList.size() > 1){ // dual sim
+
+            imei1 = imeiList.get(1);
+            imei2 = imeiList.get(0);
+        }else if(imeiList.size() == 1){ // single sim
+
+            imei1 = imeiList.get(0);
+        }
+
+        //Log.d(TAG, "onCreate: "+imeiList.get(0)+" "+imeiList.get(1));
         onUpdate = false;
 
+        //mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         initLocation();
     }
 
@@ -228,6 +248,18 @@ public class LocationUpdater extends Service implements LocationListener {
             e.printStackTrace();
         }
 
+        /*mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener((Activity) context, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location clocation) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (clocation != null) {
+                            Log.d(TAG, "onSuccess: googleloc "+ clocation.getLongitude());
+                            location = clocation;
+                        }
+                    }
+                });*/
+
         if(location != null){
             onLocationChanged(location);
         }
@@ -240,7 +272,9 @@ public class LocationUpdater extends Service implements LocationListener {
 
     @Override
     public void onDestroy() {
-        timer.cancel();
+        if(timer != null){
+            timer.cancel();
+        }
         super.onDestroy();
     }
 
@@ -267,6 +301,9 @@ public class LocationUpdater extends Service implements LocationListener {
             JSONObject jBody = new JSONObject();
             try {
                 jBody.put("data", jData);
+                jBody.put("imei1", imei1);
+                jBody.put("imei2", imei2);
+                jBody.put("kdarea", kdarea);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -312,7 +349,7 @@ public class LocationUpdater extends Service implements LocationListener {
         public void run()
         {
             Log.d(TAG, "onLocationChanged: " +String.valueOf(latitude)+" , "+ String.valueOf(longitude));
-            if(nik != null && nik.length() > 0){ // nik ada
+            if(imei1 != null && imei1.length() > 0){ // nik ada
                 if(latitude != 0 && longitude != 0 && !onUpdate){ // lat long tidak kosong
                     saveLocation();
                 }

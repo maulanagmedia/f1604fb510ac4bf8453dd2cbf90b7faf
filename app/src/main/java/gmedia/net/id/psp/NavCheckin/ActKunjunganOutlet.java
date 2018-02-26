@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Criteria;
@@ -12,6 +13,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +38,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;
@@ -90,6 +108,18 @@ public class ActKunjunganOutlet extends AppCompatActivity implements LocationLis
     private String address = "";
     private boolean isDataLoaded = false;
 
+    private FusedLocationProviderClient mFusedLocationClient;
+    private LocationCallback mLocationCallback;
+    private LocationRequest mLocationRequest;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
+            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+    private LocationSettingsRequest mLocationSettingsRequest;
+    private SettingsClient mSettingsClient;
+    private static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private Boolean mRequestingLocationUpdates;
+    private Location mCurrentLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +130,15 @@ public class ActKunjunganOutlet extends AppCompatActivity implements LocationLis
         );
         setTitle("Kunjungan Outlet");
         context = this;
+
+        // getLocation update by google
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mSettingsClient = LocationServices.getSettingsClient(this);
+        mRequestingLocationUpdates = false;
+
+        createLocationCallback();
+        createLocationRequest();
+        buildLocationSettingsRequest();
         initUI();
     }
 
@@ -138,6 +177,149 @@ public class ActKunjunganOutlet extends AppCompatActivity implements LocationLis
         initLocation();
     }
 
+    private void createLocationRequest() {
+
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    private void createLocationCallback() {
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+
+                mCurrentLocation = locationResult.getLastLocation();
+                //mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+                onLocationChanged(mCurrentLocation);
+            }
+        };
+    }
+
+    private void buildLocationSettingsRequest() {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        mLocationSettingsRequest = builder.build();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
+
+    private void stopLocationUpdates() {
+        if (!mRequestingLocationUpdates) {
+            Log.d(TAG, "stopLocationUpdates: updates never requested, no-op.");
+            return;
+        }
+
+        // It is a good practice to remove location requests when the activity is in a paused or
+        // stopped state. Doing so helps battery performance and is especially
+        // recommended in applications that request frequent location updates.
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        mRequestingLocationUpdates = false;
+                    }
+                });
+    }
+
+    private boolean checkPermissions() {
+        int permissionState = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        return permissionState == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void startLocationUpdates() {
+        // Begin by checking if the device has the necessary location settings.
+
+        isLoading = true;
+        pbLoading.setVisibility(View.VISIBLE);
+        mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
+                .addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+                    @Override
+                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                        Log.i(TAG, "All location settings are satisfied.");
+
+                        pbLoading.setVisibility(View.GONE);
+                        isLoading = false;
+                        //noinspection MissingPermission
+                        if (ActivityCompat.checkSelfPermission(ActKunjunganOutlet.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ActKunjunganOutlet.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                            return;
+                        }
+                        mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                                mLocationCallback, Looper.myLooper());
+
+                        mFusedLocationClient.getLastLocation()
+                                .addOnSuccessListener(ActKunjunganOutlet.this, new OnSuccessListener<Location>() {
+                                    @Override
+                                    public void onSuccess(Location clocation) {
+
+                                        if (clocation != null) {
+
+                                            location = clocation;
+                                            onLocationChanged(location);
+                                        }else{
+                                            location = getLocation();
+                                        }
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        int statusCode = ((ApiException) e).getStatusCode();
+                        switch (statusCode) {
+                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                                Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " +
+                                        "location settings ");
+                                try {
+                                    // Show the dialog by calling startResolutionForResult(), and check the
+                                    // result in onActivityResult().
+                                    ResolvableApiException rae = (ResolvableApiException) e;
+                                    rae.startResolutionForResult(ActKunjunganOutlet.this, REQUEST_CHECK_SETTINGS);
+                                } catch (IntentSender.SendIntentException sie) {
+                                    Log.i(TAG, "PendingIntent unable to execute request.");
+                                }
+                                break;
+                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                                String errorMessage = "Location settings are inadequate, and cannot be " +
+                                        "fixed here. Fix in Settings.";
+                                Log.e(TAG, errorMessage);
+                                Toast.makeText(ActKunjunganOutlet.this, errorMessage, Toast.LENGTH_LONG).show();
+                                mRequestingLocationUpdates = false;
+                                //refreshMode = false;
+                        }
+
+                        //get Location
+                        pbLoading.setVisibility(View.GONE);
+                        isLoading = false;
+                        location = getLocation();
+                    }
+                });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_CHECK_SETTINGS){
+
+            if(resultCode == Activity.RESULT_CANCELED){
+
+                mRequestingLocationUpdates = false;
+            }else if(resultCode == Activity.RESULT_OK){
+
+                startLocationUpdates();
+            }
+
+        }
+    }
+
     private void initLocation() {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -148,7 +330,13 @@ public class ActKunjunganOutlet extends AppCompatActivity implements LocationLis
         location.setLatitude(latitude);
         location.setLongitude(longitude);
 
-        location = getLocation();
+        //location = getLocation();
+        updateAllLocation();
+    }
+
+    private void updateAllLocation(){
+        mRequestingLocationUpdates = true;
+        startLocationUpdates();
     }
 
     public void setCriteria() {

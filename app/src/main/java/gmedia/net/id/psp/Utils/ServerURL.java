@@ -7,8 +7,9 @@ package gmedia.net.id.psp.Utils;
 public class ServerURL {
 
     //private static final String baseURL = "http://192.168.43.200/psp/";
-    private static final String baseURL = "http://api.putmasaripratama.co.id/";
-    //private static final String baseURL = "http://192.168.12.147/psp/";
+    //private static final String baseURL = "http://api.putmasaripratama.co.id/";
+    //private static final String baseURL = "http://119.2.53.122/mobilesalesforce/";
+    private static final String baseURL = "http://192.168.12.147/psp/";
 
     public static final String login = baseURL + "api/auth/login/";
     public static final String getLatestVersion = baseURL + "api/auth/get_latest_version/";
