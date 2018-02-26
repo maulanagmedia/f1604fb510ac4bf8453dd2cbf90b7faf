@@ -60,12 +60,12 @@ public class LocationUpdater extends Service implements LocationListener {
     private String TAG = "locationUpdater";
     private String address0 = "";
     private SessionManager session;
-    private String nik = "", kdarea = "";
+    private static String nik = "", kdarea = "";
     private ItemValidation iv = new ItemValidation();
     private static Timer timer;
     private int timerTime = 1000 * 60 * 15; // 15 minute refresh
     private boolean onUpdate = false;
-    private String imei1 = "", imei2 = "";
+    private static String imei1 = "", imei2 = "";
     private FusedLocationProviderClient mFusedLocationClient;
 
     public LocationUpdater() {
