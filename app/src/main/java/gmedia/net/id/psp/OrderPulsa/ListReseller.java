@@ -52,7 +52,7 @@ public class ListReseller extends AppCompatActivity {
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
-        setTitle("Pilih Reseller");
+        setTitle("Pilih Reseller MKIOS");
 
         initUI();
     }

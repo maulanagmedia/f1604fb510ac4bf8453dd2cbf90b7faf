@@ -52,7 +52,7 @@ public class CustomerPerdana extends AppCompatActivity {
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
-        setTitle("Pilih Pelanggan");
+        setTitle("Pilih Outlet Perdana");
 
         initUI();
     }

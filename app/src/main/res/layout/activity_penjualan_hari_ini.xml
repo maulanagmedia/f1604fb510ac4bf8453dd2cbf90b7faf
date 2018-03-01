@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:textSize="11sp"
             android:textColor="@color/color_black"
-            android:text="* Transaksi MKIOS yang pending/ gagal tidak dihitung total"/>
+            android:text="* Transaksi yang pending/ gagal tidak dihitung pada total"/>
     </LinearLayout>
 
     <LinearLayout

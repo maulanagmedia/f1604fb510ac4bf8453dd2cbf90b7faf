@@ -100,7 +100,8 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                             Manifest.permission.WRITE_SETTINGS,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,
                             Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.CAMERA, Manifest.permission.WAKE_LOCK,
+                            Manifest.permission.CAMERA,
+                            Manifest.permission.WAKE_LOCK,
                             Manifest.permission.WRITE_APN_SETTINGS,
                             Manifest.permission.READ_PHONE_STATE}, R.string
                             .runtime_permissions_txt
@@ -485,7 +486,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
 
     private void stopCurrentService(){
         try {
-            stopService(new Intent(getApplicationContext(), LocationUpdater.class));
+            //stopService(new Intent(getApplicationContext(), LocationUpdater.class));
 
         }catch (Exception e){
             e.printStackTrace();

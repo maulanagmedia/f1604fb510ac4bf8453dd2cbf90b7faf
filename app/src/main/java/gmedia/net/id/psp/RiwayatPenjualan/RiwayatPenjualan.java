@@ -45,6 +45,7 @@ import gmedia.net.id.psp.LoginScreen;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.OrderPerdana.DetailOrderPerdana;
 import gmedia.net.id.psp.OrderPulsa.DetailOrderPulsa;
+import gmedia.net.id.psp.OrderTcash.DetailTcashOrder;
 import gmedia.net.id.psp.PenjualanHariIni.Adapter.PenjualanHariIniAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
@@ -405,7 +406,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
                                 lastTaggal = jo.getString("tgl");
                             }
 
-                            masterList.add(new CustomItem("I", jo.getString("nonota"), jo.getString("nama"), jo.getString("piutang"), jo.getString("flag"), jo.getString("tgl"), jo.getString("app_flag"), jo.getString("jarak")));
+                            masterList.add(new CustomItem("I", jo.getString("nonota"), jo.getString("nama"), jo.getString("piutang"), jo.getString("flag"), jo.getString("tgl"), jo.getString("app_flag"), jo.getString("jarak"), jo.getString("flag_nama")));
                             total += iv.parseNullLong(jo.getString("piutang"));
 
                             if(i < items.length() - 1){
@@ -587,6 +588,11 @@ public class RiwayatPenjualan extends AppCompatActivity {
                                     intent.putExtra("jarak", jarak);
                                     startActivity(intent);
                                     break;
+                                }else if(flag.equals("TCASH")){
+                                    Intent intent = new Intent(RiwayatPenjualan.this, DetailTcashOrder.class);
+                                    intent.putExtra("nonota", jo.getString("nonota"));
+                                    intent.putExtra("koders", jo.getString("kode"));
+                                    startActivity(intent);
                                 }
                             }
                         }else{

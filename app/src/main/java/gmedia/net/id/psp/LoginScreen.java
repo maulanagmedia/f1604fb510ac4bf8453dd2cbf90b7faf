@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -42,6 +43,7 @@ import com.maulana.custommodul.SessionManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import gmedia.net.id.psp.NotificationUtil.InitFirebaseSetting;
@@ -63,6 +65,7 @@ public class LoginScreen extends RuntimePermissionsActivity {
     private String refreshToken = "";
     private String sim1 = "", sim2 = "";
     private Button btnChangeAPN;
+    private String imei1 = "", imei2 = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +96,14 @@ public class LoginScreen extends RuntimePermissionsActivity {
                 LoginScreen.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
 
             LoginScreen.super.requestAppPermissions(new
-                            String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.WRITE_SETTINGS, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA, android.Manifest.permission.WAKE_LOCK, Manifest.permission.READ_PHONE_STATE}, R.string
+                            String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                            android.Manifest.permission.ACCESS_FINE_LOCATION,
+                            android.Manifest.permission.WRITE_SETTINGS,
+                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                            android.Manifest.permission.CAMERA,
+                            android.Manifest.permission.WAKE_LOCK,
+                            Manifest.permission.READ_PHONE_STATE}, R.string
                             .runtime_permissions_txt
                     , REQUEST_PERMISSIONS);
         }
@@ -386,13 +396,42 @@ public class LoginScreen extends RuntimePermissionsActivity {
             }
         }
 
+        ArrayList<String> imeiList = iv.getIMEI(LoginScreen.this);
+
+        if(imeiList.size() > 1){ // dual sim
+
+            imei1 = imeiList.get(0);
+            imei2 = imeiList.get(1);
+        }else if(imeiList.size() == 1){ // single sim
+
+            imei1 = imeiList.get(0);
+        }
+
+        PackageInfo pInfo = null;
+        String version = "";
+
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        version = pInfo.versionName;
+
+        String deviceName = android.os.Build.MODEL;
+        String deviceMan = android.os.Build.MANUFACTURER;
+
         JSONObject jBody = new JSONObject();
         try {
             jBody.put("username", edtUsername.getText().toString());
             jBody.put("password", edtPassword.getText().toString());
             jBody.put("sim1", sim1);
             jBody.put("sim2", sim2);
+            jBody.put("imei1", imei1);
+            jBody.put("imei2", imei2);
+            jBody.put("phone_model", deviceMan +" "+ deviceName);
             jBody.put("fcm_id", refreshToken);
+            jBody.put("version", version);
         } catch (JSONException e) {
             e.printStackTrace();
         }

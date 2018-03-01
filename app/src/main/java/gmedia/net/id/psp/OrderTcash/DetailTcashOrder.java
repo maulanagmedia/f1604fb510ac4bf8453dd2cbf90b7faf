@@ -641,7 +641,7 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
             jData.put("keterangan", "-");
             jData.put("keterangan_order", "Tcash " + edtNominal.getText().toString());
             jData.put("flag", "1");
-            jData.put("order_format", "*800*200#");
+            jData.put("order_format", "*800*900#");
             jData.put("status_transaksi", "INJECK");
             jData.put("flag_injek", "SMS");
             jData.put("proses", "1");
@@ -896,6 +896,9 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
 
                         String harga = response.getJSONObject("response").getString("harga");
                         updateHarga(harga);
+                    }else{
+
+                        Toast.makeText(DetailTcashOrder.this, "Data harga tidak termuat",Toast.LENGTH_LONG).show();
                     }
 
                     pbProses.setVisibility(View.GONE);

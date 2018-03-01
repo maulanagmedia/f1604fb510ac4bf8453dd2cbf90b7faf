@@ -91,8 +91,8 @@ public class LocationUpdater extends Service implements LocationListener {
 
         if(imeiList.size() > 1){ // dual sim
 
-            imei1 = imeiList.get(1);
-            imei2 = imeiList.get(0);
+            imei1 = imeiList.get(0);
+            imei2 = imeiList.get(1);
         }else if(imeiList.size() == 1){ // single sim
 
             imei1 = imeiList.get(0);
