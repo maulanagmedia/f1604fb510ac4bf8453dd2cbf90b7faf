@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -86,8 +87,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".PelunasanPenjualan.VerifikasiPelunasan"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".DaftarPiutang.DaftarPiutang"
             android:screenOrientation="portrait" />
@@ -166,8 +166,7 @@
 
         <activity
             android:name=".NavVerifikasiOutlet.ActVerifikasiOutlet"
-            android:screenOrientation="portrait" >
-
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="ACT_VERSPV" />
 
@@ -230,8 +229,54 @@
         <activity
             android:name=".NavMapsKunjungan.MapsKunjunganActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".MapsOutletActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".MapsOutletActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavPreorderPerdana.ActPreorderPerdanaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavPreorderPerdana.DetailPreorderPerdana"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavPreorderPerdana.ListBarangPreorderPerdana"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavInjectPulsa.ActInjectPulsa"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavInjectPulsa.DetailInjectPulsa"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name=".NavInjectPulsa.Service.USSDService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/config_service" />
+        </service>
+
+        <activity
+            android:name=".NavPOL.ListOutletLocation"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="ACT_VER_LOC" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".NavPOL.FormMapsActivity"
+            android:label="@string/title_activity_form_maps"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavEvent.ActEvent"
+            android:screenOrientation="portrait" />
+        <activity android:name=".NavEvent.DetailEvent"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="gmedia.net.id.psp.NavEvent.DetailEvent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/default_margin"
+        android:scrollbarSize="@dimen/scrollbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nomor Event"
+                    style="@style/formControlLabel3"/>
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edt_nomor"
+                    style="@style/formControlInput.disable"
+                    android:gravity="left"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lokasi Event"
+                    style="@style/formControlLabel3"/>
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edt_lokasi"
+                    style="@style/formControlInput.disable"
+                    android:gravity="left"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nama Pelanggan *"
+                    style="@style/formControlLabel3"/>
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/actv_nama"
+                    android:hint="Outlet terdaftar atau nama baru"
+                    style="@style/formControlInput"
+                    android:gravity="left"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Alamat *"
+                    style="@style/formControlLabel3"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edt_alamat"
+                    style="@style/formControlInput"
+                    android:gravity="left"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ll_balasan"
+                style="@style/formGroup"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Balasan"
+                    style="@style/formControlLabel3"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edt_balasan"
+                    style="@style/formControlTextarea.disable"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/btn_login"
+                    android:id="@+id/ll_beli_pulsa"
+                    android:gravity="center"
+                    android:weightSum="1">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:padding="@dimen/default_margin_small"
+                        android:src="@drawable/ic_order_mkios"
+                        android:scaleType="fitCenter"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.7"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:gravity="center_vertical"
+                        android:text=" Beli Pulsa "
+                        android:textStyle=""
+                        android:textAllCaps="true"
+                        android:paddingLeft="@dimen/default_margin_tiny"
+                        android:paddingRight="@dimen/default_margin_tiny"
+                        android:paddingTop="@dimen/default_margin"
+                        android:paddingBottom="@dimen/default_margin"
+                        android:textColor="@color/color_white"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:background="@drawable/btn_login"
+                    android:gravity="center"
+                    android:id="@+id/ll_beli_perdana"
+                    android:weightSum="1">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:padding="@dimen/default_margin_small"
+                        android:src="@drawable/ic_order_perdana"
+                        android:scaleType="fitCenter"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.7"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:gravity="center_vertical"
+                        android:text=" Beli Perdana "
+                        android:textStyle=""
+                        android:textAllCaps="true"
+                        android:paddingLeft="@dimen/default_margin_tiny"
+                        android:paddingRight="@dimen/default_margin_tiny"
+                        android:paddingTop="@dimen/default_margin"
+                        android:paddingBottom="@dimen/default_margin"
+                        android:textColor="@color/color_white"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/pb_loading"
+        android:visibility="gone"/>
+
+</RelativeLayout>

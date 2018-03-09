@@ -51,7 +51,9 @@ public class ResellerTcash extends AppCompatActivity {
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
-        setTitle("Pilih Reseller TCash");
+
+        session = new SessionManager(ResellerTcash.this);
+        setTitle("Pilih Reseller TCash " +session.getLevel());
 
         initUI();
     }
@@ -62,7 +64,6 @@ public class ResellerTcash extends AppCompatActivity {
         actvReseller = (AutoCompleteTextView) findViewById(R.id.actv_reseller);
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
 
-        session = new SessionManager(ResellerTcash.this);
         getDataReseller();
     }
 

@@ -77,4 +77,15 @@ public class ServerURL {
     public static final String aktivasiOutlet = baseURL + "api/Verifikasi/aktivasi_outlet/";
     public static final String getCustomerVerifikasi = baseURL + "api/Verifikasi/get_customer_verifikasi/";
     public static final String getCustomerAktivasi = baseURL + "api/Verifikasi/get_customer_aktivasi/";
+
+    public static final String getPreorder = baseURL + "api/Preorder/get_preorder/";
+    public static final String getBarangPreorder = baseURL + "api/Preorder/get_barang_preorder/";
+    public static final String savePreorder = baseURL + "api/Preorder/save/";
+
+    public static final String getLocationDS = baseURL + "api/location/get_location_ds/";
+    public static final String saveLocationDS = baseURL + "api/location/save_location_ds/";
+    public static final String saveImagesDS = baseURL + "api/location/insert_foto_ds/";
+    public static final String getImagesDS = baseURL + "api/location/get_images_ds/";
+
+    public static final String getEvent = baseURL + "api/event/get_event/";
 }

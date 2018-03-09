@@ -524,13 +524,12 @@
                         </LinearLayout>
                     </LinearLayout>
 
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/menu_height"
-                        android:id="@+id/ll_5"
-                        android:visibility="gone"
+                        android:id="@+id/ll_6"
                         android:orientation="horizontal"
+                        android:gravity="center"
                         android:layout_marginTop="@dimen/default_margin_small"
                         android:layout_marginBottom="@dimen/default_margin_small"
                         android:weightSum="3">
@@ -540,11 +539,59 @@
                             android:layout_weight="1"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
+                            android:id="@+id/ll_preorder_perdana"
+                            android:background="?attr/selectableItemBackground"
                             android:paddingRight="@dimen/default_margin_small"
                             android:paddingLeft="@dimen/default_margin_small"
                             android:gravity="center"
                             android:weightSum="1">
 
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.8"
+                                android:padding="@dimen/default_margin_small"
+                                android:src="@drawable/ic_preorder_perdana_merah"
+                                android:scaleType="fitCenter"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.2"
+                                android:gravity="center"
+                                android:textSize="@dimen/font_menu"
+                                android:textColor="@color/color_black"
+                                android:text="Preorder Perdana"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:id="@+id/ll_event"
+                            android:background="?attr/selectableItemBackground"
+                            android:paddingRight="@dimen/default_margin_small"
+                            android:paddingLeft="@dimen/default_margin_small"
+                            android:gravity="center"
+                            android:weightSum="1">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.8"
+                                android:padding="@dimen/default_margin_small"
+                                android:src="@drawable/ic_penjualan_mkios"
+                                android:scaleType="fitCenter"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.2"
+                                android:gravity="center"
+                                android:textSize="@dimen/font_menu"
+                                android:textColor="@color/color_black"
+                                android:text="Event"/>
 
                         </LinearLayout>
 
@@ -575,7 +622,59 @@
                                 android:gravity="center"
                                 android:textSize="@dimen/font_menu"
                                 android:textColor="@color/color_black"
-                                android:text="Maps Kunjungan"/>
+                                android:text="Outlet Location"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/menu_height"
+                        android:id="@+id/ll_5"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/default_margin_small"
+                        android:layout_marginBottom="@dimen/default_margin_small"
+                        android:weightSum="3">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingRight="@dimen/default_margin_small"
+                            android:paddingLeft="@dimen/default_margin_small"
+                            android:gravity="center"
+                            android:weightSum="1">
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:id="@+id/ll_market_survey"
+                            android:background="?attr/selectableItemBackground"
+                            android:paddingRight="@dimen/default_margin_small"
+                            android:paddingLeft="@dimen/default_margin_small"
+                            android:gravity="center"
+                            android:weightSum="1">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.8"
+                                android:padding="@dimen/default_margin_small"
+                                android:src="@drawable/ic_penjualan_perdana"
+                                android:scaleType="fitCenter"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.2"
+                                android:gravity="center"
+                                android:textSize="@dimen/font_menu"
+                                android:textColor="@color/color_black"
+                                android:text="Market Survey"/>
                         </LinearLayout>
 
                         <LinearLayout

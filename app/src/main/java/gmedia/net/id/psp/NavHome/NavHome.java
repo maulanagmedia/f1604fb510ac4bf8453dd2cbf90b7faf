@@ -34,9 +34,13 @@ import gmedia.net.id.psp.CustomView.WrapContentViewPager;
 import gmedia.net.id.psp.DaftarPiutang.PiutangPerOutlet;
 import gmedia.net.id.psp.InfoDeposit.ActDeposit;
 import gmedia.net.id.psp.NavCheckin.ActKunjungan;
+import gmedia.net.id.psp.NavEvent.ActEvent;
 import gmedia.net.id.psp.NavHome.Adapter.HeaderSliderAdapter;
+import gmedia.net.id.psp.NavInjectPulsa.ActInjectPulsa;
 import gmedia.net.id.psp.NavKomplain.ActKomplain;
 import gmedia.net.id.psp.NavMapsKunjungan.MapsKunjunganActivity;
+import gmedia.net.id.psp.NavPOL.ListOutletLocation;
+import gmedia.net.id.psp.NavPreorderPerdana.ActPreorderPerdanaActivity;
 import gmedia.net.id.psp.NavTambahCustomer.ActTambahOutlet;
 import gmedia.net.id.psp.NavVerifikasiOutlet.ActVerifikasiOutlet;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
@@ -76,7 +80,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
     private LinearLayout llOrderMkios, llPenjualanMkios, llOrderPerdana, llPenjualanPerdana, llDaftarPiutang, llStokSales;
     private TextView tvNamaSales, tvTotalOmset, tvOmsetMkios, tvOmsetPerdana;
     private LinearLayout llAddCustomer, llCheckIn, llKomplain;
-    private LinearLayout ll1, ll2, ll3, ll4, ll5;
+    private LinearLayout ll1, ll2, ll3, ll4, ll5, ll6;
     private LinearLayout llOrderTcash;
     private LinearLayout llPenjualan;
     private LinearLayout llRiwayatPenjualan;
@@ -85,6 +89,8 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
     private TextView tvJabatan;
     private TextView tvTarget, tvPencapaian, tvGap, tvOutletBaru;
     private LinearLayout llMapsKunjungan;
+    private LinearLayout llPreorderPerdana;
+    private LinearLayout llEvent, llMarketSurvey;
 
     public NavHome() {
         // Required empty public constructor
@@ -172,6 +178,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         ll3 = (LinearLayout) layout.findViewById(R.id.ll_3);
         ll4 = (LinearLayout) layout.findViewById(R.id.ll_4);
         ll5 = (LinearLayout) layout.findViewById(R.id.ll_5);
+        ll6 = (LinearLayout) layout.findViewById(R.id.ll_6);
 
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ll1.getLayoutParams();
 
@@ -183,6 +190,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         ll3.setLayoutParams(lp);
         ll4.setLayoutParams(lp);
         ll5.setLayoutParams(lp);
+        ll6.setLayoutParams(lp);
 
         llAddCustomer = (LinearLayout) layout.findViewById(R.id.ll_add_customer);           // 1
         llOrderMkios = (LinearLayout) layout.findViewById(R.id.ll_order_mkios);             // 2
@@ -196,11 +204,13 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         llVerifikasiOutlet = (LinearLayout) layout.findViewById(R.id.ll_verifikasi_outlet); // 10
         llCheckIn = (LinearLayout) layout.findViewById(R.id.ll_checkin);                    // 11
         llInfoDeposit = (LinearLayout) layout.findViewById(R.id.ll_info_deposit);           // 12
+        llEvent = (LinearLayout) layout.findViewById(R.id.ll_event);                    // 13
+        llMarketSurvey = (LinearLayout) layout.findViewById(R.id.ll_market_survey);     // 13
+        llPreorderPerdana = (LinearLayout) layout.findViewById(R.id.ll_preorder_perdana);   // 13
 
         llPenjualanMkios = (LinearLayout) layout.findViewById(R.id.ll_penjualan_mkios);
         llPenjualanPerdana = (LinearLayout) layout.findViewById(R.id.ll_penjualan_perdana);
-        llMapsKunjungan = (LinearLayout) layout.findViewById(R.id.ll_maps_kunjungan);           // 13
-
+        llMapsKunjungan = (LinearLayout) layout.findViewById(R.id.ll_maps_kunjungan);
 
         tvNamaSales = (TextView) layout.findViewById(R.id.tv_nama_sales);
         tvTotalOmset = (TextView) layout.findViewById(R.id.tv_total_omset);
@@ -219,6 +229,17 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         getListHeaderSlider();
         //getUserOmset();
         getDataAkun();
+
+        if(session.getUserInfo(SessionManager.TAG_LEVEL).equals("DS")){
+
+            llEvent.setVisibility(View.VISIBLE);
+            llMarketSurvey.setVisibility(View.VISIBLE);
+            ll5.setVisibility(View.VISIBLE);
+        }else{
+            llEvent.setVisibility(View.GONE);
+            llMarketSurvey.setVisibility(View.GONE);
+            ll5.setVisibility(View.GONE);
+        }
     }
 
     private void initEvent() {
@@ -357,7 +378,25 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         llMapsKunjungan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, MapsKunjunganActivity.class);
+                Intent intent = new Intent(context, ListOutletLocation.class);
+                context.startActivity(intent);
+                ((Activity)context).finish();
+            }
+        });
+
+        llPreorderPerdana.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ActPreorderPerdanaActivity.class);
+                context.startActivity(intent);
+                ((Activity)context).finish();
+            }
+        });
+
+        llEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ActEvent.class);
                 context.startActivity(intent);
                 ((Activity)context).finish();
             }

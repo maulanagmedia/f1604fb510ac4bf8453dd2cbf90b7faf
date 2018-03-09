@@ -52,7 +52,9 @@ public class ListReseller extends AppCompatActivity {
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
-        setTitle("Pilih Reseller MKIOS");
+
+        session = new SessionManager(ListReseller.this);
+        setTitle("Pilih Reseller MKIOS "+ session.getLevel());
 
         initUI();
     }
@@ -62,8 +64,6 @@ public class ListReseller extends AppCompatActivity {
         lvReseller = (ListView) findViewById(R.id.lv_reseller);
         actvReseller = (AutoCompleteTextView) findViewById(R.id.actv_reseller);
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
-
-        session = new SessionManager(ListReseller.this);
         getDataReseller();
     }
 

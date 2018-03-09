@@ -69,7 +69,10 @@
             android:id="@+id/nav_info_deposit"
             android:icon="@drawable/nav_order_perdana"
             android:title="Info Deposit" />
-
+        <item
+            android:id="@+id/nav_preorder_perdana"
+            android:icon="@mipmap/ic_preorder_perdana"
+            android:title="Preorder Perdana" />
         <item
             android:title="Akun">
             <menu>

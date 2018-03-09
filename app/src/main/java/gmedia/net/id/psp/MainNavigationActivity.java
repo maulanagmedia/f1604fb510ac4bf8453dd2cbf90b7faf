@@ -43,6 +43,7 @@ import gmedia.net.id.psp.NavHome.NavHome;
 import gmedia.net.id.psp.NavKomplain.ActKomplain;
 import gmedia.net.id.psp.NavKomplain.NavKomplain;
 import gmedia.net.id.psp.NavMapsKunjungan.MapsKunjunganActivity;
+import gmedia.net.id.psp.NavPreorderPerdana.ActPreorderPerdanaActivity;
 import gmedia.net.id.psp.NavTambahCustomer.ActTambahOutlet;
 import gmedia.net.id.psp.NavTambahCustomer.NavCustomer;
 import gmedia.net.id.psp.NavVerifikasiOutlet.ActVerifikasiOutlet;
@@ -92,7 +93,8 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                 MainNavigationActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.WRITE_APN_SETTINGS) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                MainNavigationActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                MainNavigationActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                MainNavigationActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
 
             MainNavigationActivity.super.requestAppPermissions(new
                             String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -103,7 +105,8 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                             Manifest.permission.CAMERA,
                             Manifest.permission.WAKE_LOCK,
                             Manifest.permission.WRITE_APN_SETTINGS,
-                            Manifest.permission.READ_PHONE_STATE}, R.string
+                            Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.CALL_PHONE}, R.string
                             .runtime_permissions_txt
                     , REQUEST_PERMISSIONS);
         }
@@ -458,6 +461,11 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         } else if (id == R.id.nav_map_kunjungan) {
 
             Intent intent = new Intent(MainNavigationActivity.this, MapsKunjunganActivity.class);
+            startActivity(intent);
+            finish();
+        }  else if (id == R.id.nav_preorder_perdana) {
+
+            Intent intent = new Intent(MainNavigationActivity.this, ActPreorderPerdanaActivity.class);
             startActivity(intent);
             finish();
         } else if (id == R.id.nav_akun) {

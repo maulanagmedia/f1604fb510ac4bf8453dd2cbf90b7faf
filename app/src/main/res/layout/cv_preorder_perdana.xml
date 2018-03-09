@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/default_margin_small"
+    android:layout_margin="@dimen/default_margin_small">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_item"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.9"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_item1"
+                    android:textColor="@color/default_background"
+                    style="@style/titleList"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="2dp"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/default_margin_tiny"
+                    android:layout_marginRight="2dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Banyak"
+                        android:textColor="@color/color_black"
+                        android:textSize="@dimen/subtitle_text_list" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_item2"
+                        android:gravity="center_vertical|right"
+                        android:textSize="@dimen/value_text_list"
+                        android:background="@drawable/bg_item"
+                        android:textColor="@color/color_black"
+                        android:padding="@dimen/default_margin_tiny"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.35"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:padding="@dimen/default_margin_tiny">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Harga"
+                        android:textColor="@color/color_black"
+                        android:textSize="@dimen/subtitle_text_list"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_item3"
+                        android:textSize="@dimen/value_text_list"
+                        android:textColor="@color/color_black"
+                        android:gravity="center_vertical|right"
+                        android:background="@drawable/bg_item"
+                        android:padding="@dimen/default_margin_tiny"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.35"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="2dp"
+                    android:padding="@dimen/default_margin_tiny">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Untuk Tanggal"
+                        android:textColor="@color/color_black"
+                        android:textSize="@dimen/subtitle_text_list" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_item4"
+                        android:textSize="@dimen/value_text_list"
+                        android:background="@drawable/bg_item"
+                        android:textColor="@color/color_black"
+                        android:gravity="center"
+                        android:padding="@dimen/default_margin_tiny"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@mipmap/ic_next_red"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -89,6 +89,7 @@
                     android:buttonTint="@color/color_white"
                     android:text="Remember me"
                     android:id="@+id/cb_remeber_me"
+                    android:checked="true"
                     android:textColor="@color/color_white"/>
             </LinearLayout>
 

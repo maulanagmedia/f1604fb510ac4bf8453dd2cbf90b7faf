@@ -68,7 +68,7 @@ public class SessionManager {
 
 		editor.putString(TAG_EXP, exp);
 
-		editor.putString(TAG_LEVEL, level);
+		editor.putString(TAG_LEVEL, level); // DS atau SF
 
 		editor.putString(TAG_AREA, area);
 

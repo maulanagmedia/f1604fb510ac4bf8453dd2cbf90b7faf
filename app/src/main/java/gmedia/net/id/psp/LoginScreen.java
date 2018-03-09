@@ -93,7 +93,8 @@ public class LoginScreen extends RuntimePermissionsActivity {
                 LoginScreen.this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 LoginScreen.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 LoginScreen.this, android.Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                LoginScreen.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                LoginScreen.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                LoginScreen.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
 
             LoginScreen.super.requestAppPermissions(new
                             String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -103,7 +104,8 @@ public class LoginScreen extends RuntimePermissionsActivity {
                             android.Manifest.permission.READ_EXTERNAL_STORAGE,
                             android.Manifest.permission.CAMERA,
                             android.Manifest.permission.WAKE_LOCK,
-                            Manifest.permission.READ_PHONE_STATE}, R.string
+                            Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.CALL_PHONE}, R.string
                             .runtime_permissions_txt
                     , REQUEST_PERMISSIONS);
         }
@@ -136,6 +138,8 @@ public class LoginScreen extends RuntimePermissionsActivity {
             edtPassword.setText(session.getUserDetails().get(SessionManager.TAG_PASSWORD));
             cbRemeber.setChecked(true);
             login();
+        }else{
+            //cbRemeber.setChecked(false);
         }
 
         cbRemeber.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -459,14 +463,22 @@ public class LoginScreen extends RuntimePermissionsActivity {
                         String nikGa = response.getJSONObject("response").getString("nik_ga");
                         String area = response.getJSONObject("response").getString("kodearea");
                         String flag = response.getJSONObject("response").getString("flag");
-                        session.createLoginSession(nikGa,nik, nama ,edtUsername.getText().toString(),edtPassword.getText().toString(), (cbRemeber.isChecked())? "1": "0","","","",area, flag);
+                        String statusSales = response.getJSONObject("response").getString("status");
+                        session.createLoginSession(nikGa,nik, nama ,edtUsername.getText().toString(),edtPassword.getText().toString(), (cbRemeber.isChecked())? "1": "0","","", statusSales, area, flag);
                         Toast.makeText(LoginScreen.this, message, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginScreen.this, MainNavigationActivity.class);
                         startActivity(intent);
                         finish();
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     }else{
-                        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE)
+                                .setAction("OK", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                })
+                                .show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

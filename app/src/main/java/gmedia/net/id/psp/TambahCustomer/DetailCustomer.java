@@ -716,6 +716,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             jDataCustomer.put("norekening", "");
             jDataCustomer.put("status", "2");
             jDataCustomer.put("contact_person", "");
+            jDataCustomer.put("flag_customer", session.getLevel().equals("DS") ? "2" : "1");
 
             jDataCustomer.put("nik", session.getUserInfo(SessionManager.TAG_UID));
             AreaModel area = (AreaModel) spArea.getSelectedItem();

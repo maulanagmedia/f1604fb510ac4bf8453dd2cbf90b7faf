@@ -210,6 +210,26 @@ public class ItemValidation {
         }
     }
 
+    public boolean isMoreThanCurrentDate(String date1, String date2, String format){
+
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        Date dateToCompare = null;
+        Date dateCompare = null;
+
+        try {
+            dateToCompare = sdf.parse(date1);
+            dateCompare = sdf.parse(date2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if(dateToCompare.after(dateCompare) || dateToCompare.equals(dateCompare)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public String sumDate(String date1, int numberOfDay, String format){
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         Calendar c = Calendar.getInstance();
@@ -504,6 +524,22 @@ public class ItemValidation {
         DecimalFormatSymbols symbols = ((DecimalFormat) format).getDecimalFormatSymbols();
 
         symbols.setCurrencySymbol("Rp ");
+        ((DecimalFormat) format).setDecimalFormatSymbols(symbols);
+        format.setMaximumFractionDigits(0);
+
+        String hasil = String.valueOf(format.format(value));
+
+        return hasil;
+    }
+
+    public String ChangeToRupiahFormat(String number, String symbol){
+
+        double value = parseNullDouble(number);
+
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        DecimalFormatSymbols symbols = ((DecimalFormat) format).getDecimalFormatSymbols();
+
+        symbols.setCurrencySymbol(symbol);
         ((DecimalFormat) format).setDecimalFormatSymbols(symbols);
         format.setMaximumFractionDigits(0);
 

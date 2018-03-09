@@ -52,7 +52,9 @@ public class CustomerPerdana extends AppCompatActivity {
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
-        setTitle("Pilih Outlet Perdana");
+
+        session = new SessionManager(CustomerPerdana.this);
+        setTitle("Pilih Outlet Perdana "+session.getLevel());
 
         initUI();
     }
@@ -63,7 +65,6 @@ public class CustomerPerdana extends AppCompatActivity {
         actvPelanggan = (AutoCompleteTextView) findViewById(R.id.actv_pelanggan);
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
 
-        session = new SessionManager(CustomerPerdana.this);
         getData();
 
     }

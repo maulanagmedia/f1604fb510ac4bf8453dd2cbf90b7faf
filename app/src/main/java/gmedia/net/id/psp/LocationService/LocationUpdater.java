@@ -39,6 +39,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import gmedia.net.id.psp.TambahCustomer.DetailCustomer;
+import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class LocationUpdater extends Service implements LocationListener {
@@ -55,15 +56,15 @@ public class LocationUpdater extends Service implements LocationListener {
     public boolean isGPSEnabled = false;
     boolean isNetworkEnabled = false;
     boolean canGetLocation = false;
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 5 meters
-    private static final long MIN_TIME_BW_UPDATES = 1; // 5 minute
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 1 meters
+    private static final long MIN_TIME_BW_UPDATES = 2; // 2 minute
     private String TAG = "locationUpdater";
     private String address0 = "";
     private SessionManager session;
     private static String nik = "", kdarea = "";
     private ItemValidation iv = new ItemValidation();
     private static Timer timer;
-    private int timerTime = 1000 * 60 * 15; // 15 minute refresh
+    private int timerTime = 1000 * 60 * 10; // 10 minute refresh
     private boolean onUpdate = false;
     private static String imei1 = "", imei2 = "";
     private FusedLocationProviderClient mFusedLocationClient;
@@ -351,7 +352,12 @@ public class LocationUpdater extends Service implements LocationListener {
             Log.d(TAG, "onLocationChanged: " +String.valueOf(latitude)+" , "+ String.valueOf(longitude));
             if(imei1 != null && imei1.length() > 0){ // nik ada
                 if(latitude != 0 && longitude != 0 && !onUpdate){ // lat long tidak kosong
-                    saveLocation();
+
+                    // default SF
+                    if(iv.isMoreThanCurrentDate(iv.getCurrentDate(FormatItem.formatTime), "08:30:00", FormatItem.formatTime)
+                            && iv.isMoreThanCurrentDate( "20:00:00", iv.getCurrentDate(FormatItem.formatTime), FormatItem.formatTime)){
+                        saveLocation();
+                    }
                 }
             }else if(nik == null){
                 //onDestroy();

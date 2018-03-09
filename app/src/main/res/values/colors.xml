@@ -40,4 +40,10 @@
     <color name="color_yellow">#ece81b</color>
     <color name="color_green">#6be143</color>
 
+    <color name="color_orange">#ee0202</color>
+    <color name="color_grey_white">#dfdfdf</color>
+
+    <color name="color_ds_blue">#50b7e9</color>
+    <color name="color_ds_blue_active">#88cef1</color>
+
 </resources>
