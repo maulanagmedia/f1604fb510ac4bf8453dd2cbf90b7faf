@@ -80,7 +80,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
     private LinearLayout llOrderMkios, llPenjualanMkios, llOrderPerdana, llPenjualanPerdana, llDaftarPiutang, llStokSales;
     private TextView tvNamaSales, tvTotalOmset, tvOmsetMkios, tvOmsetPerdana;
     private LinearLayout llAddCustomer, llCheckIn, llKomplain;
-    private LinearLayout ll1, ll2, ll3, ll4, ll5, ll6;
+    private LinearLayout ll1, ll2, ll3, ll4, ll5, ll6, ll7;
     private LinearLayout llOrderTcash;
     private LinearLayout llPenjualan;
     private LinearLayout llRiwayatPenjualan;
@@ -92,6 +92,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
     private LinearLayout llPreorderPerdana;
     private LinearLayout llEvent, llMarketSurvey;
     private LinearLayout llDirectSelling;
+    private LinearLayout llMenuPenjualanReseller, llMenuDirectSelling, llMenuSPV, llMenuOperasional;
 
     public NavHome() {
         // Required empty public constructor
@@ -180,6 +181,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         ll4 = (LinearLayout) layout.findViewById(R.id.ll_4);
         ll5 = (LinearLayout) layout.findViewById(R.id.ll_5);
         ll6 = (LinearLayout) layout.findViewById(R.id.ll_6);
+        ll7 = (LinearLayout) layout.findViewById(R.id.ll_7);
 
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ll1.getLayoutParams();
 
@@ -192,6 +194,12 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         ll4.setLayoutParams(lp);
         ll5.setLayoutParams(lp);
         ll6.setLayoutParams(lp);
+        ll7.setLayoutParams(lp);
+
+        llMenuPenjualanReseller = (LinearLayout) layout.findViewById(R.id.ll_penjualan_reseller);
+        llMenuDirectSelling = (LinearLayout) layout.findViewById(R.id.ll_menu_direct_selling);
+        llMenuSPV = (LinearLayout) layout.findViewById(R.id.ll_menu_spv);
+        llMenuOperasional = (LinearLayout) layout.findViewById(R.id.ll_operasional);
 
         llAddCustomer = (LinearLayout) layout.findViewById(R.id.ll_add_customer);           // 1
         llOrderMkios = (LinearLayout) layout.findViewById(R.id.ll_order_mkios);             // 2
@@ -232,7 +240,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         //getUserOmset();
         getDataAkun();
 
-        if(session.getUserInfo(SessionManager.TAG_LEVEL).equals("DS")){
+        /*if(session.getUserInfo(SessionManager.TAG_LEVEL).equals("DS")){
 
             llEvent.setVisibility(View.VISIBLE);
             llMarketSurvey.setVisibility(View.VISIBLE);
@@ -241,6 +249,28 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             llEvent.setVisibility(View.GONE);
             llMarketSurvey.setVisibility(View.GONE);
             ll5.setVisibility(View.GONE);
+        }*/
+
+        // Pembagian layout
+        if(!session.getJabatan().equals("TSA")){ // AOC, SF, SPV
+
+            llMenuPenjualanReseller.setVisibility(View.VISIBLE);
+        }else{
+            llMenuPenjualanReseller.setVisibility(View.GONE);
+        }
+
+        if(session.getJabatan().equals("TSA") || session.getJabatan().equals("AOC") || session.getJabatan().equals("SPVDS") || session.getJabatan().equals("BM")){ // DS
+
+            llMenuDirectSelling.setVisibility(View.VISIBLE);
+        }else{
+            llMenuDirectSelling.setVisibility(View.GONE);
+        }
+
+        if(session.getJabatan().equals("SPVDS") || session.getJabatan().equals("SPVSF") || session.getJabatan().equals("BM")){
+
+            llMenuSPV.setVisibility(View.VISIBLE);
+        }else{
+            llMenuSPV.setVisibility(View.GONE);
         }
     }
 

@@ -126,7 +126,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
     boolean canGetLocation = false;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
     private static final long MIN_TIME_BW_UPDATES = 1; // 1 minute
-    private TextView tvTitle;
+    private TextView tvTitle, tvTitle1;
     private String TAG = "DetailCustomer";
     private String address0 = "";
     private Button btnResetPosition;
@@ -190,6 +190,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         tvTitle = (TextView) findViewById(R.id.tv_title);
+        tvTitle1 = (TextView) findViewById(R.id.tv_title1);
         btnResetPosition = (Button) findViewById(R.id.btn_reset);
 
         edtNama = (EditText) findViewById(R.id.edt_nama);
@@ -211,6 +212,15 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
 
         session = new SessionManager(DetailCustomer.this);
+
+        if(session.getJabatan().equals("TSA") || session.getJabatan().equals("AOC") || session.getJabatan().equals("SPVDS")){
+
+            tvTitle1.setText("Nama Instansi / Sekolah *");
+        }else{
+            tvTitle1.setText("Nama Outlet*");
+        }
+
+
         mvMap = (CustomMapView) findViewById(R.id.mv_map);
         mvMap.onCreate(null);
         mvMap.onResume();
@@ -597,7 +607,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
         if(editMode && iv.parseNullInteger(statusAktif) != 2){
 
-            Toast.makeText(DetailCustomer.this, "Outlet telah dirposes, tidak dapat diubah", Toast.LENGTH_LONG).show();
+            Toast.makeText(DetailCustomer.this, "Customer telah dirposes, tidak dapat diubah", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -708,14 +718,14 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         try {
             jDataCustomer.put("nama", edtNama.getText().toString());
             jDataCustomer.put("alamat", edtAlamat.getText().toString());
-            jDataCustomer.put("kota", "");
+            jDataCustomer.put("kota", edtKota.getText().toString());
             jDataCustomer.put("notelp", edtTelepon.getText().toString());
             jDataCustomer.put("nohp", edtNoHP.getText().toString());
-            jDataCustomer.put("email", "");
-            jDataCustomer.put("bank", "");
-            jDataCustomer.put("norekening", "");
+            jDataCustomer.put("email", edtEmail.getText().toString());
+            jDataCustomer.put("bank", edtBank.getText().toString());
+            jDataCustomer.put("norekening", edtRekening.getText().toString());
             jDataCustomer.put("status", "2");
-            jDataCustomer.put("contact_person", "");
+            jDataCustomer.put("contact_person", edtCP.getText().toString());
             jDataCustomer.put("flag_customer", session.getLevel().equals("DS") ? "2" : "1");
 
             jDataCustomer.put("nik", session.getUserInfo(SessionManager.TAG_UID));

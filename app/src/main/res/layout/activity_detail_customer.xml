@@ -129,6 +129,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Nama Outlet *"
+                    android:id="@+id/tv_title1"
                     style="@style/formControlLabel3"/>
 
                 <EditText
@@ -161,7 +162,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
@@ -221,7 +221,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
@@ -242,7 +241,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
@@ -262,7 +260,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
@@ -282,7 +279,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
@@ -302,7 +298,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView

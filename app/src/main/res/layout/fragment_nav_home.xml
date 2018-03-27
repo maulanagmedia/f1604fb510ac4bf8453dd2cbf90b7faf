@@ -61,111 +61,699 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/menu_height"
-                        android:id="@+id/ll_1"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/default_margin_small"
-                        android:layout_marginBottom="@dimen/default_margin_small"
-                        android:weightSum="3">
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ll_penjualan_reseller"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Penjualan ke Reseller"
+                            android:textAllCaps="true"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_black"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginRight="@dimen/default_margin_small"
+                            android:layout_marginLeft="@dimen/default_margin_small"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/default_line"
+                            android:layout_marginTop="@dimen/default_margin_tiny"
+                            android:layout_marginRight="@dimen/default_margin_small"
+                            android:layout_marginLeft="@dimen/default_margin_small"
+                            android:background="@color/color_black"/>
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_add_customer"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/menu_height"
+                            android:id="@+id/ll_1"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginBottom="@dimen/default_margin_small"
+                            android:weightSum="3">
 
-                            <ImageView
-                                android:id="@+id/imageView"
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:scaleType="fitCenter"
-                                android:src="@drawable/ic_add_customer" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_order_mkios"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
                                 android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Tambah Outlet"/>
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_order_mkios"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Order Mkios"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_order_perdana"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_order_perdana"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Order Perdana"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_order_tcash"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_tcash"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Order TCash"/>
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_order_mkios"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/menu_height"
+                            android:id="@+id/ll_2"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginBottom="@dimen/default_margin_small"
+                            android:weightSum="3">
 
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_order_mkios"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_info_deposit"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
                                 android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Order Mkios"/>
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_penjualan_perdana"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Info Deposit"/>
+                            </LinearLayout>
                         </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ll_menu_direct_selling"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Direct Selling"
+                            android:textAllCaps="true"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_black"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginRight="@dimen/default_margin_small"
+                            android:layout_marginLeft="@dimen/default_margin_small"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/default_line"
+                            android:layout_marginTop="@dimen/default_margin_tiny"
+                            android:layout_marginRight="@dimen/default_margin_small"
+                            android:layout_marginLeft="@dimen/default_margin_small"
+                            android:background="@color/color_black"/>
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_order_perdana"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/menu_height"
+                            android:id="@+id/ll_3"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginBottom="@dimen/default_margin_small"
+                            android:weightSum="3">
 
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_order_perdana"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:id="@+id/ll_direct_selling"
+                                android:background="?attr/selectableItemBackground"
                                 android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Order Perdana"/>
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_penjualan_end_user"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Direct Selling"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_event"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_penjualan_mkios"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Event"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_market_survey"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_penjualan_perdana"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Market Survey"/>
+                            </LinearLayout>
+
                         </LinearLayout>
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ll_menu_spv"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Menu Supervisor"
+                            android:textAllCaps="true"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_black"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginRight="@dimen/default_margin_small"
+                            android:layout_marginLeft="@dimen/default_margin_small"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/default_line"
+                            android:layout_marginTop="@dimen/default_margin_tiny"
+                            android:layout_marginRight="@dimen/default_margin_small"
+                            android:layout_marginLeft="@dimen/default_margin_small"
+                            android:background="@color/color_black"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/menu_height"
+                            android:id="@+id/ll_4"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginBottom="@dimen/default_margin_small"
+                            android:weightSum="3">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_verifikasi_outlet"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_verif_outlet"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Verifikasi Outlet"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_maps_kunjungan"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_map_kunjungan"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Outlet Location"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ll_operasional"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Menu Operasional"
+                            android:textAllCaps="true"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_black"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginRight="@dimen/default_margin_small"
+                            android:layout_marginLeft="@dimen/default_margin_small"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/default_line"
+                            android:layout_marginTop="@dimen/default_margin_tiny"
+                            android:layout_marginRight="@dimen/default_margin_small"
+                            android:layout_marginLeft="@dimen/default_margin_small"
+                            android:background="@color/color_black"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/menu_height"
+                            android:id="@+id/ll_5"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginBottom="@dimen/default_margin_small"
+                            android:weightSum="3">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_add_customer"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:id="@+id/imageView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/ic_add_customer" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Tambah Customer"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_penjualan"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_penjualan_mkios"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Penjualan Hari Ini"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_riwayat_penjualan"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_history"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Riwayat Penjualan"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/menu_height"
+                            android:id="@+id/ll_6"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginBottom="@dimen/default_margin_small"
+                            android:weightSum="3">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_daftar_piutang"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_daftar_piutang"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Daftar Piutang"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_stok_sales"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_stock__sales"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Stok Perdana"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_complaint"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_komplain"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Komplain"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/menu_height"
+                            android:id="@+id/ll_7"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginBottom="@dimen/default_margin_small"
+                            android:weightSum="3">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_checkin"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_chekin"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Kunjungan"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_preorder_perdana"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_preorder_perdana_merah"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Preorder Perdana"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="@dimen/menu_height"
-                        android:id="@+id/ll_2"
                         android:orientation="horizontal"
+                        android:visibility="gone"
                         android:layout_marginTop="@dimen/default_margin_small"
                         android:layout_marginBottom="@dimen/default_margin_small"
                         android:weightSum="3">
@@ -231,485 +819,7 @@
                                 android:textColor="@color/color_black"
                                 android:text="Penjualan Perdana"/>
                         </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_order_tcash"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_tcash"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
-                                android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Order TCash"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_penjualan"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_penjualan_mkios"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
-                                android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Penjualan Hari Ini"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_riwayat_penjualan"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_history"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
-                                android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Riwayat Penjualan"/>
-                        </LinearLayout>
-
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/menu_height"
-                        android:id="@+id/ll_3"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/default_margin_small"
-                        android:layout_marginBottom="@dimen/default_margin_small"
-                        android:weightSum="3">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_daftar_piutang"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_daftar_piutang"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
-                                android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Daftar Piutang"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_stok_sales"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_stock__sales"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
-                                android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Stok Sales"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_complaint"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_komplain"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
-                                android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Komplain"/>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/menu_height"
-                        android:id="@+id/ll_4"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/default_margin_small"
-                        android:layout_marginBottom="@dimen/default_margin_small"
-                        android:weightSum="3">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_verifikasi_outlet"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_verif_outlet"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
-                                android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Verifikasi Outlet"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_checkin"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_chekin"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
-                                android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Kunjungan"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_info_deposit"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_penjualan_perdana"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
-                                android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Info Deposit"/>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/menu_height"
-                        android:id="@+id/ll_6"
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:layout_marginTop="@dimen/default_margin_small"
-                        android:layout_marginBottom="@dimen/default_margin_small"
-                        android:weightSum="3">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_preorder_perdana"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_preorder_perdana_merah"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
-                                android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Preorder Perdana"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_event"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_penjualan_mkios"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
-                                android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Event"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_maps_kunjungan"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_map_kunjungan"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
-                                android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Outlet Location"/>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/menu_height"
-                        android:id="@+id/ll_5"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/default_margin_small"
-                        android:layout_marginBottom="@dimen/default_margin_small"
-                        android:weightSum="3">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:id="@+id/ll_direct_selling"
-                            android:background="?attr/selectableItemBackground"
-                            android:gravity="center"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_penjualan_end_user"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
-                                android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Direct Selling"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:id="@+id/ll_market_survey"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.8"
-                                android:padding="@dimen/default_margin_small"
-                                android:src="@drawable/ic_penjualan_perdana"
-                                android:scaleType="fitCenter"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.2"
-                                android:gravity="center"
-                                android:textSize="@dimen/font_menu"
-                                android:textColor="@color/color_black"
-                                android:text="Market Survey"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:visibility="gone"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:paddingRight="@dimen/default_margin_small"
-                            android:paddingLeft="@dimen/default_margin_small"
-                            android:gravity="center"
-                            android:weightSum="1">
-                        </LinearLayout>
-                    </LinearLayout>
-
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>

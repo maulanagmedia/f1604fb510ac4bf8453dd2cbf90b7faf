@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -104,6 +105,8 @@ public class HeaderSliderAdapter extends PagerAdapter {
 
     class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
+        private File f;
+
         /**
          * Before starting background thread
          * Show Progress Bar Dialog
@@ -128,7 +131,7 @@ public class HeaderSliderAdapter extends PagerAdapter {
                 int lenghtOfFile = conection.getContentLength();
 
                 // download the file
-                File f = new File(Environment.getExternalStorageDirectory() + File.separator + "semaranggreatsale.jpg");
+                f = new File(Environment.getExternalStorageDirectory() + File.separator + "downloadedfile.jpg");
                 InputStream input = new BufferedInputStream(url.openStream(), 8192);
 
                 // Output stream
@@ -181,13 +184,15 @@ public class HeaderSliderAdapter extends PagerAdapter {
 
             // Displaying downloaded image into image view
             // Reading image path from sdcard
-            String imagePath = "file://" + Environment.getExternalStorageDirectory().toString() + "/downloadedfile.jpg";
-            // setting downloaded into image view
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse(imagePath), "image/*");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            context.startActivity(intent);
+            if(f != null){
+                String imagePath = String.valueOf(FileProvider.getUriForFile(context, context.getPackageName() + ".provider", f));
+                // setting downloaded into image view
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(imagePath), "image/*");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                context.startActivity(intent);
+            }
         }
         private void showDialog(){
             progressDialog = new ProgressDialog(context);

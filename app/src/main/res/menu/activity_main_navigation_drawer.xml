@@ -9,18 +9,21 @@
         <item
             android:id="@+id/nav_add_customer"
             android:icon="@drawable/ic_add_customer_putih"
-            android:title="Tambah Outlet" />
+            android:title="Tambah Customer" />
         <item
             android:id="@+id/nav_order_mkios"
             android:icon="@drawable/nav_order_mkios"
+            android:visible="false"
             android:title="Order Mkios" />
         <item
             android:id="@+id/nav_order_perdana"
             android:icon="@drawable/nav_order_perdana"
+            android:visible="false"
             android:title="Order Perdana" />
         <item
             android:id="@+id/nav_order_tcash"
             android:icon="@drawable/ic_tcash_putih"
+            android:visible="false"
             android:title="Order TCash" />
         <item
             android:id="@+id/nav_penjualan_mkios"
@@ -47,7 +50,7 @@
         <item
             android:id="@+id/nav_stok_sales"
             android:icon="@drawable/nav_stock_sales"
-            android:title="Stok Sales" />
+            android:title="Stok Perdana" />
         <item
             android:id="@+id/nav_complain"
             android:icon="@drawable/ic_komplain_putih"
@@ -55,11 +58,12 @@
         <item
             android:id="@+id/nav_verifikasi_outlet"
             android:icon="@drawable/ic_verif_outlet_putih"
+            android:visible="false"
             android:title="Verifikasi Outlet" />
         <item
             android:id="@+id/nav_checkin"
             android:icon="@drawable/ic_chekin_putih"
-            android:title="Kunjungan / Check-in" />
+            android:title="Kunjungan" />
         <item
             android:id="@+id/nav_map_kunjungan"
             android:icon="@mipmap/ic_map_kunjungan_putih"
@@ -68,7 +72,8 @@
         <item
             android:id="@+id/nav_info_deposit"
             android:icon="@drawable/nav_order_perdana"
-            android:title="Info Deposit" />
+            android:title="Info Deposit"
+            android:visible="false"/>
         <item
             android:id="@+id/nav_preorder_perdana"
             android:icon="@mipmap/ic_preorder_perdana"
