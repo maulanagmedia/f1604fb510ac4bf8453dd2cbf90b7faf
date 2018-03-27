@@ -104,7 +104,15 @@ public class ActEvent extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("nomor"), jo.getString("jenis_event"), jo.getString("tgl"), jo.getString("sampaitgl"), jo.getString("lat"), jo.getString("lang"), jo.getString("label"), jo.getString("radius")));
+                            masterList.add(new CustomItem(jo.getString("nomor"),    // 1
+                                    jo.getString("jenis_event"),                    // 2
+                                    jo.getString("tgl"),                            // 3
+                                    jo.getString("sampaitgl"),                      // 4
+                                    jo.getString("lat"),                            // 5
+                                    jo.getString("lang"),                           // 6
+                                    jo.getString("label"),                          // 7
+                                    jo.getString("radius"),                         // 8
+                                    jo.getString("flag_radius")));                  // 9
                         }
                     }
 
@@ -201,6 +209,10 @@ public class ActEvent extends AppCompatActivity {
                     Intent intent = new Intent(context, DetailEvent.class);
                     intent.putExtra("nomor", selectedItem.getItem1());
                     intent.putExtra("lokasi", selectedItem.getItem7());
+                    intent.putExtra("lat", selectedItem.getItem5());
+                    intent.putExtra("long", selectedItem.getItem6());
+                    intent.putExtra("radius", selectedItem.getItem8());
+                    intent.putExtra("flag_radius", selectedItem.getItem9());
                     startActivity(intent);
                 }
             });

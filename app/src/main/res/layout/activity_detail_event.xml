@@ -20,6 +20,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/ll_nomor"
+                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
@@ -40,6 +42,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/ll_lokasi"
+                android:visibility="gone"
                 style="@style/formGroup">
 
                 <TextView
@@ -74,7 +78,9 @@
                     android:id="@+id/actv_nama"
                     android:hint="Outlet terdaftar atau nama baru"
                     style="@style/formControlInput"
-                    android:gravity="left"/>
+                    android:gravity="left"
+                    android:inputType="textPersonName"
+                    android:imeOptions="actionNext"/>
 
             </LinearLayout>
 
@@ -94,7 +100,9 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/edt_alamat"
                     style="@style/formControlInput"
-                    android:gravity="left"/>
+                    android:gravity="left"
+                    android:inputType="textPersonName"
+                    android:imeOptions="actionDone"/>
 
             </LinearLayout>
 
@@ -148,7 +156,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="18sp"
                         android:gravity="center_vertical"
-                        android:text=" Beli Pulsa "
+                        android:text=" Pulsa / Bulk / TCash"
                         android:textStyle=""
                         android:textAllCaps="true"
                         android:paddingLeft="@dimen/default_margin_tiny"

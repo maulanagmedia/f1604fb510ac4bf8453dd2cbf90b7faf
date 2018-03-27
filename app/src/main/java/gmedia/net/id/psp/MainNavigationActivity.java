@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -94,7 +95,9 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                 MainNavigationActivity.this, Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.WRITE_APN_SETTINGS) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                MainNavigationActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                MainNavigationActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                MainNavigationActivity.this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                MainNavigationActivity.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
 
             MainNavigationActivity.super.requestAppPermissions(new
                             String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -106,7 +109,9 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                             Manifest.permission.WAKE_LOCK,
                             Manifest.permission.WRITE_APN_SETTINGS,
                             Manifest.permission.READ_PHONE_STATE,
-                            Manifest.permission.CALL_PHONE}, R.string
+                            Manifest.permission.CALL_PHONE,
+                            Manifest.permission.RECEIVE_SMS,
+                            Manifest.permission.READ_SMS}, R.string
                             .runtime_permissions_txt
                     , REQUEST_PERMISSIONS);
         }
@@ -159,6 +164,22 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                 callFragment(context, fragment);
 
             }
+        }
+
+        //requestSmsPermission();
+    }
+
+    private void requestSmsPermission() {
+        String permission1 = Manifest.permission.RECEIVE_SMS;
+        String permission2 = Manifest.permission.READ_SMS;
+        //String permission3 = Manifest.permission.SMS;
+        int grant1 = ContextCompat.checkSelfPermission(this, permission1);
+        int grant2 = ContextCompat.checkSelfPermission(this, permission2);
+        if ( grant1 != PackageManager.PERMISSION_GRANTED || grant2 != PackageManager.PERMISSION_GRANTED) {
+            String[] permission_list = new String[1];
+            permission_list[0] = permission1;
+            permission_list[0] = permission2;
+            ActivityCompat.requestPermissions(this, permission_list, 1);
         }
     }
 
@@ -345,6 +366,10 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
     public void onPermissionsGranted(int requestCode) {
 
         statusCheck();
+
+        if (requestCode == 1) {
+
+        }
     }
 
     @Override

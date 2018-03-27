@@ -229,6 +229,7 @@ public class PenjualanHariIni extends AppCompatActivity {
             List<CustomItem> gaList = new ArrayList<>();
             List<CustomItem> tcashTrList = new ArrayList<>();
             List<CustomItem> tcashList = new ArrayList<>();
+            List<CustomItem> dsList = new ArrayList<>();
 
             // Get MKIOS & GA
             for(CustomItem itemApPosition:tableList){
@@ -245,6 +246,8 @@ public class PenjualanHariIni extends AppCompatActivity {
                         tcashList.add(itemApPosition);
                     }else if(itemApPosition.getItem5().toUpperCase().equals("TCASH_TR")){
                         tcashTrList.add(itemApPosition);
+                    }else if(itemApPosition.getItem5().toUpperCase().equals("DS")){
+                        dsList.add(itemApPosition);
                     }
                 }else if(itemApPosition.getItem1().toUpperCase().equals("F")){
 
@@ -258,6 +261,8 @@ public class PenjualanHariIni extends AppCompatActivity {
                         tcashList.add(itemApPosition);
                     }else if(itemApPosition.getItem3().toUpperCase().equals("TCASH_TR")){
                         tcashTrList.add(itemApPosition);
+                    }else if(itemApPosition.getItem3().toUpperCase().equals("DS")){
+                        dsList.add(itemApPosition);
                     }
                 }
 
@@ -271,6 +276,11 @@ public class PenjualanHariIni extends AppCompatActivity {
             if(tcashTrList.size() > 0){
                 bufferList.add(new CustomItem("H", "Transaksi TCash"));
                 bufferList.addAll(tcashTrList);
+            }
+
+            if(dsList.size() > 0){
+                bufferList.add(new CustomItem("H", "Direct Selling"));
+                bufferList.addAll(dsList);
             }
 
             if(mkiosList.size() > 0){

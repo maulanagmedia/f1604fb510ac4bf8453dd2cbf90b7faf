@@ -48,7 +48,7 @@ public class MapsOutletActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_outlet);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Peta Outlet");
+        setTitle("Peta Outlet / Event");
 
         initUI();
     }

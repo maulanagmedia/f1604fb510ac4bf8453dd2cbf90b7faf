@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="gmedia.net.id.psp.NavInjectPulsa.DetailInjectPulsa"
+    tools:context="gmedia.net.id.psp.OrderDirectSelling.DetailInjectPulsa"
     android:padding="@dimen/default_margin_small">
 
     <ScrollView
@@ -47,7 +47,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nomor *"
+                    android:text="Nomor HP *"
                     style="@style/formControlLabel"/>
 
                 <EditText
@@ -67,28 +67,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nama"
-                    style="@style/formControlLabel"/>
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/edt_nama"
-                    style="@style/formControlInput"
-                    android:inputType="phone"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/formGroup">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_margin_small"
-                    android:text="Nominal Pulsa *"
+                    android:text="Nominal Pulsa / barang *"
                     style="@style/formControlLabel"/>
 
                 <LinearLayout
@@ -97,174 +77,35 @@
                     android:orientation="horizontal"
                     android:weightSum="1">
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="0.25"
+                    <com.maulana.custommodul.CustomView.NestedListView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/inject_pulsa_height"
-                            android:background="@drawable/bg_input_left">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="5S"
-                                android:textStyle="bold"
-                                android:layout_centerInParent="true"
-                                android:textColor="@color/color_white"/>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/default_margin"></RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/inject_pulsa_height"
-                            android:background="@drawable/bg_input_left">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="10S"
-                                android:textStyle="bold"
-                                android:layout_centerInParent="true"
-                                android:textColor="@color/color_white"/>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/default_margin"></RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/inject_pulsa_height"
-                            android:background="@drawable/bg_input_left">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="20S"
-                                android:textStyle="bold"
-                                android:layout_centerInParent="true"
-                                android:textColor="@color/color_white"/>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/default_margin"></RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/inject_pulsa_height"
-                            android:background="@drawable/bg_input_left">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="25S"
-                                android:textStyle="bold"
-                                android:layout_centerInParent="true"
-                                android:textColor="@color/color_white"/>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/default_margin"></RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/inject_pulsa_height"
-                            android:background="@drawable/bg_input_left">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="50S"
-                                android:textStyle="bold"
-                                android:layout_centerInParent="true"
-                                android:textColor="@color/color_white"/>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/default_margin"></RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/inject_pulsa_height"
-                            android:background="@drawable/bg_input_left">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="100S"
-                                android:textStyle="bold"
-                                android:layout_centerInParent="true"
-                                android:textColor="@color/color_white"/>
-                        </RelativeLayout>
-
-                    </LinearLayout>
-
-                    <RadioGroup
-                        android:layout_width="0dp"
-                        android:layout_weight="0.75"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/rg_nominal"
-                        android:orientation="vertical">
-
-                        <RadioButton
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/inject_pulsa_height"
-                            android:background="@drawable/bg_input_right"
-                            android:id="@+id/rb_5s"
-                            android:text="5.000"/>
-
-                        <RadioButton
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/inject_pulsa_height"
-                            android:background="@drawable/bg_input_right"
-                            android:layout_marginTop="@dimen/default_margin"
-                            android:id="@+id/rb_10s"
-                            android:text="10.000"/>
-
-                        <RadioButton
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/inject_pulsa_height"
-                            android:background="@drawable/bg_input_right"
-                            android:layout_marginTop="@dimen/default_margin"
-                            android:id="@+id/rb_20s"
-                            android:text="20.000"/>
-
-                        <RadioButton
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/inject_pulsa_height"
-                            android:background="@drawable/bg_input_right"
-                            android:layout_marginTop="@dimen/default_margin"
-                            android:id="@+id/rb_25s"
-                            android:text="25.000"/>
-
-                        <RadioButton
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/inject_pulsa_height"
-                            android:background="@drawable/bg_input_right"
-                            android:layout_marginTop="@dimen/default_margin"
-                            android:id="@+id/rb_50s"
-                            android:text="50.000"/>
-
-                        <RadioButton
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/inject_pulsa_height"
-                            android:background="@drawable/bg_input_right"
-                            android:layout_marginTop="@dimen/default_margin"
-                            android:id="@+id/rb_100s"
-                            android:text="100.000"/>
-                    </RadioGroup>
-
+                        android:nestedScrollingEnabled="true"
+                        android:id="@+id/lv_barang"></com.maulana.custommodul.CustomView.NestedListView>
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup"
+                android:visibility="gone"
+                android:id="@+id/ll_nominal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nominal *"
+                    style="@style/formControlLabel"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edt_nominal"
+                    style="@style/formControlInput"
+                    android:inputType="numberSigned"
+                    android:imeOptions="actionNext"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -306,6 +147,81 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/ll_jarak"
+                style="@style/formGroup">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_weight="0.9"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edt_jarak"
+                        android:background="@null"
+                        android:inputType="none"
+                        android:editable="false"
+                        android:text="Menunggu proses perhitungan jarak..."/>
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.1"
+                        android:background="?attr/selectableItemBackground"
+                        android:layout_marginLeft="@dimen/default_margin_tiny"
+                        android:layout_marginRight="@dimen/default_margin_tiny"
+                        android:scaleType="centerInside"
+                        android:id="@+id/iv_refresh_position"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/ic_sync"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ll_permission"
+                style="@style/formGroup">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_weight="0.8"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edt_app"
+                        android:background="@null"
+                        android:inputType="none"
+                        android:editable="false"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_grey_4"
+                        android:text="Pastikan ijin untuk menerima sms telah diaktifkan, jika anda tidak yakin silahkan tekan buka info app dan pilih permission."/>
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_weight="0.2"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:background="@drawable/bg_button"
+                        android:textColor="@color/color_white"
+                        android:textSize="11sp"
+                        android:id="@+id/btn_app_info"
+                        android:text="Buka Info App"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin"
                 style="@style/formGroup">
 
@@ -318,13 +234,28 @@
 
                     <Button
                         android:layout_width="0dp"
-                        android:layout_weight="0.6"
+                        android:layout_weight="0.4"
+                        android:layout_height="wrap_content"
+                        android:text="Peta Event"
+                        android:id="@+id/btn_maps_event"
+                        android:textColor="@color/color_white"
+                        android:layout_marginTop="@dimen/default_margin_tiny"
+                        android:layout_marginBottom="@dimen/default_margin_small"
+                        android:background="@drawable/btn_form"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.1"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"></LinearLayout>
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
                         android:layout_height="wrap_content"
                         android:text=" Inject Pulsa "
                         android:id="@+id/btn_proses"
                         android:textColor="@color/color_white"
-                        android:paddingRight="@dimen/default_margin_small"
-                        android:paddingLeft="@dimen/default_margin_small"
                         android:layout_marginTop="@dimen/default_margin_tiny"
                         android:layout_marginBottom="@dimen/default_margin_small"
                         android:background="@drawable/btn_login"/>

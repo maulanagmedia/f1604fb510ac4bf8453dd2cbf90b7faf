@@ -35,10 +35,10 @@ import gmedia.net.id.psp.DaftarPiutang.PiutangPerOutlet;
 import gmedia.net.id.psp.InfoDeposit.ActDeposit;
 import gmedia.net.id.psp.NavCheckin.ActKunjungan;
 import gmedia.net.id.psp.NavEvent.ActEvent;
+import gmedia.net.id.psp.NavEvent.DetailEvent;
 import gmedia.net.id.psp.NavHome.Adapter.HeaderSliderAdapter;
-import gmedia.net.id.psp.NavInjectPulsa.ActInjectPulsa;
 import gmedia.net.id.psp.NavKomplain.ActKomplain;
-import gmedia.net.id.psp.NavMapsKunjungan.MapsKunjunganActivity;
+import gmedia.net.id.psp.NavMarketSurvey.ActMarketSurvey;
 import gmedia.net.id.psp.NavPOL.ListOutletLocation;
 import gmedia.net.id.psp.NavPreorderPerdana.ActPreorderPerdanaActivity;
 import gmedia.net.id.psp.NavTambahCustomer.ActTambahOutlet;
@@ -91,6 +91,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
     private LinearLayout llMapsKunjungan;
     private LinearLayout llPreorderPerdana;
     private LinearLayout llEvent, llMarketSurvey;
+    private LinearLayout llDirectSelling;
 
     public NavHome() {
         // Required empty public constructor
@@ -207,6 +208,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         llEvent = (LinearLayout) layout.findViewById(R.id.ll_event);                    // 13
         llMarketSurvey = (LinearLayout) layout.findViewById(R.id.ll_market_survey);     // 13
         llPreorderPerdana = (LinearLayout) layout.findViewById(R.id.ll_preorder_perdana);   // 13
+        llDirectSelling = (LinearLayout) layout.findViewById(R.id.ll_direct_selling);
 
         llPenjualanMkios = (LinearLayout) layout.findViewById(R.id.ll_penjualan_mkios);
         llPenjualanPerdana = (LinearLayout) layout.findViewById(R.id.ll_penjualan_perdana);
@@ -397,6 +399,25 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ActEvent.class);
+                context.startActivity(intent);
+                ((Activity)context).finish();
+            }
+        });
+
+        llMarketSurvey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ActMarketSurvey.class);
+                context.startActivity(intent);
+                ((Activity)context).finish();
+            }
+        });
+
+        llDirectSelling.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(context, DetailEvent.class);
                 context.startActivity(intent);
                 ((Activity)context).finish();
             }

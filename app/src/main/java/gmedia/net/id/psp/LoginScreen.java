@@ -94,7 +94,9 @@ public class LoginScreen extends RuntimePermissionsActivity {
                 LoginScreen.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 LoginScreen.this, android.Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 LoginScreen.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                LoginScreen.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                LoginScreen.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                LoginScreen.this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                LoginScreen.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
 
             LoginScreen.super.requestAppPermissions(new
                             String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -105,7 +107,9 @@ public class LoginScreen extends RuntimePermissionsActivity {
                             android.Manifest.permission.CAMERA,
                             android.Manifest.permission.WAKE_LOCK,
                             Manifest.permission.READ_PHONE_STATE,
-                            Manifest.permission.CALL_PHONE}, R.string
+                            Manifest.permission.CALL_PHONE,
+                            Manifest.permission.RECEIVE_SMS,
+                            Manifest.permission.READ_SMS}, R.string
                             .runtime_permissions_txt
                     , REQUEST_PERMISSIONS);
         }
@@ -464,7 +468,8 @@ public class LoginScreen extends RuntimePermissionsActivity {
                         String area = response.getJSONObject("response").getString("kodearea");
                         String flag = response.getJSONObject("response").getString("flag");
                         String statusSales = response.getJSONObject("response").getString("status");
-                        session.createLoginSession(nikGa,nik, nama ,edtUsername.getText().toString(),edtPassword.getText().toString(), (cbRemeber.isChecked())? "1": "0","","", statusSales, area, flag);
+                        String jabatan = response.getJSONObject("response").getString("status_bagian");
+                        session.createLoginSession(nikGa,nik, nama ,edtUsername.getText().toString(),edtPassword.getText().toString(), (cbRemeber.isChecked())? "1": "0", jabatan,"", statusSales, area, flag);
                         Toast.makeText(LoginScreen.this, message, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginScreen.this, MainNavigationActivity.class);
                         startActivity(intent);

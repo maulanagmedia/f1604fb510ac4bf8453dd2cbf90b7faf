@@ -666,6 +666,7 @@ public class ItemValidation {
     }
 
     public Double parseNullDouble(String s){
+
         double result = 0;
         if(s != null && s.length() > 0){
             try {

@@ -6,5 +6,5 @@
     android:canRetrieveWindowContent="true"
     android:description="@string/accessibility_description"
     android:notificationTimeout="100"
-    android:packageNames="com.cootf.sims"
-    android:settingsActivity="com.example.android.accessibility.ServiceSettingsActivity" />
+    android:packageNames="gmedia.net.id.psp"
+    android:settingsActivity="gmedia.net.id.psp.OrderDirectSelling.Service.USSDService" />

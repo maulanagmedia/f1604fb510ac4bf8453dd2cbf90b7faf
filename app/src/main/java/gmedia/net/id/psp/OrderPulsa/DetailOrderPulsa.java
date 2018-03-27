@@ -313,6 +313,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                                     @Override
                                     public void onSuccess(Location clocation) {
 
+                                        mRequestingLocationUpdates = true;
                                         if (clocation != null) {
 
                                             onLocationChanged(clocation);

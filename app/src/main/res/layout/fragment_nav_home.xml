@@ -630,6 +630,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/menu_height"
                         android:id="@+id/ll_5"
+                        android:gravity="center"
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/default_margin_small"
                         android:layout_marginBottom="@dimen/default_margin_small"
@@ -642,8 +643,27 @@
                             android:orientation="vertical"
                             android:paddingRight="@dimen/default_margin_small"
                             android:paddingLeft="@dimen/default_margin_small"
+                            android:id="@+id/ll_direct_selling"
+                            android:background="?attr/selectableItemBackground"
                             android:gravity="center"
                             android:weightSum="1">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.8"
+                                android:padding="@dimen/default_margin_small"
+                                android:src="@drawable/ic_penjualan_end_user"
+                                android:scaleType="fitCenter"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.2"
+                                android:gravity="center"
+                                android:textSize="@dimen/font_menu"
+                                android:textColor="@color/color_black"
+                                android:text="Direct Selling"/>
 
                         </LinearLayout>
 
@@ -680,6 +700,7 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_weight="1"
+                            android:visibility="gone"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
                             android:paddingRight="@dimen/default_margin_small"
@@ -695,7 +716,8 @@
 
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="visible">
 
             <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"

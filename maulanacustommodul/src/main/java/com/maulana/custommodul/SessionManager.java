@@ -31,7 +31,7 @@ public class SessionManager {
 	public static final String TAG_NAMA = "nama";
 	public static final String TAG_USERNAME = "username";
 	public static final String TAG_PASSWORD = "password";
-	public static final String TAG_TOKEN = "token";
+	public static final String TAG_JAB = "jabatan";
 	public static final String TAG_EXP = "expired_at";
 	public static final String TAG_LEVEL = "level";
 	public static final String TAG_SAVED = "saved";
@@ -48,7 +48,7 @@ public class SessionManager {
 	/**
 	 * Create login session
 	 * */
-	public void createLoginSession(String uid, String nik, String nama, String username, String password, String saved, String token, String exp, String level, String area, String flag){
+	public void createLoginSession(String uid, String nik, String nama, String username, String password, String saved, String jabatan, String exp, String level, String area, String flag){
 
 		editor.putBoolean(IS_LOGIN, true);
 		
@@ -64,7 +64,7 @@ public class SessionManager {
 
 		editor.putString(TAG_SAVED, saved); // value is 0 or 1
 
-		editor.putString(TAG_TOKEN, token);
+		editor.putString(TAG_JAB, jabatan);
 
 		editor.putString(TAG_EXP, exp);
 
@@ -104,7 +104,7 @@ public class SessionManager {
 
 		user.put(TAG_SAVED, pref.getString(TAG_SAVED, ""));
 
-		user.put(TAG_TOKEN, pref.getString(TAG_TOKEN, ""));
+		user.put(TAG_JAB, pref.getString(TAG_JAB, ""));
 
 		user.put(TAG_EXP, pref.getString(TAG_EXP, ""));
 
@@ -135,6 +135,10 @@ public class SessionManager {
 
 	public String getLevel(){
 		return pref.getString(TAG_LEVEL, "");
+	}
+
+	public String getJabatan(){
+		return pref.getString(TAG_JAB, "");
 	}
 
 	/**

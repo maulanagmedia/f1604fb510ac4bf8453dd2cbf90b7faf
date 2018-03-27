@@ -70,6 +70,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -361,6 +364,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                                     @Override
                                     public void onSuccess(Location clocation) {
 
+                                        mRequestingLocationUpdates = true;
                                         if (clocation != null) {
 
                                             onLocationChanged(clocation);
@@ -1244,11 +1248,16 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             pbLoading.setVisibility(View.GONE);
         }
     }
+    private List<String> list(String... values) {
+        return Collections.unmodifiableList(Arrays.asList(values));
+    }
 
     private void openScanBarcode() {
 
+        Collection<String> ONE_D_CODE_TYPES =
+                list("CODE_128","QR_CODE");
         IntentIntegrator integrator = new IntentIntegrator(DetailOrderPerdana.this);
-        //integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
         integrator.initiateScan();
     }
 

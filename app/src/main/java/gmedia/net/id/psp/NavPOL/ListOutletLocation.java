@@ -247,6 +247,7 @@ public class ListOutletLocation extends AppCompatActivity {
 
         try {
             jBody.put("kodearea", kodeArea);
+            jBody.put("nik", session.getUserInfo(SessionManager.TAG_UID));
             jBody.put("keyword", keyword);
             jBody.put("terverifikasi", isTerverifikasi ? "1": "0");
             jBody.put("flag", session.getLevel());
@@ -306,6 +307,7 @@ public class ListOutletLocation extends AppCompatActivity {
 
         try {
             jBody.put("kodeArea", kodeArea);
+            jBody.put("nik", session.getUserInfo(SessionManager.TAG_UID));
             jBody.put("keyword", keyword);
             jBody.put("terverifikasi", isTerverifikasi ? "1": "0");
             jBody.put("flag", session.getLevel());
