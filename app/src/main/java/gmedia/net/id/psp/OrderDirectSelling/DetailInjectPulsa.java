@@ -622,7 +622,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    showDialog(3, "Terjadi kesalahan saat mengambil data ccid, harap ulangi");
+                    showDialog(3, "Terjadi kesalahan saat mengambil data barang, harap ulangi");
                 }
             }
 
@@ -630,7 +630,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             public void onError(String result) {
 
                 isLoading(false);
-                showDialog(3, "Terjadi kesalahan saat memuat data ccid, harap ulangi");
+                showDialog(3, "Terjadi kesalahan saat memuat data barang, harap ulangi");
             }
         });
 
@@ -1165,6 +1165,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
+                                showDialogLoading();
                                 String format = selectedItemOrder.getItem7().replace("[tujuan]",edtNomor.getText().toString());
                                 format = format.replace("[nominal]", selectedHarga);
                                 format = format.replace("[pin]", selectedItemOrder.getItem6());
@@ -1240,6 +1241,31 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 }
             }
         });
+    }
+
+    private static void showDialogLoading(){
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = (LayoutInflater) ((Activity)context).getSystemService(LAYOUT_INFLATER_SERVICE);
+        View viewDialog = inflater.inflate(R.layout.layout_loading, null);
+        builder.setView(viewDialog);
+        builder.setCancelable(false);
+
+        final TextView tvText1 = (TextView) viewDialog.findViewById(R.id.tv_text1);
+        final Button btnOK = (Button) viewDialog.findViewById(R.id.btn_ok);
+
+        final AlertDialog alert = builder.create();
+        alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view2) {
+
+                if(alert != null) alert.dismiss();
+            }
+        });
+
+        alert.show();
     }
 
     @Override
