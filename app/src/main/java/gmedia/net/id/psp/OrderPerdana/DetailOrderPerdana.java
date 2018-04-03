@@ -1257,7 +1257,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         Collection<String> ONE_D_CODE_TYPES =
                 list("CODE_128","QR_CODE");
         IntentIntegrator integrator = new IntentIntegrator(DetailOrderPerdana.this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+        //integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
         integrator.initiateScan();
     }
 

@@ -593,7 +593,7 @@ public class DetailDSPerdana extends AppCompatActivity implements LocationListen
                 list("CODE_128B","QR_CODE");
 
         IntentIntegrator integrator = new IntentIntegrator(DetailDSPerdana.this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+        //integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
         integrator.initiateScan();
     }
 
