@@ -8,25 +8,38 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Environment;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -52,6 +65,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
+import com.maulana.custommodul.ImageUtils;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.SessionManager;
 
@@ -59,12 +73,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import gmedia.net.id.psp.BuildConfig;
 import gmedia.net.id.psp.R;
+import gmedia.net.id.psp.TambahCustomer.Adapter.PhotosAdapter;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class DetailKunjungan extends AppCompatActivity implements LocationListener {
@@ -116,6 +141,12 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
     private Location mCurrentLocation;
     private RadioGroup rgKondisiOutlet;
     private RadioButton rbBuka, rbTutup;
+    private RecyclerView rvPhoto;
+    private ImageButton ibAddPhoto;
+    private List<Bitmap> photoList;
+    private Bitmap bitmap;
+    private PhotosAdapter adapter;
+    private static int PICK_IMAGE_REQUEST = 1212;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +181,8 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
         rgKondisiOutlet = (RadioGroup) findViewById(R.id.rg_kondisi_outlet);
         rbBuka = (RadioButton) findViewById(R.id.rb_buka);
         rbTutup = (RadioButton) findViewById(R.id.rb_tutup);
+        rvPhoto = (RecyclerView) findViewById(R.id.rv_photo);
+        ibAddPhoto = (ImageButton) findViewById(R.id.ib_add_photo);
 
         llJarak = (LinearLayout) findViewById(R.id.ll_jarak);
         llJarak1 = (LinearLayout) findViewById(R.id.ll_jarak_1);
@@ -159,6 +192,13 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
         session = new SessionManager(DetailKunjungan.this);
         flag = true;
         isLocationRefresh = false;
+
+        //initial data image
+        photoList = new ArrayList<>();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        adapter = new PhotosAdapter(context, photoList);
+        rvPhoto.setLayoutManager(layoutManager);
+        rvPhoto.setAdapter(adapter);
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
@@ -344,7 +384,112 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
                 startLocationUpdates();
             }
 
+        }else if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri filePath = data.getData();
+            /*File file = new File(String.valueOf(filePath));
+            long length = file.length();
+            length = length/1024; //in KB*/
+
+            InputStream imageStream = null, copyStream = null;
+            try {
+                imageStream = getContentResolver().openInputStream(
+                        filePath);
+                copyStream = getContentResolver().openInputStream(
+                        filePath);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            //options.inJustDecodeBounds = false;
+            options.inPreferredConfig = Bitmap.Config.RGB_565;
+            //options.inDither = true;
+
+            // Get bitmap dimensions before reading...
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(copyStream, null, options);
+            int width = options.outWidth;
+            int height = options.outHeight;
+            int largerSide = Math.max(width, height);
+            options.inJustDecodeBounds = false; // This time it's for real!
+            int sampleSize = 1; // Calculate your sampleSize here
+            if(largerSide <= 1000){
+                sampleSize = 1;
+            }else if(largerSide > 1000 && largerSide <= 2000){
+                sampleSize = 2;
+            }else if(largerSide > 2000 && largerSide <= 3000){
+                sampleSize = 3;
+            }else if(largerSide > 3000 && largerSide <= 4000){
+                sampleSize = 4;
+            }else{
+                sampleSize = 6;
+            }
+            options.inSampleSize = sampleSize;
+            //options.inDither = true;
+
+            Bitmap bmp = BitmapFactory.decodeStream(imageStream, null, options);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.PNG, 70, stream);
+            byte[] byteArray = stream.toByteArray();
+            bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            bitmap = scaleDown(bitmap, 380, true);
+
+            try {
+                stream.close();
+                stream = null;
+            } catch (IOException e) {
+
+                e.printStackTrace();
+            }
+
+            if(bitmap != null){
+
+                photoList.add(bitmap);
+                adapter.notifyDataSetChanged();
+            }
+
+        }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+
+            try {
+
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(photoFromCameraURI));
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    bitmap = rotateImage(bitmap, 90);
+                }
+
+                bitmap = scaleDown(bitmap, 380, true);
+
+
+                if(bitmap != null){
+
+                    photoList.add(bitmap);
+                    adapter.notifyDataSetChanged();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
+                                   boolean filter) {
+        float ratio = Math.min(
+                (float) maxImageSize / realImage.getWidth(),
+                (float) maxImageSize / realImage.getHeight());
+        int width = Math.round((float) ratio * realImage.getWidth());
+        int height = Math.round((float) ratio * realImage.getHeight());
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                height, filter);
+        return newBitmap;
+    }
+
+    private Bitmap rotateImage(Bitmap source, float angle){
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
     private void updateAllLocation(){
@@ -418,6 +563,8 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
                             }
                             break;
                         }
+
+                        getPhotos();
                     }
 
                 } catch (JSONException e) {
@@ -434,13 +581,135 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
         });
     }
 
+    private void getPhotos() {
+
+        ApiVolley request = new ApiVolley(context, new JSONObject(), "GET", ServerURL.getDetailKunjunganImg+idKunjungan, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray jsonArray = response.getJSONArray("response");
+
+                        for (int i = 0; i < jsonArray.length(); i++){
+
+                            JSONObject jo = jsonArray.getJSONObject(i);
+                            String image = jo.getString("image");
+                            new AsyncGettingBitmapFromUrl().execute(image);
+                        }
+                    }
+
+                } catch (JSONException e) {
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+
+            }
+        });
+    }
+
+    private class AsyncGettingBitmapFromUrl extends AsyncTask<String, Void, Bitmap> {
+
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+
+            System.out.println("doInBackground");
+
+            Bitmap bitmap1 = null;
+
+            bitmap1 = downloadImage(params[0]);
+            photoList.add(bitmap1);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+            return bitmap1;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+
+            System.out.println("bitmap" + bitmap);
+
+        }
+    }
+
+    public static  Bitmap downloadImage(String url) {
+        Bitmap bitmap = null;
+        InputStream stream = null;
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inSampleSize = 1;
+
+        try {
+            stream = getHttpConnection(url);
+            bitmap = BitmapFactory.decodeStream(stream, null, bmOptions);
+            if(stream != null){
+                stream.close();
+            }
+        }
+        catch (IOException e1) {
+            e1.printStackTrace();
+            System.out.println("downloadImage"+ e1.toString());
+        }
+        return bitmap;
+    }
+
+    public static InputStream getHttpConnection(String urlString)  throws IOException {
+
+        InputStream stream = null;
+        URL url = new URL(urlString);
+        URLConnection connection = url.openConnection();
+
+        try {
+            HttpURLConnection httpConnection = (HttpURLConnection) connection;
+            httpConnection.setRequestMethod("GET");
+            httpConnection.connect();
+
+            if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                stream = httpConnection.getInputStream();
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            System.out.println("downloadImage" + ex.toString());
+        }
+        return stream;
+    }
+
     private void initEvent() {
 
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                validateBeforeSave();
+
+                AlertDialog dialog = new AlertDialog.Builder(context)
+                        .setTitle("Konfirmasi")
+                        .setIcon(R.mipmap.ic_launcher)
+                        .setMessage("Apakah anda yakin ingin menyimpan data?")
+                        .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                validateBeforeSave();
+                            }
+                        })
+                        .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -455,6 +724,103 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
                 }
             }
         });
+
+        ibAddPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                loadChooserDialog();
+            }
+        });
+    }
+
+    private void loadChooserDialog(){
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.layout_chooser, null);
+        builder.setView(view);
+
+        final LinearLayout llBrowse= (LinearLayout) view.findViewById(R.id.ll_browse);
+        final LinearLayout llCamera = (LinearLayout) view.findViewById(R.id.ll_camera);
+
+        final AlertDialog alert = builder.create();
+
+        llBrowse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                showFileChooser();
+                alert.dismiss();
+            }
+        });
+
+        llCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                openCamera();
+                alert.dismiss();
+            }
+        });
+
+        alert.show();
+    }
+
+    //region File Chooser
+
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+
+    }
+
+    private final int REQUEST_IMAGE_CAPTURE = 2;
+    private String photoFromCameraURI;
+
+    private void openCamera(){
+
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            Uri photoURL = null;
+            try {
+                photoURL = FileProvider.getUriForFile(context,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        createImageFile());
+                photoFromCameraURI = photoURL.toString();
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Log.i(TAG, "IOException");
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURL);
+                startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  // prefix
+                ".jpg",         // suffix
+                storageDir      // directory
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        //photoFromCameraURI = "file:" + image.getAbsolutePath();
+        return image;
     }
 
     private void validateBeforeSave() {
@@ -495,7 +861,19 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
             e.printStackTrace();
         }
 
+
         JSONArray jDataImages = new JSONArray();
+
+        for (Bitmap item : photoList){
+
+            JSONObject jo = new JSONObject();
+            try {
+                jo.put("image", ImageUtils.convert(item));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            jDataImages.put(jo);
+        }
 
         String method = "POST";
         JSONObject jBody = new JSONObject();
@@ -504,12 +882,14 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
             jBody.put("data", jDataLocation);
             jBody.put("data_images", jDataImages);
             if(showMode){ // edit kunjungan
+
                 method = "PUT";
                 JSONObject jUpdate = new JSONObject();
                 jUpdate.put("id", idKunjungan);
                 jUpdate.put("kdcus", kdcus);
                 jUpdate.put("nik", nik);
                 jUpdate.put("timestamp", timestampDetail);
+
                 jBody.put("data_update", jUpdate);
             }
         } catch (JSONException e) {

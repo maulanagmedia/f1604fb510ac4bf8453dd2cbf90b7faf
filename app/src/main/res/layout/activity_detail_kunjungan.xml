@@ -114,6 +114,43 @@
 
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:id="@+id/rv_photo"></android.support.v7.widget.RecyclerView>
+
+                <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/ic_add_photo"
+                    android:scaleType="centerInside"
+                    android:id="@+id/ib_add_photo"
+                    android:padding="@dimen/default_margin_small"
+                    android:layout_marginRight="@dimen/default_margin_small"
+                    android:layout_marginBottom="@dimen/default_margin_small"
+                    android:background="@drawable/btn_round"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup"
+                android:layout_marginTop="@dimen/default_margin_small">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Geser gambar untuk melihat gambar lainnya"/>
+
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

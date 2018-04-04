@@ -10,6 +10,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -18,6 +19,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Looper;
 import android.provider.MediaStore;
@@ -219,7 +221,6 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         }else{
             tvTitle1.setText("Nama Outlet*");
         }
-
 
         mvMap = (CustomMapView) findViewById(R.id.mv_map);
         mvMap.onCreate(null);
@@ -468,6 +469,11 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             try {
 
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(photoFromCameraURI));
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    bitmap = rotateImage(bitmap, 90);
+                }
+
                 bitmap = scaleDown(bitmap, 380, true);
 
 
@@ -493,6 +499,12 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
         Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
                 height, filter);
         return newBitmap;
+    }
+
+    private Bitmap rotateImage(Bitmap source, float angle){
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
     private void initEvent() {
