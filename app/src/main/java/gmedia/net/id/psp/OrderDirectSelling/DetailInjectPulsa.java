@@ -137,8 +137,8 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
     private Boolean mRequestingLocationUpdates;
     private Location mCurrentLocation;
     private boolean editMode = false;
-    private static String nomor = "", radius = "", nama = "", alamat = "", kdcus = "", flagRadius = "";
-    private boolean isEvent = false;
+    private static String nomor = "", radius = "", nama = "", alamat = "", kdcus = "", flagRadius = "", latitudePOI = "", longitudePOI = "", poiName = "";
+    private boolean isEvent = false, isPOI = false;
     private Button btnAppInfo;
     private LinearLayout llJarak;
 
@@ -205,7 +205,11 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             nomor = bundle.getString("nomor","");
             kdcus = bundle.getString("kdcus", "");
             nama = bundle.getString("nama", "");
-            alamat= bundle.getString("alamat", "");
+            alamat = bundle.getString("alamat", "");
+            latitudePOI =  bundle.getString("lat_poi", "");
+            longitudePOI =  bundle.getString("long_poi", "");
+            radius = bundle.getString("radius", "");
+            poiName = bundle.getString("poi", "");
 
             if(nomor.length() > 0){
 
@@ -213,14 +217,24 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 isEvent = true;
                 latitudeEvent = bundle.getString("lat", "");
                 longitudeEvent = bundle.getString("long", "");
-                radius = bundle.getString("radius", "");
                 flagRadius = bundle.getString("flag_radius", "");
             }
         }
 
         if(!isEvent){
-            llJarak.setVisibility(View.GONE);
-            btnMapsOutlet.setVisibility(View.GONE);
+
+            if(kdcus.length() == 0){
+                llJarak.setVisibility(View.GONE);
+                btnMapsOutlet.setVisibility(View.GONE);
+                isPOI = false;
+            }else{ //POI
+                llJarak.setVisibility(View.VISIBLE);
+                btnMapsOutlet.setVisibility(View.VISIBLE);
+                isPOI = true;
+            }
+        }else{
+
+            btnMapsOutlet.setText("Peta Event");
         }
 
         getBarang();
@@ -361,12 +375,26 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
     private boolean isOnLocation(Location detectedLocation){
 
+
+        String latLokasi = "", longLokasi = "";
+
+        if(isEvent){
+            latLokasi = latitudeEvent;
+            longLokasi = longitudeEvent;
+        }else if (isPOI){
+            latLokasi = latitudePOI;
+            longLokasi = longitudePOI;
+        }else{
+            latLokasi = latitudeEvent;
+            longLokasi = longitudeEvent;
+        }
+
         boolean hasil = false;
 
-        if(radius != "" && latitudeEvent != "" && longitudeEvent != "" && detectedLocation != null){
+        if(!radius.equals("") && !latLokasi.equals("") && !longLokasi.equals("") && detectedLocation != null){
 
-            double latOutlet = iv.parseNullDouble(latitudeEvent);
-            double longOutlet = iv.parseNullDouble(longitudeEvent);
+            double latOutlet = iv.parseNullDouble(latLokasi);
+            double longOutlet = iv.parseNullDouble(longLokasi);
 
             double detectedJarak = (6371 * Math.acos(Math.sin(Math.toRadians(latOutlet)) * Math.sin(Math.toRadians(detectedLocation.getLatitude())) + Math.cos(Math.toRadians(longOutlet - detectedLocation.getLongitude())) * Math.cos(Math.toRadians(latOutlet)) * Math.cos(Math.toRadians(detectedLocation.getLatitude()))));
             double rangeDouble = iv.parseNullDouble(range);
@@ -1099,10 +1127,22 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             @Override
             public void onClick(View view) {
 
-
                 if(isEvent && !isOnLocation(location) && flagRadius.equals("1")){ // wajib tapi tidak dilokasi
 
                     Snackbar.make(findViewById(android.R.id.content), "Posisi anda jauh dari lokasi event, mohon menuju " + radius + " km dari lokasi event",
+                            Snackbar.LENGTH_INDEFINITE).setAction("OK",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                }
+                            }).show();
+                    return;
+                }
+
+                if(isPOI && !isOnLocation(location)){ // wajib tapi tidak dilokasi
+
+                    Snackbar.make(findViewById(android.R.id.content), "Posisi anda jauh dari " +poiName+ ", mohon menuju " + radius + " km dari lokasi",
                             Snackbar.LENGTH_INDEFINITE).setAction("OK",
                             new View.OnClickListener() {
                                 @Override
@@ -1225,14 +1265,30 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             @Override
             public void onClick(View view) {
 
-                if(latitudeEvent!= "" && longitudeEvent != ""){
+                String latLokasi = "", longLokasi = "", namaTitle = "";
+
+                if(isEvent){
+                    latLokasi = latitudeEvent;
+                    longLokasi = longitudeEvent;
+                    namaTitle = "Lokasi Event";
+                }else if (isPOI){
+                    latLokasi = latitudePOI;
+                    longLokasi = longitudePOI;
+                    namaTitle = poiName;
+                }else{
+                    latLokasi = latitudeEvent;
+                    longLokasi = longitudeEvent;
+                    namaTitle = "Lokasi Event";
+                }
+
+                if(!latLokasi.equals("") && !longLokasi.equals("")){
 
                     Intent intent = new Intent(context, MapsOutletActivity.class);
                     intent.putExtra("lat", iv.doubleToStringFull(latitude));
                     intent.putExtra("long", iv.doubleToStringFull(longitude));
-                    intent.putExtra("lat_outlet", latitudeEvent);
-                    intent.putExtra("long_outlet", longitudeEvent);
-                    intent.putExtra("nama", "Lokasi Event");
+                    intent.putExtra("lat_outlet", latLokasi);
+                    intent.putExtra("long_outlet", longLokasi);
+                    intent.putExtra("nama", namaTitle);
 
                     startActivity(intent);
                 }else{

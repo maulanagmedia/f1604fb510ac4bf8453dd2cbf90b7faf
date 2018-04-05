@@ -46,10 +46,12 @@ public class DetailEvent extends AppCompatActivity {
     private ProgressBar pbLoading;
     private List<HashMap<String,String >> masterList;
     private SimpleAdapter adapter;
-    private String nomor = "", lokasi = "", lastKdcus = "", lastCus = "", selectedKdcus = "";
+    private String nomor = "", lokasi = "", lastKdcus = "", lastCus = "", selectedKdcus = "", latitudePOI = "", longitudePOI = "", lastRadius = "";
     private boolean isEvent = false;
     private LinearLayout llNomor, llLokasi;
     private String latitude = "", longitude = "", radius = "", flagRadius = "";
+    private AutoCompleteTextView actvPoi;
+    private LinearLayout llPOI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +74,12 @@ public class DetailEvent extends AppCompatActivity {
         llLokasi = (LinearLayout) findViewById(R.id.ll_lokasi);
         edtNomor = (EditText) findViewById(R.id.edt_nomor);
         edtLokasi = (EditText) findViewById(R.id.edt_lokasi);
+        actvPoi = (AutoCompleteTextView) findViewById(R.id.actv_poi);
         actvNama = (AutoCompleteTextView) findViewById(R.id.actv_nama);
         edtAlamat = (EditText) findViewById(R.id.edt_alamat);
         llBeliPulsa = (LinearLayout) findViewById(R.id.ll_beli_pulsa);
         llBeliPerdana = (LinearLayout) findViewById(R.id.ll_beli_perdana);
+        llPOI = (LinearLayout) findViewById(R.id.ll_poi);
         pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
 
         session = new SessionManager(context);
@@ -105,6 +109,7 @@ public class DetailEvent extends AppCompatActivity {
 
         if(!isEvent){
             setTitle("Detail Direct Selling");
+            llPOI.setVisibility(View.VISIBLE);
         }
 
         initEvent();
@@ -121,6 +126,7 @@ public class DetailEvent extends AppCompatActivity {
         try {
             jBody.put("nik", nik);
             jBody.put("area", area);
+            jBody.put("flag", "DS");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -147,6 +153,9 @@ public class DetailEvent extends AppCompatActivity {
                             data.put("kdcus", jo.getString("kdcus"));
                             data.put("nama", jo.getString("nama"));
                             data.put("alamat", jo.getString("alamat"));
+                            data.put("latitude", jo.getString("latitude"));
+                            data.put("longitude", jo.getString("longitude"));
+                            data.put("radius", jo.getString("toleransi_jarak"));
                             masterList.add(data);
 
                         }
@@ -174,15 +183,15 @@ public class DetailEvent extends AppCompatActivity {
         String[] from = {"nama"};
         int[] to = new int[] { android.R.id.text1 };
 
-        actvNama.setAdapter(null);
+        actvPoi.setAdapter(null);
         if(listItem != null){
 
             adapter = new SimpleAdapter(context, listItem, android.R.layout.simple_list_item_1,
                     from, to);
-            actvNama.setAdapter(adapter);
+            actvPoi.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
-            actvNama.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            actvPoi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -191,10 +200,13 @@ public class DetailEvent extends AppCompatActivity {
                     lastCus = customer.get("nama");
                     String alamat = customer.get("alamat");
 
-                    actvNama.setText(lastCus);
-                    if(actvNama.getText().length() > 0) actvNama.setSelection(actvNama.getText().length());
+                    actvPoi.setText(lastCus);
+                    if(actvPoi.getText().length() > 0) actvPoi.setSelection(actvPoi.getText().length());
+                    latitudePOI = customer.get("latitude");
+                    longitudePOI = customer.get("longitude");
+                    lastRadius = customer.get("radius");
 
-                    edtAlamat.setText(alamat);
+                    //edtAlamat.setText(alamat);
                 }
             });
         }
@@ -222,10 +234,24 @@ public class DetailEvent extends AppCompatActivity {
     private void redirectToDetail(boolean isPulsa){
 
         //Validasi
+
+        if(actvPoi.getText().length() > 0 && !lastCus.equals(actvPoi.getText().toString())){
+            actvPoi.setError("POI tidak ditemukan");
+            actvPoi.requestFocus();
+            return;
+
+        }
+
         if(isEvent && edtNomor.getText().toString().length() == 0){
 
             Toast.makeText(context, "Data event tidak termuat, silahkan ulangi proses", Toast.LENGTH_LONG).show();
             return;
+        }
+
+        if(actvPoi.getText().toString().length() > 0) {
+            selectedKdcus = actvPoi.getText().toString().equals(lastCus) ? lastKdcus: "";
+        }else{
+            selectedKdcus = "";
         }
 
         if(actvNama.getText().toString().length() == 0){
@@ -235,7 +261,7 @@ public class DetailEvent extends AppCompatActivity {
             return;
         }else{
             actvNama.setError(null);
-            selectedKdcus = actvNama.getText().toString().equals(lastCus) ? lastKdcus: "";
+            //selectedKdcus = actvNama.getText().toString().equals(lastCus) ? lastKdcus: "";
         }
 
         if(edtAlamat.getText().toString().length() == 0){
@@ -258,8 +284,13 @@ public class DetailEvent extends AppCompatActivity {
         intent.putExtra("long", longitude);
         intent.putExtra("radius", radius);
         intent.putExtra("flag_radius", flagRadius);
-        if(lastCus.equals(actvNama.getText().toString())){
+        if(lastCus.equals(actvPoi.getText().toString())){
             intent.putExtra("kdcus", lastKdcus);
+            intent.putExtra("lat_poi", latitudePOI);
+            intent.putExtra("long_poi", longitudePOI);
+            intent.putExtra("radius", lastRadius);
+            intent.putExtra("poi", lastCus);
+
         }
         startActivity(intent);
     }

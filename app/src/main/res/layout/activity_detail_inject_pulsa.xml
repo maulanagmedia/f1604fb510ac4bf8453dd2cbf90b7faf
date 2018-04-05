@@ -236,7 +236,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="0.4"
                         android:layout_height="wrap_content"
-                        android:text="Peta Event"
+                        android:text="Peta Customer"
                         android:id="@+id/btn_maps_event"
                         android:textColor="@color/color_white"
                         android:layout_marginTop="@dimen/default_margin_tiny"
