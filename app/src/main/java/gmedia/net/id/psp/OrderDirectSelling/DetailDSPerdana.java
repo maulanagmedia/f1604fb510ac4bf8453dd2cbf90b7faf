@@ -785,8 +785,8 @@ public class DetailDSPerdana extends AppCompatActivity implements LocationListen
 
         if(!radius.equals("") && !latLokasi.equals("") && !longLokasi.equals("") && detectedLocation != null){
 
-            double latOutlet = iv.parseNullDouble(latitudeEvent);
-            double longOutlet = iv.parseNullDouble(longitudeEvent);
+            double latOutlet = iv.parseNullDouble(latLokasi);
+            double longOutlet = iv.parseNullDouble(longLokasi);
 
             double detectedJarak = (6371 * Math.acos(Math.sin(Math.toRadians(latOutlet)) * Math.sin(Math.toRadians(detectedLocation.getLatitude())) + Math.cos(Math.toRadians(longOutlet - detectedLocation.getLongitude())) * Math.cos(Math.toRadians(latOutlet)) * Math.cos(Math.toRadians(detectedLocation.getLatitude()))));
             double rangeDouble = iv.parseNullDouble(range);
