@@ -287,13 +287,22 @@
         <activity
             android:name=".NavEvent.DetailEvent"
             android:screenOrientation="portrait" />
-        <activity android:name=".OrderDirectSelling.DetailDSPerdana"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".NavMarketSurvey.ActMarketSurvey"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".NavMarketSurvey.DetailMarketSurvey"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".OrderDirectSelling.DetailDSPerdana"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavMarketSurvey.ActMarketSurvey"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavMarketSurvey.DetailMarketSurvey"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".NavMarketSurvey.MarketSurveyTSA"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".NavMarketSurvey.MarketSurveyAOC"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

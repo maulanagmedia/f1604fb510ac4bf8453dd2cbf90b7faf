@@ -402,7 +402,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
             range = radius;
             jarak = iv.doubleToStringFull(detectedJarak);
-            String pesan = "Jarak saat ini dengan event adalah ";
+            String pesan = "Jarak saat ini dengan lokasi adalah ";
             String keteranganJarak = "";
             if(iv.parseNullDouble(radius) <= 6371){
                 if(iv.parseNullDouble(jarak) <= 1){
@@ -809,6 +809,36 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 e.printStackTrace();
             }
 
+        }else if(state == 4){
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+            View viewDialog = inflater.inflate(R.layout.layout_warning, null);
+            builder.setView(viewDialog);
+            builder.setCancelable(false);
+
+            final TextView tvText1 = (TextView) viewDialog.findViewById(R.id.tv_text1);
+            tvText1.setText(message);
+            final Button btnOK = (Button) viewDialog.findViewById(R.id.btn_ok);
+            btnOK.setText("Ulangi Proses");
+
+            final AlertDialog alert = builder.create();
+            alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+            btnOK.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view2) {
+
+                    if(alert != null) alert.dismiss();
+                    saveData();
+                }
+            });
+
+            try {
+                alert.show();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -1041,6 +1071,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(context, superMessage, Toast.LENGTH_LONG).show();
+                    showDialog(4, "Terjadi kesalahan koneksi, harap tekan ulangi proses");
                 }
             }
 
@@ -1048,7 +1079,8 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             public void onError(String result) {
                 isLoading(false);
                 progressDialog.dismiss();
-                Toast.makeText(context, "Terjadi kesalahan saat menyimpan data, harap ulangi kembali", Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "Terjadi kesalahan saat menyimpan data, harap ulangi kembali", Toast.LENGTH_LONG).show();
+                showDialog(4, "Terjadi kesalahan koneksi, harap tekan ulangi proses");
             }
         });
     }

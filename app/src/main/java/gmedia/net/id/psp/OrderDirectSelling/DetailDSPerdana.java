@@ -794,7 +794,7 @@ public class DetailDSPerdana extends AppCompatActivity implements LocationListen
 
             range = radius;
             jarak = iv.doubleToStringFull(detectedJarak);
-            String pesan = "Jarak saat ini dengan outlet adalah ";
+            String pesan = "Jarak saat ini dengan lokasi adalah ";
             String keteranganJarak = "";
             if(iv.parseNullDouble(radius) <= 6371){
                 if(iv.parseNullDouble(jarak) <= 1){

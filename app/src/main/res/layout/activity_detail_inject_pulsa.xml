@@ -55,7 +55,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/edt_nomor"
                     style="@style/formControlInput"
-                    android:inputType="phone"/>
+                    android:inputType="phone"
+                    android:imeOptions="actionDone"/>
 
             </LinearLayout>
 
