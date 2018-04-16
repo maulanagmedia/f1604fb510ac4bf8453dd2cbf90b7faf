@@ -448,7 +448,7 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
             bmp.compress(Bitmap.CompressFormat.PNG, 70, stream);
             byte[] byteArray = stream.toByteArray();
             bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-            bitmap = scaleDown(bitmap, 380, true);
+            bitmap = scaleDown(bitmap, 360, true);
 
             try {
                 stream.close();
@@ -468,20 +468,23 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
             try {
 
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(photoFromCameraURI));
+                if(photoFromCameraURI != null){
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(photoFromCameraURI));
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    bitmap = rotateImage(bitmap, 90);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        bitmap = rotateImage(bitmap, 90);
+                    }
+
+                    bitmap = scaleDown(bitmap, 360, true);
+
+
+                    if(bitmap != null){
+
+                        photoList.add(bitmap);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
 
-                bitmap = scaleDown(bitmap, 380, true);
-
-
-                if(bitmap != null){
-
-                    photoList.add(bitmap);
-                    adapter.notifyDataSetChanged();
-                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

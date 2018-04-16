@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="gmedia.net.id.psp.NavMarketSurvey.MarketSurveyAOC">
+    tools:context="gmedia.net.id.psp.NavMarketSurveyAOC.MarketSurveyAOC">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/abl_main"
@@ -73,7 +73,7 @@
                                 android:id="@+id/tv_title"
                                 android:textSize="14sp"
                                 android:gravity="right"
-                                android:text="(Tahan point untuk memindah / tekan pada map)"
+                                android:text=""
                                 android:layout_marginLeft="@dimen/default_margin"
                                 android:layout_marginRight="@dimen/default_margin"
                                 android:layout_marginBottom="@dimen/default_margin"
@@ -122,18 +122,105 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/ll_poi"
                 style="@style/formGroup">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nama *"
+                    android:text="POI *"
                     style="@style/formControlLabel3"/>
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/actv_poi"
+                    android:hint="Customer"
+                    style="@style/formControlInput"
+                    android:gravity="left"
+                    android:inputType="textPersonName"
+                    android:imeOptions="actionNext"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Jumlah Display Perdana"
+                    style="@style/formControlLabel3"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/default_margin_tiny"
+                        android:layout_marginBottom="@dimen/default_margin_tiny"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_black"
+                            android:text="Barang"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_black"
+                            android:layout_marginLeft="@dimen/default_margin_tiny"
+                            android:layout_marginRight="@dimen/default_margin_tiny"
+                            android:text="Unit"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.4"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_black"
+                            android:text="Belanja(Rp)/ Minggu"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_line"
+                        android:background="@color/color_black"
+                        android:layout_marginBottom="@dimen/default_margin_tiny"/>
+
+                    <com.maulana.custommodul.CustomView.NestedListView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="true"
+                        android:id="@+id/lv_display"></com.maulana.custommodul.CustomView.NestedListView>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Branding"
+                    style="@style/formControlLabel3" />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/edt_nama"
+                    android:id="@+id/edt_branding"
                     style="@style/formControlInput"
                     android:inputType="textPersonName"
                     android:imeOptions="actionNext"/>
@@ -148,15 +235,15 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nomor HP *"
-                    style="@style/formControlLabel3" />
+                    android:text="Evaluasi"
+                    style="@style/formControlLabel3"/>
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/edt_nohp"
+                    android:id="@+id/edt_evaluasi"
                     style="@style/formControlInput"
-                    android:inputType="phone"
+                    android:inputType="textPersonName"
                     android:imeOptions="actionNext"/>
 
             </LinearLayout>
@@ -166,17 +253,48 @@
                 android:layout_height="wrap_content"
                 style="@style/formGroup">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Alamat *"
-                    style="@style/formControlLabel3"/>
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
-                <EditText
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.9"
+                        android:layout_height="wrap_content"
+                        android:text="Rekomendasi"
+                        style="@style/formControlLabel3"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.1"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="right">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:id="@+id/iv_add_rekomendasi"
+                            android:src="@mipmap/ic_add_blue"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/edt_alamat"
-                    style="@style/formControlTextarea"/>
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <com.maulana.custommodul.CustomView.NestedListView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="true"
+                        android:id="@+id/lv_rekomendasi"></com.maulana.custommodul.CustomView.NestedListView>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -188,23 +306,71 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Provider *"
+                    android:text="Rekomendasi Branding"
                     style="@style/formControlLabel3"/>
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/edt_provider"
+                    android:id="@+id/edt_rekomendasi_branding"
                     style="@style/formControlInput"
                     android:inputType="textPersonName"
                     android:imeOptions="actionDone"/>
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.9"
+                        android:layout_height="wrap_content"
+                        android:text="Jenis Postmat + Unit"
+                        style="@style/formControlLabel3"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.1"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="right">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:id="@+id/iv_add_postmat"
+                            android:src="@mipmap/ic_add_blue"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <com.maulana.custommodul.CustomView.NestedListView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="true"
+                        android:id="@+id/lv_postmat"></com.maulana.custommodul.CustomView.NestedListView>
+                </LinearLayout>
+
+            </LinearLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 style="@style/formGroup">
 
                 <android.support.v7.widget.RecyclerView
@@ -231,7 +397,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 style="@style/formGroup"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:gravity="center_vertical">
 
                 <TextView
@@ -242,14 +408,69 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_jarak"
+                style="@style/formGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:id="@+id/edt_jarak"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.9"
+                        android:background="@null"
+                        android:editable="false"
+                        android:inputType="none"
+                        android:text="Menunggu proses perhitungan jarak..." />
+
+                    <ImageView
+                        android:id="@+id/iv_refresh_position"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/default_margin_tiny"
+                        android:layout_marginRight="@dimen/default_margin_tiny"
+                        android:layout_weight="0.1"
+                        android:background="?attr/selectableItemBackground"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/ic_sync" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/formGroup"
                 android:gravity="center"
-                android:layout_marginBottom="@dimen/default_margin_small">
+                android:layout_marginBottom="@dimen/default_margin_small"
+                android:orientation="horizontal"
+                android:weightSum="1">
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:id="@+id/btn_maps"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin_small"
+                    android:layout_marginTop="@dimen/default_margin_tiny"
+                    android:layout_weight="0.4"
+                    android:background="@drawable/btn_form"
+                    android:text="Peta POI"
+                    android:textColor="@color/color_white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:orientation="vertical"></LinearLayout>
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="0.4"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_login"
                     android:paddingLeft="@dimen/default_margin_small"

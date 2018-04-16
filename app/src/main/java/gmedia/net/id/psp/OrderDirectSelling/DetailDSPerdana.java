@@ -1155,7 +1155,7 @@ public class DetailDSPerdana extends AppCompatActivity implements LocationListen
                             //4. harga
                             //5. jumlah
                             //6. nomor surat jalan
-                            //7. id surat jalam
+                            //7. id surat jalan
                             break;
                         }
 

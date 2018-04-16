@@ -276,7 +276,7 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="0.8"
                                     android:padding="@dimen/default_margin_small"
-                                    android:src="@drawable/ic_penjualan_end_user"
+                                    android:src="@drawable/ic_order_perdana"
                                     android:scaleType="fitCenter"/>
 
                                 <TextView
@@ -338,7 +338,7 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="0.8"
                                     android:padding="@dimen/default_margin_small"
-                                    android:src="@drawable/ic_penjualan_perdana"
+                                    android:src="@drawable/ic_penjualan_end_user"
                                     android:scaleType="fitCenter"/>
 
                                 <TextView
@@ -348,7 +348,49 @@
                                     android:gravity="center"
                                     android:textSize="@dimen/font_menu"
                                     android:textColor="@color/color_black"
-                                    android:text="Market Survey"/>
+                                    android:text="Market Survey TSA"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/menu_height"
+                            android:id="@+id/ll_3a"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginBottom="@dimen/default_margin_small"
+                            android:weightSum="3">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:id="@+id/ll_market_survey_aoc"
+                                android:background="?attr/selectableItemBackground"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_penjualan_end_user"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Market Survey AOC"/>
+
                             </LinearLayout>
 
                         </LinearLayout>

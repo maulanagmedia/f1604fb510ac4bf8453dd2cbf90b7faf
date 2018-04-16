@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/default_margin_tiny"
+        android:layout_marginBottom="@dimen/default_margin_tiny"
+        android:weightSum="1">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/default_margin_tiny"
+            android:layout_marginLeft="@dimen/default_margin_tiny"
+            style="@style/formControlInput"
+            android:id="@+id/edt_text1"
+            android:hint="Nama Produk"
+            android:text=""
+            android:inputType="number"
+            android:imeOptions="actionNext"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/default_margin_tiny"
+            android:layout_marginLeft="@dimen/default_margin_tiny"
+            style="@style/formControlInput"
+            android:id="@+id/edt_text2"
+            android:hint="Unit"
+            android:text=""
+            android:inputType="number"
+            android:imeOptions="actionNext"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/iv_delete"
+                android:src="@mipmap/ic_delete"
+                android:scaleType="fitCenter"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

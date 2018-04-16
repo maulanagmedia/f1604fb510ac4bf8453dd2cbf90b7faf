@@ -141,6 +141,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
     private boolean isEvent = false, isPOI = false;
     private Button btnAppInfo;
     private LinearLayout llJarak;
+    private static String lastKodebrg = "", lastFlagOrder = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -920,7 +921,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
         try {
             jBody.put("nik", nik);
             jBody.put("balasan", text);
-            jBody.put("flag_order", selectedItemOrder.getItem5());
+            jBody.put("flag_order", lastFlagOrder);
             jBody.put("nomor", edtNomor.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1002,7 +1003,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
         try {
             jDataDetail.put("nobukti","");
             jDataDetail.put("nik", nik);
-            jDataDetail.put("kodebrg", selectedItemOrder.getItem1());
+            jDataDetail.put("kodebrg", lastKodebrg);
             jDataDetail.put("ccid", "");
             jDataDetail.put("harga", selectedHarga);
             jDataDetail.put("jumlah", "1");
@@ -1228,6 +1229,9 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 //5. flag jenis order MK, BL, TC
                 //6. pin rs
                 //7. format inject
+
+                lastFlagOrder = selectedItemOrder.getItem5();
+                lastKodebrg = selectedItemOrder.getItem1();
 
                 AlertDialog dialog = new AlertDialog.Builder(context)
                         .setTitle("Konfirmasi")

@@ -297,12 +297,15 @@
             android:name=".NavMarketSurvey.DetailMarketSurvey"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".NavMarketSurvey.MarketSurveyTSA"
+        <activity
+            android:name=".NavMarketSurvey.MarketSurveyTSA"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".NavMarketSurvey.MarketSurveyAOC"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".NavMarketSurveyAOC.MarketSurveyAOC"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".NavMarketSurveyAOC.ActMarketSurveyAOC"></activity>
     </application>
 
 </manifest>

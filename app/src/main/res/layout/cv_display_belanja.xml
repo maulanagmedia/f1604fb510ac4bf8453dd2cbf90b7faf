@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/default_margin_tiny"
+        android:layout_marginBottom="@dimen/default_margin_tiny"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_black"
+            android:id="@+id/tv_text1"
+            android:text=""/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/default_margin_tiny"
+            android:layout_marginLeft="@dimen/default_margin_tiny"
+            style="@style/formControlInput"
+            android:id="@+id/edt_text1"
+            android:hint="Unit"
+            android:text=""
+            android:inputType="number"
+            android:imeOptions="actionNext"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_black"
+            style="@style/formControlInput"
+            android:id="@+id/edt_text2"
+            android:hint="100000"
+            android:inputType="number"
+            android:imeOptions="actionNext"/>
+    </LinearLayout>
+</LinearLayout>

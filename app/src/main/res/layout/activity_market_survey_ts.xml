@@ -73,7 +73,7 @@
                                 android:id="@+id/tv_title"
                                 android:textSize="14sp"
                                 android:gravity="right"
-                                android:text="(Tahan point untuk memindah / tekan pada map)"
+                                android:text=""
                                 android:layout_marginLeft="@dimen/default_margin"
                                 android:layout_marginRight="@dimen/default_margin"
                                 android:layout_marginBottom="@dimen/default_margin"
@@ -128,7 +128,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="POI"
+                    android:text="POI *"
                     style="@style/formControlLabel3"/>
 
                 <AutoCompleteTextView
@@ -184,7 +184,6 @@
 
             </LinearLayout>
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -196,9 +195,123 @@
                     android:text="Nomor Pengguna"
                     style="@style/formControlLabel3"/>
 
-                <ListView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height=""></ListView>
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_weight="0.6"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edt_kartu_utama"
+                        style="@style/formControlInput"
+                        android:hint="Kartu Utama"
+                        android:text=""
+                        android:layout_marginTop="@dimen/default_margin_tiny"
+                        android:layout_marginBottom="@dimen/default_margin_tiny"
+                        android:layout_marginRight="@dimen/default_margin_small"
+                        android:inputType="phone"
+                        android:imeOptions="actionNext"/>
+
+                    <Spinner
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:id="@+id/sp_kartu_utama"
+                        android:layout_height="match_parent"></Spinner>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_weight="0.6"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edt_kartu_kedua"
+                        style="@style/formControlInput"
+                        android:hint="Kartu Kedua"
+                        android:layout_marginRight="@dimen/default_margin_small"
+                        android:layout_marginTop="@dimen/default_margin_tiny"
+                        android:layout_marginBottom="@dimen/default_margin_tiny"
+                        android:inputType="phone"
+                        android:imeOptions="actionNext"/>
+
+                    <Spinner
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:id="@+id/sp_kartu_kedua"
+                        android:layout_height="match_parent"></Spinner>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Konsumsi Penggunaan"
+                    style="@style/formControlLabel3"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_weight="0.6"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edt_pulsa"
+                        style="@style/formControlInput"
+                        android:hint="Jumlah Pulsa"
+                        android:layout_marginRight="@dimen/default_margin_small"
+                        android:layout_marginTop="@dimen/default_margin_tiny"
+                        android:layout_marginBottom="@dimen/default_margin_tiny"
+                        android:inputType="number"
+                        android:imeOptions="actionNext"/>
+
+                    <Spinner
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:id="@+id/sp_pulsa"
+                        android:layout_height="match_parent"></Spinner>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_weight="0.6"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edt_data"
+                        style="@style/formControlInput"
+                        android:hint="Jumlah Data"
+                        android:layout_marginTop="@dimen/default_margin_tiny"
+                        android:layout_marginBottom="@dimen/default_margin_tiny"
+                        android:layout_marginRight="@dimen/default_margin_small"
+                        android:inputType="textPersonName"
+                        android:imeOptions="actionDone"/>
+
+                    <Spinner
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:id="@+id/sp_data"
+                        android:layout_height="match_parent"></Spinner>
+                </LinearLayout>
 
             </LinearLayout>
 

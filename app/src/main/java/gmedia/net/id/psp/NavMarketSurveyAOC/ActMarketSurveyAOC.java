@@ -1,4 +1,4 @@
-package gmedia.net.id.psp.NavMarketSurvey;
+package gmedia.net.id.psp.NavMarketSurveyAOC;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -45,7 +45,7 @@ import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ServerURL;
 
-public class ActMarketSurvey extends AppCompatActivity {
+public class ActMarketSurveyAOC extends AppCompatActivity {
 
     private Context context;
     private SessionManager session;
@@ -64,7 +64,7 @@ public class ActMarketSurvey extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_act_market_survey);
+        setContentView(R.layout.activity_act_market_survey_aoc);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getWindow().setSoftInputMode(
@@ -73,7 +73,7 @@ public class ActMarketSurvey extends AppCompatActivity {
 
         context = this;
 
-        setTitle("Market Survey TSA");
+        setTitle("Market Survey AOC");
         session = new SessionManager(context);
 
         initUI();
@@ -103,8 +103,8 @@ public class ActMarketSurvey extends AppCompatActivity {
     private void initEvent() {
 
         fabAdd.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                /*if(!session.getJabatan().equals("TSA")){ // AOC, SF, SPV
 
@@ -114,10 +114,10 @@ public class ActMarketSurvey extends AppCompatActivity {
                    startActivity(intent);
                }*/
 
-               Intent intent = new Intent(context, MarketSurveyTSA.class);
-               startActivity(intent);
+                Intent intent = new Intent(context, MarketSurveyAOC.class);
+                startActivity(intent);
             }
-       });
+        });
 
         tvFrom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,7 +149,7 @@ public class ActMarketSurvey extends AppCompatActivity {
                 };
 
                 SimpleDateFormat yearOnly = new SimpleDateFormat("yyyy");
-                new DatePickerDialog(ActMarketSurvey.this ,date , iv.parseNullInteger(yearOnly.format(dateValue)),dateValue.getMonth(),dateValue.getDate()).show();
+                new DatePickerDialog(context ,date , iv.parseNullInteger(yearOnly.format(dateValue)),dateValue.getMonth(),dateValue.getDate()).show();
             }
         });
 
@@ -183,7 +183,7 @@ public class ActMarketSurvey extends AppCompatActivity {
                 };
 
                 SimpleDateFormat yearOnly = new SimpleDateFormat("yyyy");
-                new DatePickerDialog(ActMarketSurvey.this ,date , iv.parseNullInteger(yearOnly.format(dateValue)),dateValue.getMonth(),dateValue.getDate()).show();
+                new DatePickerDialog(context ,date , iv.parseNullInteger(yearOnly.format(dateValue)),dateValue.getMonth(),dateValue.getDate()).show();
             }
         });
 
@@ -214,7 +214,7 @@ public class ActMarketSurvey extends AppCompatActivity {
         JSONObject jBody = new JSONObject();
 
         try {
-            jBody.put("flag", "TSA");
+            jBody.put("flag", "AOC");
             jBody.put("nik", nik);
             jBody.put("keyword", keyword);
             jBody.put("date1", iv.ChangeFormatDateString(dateFrom, FormatItem.formatDateDisplay, FormatItem.formatDate));
@@ -334,7 +334,7 @@ public class ActMarketSurvey extends AppCompatActivity {
 
                     CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
 
-                    Intent intent = new Intent(context, MarketSurveyTSA.class);
+                    Intent intent = new Intent(context, MarketSurveyAOC.class);
                     intent.putExtra("id", selectedItem.getItem1());
                     startActivity(intent);
 

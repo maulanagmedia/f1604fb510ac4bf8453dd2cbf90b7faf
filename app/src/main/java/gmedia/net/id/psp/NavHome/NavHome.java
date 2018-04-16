@@ -39,6 +39,7 @@ import gmedia.net.id.psp.NavEvent.DetailEvent;
 import gmedia.net.id.psp.NavHome.Adapter.HeaderSliderAdapter;
 import gmedia.net.id.psp.NavKomplain.ActKomplain;
 import gmedia.net.id.psp.NavMarketSurvey.ActMarketSurvey;
+import gmedia.net.id.psp.NavMarketSurveyAOC.ActMarketSurveyAOC;
 import gmedia.net.id.psp.NavPOL.ListOutletLocation;
 import gmedia.net.id.psp.NavPreorderPerdana.ActPreorderPerdanaActivity;
 import gmedia.net.id.psp.NavTambahCustomer.ActTambahOutlet;
@@ -80,7 +81,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
     private LinearLayout llOrderMkios, llPenjualanMkios, llOrderPerdana, llPenjualanPerdana, llDaftarPiutang, llStokSales;
     private TextView tvNamaSales, tvTotalOmset, tvOmsetMkios, tvOmsetPerdana;
     private LinearLayout llAddCustomer, llCheckIn, llKomplain;
-    private LinearLayout ll1, ll2, ll3, ll4, ll5, ll6, ll7;
+    private LinearLayout ll1, ll2, ll3, ll3a, ll4, ll5, ll6, ll7;
     private LinearLayout llOrderTcash;
     private LinearLayout llPenjualan;
     private LinearLayout llRiwayatPenjualan;
@@ -90,7 +91,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
     private TextView tvTarget, tvPencapaian, tvGap, tvOutletBaru;
     private LinearLayout llMapsKunjungan;
     private LinearLayout llPreorderPerdana;
-    private LinearLayout llEvent, llMarketSurvey;
+    private LinearLayout llEvent, llMarketSurvey, llMarketSurveyAoc;
     private LinearLayout llDirectSelling;
     private LinearLayout llMenuPenjualanReseller, llMenuDirectSelling, llMenuSPV, llMenuOperasional;
 
@@ -178,6 +179,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         ll1 = (LinearLayout) layout.findViewById(R.id.ll_1);
         ll2 = (LinearLayout) layout.findViewById(R.id.ll_2);
         ll3 = (LinearLayout) layout.findViewById(R.id.ll_3);
+        ll3a = (LinearLayout) layout.findViewById(R.id.ll_3a);
         ll4 = (LinearLayout) layout.findViewById(R.id.ll_4);
         ll5 = (LinearLayout) layout.findViewById(R.id.ll_5);
         ll6 = (LinearLayout) layout.findViewById(R.id.ll_6);
@@ -191,6 +193,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         ll1.setLayoutParams(lp);
         ll2.setLayoutParams(lp);
         ll3.setLayoutParams(lp);
+        ll3a.setLayoutParams(lp);
         ll4.setLayoutParams(lp);
         ll5.setLayoutParams(lp);
         ll6.setLayoutParams(lp);
@@ -215,6 +218,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         llInfoDeposit = (LinearLayout) layout.findViewById(R.id.ll_info_deposit);           // 12
         llEvent = (LinearLayout) layout.findViewById(R.id.ll_event);                    // 13
         llMarketSurvey = (LinearLayout) layout.findViewById(R.id.ll_market_survey);     // 13
+        llMarketSurveyAoc = (LinearLayout) layout.findViewById(R.id.ll_market_survey_aoc);     // 13
         llPreorderPerdana = (LinearLayout) layout.findViewById(R.id.ll_preorder_perdana);   // 13
         llDirectSelling = (LinearLayout) layout.findViewById(R.id.ll_direct_selling);
 
@@ -438,6 +442,15 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ActMarketSurvey.class);
+                context.startActivity(intent);
+                ((Activity)context).finish();
+            }
+        });
+
+        llMarketSurveyAoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ActMarketSurveyAOC.class);
                 context.startActivity(intent);
                 ((Activity)context).finish();
             }

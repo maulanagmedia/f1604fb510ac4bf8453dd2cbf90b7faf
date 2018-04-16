@@ -9,7 +9,7 @@ public class ServerURL {
     //private static final String baseURL = "http://192.168.43.200/psp/";
     //private static final String baseURL = "http://api.putmasaripratama.co.id/";
     //private static final String baseURL = "http://119.2.53.122/mobilesalesforce/";
-    private static final String baseURL = "http://192.168.12.67/psp/";
+    private static final String baseURL = "http://192.168.12.188/psp/";
 
     public static final String login = baseURL + "api/auth/login/";
     public static final String getLatestVersion = baseURL + "api/auth/get_latest_version/";
@@ -95,4 +95,6 @@ public class ServerURL {
     public static final String saveDirectSelling = baseURL + "api/event/save_order_direct/";
     public static final String getMarketSurvey = baseURL + "api/event/get_market_survey/";
     public static final String saveMarketSurvey = baseURL + "api/event/save_market_survey/";
+
+    public static final String getProvider = baseURL + "api/event/get_provide/";
 }

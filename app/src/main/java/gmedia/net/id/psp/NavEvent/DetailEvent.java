@@ -16,6 +16,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.maulana.custommodul.ApiVolley;
+import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.SessionManager;
 
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import gmedia.net.id.psp.Adapter.AutocompleteAdapter;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.OrderDirectSelling.DetailDSPerdana;
 import gmedia.net.id.psp.OrderDirectSelling.DetailInjectPulsa;
@@ -52,6 +54,7 @@ public class DetailEvent extends AppCompatActivity {
     private String latitude = "", longitude = "", radius = "", flagRadius = "";
     private AutoCompleteTextView actvPoi;
     private LinearLayout llPOI;
+    private List<CustomItem> listPOI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +145,7 @@ public class DetailEvent extends AppCompatActivity {
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
                     masterList = new ArrayList<>();
+                    listPOI = new ArrayList<>();
 
                     if(iv.parseNullInteger(status) == 200){
 
@@ -149,30 +153,40 @@ public class DetailEvent extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            HashMap<String,String> data = new HashMap<>();
+                            /*HashMap<String,String> data = new HashMap<>();
                             data.put("kdcus", jo.getString("kdcus"));
                             data.put("nama", jo.getString("nama"));
                             data.put("alamat", jo.getString("alamat"));
                             data.put("latitude", jo.getString("latitude"));
                             data.put("longitude", jo.getString("longitude"));
                             data.put("radius", jo.getString("toleransi_jarak"));
-                            masterList.add(data);
+                            masterList.add(data);*/
+
+                            listPOI.add(new CustomItem(jo.getString("kdcus"),
+                                    jo.getString("nama"),
+                                    jo.getString("alamat"),
+                                    jo.getString("latitude"),
+                                    jo.getString("longitude"),
+                                    jo.getString("toleransi_jarak")));
 
                         }
                     }
 
-                    getAutocompleteEvent(masterList);
+                    //getAutocompleteEvent(masterList);
+                    setAutocomplete(listPOI);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    getAutocompleteEvent(null);
+                    //getAutocompleteEvent(null);
+                    setAutocomplete(null);
                 }
             }
 
             @Override
             public void onError(String result) {
 
-                getAutocompleteEvent(null);
+                //getAutocompleteEvent(null);
+                setAutocomplete(null);
                 pbLoading.setVisibility(View.GONE);
             }
         });
@@ -207,6 +221,34 @@ public class DetailEvent extends AppCompatActivity {
                     lastRadius = customer.get("radius");
 
                     //edtAlamat.setText(alamat);
+                }
+            });
+        }
+    }
+
+    private void setAutocomplete(List<CustomItem> listItem) {
+
+        actvPoi.setAdapter(null);
+
+        if(listItem != null && listItem.size() > 0){
+
+            AutocompleteAdapter adapterACTV = new AutocompleteAdapter(context, listItem, "");
+            actvPoi.setAdapter(adapterACTV);
+            actvPoi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    CustomItem item = (CustomItem) adapterView.getItemAtPosition(i);
+
+                    lastKdcus = item.getItem1();
+                    lastCus = item.getItem2();
+                    String alamat =item.getItem3();
+
+                    //actvPoi.setText(lastCus);
+                    //if(actvPoi.getText().length() > 0) actvPoi.setSelection(actvPoi.getText().length());
+                    latitudePOI = item.getItem4();
+                    longitudePOI = item.getItem5();
+                    lastRadius = item.getItem6();
                 }
             });
         }
