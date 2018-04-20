@@ -214,7 +214,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Branding"
+                    android:text="Branding *"
                     style="@style/formControlLabel3" />
 
                 <EditText
@@ -235,7 +235,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Evaluasi"
+                    android:text="Evaluasi *"
                     style="@style/formControlLabel3"/>
 
                 <EditText
@@ -306,7 +306,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Rekomendasi Branding"
+                    android:text="Rekomendasi Branding *"
                     style="@style/formControlLabel3"/>
 
                 <EditText

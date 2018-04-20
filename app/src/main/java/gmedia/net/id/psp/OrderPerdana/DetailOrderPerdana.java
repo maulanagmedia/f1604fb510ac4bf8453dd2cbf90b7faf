@@ -85,6 +85,7 @@ import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
+import gmedia.net.id.psp.Utils.MockLocChecker;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class DetailOrderPerdana extends AppCompatActivity implements LocationListener{
@@ -172,6 +173,13 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         buildLocationSettingsRequest();
 
         initUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        MockLocChecker checker = new MockLocChecker(DetailOrderPerdana.this);
     }
 
     private void initUI() {

@@ -82,6 +82,7 @@ import gmedia.net.id.psp.OrderPerdana.Adapter.ListCCIDAdapter;
 import gmedia.net.id.psp.OrderPerdana.Adapter.ListCCIDCBAdapter;
 import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.R;
+import gmedia.net.id.psp.Utils.MockLocChecker;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class DetailDSPerdana extends AppCompatActivity implements LocationListener{
@@ -161,6 +162,12 @@ public class DetailDSPerdana extends AppCompatActivity implements LocationListen
         setTitle("Direct Selling Perdana");
         context = this;
         initUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MockLocChecker checker = new MockLocChecker(DetailDSPerdana.this);
     }
 
     private void initUI() {

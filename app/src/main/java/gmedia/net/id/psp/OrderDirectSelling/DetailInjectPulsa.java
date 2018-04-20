@@ -76,6 +76,7 @@ import gmedia.net.id.psp.OrderDirectSelling.Service.USSDService;
 import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
+import gmedia.net.id.psp.Utils.MockLocChecker;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class DetailInjectPulsa extends AppCompatActivity implements LocationListener {
@@ -141,7 +142,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
     private boolean isEvent = false, isPOI = false;
     private Button btnAppInfo;
     private LinearLayout llJarak;
-    private static String lastKodebrg = "", lastFlagOrder = "";
+    private static String lastKodebrg = "", lastFlagOrder = "", lastSN = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,6 +196,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
         alamat = "";
         kdcus = "";
         jarak = "";
+        lastSN = "";
 
         initEvent();
         initLocationManual();
@@ -705,7 +707,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
         //2. namabrg
         //3. hargajual
         //4. flag dipilih
-        //5. flag jenis order MK, BL, TC
+        //5. flag jenis order MK, BL, TC, BL2
         //6. pin rs
 
         selectedItemOrder = item;
@@ -721,6 +723,15 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             //llNominal.setVisibility(View.VISIBLE);
             edtNominal.setText("1");
             edtHarga.setVisibility(View.GONE);
+        }
+
+        if(flagOrder.equals("BL2")){ // Bulk reguler
+
+            edtNominal.setText("");
+            llNominal.setVisibility(View.VISIBLE);
+            edtHarga.setVisibility(View.VISIBLE);
+        }else{
+            llNominal.setVisibility(View.GONE);
         }
     }
 
@@ -860,6 +871,8 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
     protected void onResume() {
         super.onResume();
 
+        MockLocChecker checker = new MockLocChecker(DetailInjectPulsa.this);
+
         isActive = true;
 
         boolean isAccessGranted =  isAccessibilityEnabled(context.getPackageName() + "/" + context.getPackageName() + ".OrderDirectSelling.Service.USSDService");
@@ -945,6 +958,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
                             String harga = response.getJSONObject("response").getString("harga");
                             String nomor = response.getJSONObject("response").getString("nomor");
+                            lastSN = response.getJSONObject("response").getString("sn");
                             edtNomor.setText(nomor);
                             selectedHarga = harga;
                             edtNominal.setText(harga);
@@ -1014,6 +1028,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             jDataDetail.put("nomor", edtNomor.getText().toString());
             jDataDetail.put("nomor_event", nomor);
             jDataDetail.put("jarak", jarak);
+            jDataDetail.put("sn", lastSN);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1243,9 +1258,14 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
                                 showDialogLoading();
                                 String format = selectedItemOrder.getItem7().replace("[tujuan]",edtNomor.getText().toString());
-                                format = format.replace("[nominal]", selectedHarga);
+                                if(flagOrder.equals("BL2")){
+                                    format = format.replace("[nominal]", selectedHarga.substring(0, selectedHarga.length() - 3));
+                                }else{
+                                    format = format.replace("[nominal]", selectedHarga);
+                                }
                                 format = format.replace("[pin]", selectedItemOrder.getItem6());
                                 format = format.replace("#", Uri.encode("#"));
+
                                 Log.d(TAG, "onClick: " + format);
 
                                 //String code = "*123" + Uri.encode("#");
@@ -1354,6 +1374,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             public void onClick(View view2) {
 
                 if(alert != null) alert.dismiss();
+                ((Activity) context).onBackPressed();
             }
         });
 

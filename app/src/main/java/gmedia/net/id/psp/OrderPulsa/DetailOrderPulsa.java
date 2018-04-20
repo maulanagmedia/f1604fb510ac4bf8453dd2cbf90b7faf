@@ -74,6 +74,7 @@ import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
+import gmedia.net.id.psp.Utils.MockLocChecker;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class DetailOrderPulsa extends AppCompatActivity implements LocationListener{
@@ -145,6 +146,12 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
         buildLocationSettingsRequest();
 
         initUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MockLocChecker checker = new MockLocChecker(DetailOrderPulsa.this);
     }
 
     private void initUI() {

@@ -105,6 +105,7 @@
                     android:id="@+id/edt_nominal"
                     style="@style/formControlInput"
                     android:inputType="numberSigned"
+                    android:hint="10000"
                     android:imeOptions="actionNext"/>
 
             </LinearLayout>

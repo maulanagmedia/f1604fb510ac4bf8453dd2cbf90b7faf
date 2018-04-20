@@ -18,6 +18,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Looper;
@@ -87,6 +88,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -97,13 +101,13 @@ import gmedia.net.id.psp.Adapter.AutocompleteAdapter;
 import gmedia.net.id.psp.BuildConfig;
 import gmedia.net.id.psp.CustomView.CustomMapView;
 import gmedia.net.id.psp.MapsOutletActivity;
-import gmedia.net.id.psp.NavMarketSurvey.MarketSurveyTSA;
 import gmedia.net.id.psp.NavMarketSurveyAOC.Adapter.ListDisplayAdapter;
 import gmedia.net.id.psp.NavMarketSurveyAOC.Adapter.ListPostmatAdapter;
 import gmedia.net.id.psp.NavMarketSurveyAOC.Adapter.ListRekomendasiAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.TambahCustomer.Adapter.PhotosAdapter;
 import gmedia.net.id.psp.TambahCustomer.DetailCustomer;
+import gmedia.net.id.psp.Utils.MockLocChecker;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class MarketSurveyAOC extends AppCompatActivity implements LocationListener {
@@ -167,7 +171,7 @@ public class MarketSurveyAOC extends AppCompatActivity implements LocationListen
     private Bitmap bitmap;
     private List<Bitmap> photoList;
     private PhotosAdapter adapter;
-    private EditText edtEmail;
+
     private String kdcus = "";
     private String statusAktif = "";
     private ListView lvDisplay, lvRekomendasi, lvPostmat;
@@ -181,6 +185,8 @@ public class MarketSurveyAOC extends AppCompatActivity implements LocationListen
     private ImageView ivRefreshPosition;
     private Button btnMapsOutlet;
     private String jarak = "";
+    private String idKunjungan = "";
+    private ListDisplayAdapter adapterDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,6 +244,7 @@ public class MarketSurveyAOC extends AppCompatActivity implements LocationListen
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -280,7 +287,79 @@ public class MarketSurveyAOC extends AppCompatActivity implements LocationListen
             @Override
             public void onClick(View view) {
 
-                //d
+                //validasi
+                if(!actvPOI.getText().toString().equals(lastCus) || actvPOI.getText().toString().isEmpty()){
+
+                    actvPOI.setError("Harap pilih POI dari list");
+                    actvPOI.requestFocus();
+                    return;
+                }else{
+                    actvPOI.setError(null);
+                }
+
+                if(edtBranding.getText().toString().isEmpty()){
+
+                    edtBranding.setError("Branding harap diisi");
+                    edtBranding.requestFocus();
+                    return;
+                }else{
+                    edtBranding.setError(null);
+                }
+
+                if(edtEvaluasi.getText().toString().isEmpty()){
+
+                    edtEvaluasi.setError("Evaluasi harap diisi");
+                    edtEvaluasi.requestFocus();
+                    return;
+                }else{
+                    edtEvaluasi.setError(null);
+                }
+
+                if(edtRekomendasiBranding.getText().toString().isEmpty()){
+
+                    edtRekomendasiBranding.setError("Rekomendasi Branding harap diisi");
+                    edtRekomendasiBranding.requestFocus();
+                    return;
+                }else{
+                    edtRekomendasiBranding.setError(null);
+                }
+
+                if(listRekomendasi.size() == 0){
+
+                    Toast.makeText(context, "Harap tambahkan data rekomendasi", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if(listPostmat.size() == 0){
+
+                    Toast.makeText(context, "Harap tambahkan data postmat", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if(!isOnLocation(location)){
+                    Toast.makeText(context, "Posisi anda diluar area yang ditentukan", Toast.LENGTH_LONG).show();
+                    refreshMode = true;
+                    updateAllLocation();
+                    return;
+                }
+
+                AlertDialog konfirmasi = new AlertDialog.Builder(MarketSurveyAOC.this)
+                        .setTitle("Konfirmasi")
+                        .setMessage( (editMode) ? "Apakah anda yakin ingin menyimpan perubahan ?" : "Apakah anda yakin ingin menyimpan data survey ?")
+                        .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                saveData();
+                            }
+                        })
+                        .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .show();
+
             }
         });
 
@@ -296,7 +375,9 @@ public class MarketSurveyAOC extends AppCompatActivity implements LocationListen
             @Override
             public void onClick(View view) {
 
-                adapterRekomendasi.addItem(new CustomItem("",""));
+                listRekomendasi.add(new CustomItem("",""));
+                adapterRekomendasi = new ListRekomendasiAdapter((Activity) context, listRekomendasi);
+                lvRekomendasi.setAdapter(adapterRekomendasi);
             }
         });
 
@@ -304,7 +385,9 @@ public class MarketSurveyAOC extends AppCompatActivity implements LocationListen
             @Override
             public void onClick(View view) {
 
-                adapterPostmat.addItem(new CustomItem(""));
+                listPostmat.add(new CustomItem(""));
+                adapterPostmat = new ListPostmatAdapter((Activity) context, listPostmat);
+                lvPostmat.setAdapter(adapterPostmat);
             }
         });
 
@@ -340,6 +423,149 @@ public class MarketSurveyAOC extends AppCompatActivity implements LocationListen
 
                     Toast.makeText(context, "Harap tunggu hingga proses pencarian lokasi selesai", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+    }
+
+    private void saveData() {
+
+        progressDialog = new ProgressDialog(context, R.style.AppTheme_Login_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Menyimpan...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        btnSimpan.setEnabled(false);
+
+        String nik = session.getUserInfo(SessionManager.TAG_UID);
+
+        JSONObject jDataSurvey = new JSONObject();
+
+        try {
+            jDataSurvey.put("nik", session.getUserInfo(SessionManager.TAG_UID));
+            jDataSurvey.put("kdcus",lastKdcus);
+            jDataSurvey.put("branding", edtBranding.getText().toString());
+            jDataSurvey.put("evaluasi", edtEvaluasi.getText().toString());
+            jDataSurvey.put("rekomendasi_branding", edtRekomendasiBranding.getText().toString());
+            jDataSurvey.put("latitude", latitudeString);
+            jDataSurvey.put("longitude", longitudeString);
+            jDataSurvey.put("state", state);
+            jDataSurvey.put("kodearea", session.getUserInfo(SessionManager.TAG_AREA));
+
+            List<CustomItem> dataDisplay = ((ListDisplayAdapter)lvDisplay.getAdapter()).getItems();
+            for(CustomItem item : dataDisplay){
+                jDataSurvey.put("unit_"+item.getItem5(), ((item.getItem3().equals("")) ? "0" : item.getItem3()));
+                jDataSurvey.put("order_"+item.getItem5(), ((item.getItem4().equals("")) ? "0" : item.getItem4()));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONArray jDataImages = new JSONArray();
+
+        for (Bitmap item : photoList){
+
+            JSONObject jo = new JSONObject();
+            try {
+                jo.put("image", ImageUtils.convert(item));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            jDataImages.put(jo);
+        }
+
+        JSONArray jDataRekomendasi = new JSONArray();
+        for (CustomItem item : listRekomendasi){
+
+            if(!item.getItem1().equals("") && !item.getItem2().equals("")){
+
+                JSONObject jo = new JSONObject();
+                try {
+                    jo.put("namabrg", item.getItem1());
+                    jo.put("unit", item.getItem2());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                jDataRekomendasi.put(jo);
+            }
+        }
+
+        if(jDataRekomendasi.length() == 0){
+
+            Toast.makeText(context, "Harap tambahkan data rekomendasi", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        JSONArray jDataPostman = new JSONArray();
+        for (CustomItem item : listPostmat){
+
+            if(!item.getItem1().equals("")){
+
+                JSONObject jo = new JSONObject();
+                try {
+                    jo.put("postmat", item.getItem1());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                jDataPostman.put(jo);
+            }
+        }
+
+        if(jDataPostman.length() == 0){
+
+            Toast.makeText(context, "Harap tambahkan data postmat", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String method = "POST";
+        JSONObject jBody = new JSONObject();
+        try {
+            jBody.put("data", jDataSurvey);
+            jBody.put("flag", "AOC");
+            jBody.put("data_images", jDataImages);
+            jBody.put("data_rekomendasi", jDataRekomendasi);
+            jBody.put("data_postmat", jDataPostman);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(MarketSurveyAOC.this, jBody, method, ServerURL.saveMarketSurvey, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+                    progressDialog.dismiss();
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        String message = response.getJSONObject("response").getString("message");
+                        Toast.makeText(MarketSurveyAOC.this, message, Toast.LENGTH_LONG).show();
+                        onBackPressed();
+                    }else{
+                        String message = response.getJSONObject("metadata").getString("message");
+                        Toast.makeText(MarketSurveyAOC.this, message, Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    progressDialog.dismiss();
+                    Toast.makeText(MarketSurveyAOC.this, "Terjadi kesalahan, mohon ulangi kembali", Toast.LENGTH_LONG).show();
+                    btnSimpan.setEnabled(true);
+                }
+
+                btnSimpan.setEnabled(true);
+            }
+
+            @Override
+            public void onError(String result) {
+
+                progressDialog.dismiss();
+                Toast.makeText(MarketSurveyAOC.this, "Terjadi kesalahan, mohon ulangi kembali", Toast.LENGTH_LONG).show();
+                btnSimpan.setEnabled(true);
             }
         });
     }
@@ -487,7 +713,7 @@ public class MarketSurveyAOC extends AppCompatActivity implements LocationListen
     @Override
     protected void onResume() {
         super.onResume();
-
+        MockLocChecker checker = new MockLocChecker(MarketSurveyAOC.this);
         /*if (mRequestingLocationUpdates && checkPermissions()) {
             startLocationUpdates();
         }*/
@@ -806,6 +1032,7 @@ public class MarketSurveyAOC extends AppCompatActivity implements LocationListen
                     }
 
                     setTableDisplay(listProvider);
+                    initData();
 
                 } catch (JSONException e) {
 
@@ -823,14 +1050,234 @@ public class MarketSurveyAOC extends AppCompatActivity implements LocationListen
         });
     }
 
+    private void initData() {
+
+        Bundle bundle = getIntent().getExtras();
+
+        if(bundle != null){
+
+            idSurvey = bundle.getString("id", "");
+            if(!idSurvey.isEmpty()){
+
+                btnSimpan.setEnabled(false);
+                llJarak.setVisibility(View.GONE);
+                getDataSurvey();
+            }else{
+                refreshMode = true;
+                updateAllLocation();
+            }
+
+        }else{
+
+            refreshMode = true;
+            updateAllLocation();
+        }
+    }
+
+    private void getDataSurvey() {
+
+        pbProses.setVisibility(View.VISIBLE);
+        JSONObject jBody = new JSONObject();
+
+        try {
+            jBody.put("id", idSurvey);
+            jBody.put("flag", "AOC");
+            jBody.put("nik", "");
+            jBody.put("keyword", "");
+            jBody.put("date1", "");
+            jBody.put("date2", "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getMarketSurvey, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                pbProses.setVisibility(View.GONE);
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONObject jSurvey = response.getJSONObject("response").getJSONObject("survey");
+                        lastKdcus = jSurvey.getString("kdcus");
+                        lastCus = jSurvey.getString("nama");
+                        lastRadius = jSurvey.getString("toleransi_jarak");
+                        actvPOI.setText(lastCus);
+
+                        idKunjungan = jSurvey.getString("id_kunjungan");
+                        latitudeString = jSurvey.getString("latitude");
+                        longitudeString = jSurvey.getString("longitude");
+                        latitudePOI = jSurvey.getString("latitude_poi");
+                        longitudePOI = jSurvey.getString("longitude_poi");
+
+                        for(CustomItem item: listProvider){
+
+                            item.setItem3(jSurvey.getString("unit_"+item.getItem5()));
+                            item.setItem4(jSurvey.getString("order_"+item.getItem5()));
+                        }
+
+                        adapterDisplay.notifyDataSetChanged();
+
+                        edtBranding.setText(jSurvey.getString("branding"));
+                        edtEvaluasi.setText(jSurvey.getString("evaluasi"));
+                        edtRekomendasiBranding.setText(jSurvey.getString("rekomendasi_branding"));
+
+                        JSONArray jRekomendArray = response.getJSONObject("response").getJSONArray("rekomendasi");
+                        for(int j = 0; j < jRekomendArray.length() ; j++){
+
+                            JSONObject jRekomendasi = jRekomendArray.getJSONObject(j);
+                            listRekomendasi.add(new CustomItem(jRekomendasi.getString("namabrg"),jRekomendasi.getString("unit")));
+                        }
+                        adapterRekomendasi.notifyDataSetChanged();
+
+                        JSONArray jPostmatArray = response.getJSONObject("response").getJSONArray("postmat");
+                        for(int j = 0; j < jPostmatArray.length() ; j++){
+
+                            JSONObject jPostmat = jPostmatArray.getJSONObject(j);
+                            listPostmat.add(new CustomItem(jPostmat.getString("postmat")));
+                        }
+                        adapterPostmat.notifyDataSetChanged();
+
+                        latitude = iv.parseNullDouble(latitudeString);
+                        longitude = iv.parseNullDouble(longitudeString);
+                        location.setLatitude(latitude);
+                        location.setLongitude(longitude);
+                        refreshMode = true;
+                        onLocationChanged(location);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                getPhotos();
+            }
+
+            @Override
+            public void onError(String result) {
+
+                pbProses.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void getPhotos() {
+
+        ApiVolley request = new ApiVolley(context, new JSONObject(), "GET", ServerURL.getDetailKunjunganImg+idKunjungan, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray jsonArray = response.getJSONArray("response");
+
+                        for (int i = 0; i < jsonArray.length(); i++){
+
+                            JSONObject jo = jsonArray.getJSONObject(i);
+                            String image = jo.getString("image");
+                            new AsyncGettingBitmapFromUrl().execute(image);
+                        }
+                    }
+
+                } catch (JSONException e) {
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+
+            }
+        });
+    }
+
+    private class AsyncGettingBitmapFromUrl extends AsyncTask<String, Void, Bitmap> {
+
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+
+            System.out.println("doInBackground");
+
+            Bitmap bitmap1 = null;
+
+            bitmap1 = downloadImage(params[0]);
+            photoList.add(bitmap1);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+            return bitmap1;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+
+            System.out.println("bitmap" + bitmap);
+
+        }
+    }
+
+    private Bitmap downloadImage(String url) {
+        Bitmap bitmap = null;
+        InputStream stream = null;
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inSampleSize = 1;
+
+        try {
+            stream = getHttpConnection(url);
+            bitmap = BitmapFactory.decodeStream(stream, null, bmOptions);
+            if(stream != null){
+                stream.close();
+            }
+        }
+        catch (IOException e1) {
+            e1.printStackTrace();
+            System.out.println("downloadImage"+ e1.toString());
+        }
+        return bitmap;
+    }
+
+    private InputStream getHttpConnection(String urlString)  throws IOException {
+
+        InputStream stream = null;
+        URL url = new URL(urlString);
+        URLConnection connection = url.openConnection();
+
+        try {
+            HttpURLConnection httpConnection = (HttpURLConnection) connection;
+            httpConnection.setRequestMethod("GET");
+            httpConnection.connect();
+
+            if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                stream = httpConnection.getInputStream();
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            System.out.println("downloadImage" + ex.toString());
+        }
+        return stream;
+    }
+
     private void setTableDisplay(List<CustomItem> listItem) {
 
         lvDisplay.setAdapter(null);
 
         if(listItem != null && listItem.size() > 0){
 
-            ListDisplayAdapter adapter = new ListDisplayAdapter((Activity) context, listItem);
-            lvDisplay.setAdapter(adapter);
+            adapterDisplay = new ListDisplayAdapter((Activity) context, listItem);
+            lvDisplay.setAdapter(adapterDisplay);
         }
     }
 

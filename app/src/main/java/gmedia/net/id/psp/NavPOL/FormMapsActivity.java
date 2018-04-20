@@ -89,6 +89,7 @@ import java.util.Locale;
 import gmedia.net.id.psp.BuildConfig;
 import gmedia.net.id.psp.NavPOL.Adapter.PhotosAdapter;
 import gmedia.net.id.psp.R;
+import gmedia.net.id.psp.Utils.MockLocChecker;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class FormMapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
@@ -170,6 +171,12 @@ public class FormMapsActivity extends FragmentActivity implements OnMapReadyCall
 
         initUI();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MockLocChecker checker = new MockLocChecker(FormMapsActivity.this);
     }
 
     private void initUI() {

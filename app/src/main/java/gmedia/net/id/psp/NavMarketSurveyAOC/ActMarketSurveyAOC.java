@@ -244,7 +244,7 @@ public class ActMarketSurveyAOC extends AppCompatActivity {
                             JSONObject jo = items.getJSONObject(i);
                             listService.add(new CustomItem(jo.getString("id"),
                                     jo.getString("nama"),
-                                    jo.getString("alamat"),
+                                    jo.getString("nik"),
                                     jo.getString("state"),
                                     jo.getString("timestamp"),
                                     jo.getString("latitude"),

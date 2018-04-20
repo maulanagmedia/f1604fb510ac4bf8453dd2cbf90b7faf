@@ -90,6 +90,7 @@ import java.util.Locale;
 import gmedia.net.id.psp.BuildConfig;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.TambahCustomer.Adapter.PhotosAdapter;
+import gmedia.net.id.psp.Utils.MockLocChecker;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class DetailKunjungan extends AppCompatActivity implements LocationListener {
@@ -169,6 +170,12 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
         buildLocationSettingsRequest();
 
         initUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MockLocChecker checker = new MockLocChecker(DetailKunjungan.this);
     }
 
     private void initUI() {

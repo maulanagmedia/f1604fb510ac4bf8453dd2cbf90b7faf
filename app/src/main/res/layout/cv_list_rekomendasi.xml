@@ -21,7 +21,7 @@
             android:id="@+id/edt_text1"
             android:hint="Nama Produk"
             android:text=""
-            android:inputType="number"
+            android:inputType="textPersonName"
             android:imeOptions="actionNext"/>
 
         <EditText
@@ -33,6 +33,7 @@
             style="@style/formControlInput"
             android:id="@+id/edt_text2"
             android:hint="Unit"
+            android:gravity="right"
             android:text=""
             android:inputType="number"
             android:imeOptions="actionNext"/>

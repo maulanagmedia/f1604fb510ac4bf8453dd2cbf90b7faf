@@ -79,7 +79,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
     private BottomSheetBehavior mBottomSheetBehavior2;
     private ImageView ivExpand;
     private LinearLayout llOrderMkios, llPenjualanMkios, llOrderPerdana, llPenjualanPerdana, llDaftarPiutang, llStokSales;
-    private TextView tvNamaSales, tvTotalOmset, tvOmsetMkios, tvOmsetPerdana;
+    private TextView tvNamaSales, tvTotalOmset, tvOmsetMkios, tvOmsetPerdana, tvTargetMkios, tvGapMkios, tvTargetPerdana, tvGapPerdana, tvTargetPJP, tvPencapaianPJP, tvGapPJP;
     private LinearLayout llAddCustomer, llCheckIn, llKomplain;
     private LinearLayout ll1, ll2, ll3, ll3a, ll4, ll5, ll6, ll7;
     private LinearLayout llOrderTcash;
@@ -88,12 +88,14 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
     private LinearLayout llVerifikasiOutlet;
     private LinearLayout llInfoDeposit;
     private TextView tvJabatan;
-    private TextView tvTarget, tvPencapaian, tvGap, tvOutletBaru;
+    private TextView tvOutletBaru;
     private LinearLayout llMapsKunjungan;
     private LinearLayout llPreorderPerdana;
     private LinearLayout llEvent, llMarketSurvey, llMarketSurveyAoc;
     private LinearLayout llDirectSelling;
     private LinearLayout llMenuPenjualanReseller, llMenuDirectSelling, llMenuSPV, llMenuOperasional;
+    private LinearLayout llIDS, llDS;
+    private TextView tvDSTargetMkios, tvDSOmsetMkios, tvDSGapMkios, tvDSTargetPerdana, tvDSOmsetPerdana, tvDSGapPerdana, tvDSTargetBulk, tvDSOmsetBulk, tvDSGapBulk, tvTargetSurvey, tvEffectiveCall;
 
     public NavHome() {
         // Required empty public constructor
@@ -228,13 +230,49 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
 
         tvNamaSales = (TextView) layout.findViewById(R.id.tv_nama_sales);
         tvTotalOmset = (TextView) layout.findViewById(R.id.tv_total_omset);
+
+        tvTargetMkios = (TextView) layout.findViewById(R.id.tv_target_mkios);
         tvOmsetMkios = (TextView) layout.findViewById(R.id.tv_omset_mkios);
+        tvGapMkios = (TextView) layout.findViewById(R.id.tv_gap_mkios);
+
+        tvTargetPerdana = (TextView) layout.findViewById(R.id.tv_target_perdana);
         tvOmsetPerdana = (TextView) layout.findViewById(R.id.tv_omset_perdana);
-        tvTarget = (TextView) layout.findViewById(R.id.tv_target);
-        tvPencapaian = (TextView) layout.findViewById(R.id.tv_pencapain);
-        tvGap = (TextView) layout.findViewById(R.id.tv_gap);
+        tvGapPerdana = (TextView) layout.findViewById(R.id.tv_gap_perdana);
+
+        tvTargetPJP = (TextView) layout.findViewById(R.id.tv_target_pjp);
+        tvPencapaianPJP = (TextView) layout.findViewById(R.id.tv_pencapaian_pjp);
+        tvGapPJP = (TextView) layout.findViewById(R.id.tv_gap_pjp);
+
         tvOutletBaru = (TextView) layout.findViewById(R.id.tv_outlet_baru);
         tvJabatan = (TextView) layout.findViewById(R.id.tv_jabatan);
+
+        llIDS = (LinearLayout) layout.findViewById(R.id.ll_ids);
+        llDS = (LinearLayout) layout.findViewById(R.id.ll_ds);
+
+        if(session.getLevel().equals("SF")){
+
+            llIDS.setVisibility(View.VISIBLE);
+            llDS.setVisibility(View.GONE);
+        }else{
+
+            llIDS.setVisibility(View.GONE);
+            llDS.setVisibility(View.VISIBLE);
+        }
+
+        tvDSTargetMkios = (TextView) layout.findViewById(R.id.tv_ds_target_mkios);
+        tvDSOmsetMkios = (TextView) layout.findViewById(R.id.tv_ds_omset_mkios);
+        tvDSGapMkios = (TextView) layout.findViewById(R.id.tv_ds_gap_mkios);
+
+        tvDSTargetPerdana = (TextView) layout.findViewById(R.id.tv_ds_target_perdana);
+        tvDSOmsetPerdana = (TextView) layout.findViewById(R.id.tv_ds_omset_perdana);
+        tvDSGapPerdana = (TextView) layout.findViewById(R.id.tv_ds_gap_perdana);
+
+        tvDSTargetBulk = (TextView) layout.findViewById(R.id.tv_ds_target_bulk);
+        tvDSOmsetBulk = (TextView) layout.findViewById(R.id.tv_ds_omset_bulk);
+        tvDSGapBulk = (TextView) layout.findViewById(R.id.tv_ds_gap_bulk);
+
+        tvTargetSurvey = (TextView) layout.findViewById(R.id.tv_ds_target_survey);
+        tvEffectiveCall = (TextView) layout.findViewById(R.id.tv_ds_effective_call);
 
         initEvent();
 
@@ -520,6 +558,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getUserInfo, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
@@ -555,6 +594,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         JSONObject jBody = new JSONObject();
         try {
             jBody.put("nik", session.getUserInfo(SessionManager.TAG_UID));
+            jBody.put("flag", session.getUserInfo(SessionManager.TAG_LEVEL));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -571,15 +611,42 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
                     if(iv.parseNullInteger(status) == 200){
 
                         JSONObject item = responseAPI.getJSONObject("response");
-                        tvOmsetMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_mkios"))));
-                        tvOmsetPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_perdana"))));
-                        tvTarget.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("target"))));
-                        tvPencapaian.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("pencapaian"))));
-                        tvGap.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("gap"))));
-                        tvOutletBaru.setText(item.getString("outlet_baru"));
 
-                        tvTotalOmset.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_mkios")) + iv.parseNullDouble(item.getString("omset_perdana"))));
+                        if(session.getLevel().equals("SF")){
 
+                            tvTargetMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("target_mkios"))));
+                            tvOmsetMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_mkios"))));
+                            tvGapMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("gap_mkios"))));
+
+                            tvTargetPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("target_perdana"))));
+                            tvOmsetPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_perdana"))));
+                            tvGapPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("gap_perdana"))));
+
+                            tvTargetPJP.setText(item.getString("target_pjp"));
+                            tvPencapaianPJP.setText(item.getString("pencapaian_pjp"));
+                            tvGapPJP.setText(item.getString("gap_pjp"));
+
+                            tvOutletBaru.setText(item.getString("outlet_baru"));
+
+                        }else{
+
+                            tvDSTargetMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("target_mkios"))));
+                            tvDSOmsetMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_mkios"))));
+                            tvDSGapMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("gap_mkios"))));
+
+                            tvDSTargetPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("target_perdana"))));
+                            tvDSOmsetPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_perdana"))));
+                            tvDSGapPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("gap_perdana"))));
+
+                            tvDSTargetBulk.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("target_bulk"))));
+                            tvDSOmsetBulk.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_bulk"))));
+                            tvDSGapBulk.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("gap_bulk"))));
+
+                            tvTargetSurvey.setText(item.getString("target_survey"));
+                            tvEffectiveCall.setText(item.getString("effective_call"));
+                        }
+
+                        tvTotalOmset.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("total_omset"))));
                     }
 
                 } catch (JSONException e) {

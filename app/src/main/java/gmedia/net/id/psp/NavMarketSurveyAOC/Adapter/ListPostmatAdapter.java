@@ -43,7 +43,7 @@ public class ListPostmatAdapter extends ArrayAdapter{
 
     public void addItem(CustomItem item){
 
-        items.add(item);
+        items.add(items.size(),item);
         notifyDataSetChanged();
     }
 
@@ -88,7 +88,12 @@ public class ListPostmatAdapter extends ArrayAdapter{
             @Override
             public void afterTextChanged(Editable editable) {
 
-                items.get(position).setItem1(editable.toString());
+                try {
+                    items.get(position).setItem1(editable.toString());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
         });
 

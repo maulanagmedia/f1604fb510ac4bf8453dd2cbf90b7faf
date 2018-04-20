@@ -315,15 +315,109 @@
 
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup">
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:id="@+id/rv_photo"></android.support.v7.widget.RecyclerView>
+
+                <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/ic_add_photo"
+                    android:scaleType="centerInside"
+                    android:id="@+id/ib_add_photo"
+                    android:padding="@dimen/default_margin_small"
+                    android:layout_marginRight="@dimen/default_margin_small"
+                    android:layout_marginBottom="@dimen/default_margin_small"
+                    android:background="@drawable/btn_round"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                style="@style/formGroup"
+                android:visibility="visible"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Geser gambar untuk melihat gambar lainnya"
+                    android:textColor="@color/default_background"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_jarak"
+                style="@style/formGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:id="@+id/edt_jarak"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.9"
+                        android:background="@null"
+                        android:editable="false"
+                        android:inputType="none"
+                        android:text="Menunggu proses perhitungan jarak..." />
+
+                    <ImageView
+                        android:id="@+id/iv_refresh_position"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/default_margin_tiny"
+                        android:layout_marginRight="@dimen/default_margin_tiny"
+                        android:layout_weight="0.1"
+                        android:background="?attr/selectableItemBackground"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/ic_sync" />
+                </LinearLayout>
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/formGroup"
                 android:gravity="center"
-                android:layout_marginBottom="@dimen/default_margin_small">
+                android:layout_marginBottom="@dimen/default_margin_small"
+                android:orientation="horizontal"
+                android:weightSum="1">
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:id="@+id/btn_maps"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin_small"
+                    android:layout_marginTop="@dimen/default_margin_tiny"
+                    android:layout_weight="0.4"
+                    android:background="@drawable/btn_form"
+                    android:text="Peta POI"
+                    android:textColor="@color/color_white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:orientation="vertical"></LinearLayout>
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="0.4"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_login"
                     android:paddingLeft="@dimen/default_margin_small"

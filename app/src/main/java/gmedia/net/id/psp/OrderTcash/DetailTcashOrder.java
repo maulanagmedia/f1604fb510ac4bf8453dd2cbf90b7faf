@@ -63,6 +63,7 @@ import org.json.JSONObject;
 import gmedia.net.id.psp.MapsOutletActivity;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
+import gmedia.net.id.psp.Utils.MockLocChecker;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class DetailTcashOrder extends AppCompatActivity implements LocationListener {
@@ -137,6 +138,12 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
         buildLocationSettingsRequest();
 
         initUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MockLocChecker checker = new MockLocChecker(DetailTcashOrder.this);
     }
 
     private void initUI() {

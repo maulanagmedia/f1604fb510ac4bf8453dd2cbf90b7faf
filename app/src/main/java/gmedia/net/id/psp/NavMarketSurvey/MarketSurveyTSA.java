@@ -8,22 +8,35 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Environment;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -31,6 +44,9 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -61,6 +77,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
+import com.maulana.custommodul.ImageUtils;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.OptionItem;
 import com.maulana.custommodul.SessionManager;
@@ -69,13 +86,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import gmedia.net.id.psp.Adapter.AutocompleteAdapter;
+import gmedia.net.id.psp.BuildConfig;
 import gmedia.net.id.psp.CustomView.CustomMapView;
+import gmedia.net.id.psp.MapsOutletActivity;
+import gmedia.net.id.psp.NavCheckin.DetailKunjungan;
 import gmedia.net.id.psp.R;
+import gmedia.net.id.psp.TambahCustomer.Adapter.PhotosAdapter;
+import gmedia.net.id.psp.Utils.MockLocChecker;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class MarketSurveyTSA extends AppCompatActivity implements LocationListener {
@@ -135,6 +167,23 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
     private List<CustomItem> listPOI;
     private String lastKdcus = "", lastCus = "", latitudePOI = "", longitudePOI = "", lastRadius = "";
 
+    //Upload Handler
+    private static int RESULT_OK = -1;
+    private static int PICK_IMAGE_REQUEST = 1212;
+    private ImageUtils iu = new ImageUtils();
+    private Bitmap bitmap;
+    private List<Bitmap> photoList;
+    private PhotosAdapter adapter;
+    private RecyclerView rvPhoto;
+    private ImageButton ibAddPhoto;
+
+    private LinearLayout llJarak;
+    private EditText edtJarak;
+    private ImageView ivRefreshPosition;
+    private Button btnMapsOutlet;
+    private String jarak = "";
+    private String idKunjungan = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,8 +223,23 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
         spKartuKedua = (Spinner) findViewById(R.id.sp_kartu_kedua);
         spPulsa = (Spinner) findViewById(R.id.sp_pulsa);
         spData = (Spinner) findViewById(R.id.sp_data);
+
+        llJarak = (LinearLayout) findViewById(R.id.ll_jarak);
+        edtJarak = (EditText) findViewById(R.id.edt_jarak);
+        ivRefreshPosition = (ImageView) findViewById(R.id.iv_refresh_position);
+        btnMapsOutlet = (Button) findViewById(R.id.btn_maps);
         btnSimpan = (Button) findViewById(R.id.btn_simpan);
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
+
+        rvPhoto = (RecyclerView) findViewById(R.id.rv_photo);
+        ibAddPhoto = (ImageButton) findViewById(R.id.ib_add_photo);
+
+        // Gambar
+        photoList = new ArrayList<>();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        adapter = new PhotosAdapter(MarketSurveyTSA.this, photoList);
+        rvPhoto.setLayoutManager(layoutManager);
+        rvPhoto.setAdapter(adapter);
 
         session = new SessionManager(context);
         mvMap = (CustomMapView) findViewById(R.id.mv_map);
@@ -248,6 +312,13 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
                     edtAlamat.setError(null);
                 }
 
+                if(!isOnLocation(location)){
+                    Toast.makeText(context, "Posisi anda diluar area yang ditentukan", Toast.LENGTH_LONG).show();
+                    refreshMode = true;
+                    updateAllLocation();
+                    return;
+                }
+
                 AlertDialog konfirmasi = new AlertDialog.Builder(MarketSurveyTSA.this)
                         .setTitle("Konfirmasi")
                         .setMessage( (editMode) ? "Apakah anda yakin ingin menyimpan perubahan ?" : "Apakah anda yakin ingin menyimpan data survey ?")
@@ -266,6 +337,128 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
                         .show();
             }
         });
+
+        ibAddPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                loadChooserDialog();
+            }
+        });
+
+        btnMapsOutlet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String latLokasi = "", longLokasi = "";
+
+                latLokasi = latitudePOI;
+                longLokasi = longitudePOI;
+
+                if(!latLokasi.equals("")&& !longLokasi.equals("")){
+
+                    Intent intent = new Intent(context, MapsOutletActivity.class);
+                    intent.putExtra("lat", iv.doubleToStringFull(latitude));
+                    intent.putExtra("long", iv.doubleToStringFull(longitude));
+                    intent.putExtra("lat_outlet", latLokasi);
+                    intent.putExtra("long_outlet", longLokasi);
+                    intent.putExtra("nama", lastCus);
+
+                    startActivity(intent);
+                }else{
+
+                    Toast.makeText(context, "Harap tunggu hingga proses pencarian lokasi selesai", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void loadChooserDialog(){
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(MarketSurveyTSA.this);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.layout_chooser, null);
+        builder.setView(view);
+
+        final LinearLayout llBrowse= (LinearLayout) view.findViewById(R.id.ll_browse);
+        final LinearLayout llCamera = (LinearLayout) view.findViewById(R.id.ll_camera);
+
+        final AlertDialog alert = builder.create();
+
+        llBrowse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                showFileChooser();
+                alert.dismiss();
+            }
+        });
+
+        llCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                openCamera();
+                alert.dismiss();
+            }
+        });
+
+        alert.show();
+    }
+
+    //region File Chooser
+
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    private final int REQUEST_IMAGE_CAPTURE = 2;
+    private String photoFromCameraURI;
+
+    private void openCamera(){
+
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            Uri photoURL = null;
+            try {
+                photoURL = FileProvider.getUriForFile(MarketSurveyTSA.this,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        createImageFile());
+                photoFromCameraURI = photoURL.toString();
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Log.i(TAG, "IOException");
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURL);
+                startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  // prefix
+                ".jpg",         // suffix
+                storageDir      // directory
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        //photoFromCameraURI = "file:" + image.getAbsolutePath();
+        return image;
     }
 
     private void saveData() {
@@ -317,11 +510,25 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
             e.printStackTrace();
         }
 
+        JSONArray jDataImages = new JSONArray();
+
+        for (Bitmap item : photoList){
+
+            JSONObject jo = new JSONObject();
+            try {
+                jo.put("image", ImageUtils.convert(item));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            jDataImages.put(jo);
+        }
+
         String method = "POST";
         JSONObject jBody = new JSONObject();
         try {
             jBody.put("data", jDataSurvey);
             jBody.put("flag", "TSA");
+            jBody.put("data_images", jDataImages);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -419,6 +626,7 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
     @Override
     protected void onResume() {
         super.onResume();
+        MockLocChecker checker = new MockLocChecker(MarketSurveyTSA.this);
 
         /*if (mRequestingLocationUpdates && checkPermissions()) {
             startLocationUpdates();
@@ -511,7 +719,115 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
                 startLocationUpdates();
             }
 
+        }else if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri filePath = data.getData();
+            /*File file = new File(String.valueOf(filePath));
+            long length = file.length();
+            length = length/1024; //in KB*/
+
+            InputStream imageStream = null, copyStream = null;
+            try {
+                imageStream = getContentResolver().openInputStream(
+                        filePath);
+                copyStream = getContentResolver().openInputStream(
+                        filePath);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            //options.inJustDecodeBounds = false;
+            options.inPreferredConfig = Bitmap.Config.RGB_565;
+            //options.inDither = true;
+
+            // Get bitmap dimensions before reading...
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(copyStream, null, options);
+            int width = options.outWidth;
+            int height = options.outHeight;
+            int largerSide = Math.max(width, height);
+            options.inJustDecodeBounds = false; // This time it's for real!
+            int sampleSize = 1; // Calculate your sampleSize here
+            if(largerSide <= 1000){
+                sampleSize = 1;
+            }else if(largerSide > 1000 && largerSide <= 2000){
+                sampleSize = 2;
+            }else if(largerSide > 2000 && largerSide <= 3000){
+                sampleSize = 3;
+            }else if(largerSide > 3000 && largerSide <= 4000){
+                sampleSize = 4;
+            }else{
+                sampleSize = 6;
+            }
+            options.inSampleSize = sampleSize;
+            //options.inDither = true;
+
+            Bitmap bmp = BitmapFactory.decodeStream(imageStream, null, options);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.PNG, 70, stream);
+            byte[] byteArray = stream.toByteArray();
+            bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            bitmap = scaleDown(bitmap, 360, true);
+
+            try {
+                stream.close();
+                stream = null;
+            } catch (IOException e) {
+
+                e.printStackTrace();
+            }
+
+            if(bitmap != null){
+
+                photoList.add(bitmap);
+                adapter.notifyDataSetChanged();
+            }
+
+        }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+
+            try {
+
+                if(photoFromCameraURI != null){
+
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(photoFromCameraURI));
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        bitmap = rotateImage(bitmap, 90);
+                    }
+
+                    bitmap = scaleDown(bitmap, 360, true);
+
+
+                    if(bitmap != null){
+
+                        photoList.add(bitmap);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
+                                   boolean filter) {
+        float ratio = Math.min(
+                (float) maxImageSize / realImage.getWidth(),
+                (float) maxImageSize / realImage.getHeight());
+        int width = Math.round((float) ratio * realImage.getWidth());
+        int height = Math.round((float) ratio * realImage.getHeight());
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                height, filter);
+        return newBitmap;
+    }
+
+    private Bitmap rotateImage(Bitmap source, float angle){
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
     private void initLocation() {
@@ -623,6 +939,9 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
                     latitudePOI = item.getItem4();
                     longitudePOI = item.getItem5();
                     lastRadius = item.getItem6();
+
+                    refreshMode = true;
+                    updateAllLocation();
                 }
             });
         }
@@ -704,6 +1023,7 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
                 editMode = true;
 
                 btnSimpan.setEnabled(false);
+                llJarak.setVisibility(View.GONE);
 
                 getSurveyMarket();
 
@@ -716,6 +1036,48 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
             //location = getLocation();
             updateAllLocation();
         }
+    }
+
+    public static  Bitmap downloadImage(String url) {
+        Bitmap bitmap = null;
+        InputStream stream = null;
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inSampleSize = 1;
+
+        try {
+            stream = getHttpConnection(url);
+            bitmap = BitmapFactory.decodeStream(stream, null, bmOptions);
+            if(stream != null){
+                stream.close();
+            }
+        }
+        catch (IOException e1) {
+            e1.printStackTrace();
+            System.out.println("downloadImage"+ e1.toString());
+        }
+        return bitmap;
+    }
+
+    public static InputStream getHttpConnection(String urlString)  throws IOException {
+
+        InputStream stream = null;
+        URL url = new URL(urlString);
+        URLConnection connection = url.openConnection();
+
+        try {
+            HttpURLConnection httpConnection = (HttpURLConnection) connection;
+            httpConnection.setRequestMethod("GET");
+            httpConnection.connect();
+
+            if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                stream = httpConnection.getInputStream();
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            System.out.println("downloadImage" + ex.toString());
+        }
+        return stream;
     }
 
     private void getSurveyMarket() {
@@ -759,6 +1121,7 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
 
                             //actvPoi.setText(lastCus);
                             //if(actvPOI.getText().length() > 0) actvPOI.setSelection(actvPOI.getText().length());
+                            idKunjungan = jo.getString("id_kunjungan");
                             latitudePOI = jo.getString("latitude_poi");
                             longitudePOI = jo.getString("longitude_poi");
                             lastRadius = jo.getString("toleransi_jarak");
@@ -807,6 +1170,8 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                getPhotos();
             }
 
             @Override
@@ -815,6 +1180,68 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
                 pbProses.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void getPhotos() {
+
+        ApiVolley request = new ApiVolley(context, new JSONObject(), "GET", ServerURL.getDetailKunjunganImg+idKunjungan, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray jsonArray = response.getJSONArray("response");
+
+                        for (int i = 0; i < jsonArray.length(); i++){
+
+                            JSONObject jo = jsonArray.getJSONObject(i);
+                            String image = jo.getString("image");
+                            new AsyncGettingBitmapFromUrl().execute(image);
+                        }
+                    }
+
+                } catch (JSONException e) {
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+
+            }
+        });
+    }
+
+    private class AsyncGettingBitmapFromUrl extends AsyncTask<String, Void, Bitmap> {
+
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+
+            System.out.println("doInBackground");
+
+            Bitmap bitmap1 = null;
+
+            bitmap1 = downloadImage(params[0]);
+            photoList.add(bitmap1);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+            return bitmap1;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+
+            System.out.println("bitmap" + bitmap);
+
+        }
     }
 
     private void updateAllLocation(){
@@ -875,10 +1302,14 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
                     Log.d("Network", "Network");
 
                     if (locationManager != null) {
-                        location = locationManager
+
+
+                        Location cLocation = locationManager
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                        if (location != null) {
-                            //onLocationChanged(location);
+
+                        if (cLocation != null && !isOnLocation(location)) {
+
+                            location = cLocation;
                         }
                     }
                 }
@@ -895,7 +1326,7 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
                     if (locationManager != null) {
                         Location bufferLocation = locationManager
                                 .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        if (bufferLocation != null) {
+                        if (bufferLocation != null && !isOnLocation(location)) {
 
                             location = bufferLocation;
                         }
@@ -1104,14 +1535,80 @@ public class MarketSurveyTSA extends AppCompatActivity implements LocationListen
         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
     }
 
+    private boolean isOnLocation(Location detectedLocation){
+
+        String latLokasi = "", longLokasi = "";
+
+        latLokasi = latitudePOI;
+        longLokasi = longitudePOI;
+
+        boolean hasil = false;
+
+        if(!lastRadius.equals("") && !latLokasi.equals("") && !longLokasi.equals("") && detectedLocation != null){
+
+            double latOutlet = iv.parseNullDouble(latLokasi);
+            double longOutlet = iv.parseNullDouble(longLokasi);
+
+            double detectedJarak = (6371 * Math.acos(Math.sin(Math.toRadians(latOutlet)) * Math.sin(Math.toRadians(detectedLocation.getLatitude())) + Math.cos(Math.toRadians(longOutlet - detectedLocation.getLongitude())) * Math.cos(Math.toRadians(latOutlet)) * Math.cos(Math.toRadians(detectedLocation.getLatitude()))));
+            double rangeDouble = iv.parseNullDouble(lastRadius);
+
+            jarak = iv.doubleToStringFull(detectedJarak);
+            String pesan = "Jarak saat ini dengan lokasi adalah ";
+            String keteranganJarak = "";
+            if(iv.parseNullDouble(lastRadius) <= 6371){
+                if(iv.parseNullDouble(jarak) <= 1){
+                    keteranganJarak = iv.doubleToString(iv.parseNullDouble(jarak) * 1000, "2") + " m";
+                }else{
+                    keteranganJarak = iv.doubleToString(iv.parseNullDouble(jarak), "2") + " km";
+                }
+
+                if(iv.parseNullDouble(jarak) > iv.parseNullDouble(lastRadius)){
+
+                    keteranganJarak = "<font color='#ec1c25'>"+keteranganJarak+"</font>";
+                }
+
+            }else{
+
+                keteranganJarak = "<font color='#ec1c25'>Lokasi outlet tidak diketahui</font>";
+            }
+
+            edtJarak.setText(Html.fromHtml(pesan + keteranganJarak));
+
+            if(detectedJarak <= rangeDouble) {
+
+                hasil = true;
+            }
+        }
+
+        return hasil;
+    }
+
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(Location clocation) {
 
         if(refreshMode){
+
+            if(!jarak.equals("")){
+
+                if(isOnLocation(clocation)){
+
+                    this.location = clocation;
+                    this.latitude = location.getLatitude();
+                    this.longitude = location.getLongitude();
+                }
+
+            }else{
+
+                this.location = clocation;
+                this.latitude = location.getLatitude();
+                this.longitude = location.getLongitude();
+            }
+
+            if(!editMode){
+                isOnLocation(clocation);
+            }
+
             refreshMode = false;
-            this.location = location;
-            this.latitude = location.getLatitude();
-            this.longitude = location.getLongitude();
             setPointMap();
         }
     }

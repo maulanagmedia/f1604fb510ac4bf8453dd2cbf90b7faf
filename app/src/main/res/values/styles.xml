@@ -191,6 +191,8 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">@dimen/home_title</item>
         <item name="android:paddingTop">@dimen/default_margin_tiny</item>
+        <item name="android:paddingLeft">@dimen/default_margin_tiny</item>
+        <item name="android:paddingRight">@dimen/default_margin_tiny</item>
     </style>
 
     <style name="home_subtitle">
@@ -199,6 +201,8 @@
         <item name="android:layout_marginTop">@dimen/default_margin_tiny</item>
         <item name="android:textSize">@dimen/home_subtitle</item>
         <item name="android:paddingBottom">@dimen/default_margin_tiny</item>
+        <item name="android:paddingLeft">@dimen/default_margin_tiny</item>
+        <item name="android:paddingRight">@dimen/default_margin_tiny</item>
     </style>
 
 </resources>

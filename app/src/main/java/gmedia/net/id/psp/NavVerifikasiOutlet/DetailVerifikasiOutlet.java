@@ -82,6 +82,7 @@ import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.TambahCustomer.Adapter.PhotosAdapter;
 import gmedia.net.id.psp.TambahCustomer.Model.AreaModel;
 import gmedia.net.id.psp.Utils.FormatItem;
+import gmedia.net.id.psp.Utils.MockLocChecker;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class DetailVerifikasiOutlet extends AppCompatActivity  implements LocationListener {
@@ -154,6 +155,12 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
         );
 
         initUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MockLocChecker checker = new MockLocChecker(DetailVerifikasiOutlet.this);
     }
 
     private void initUI() {

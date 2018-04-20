@@ -88,7 +88,12 @@ public class ListDisplayAdapter extends ArrayAdapter{
             @Override
             public void afterTextChanged(Editable editable) {
 
-                items.get(position).setItem3(editable.toString());
+                try {
+                    items.get(position).setItem3(editable.toString());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
         });
 
@@ -106,7 +111,12 @@ public class ListDisplayAdapter extends ArrayAdapter{
             @Override
             public void afterTextChanged(Editable editable) {
 
-                items.get(position).setItem4(editable.toString());
+                try {
+                    items.get(position).setItem4(editable.toString());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
         });
 
