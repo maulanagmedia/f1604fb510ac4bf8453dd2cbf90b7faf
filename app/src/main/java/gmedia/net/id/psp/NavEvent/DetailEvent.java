@@ -326,7 +326,7 @@ public class DetailEvent extends AppCompatActivity {
         intent.putExtra("long", longitude);
         intent.putExtra("radius", radius);
         intent.putExtra("flag_radius", flagRadius);
-        if(lastCus.equals(actvPoi.getText().toString())){
+        if(lastCus.equals(actvPoi.getText().toString()) && !actvPoi.getText().toString().equals("")){
             intent.putExtra("kdcus", lastKdcus);
             intent.putExtra("lat_poi", latitudePOI);
             intent.putExtra("long_poi", longitudePOI);

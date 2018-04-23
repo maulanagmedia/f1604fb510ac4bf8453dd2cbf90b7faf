@@ -82,6 +82,8 @@ public class MockLocChecker {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 ((Activity)context).startActivity(intent);
                                 ((Activity)context).finish();
+                            }else{
+                                Toast.makeText(context, "Anda terdeteksi menggunakan aplikasi yang mengganggu proses app PSP", Toast.LENGTH_LONG).show();
                             }
                         }
 
