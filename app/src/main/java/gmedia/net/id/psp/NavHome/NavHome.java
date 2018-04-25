@@ -618,9 +618,9 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
                             tvOmsetMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_mkios"))));
                             tvGapMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("gap_mkios"))));
 
-                            tvTargetPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("target_perdana"))));
-                            tvOmsetPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_perdana"))));
-                            tvGapPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("gap_perdana"))));
+                            tvTargetPerdana.setText(item.getString("target_perdana"));
+                            tvOmsetPerdana.setText(item.getString("omset_perdana"));
+                            tvGapPerdana.setText(item.getString("gap_perdana"));
 
                             tvTargetPJP.setText(item.getString("target_pjp"));
                             tvPencapaianPJP.setText(item.getString("pencapaian_pjp"));
@@ -634,9 +634,9 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
                             tvDSOmsetMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_mkios"))));
                             tvDSGapMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("gap_mkios"))));
 
-                            tvDSTargetPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("target_perdana"))));
-                            tvDSOmsetPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_perdana"))));
-                            tvDSGapPerdana.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("gap_perdana"))));
+                            tvDSTargetPerdana.setText(item.getString("target_perdana"));
+                            tvDSOmsetPerdana.setText(item.getString("omset_perdana"));
+                            tvDSGapPerdana.setText(item.getString("gap_perdana"));
 
                             tvDSTargetBulk.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("target_bulk"))));
                             tvDSOmsetBulk.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_bulk"))));
