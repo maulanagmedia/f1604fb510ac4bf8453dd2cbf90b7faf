@@ -142,7 +142,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
     private boolean isEvent = false, isPOI = false;
     private Button btnAppInfo;
     private LinearLayout llJarak;
-    private static String lastKodebrg = "", lastFlagOrder = "", lastSN = "";
+    private static String lastKodebrg = "", lastFlagOrder = "", lastSN = "", lastSuccessBalasan = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,6 +197,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
         kdcus = "";
         jarak = "";
         lastSN = "";
+        lastSuccessBalasan = "";
 
         initEvent();
         initLocationManual();
@@ -851,6 +852,36 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             }catch (Exception e){
                 e.printStackTrace();
             }
+        }else if(state == 5){
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+            View viewDialog = inflater.inflate(R.layout.layout_warning, null);
+            builder.setView(viewDialog);
+            builder.setCancelable(false);
+
+            final TextView tvText1 = (TextView) viewDialog.findViewById(R.id.tv_text1);
+            tvText1.setText(message);
+            final Button btnOK = (Button) viewDialog.findViewById(R.id.btn_ok);
+            btnOK.setText("Ulangi Proses");
+
+            final AlertDialog alert = builder.create();
+            alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+            btnOK.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view2) {
+
+                    if(alert != null) alert.dismiss();
+                    logBalasan(lastSuccessBalasan);
+                }
+            });
+
+            try {
+                alert.show();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -930,6 +961,10 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
         isLoading(true);
         String nik = session.getUserDetails().get(SessionManager.TAG_UID);
 
+        if(text.toLowerCase().contains("berhasil")){
+            lastSuccessBalasan = text;
+        }
+
         JSONObject jBody = new JSONObject();
         try {
             jBody.put("nik", nik);
@@ -968,12 +1003,20 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if(text.toLowerCase().contains("berhasil")){
+                        lastSuccessBalasan = text;
+                        showDialog(5, "Laporan tidak masuk, harap tekan ulangi proses");
+                    }
                 }
             }
 
             @Override
             public void onError(String result) {
                 isLoading(false);
+                if(text.toLowerCase().contains("berhasil")){
+                    lastSuccessBalasan = text;
+                    showDialog(5, "Laporan tidak masuk, harap tekan ulangi proses");
+                }
             }
         });
 
@@ -1087,7 +1130,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(context, superMessage, Toast.LENGTH_LONG).show();
-                    showDialog(4, "Terjadi kesalahan koneksi, harap tekan ulangi proses");
+                    showDialog(4, "Laporan tidak masuk, harap tekan ulangi proses");
                 }
             }
 
@@ -1096,7 +1139,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 isLoading(false);
                 progressDialog.dismiss();
                 //Toast.makeText(context, "Terjadi kesalahan saat menyimpan data, harap ulangi kembali", Toast.LENGTH_LONG).show();
-                showDialog(4, "Terjadi kesalahan koneksi, harap tekan ulangi proses");
+                showDialog(4, "Laporan tidak masuk, harap tekan ulangi proses");
             }
         });
     }
@@ -1374,7 +1417,26 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             public void onClick(View view2) {
 
                 if(alert != null) alert.dismiss();
-                ((Activity) context).onBackPressed();
+
+                AlertDialog alertDialog = new AlertDialog.Builder(context)
+                        .setIcon(R.mipmap.ic_launcher)
+                        .setTitle("Konfirmasi")
+                        .setMessage("Apakah anda yakin ingin membatalkan proses?")
+                        .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ((Activity) context).onBackPressed();
+                            }
+                        })
+                        .setCancelable(false)
+                        .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                showDialogLoading();
+                            }
+                        })
+                        .show();
             }
         });
 

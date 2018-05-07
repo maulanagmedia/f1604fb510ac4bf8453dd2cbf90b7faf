@@ -97,7 +97,7 @@ public class ApiVolley {
             public void onErrorResponse(VolleyError error) {
                 callback.onError(error.toString());
                 ShowCustomDialog(context,showDialogFlag,failDialog);
-                callback.onError(error.toString());
+                //callback.onError(error.toString());
                 return;
             }
         }) {
