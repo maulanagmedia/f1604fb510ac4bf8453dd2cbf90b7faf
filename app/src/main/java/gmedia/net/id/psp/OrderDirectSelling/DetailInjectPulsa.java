@@ -66,6 +66,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,6 +104,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
     private static EditText edtNominal;
     private static String flagOrder = "", selectedHarga = "";
     private static CustomItem selectedItemOrder;
+    private static String currentString = "";
 
     // Location
     private double latitude, longitude;
@@ -1408,6 +1410,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
         final TextView tvText1 = (TextView) viewDialog.findViewById(R.id.tv_text1);
         final Button btnOK = (Button) viewDialog.findViewById(R.id.btn_ok);
+        final Button btnKonfirmasi = (Button) viewDialog.findViewById(R.id.btn_konfirmasi);
 
         final AlertDialog alert = builder.create();
         alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -1434,6 +1437,120 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                                 showDialogLoading();
+                            }
+                        })
+                        .show();
+            }
+        });
+
+        btnKonfirmasi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                showKonfirmasiDialog();
+            }
+        });
+
+        alert.show();
+    }
+
+    private static void showKonfirmasiDialog(){
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = (LayoutInflater) ((Activity)context).getSystemService(LAYOUT_INFLATER_SERVICE);
+        View viewDialog = inflater.inflate(R.layout.layout_konfirmasi, null);
+        builder.setView(viewDialog);
+        builder.setCancelable(false);
+
+        final TextView tvText1 = (TextView) viewDialog.findViewById(R.id.tv_text1);
+        final EditText edtNominal = (EditText) viewDialog.findViewById(R.id.edt_nomimal);
+        final Button btnOK = (Button) viewDialog.findViewById(R.id.btn_ok);
+        final Button btnProses = (Button) viewDialog.findViewById(R.id.btn_proses);
+
+        currentString = "";
+
+        edtNominal.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                if(!editable.toString().equals(currentString)){
+
+                    String cleanString = editable.toString().replaceAll("[,.]", "");
+                    edtNominal.removeTextChangedListener(this);
+
+                    String formatted = iv.ChangeToCurrencyFormat(cleanString);
+
+                    currentString = formatted;
+                    edtNominal.setText(formatted);
+                    edtNominal.setSelection(formatted.length());
+                    edtNominal.addTextChangedListener(this);
+                }
+            }
+        });
+
+        final AlertDialog alert = builder.create();
+        alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view2) {
+
+                if(alert != null) alert.dismiss();
+                //showDialogLoading();
+            }
+        });
+
+        btnProses.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final String nominal = edtNominal.getText().toString().replaceAll("[,.]", "");
+                if(nominal.isEmpty()){
+
+                    edtNominal.setError("Nominal harap diisi");
+                    edtNominal.requestFocus();
+                    return;
+                }else if(iv.parseNullDouble(nominal) == 0){
+
+                    edtNominal.setError("Nominal harap lebih dari 0");
+                    edtNominal.requestFocus();
+                    return;
+                }else{
+                    edtNominal.setError(null);
+                }
+
+                AlertDialog alertDialog = new AlertDialog.Builder(context)
+                        .setIcon(R.mipmap.ic_launcher)
+                        .setTitle("Konfirmasi")
+                        .setMessage("Apakah anda yakin ingin proses order dengan nominal "+ iv.ChangeToCurrencyFormat(nominal)+" ?")
+                        .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                lastSN = "";
+                                selectedHarga = nominal;
+                                edtNominal.setText(nominal);
+                                saveData();
+                            }
+                        })
+                        .setCancelable(false)
+                        .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                return;
                             }
                         })
                         .show();
