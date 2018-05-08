@@ -145,6 +145,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
     private Button btnAppInfo;
     private LinearLayout llJarak;
     private static String lastKodebrg = "", lastFlagOrder = "", lastSN = "", lastSuccessBalasan = "";
+    private static boolean isKonfirmasiManual = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +201,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
         jarak = "";
         lastSN = "";
         lastSuccessBalasan = "";
+        isKonfirmasiManual = false;
 
         initEvent();
         initLocationManual();
@@ -999,7 +1001,10 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                             edtNomor.setText(nomor);
                             selectedHarga = harga;
                             edtNominal.setText(harga);
-                            saveData();
+
+                            if(!isKonfirmasiManual){
+                                saveData();
+                            }
                         }
                     }
 
@@ -1290,6 +1295,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 //6. pin rs
                 //7. format inject
 
+                isKonfirmasiManual = false;
                 lastFlagOrder = selectedItemOrder.getItem5();
                 lastKodebrg = selectedItemOrder.getItem1();
 
@@ -1507,6 +1513,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             @Override
             public void onClick(View view2) {
 
+                isKonfirmasiManual = false;
                 if(alert != null) alert.dismiss();
                 //showDialogLoading();
             }
@@ -1531,6 +1538,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                     edtNominal.setError(null);
                 }
 
+                isKonfirmasiManual = true;
                 AlertDialog alertDialog = new AlertDialog.Builder(context)
                         .setIcon(R.mipmap.ic_launcher)
                         .setTitle("Konfirmasi")
