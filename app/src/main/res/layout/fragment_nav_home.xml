@@ -787,6 +787,36 @@
                                     android:textColor="@color/color_black"
                                     android:text="Preorder Perdana"/>
                             </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_pengajuan_deposit"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_penjualan_perdana"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Pengajuan Deposit"/>
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
 

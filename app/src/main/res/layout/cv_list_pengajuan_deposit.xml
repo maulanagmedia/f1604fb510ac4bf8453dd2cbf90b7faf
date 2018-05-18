@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/default_margin_tiny"
+    android:layout_margin="@dimen/default_margin_tiny">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_item"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_input_up"
+                    android:padding="@dimen/default_margin_small">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_item4"
+                        android:textColor="@color/color_white"
+                        android:text=""
+                        android:textSize="12sp"
+                        android:gravity="center_vertical"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_item1"
+                        android:text=""
+                        android:layout_below="@id/tv_item4"
+                        android:textColor="@color/color_white"
+                        style="@style/titleList"
+                        android:gravity="center_horizontal"/>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/default_margin_small"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Status"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_item3"
+                            style="@style/subtitleList"
+                            android:gravity="center_vertical|right"
+                            android:textSize="15sp"
+                            android:layout_marginLeft="@dimen/default_margin_tiny"
+                            android:layout_marginRight="@dimen/default_margin_tiny"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="@dimen/default_line"
+                        android:layout_height="match_parent"
+                        android:background="@color/color_stroke_2"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/default_margin_small"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Besar Deposit"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_item2"
+                            style="@style/subtitleList"
+                            android:gravity="right"
+                            android:textSize="16sp"
+                            android:textColor="@color/color_black"
+                            android:layout_marginLeft="@dimen/default_margin_tiny"
+                            android:layout_marginRight="@dimen/default_margin_tiny"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

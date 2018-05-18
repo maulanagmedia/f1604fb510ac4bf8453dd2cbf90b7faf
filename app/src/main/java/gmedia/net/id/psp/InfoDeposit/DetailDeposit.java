@@ -243,6 +243,7 @@ public class DetailDeposit extends AppCompatActivity {
             @Override
             public void onSuccess(String result) {
 
+                progressDialog.dismiss();
                 String message = "Terjadi kesalahan saat memproses data, silahkan ulangi kembali";
 
                 try {
