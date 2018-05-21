@@ -146,6 +146,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
     private LinearLayout llJarak;
     private static String lastKodebrg = "", lastFlagOrder = "", lastSN = "", lastSuccessBalasan = "";
     private static boolean isKonfirmasiManual = false;
+    private static boolean isSaveButtonClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,6 +203,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
         lastSN = "";
         lastSuccessBalasan = "";
         isKonfirmasiManual = false;
+        isSaveButtonClicked = false;
 
         initEvent();
         initLocationManual();
@@ -1002,7 +1004,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                             selectedHarga = harga;
                             edtNominal.setText(harga);
 
-                            if(!isKonfirmasiManual){
+                            if(!isKonfirmasiManual && isSaveButtonClicked){
                                 saveData();
                             }
                         }
@@ -1307,6 +1309,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
+                                isSaveButtonClicked = true;
                                 showDialogLoading();
                                 String format = selectedItemOrder.getItem7().replace("[tujuan]",edtNomor.getText().toString());
                                 if(flagOrder.equals("BL2")){

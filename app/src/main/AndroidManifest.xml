@@ -188,7 +188,6 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="ACT_MKIOS" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
