@@ -309,7 +309,12 @@
         <activity android:name=".NavMarketSurveyAOC.ActMarketSurveyAOC"
             android:screenOrientation="portrait"/>
         <activity android:name=".NavPengajuanDeposit.NavPengajuanDeposit"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="ACT_DEPOSIT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

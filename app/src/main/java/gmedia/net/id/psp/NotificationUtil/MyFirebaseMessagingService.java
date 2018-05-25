@@ -23,6 +23,7 @@ import java.util.Map;
 import gmedia.net.id.psp.LocationService.LocationUpdater;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.NavPOL.ListOutletLocation;
+import gmedia.net.id.psp.NavPengajuanDeposit.NavPengajuanDeposit;
 import gmedia.net.id.psp.NavVerifikasiOutlet.ActVerifikasiOutlet;
 import gmedia.net.id.psp.PelunasanPenjualan.PelunasanPenjualan;
 import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
@@ -98,6 +99,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     typeContent = 4;
                 }else if(extra.get(key).trim().toUpperCase().equals("VERPOL")){
                     typeContent = 5;
+                }else if(extra.get(key).trim().toUpperCase().equals("DEPOSIT")){
+                    typeContent = 6;
                 }
             }
         }
@@ -115,6 +118,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     break;
                 case 5:
                     intent = new Intent(this, ListOutletLocation.class);
+                    break;
+                case 6:
+                    intent = new Intent(this, NavPengajuanDeposit.class);
                     break;
                 default:
                     intent = new Intent(this, MainNavigationActivity.class);
