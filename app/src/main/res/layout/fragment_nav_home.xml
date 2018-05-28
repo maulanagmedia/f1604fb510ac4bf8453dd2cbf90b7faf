@@ -187,6 +187,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/menu_height"
                             android:id="@+id/ll_2"
+                            android:visibility="gone"
                             android:orientation="horizontal"
                             android:layout_marginTop="@dimen/default_margin_small"
                             android:layout_marginBottom="@dimen/default_margin_small"
