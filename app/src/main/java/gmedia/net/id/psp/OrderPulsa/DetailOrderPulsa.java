@@ -217,7 +217,6 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                     keteranganJarak = "Jarak sales dengan outlet saat order yaitu " + keteranganJarak;
                 }else{
 
-
                     keteranganJarak = "<font color='#ec1c25'>Lokasi outlet tidak diketahui</font>";
                 }
 
@@ -1354,7 +1353,6 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                                 }
 
                             }else{
-
 
                                 keteranganJarak = "<font color='#ec1c25'>Lokasi outlet tidak diketahui</font>";
                             }

@@ -147,6 +147,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
     private static String lastKodebrg = "", lastFlagOrder = "", lastSN = "", lastSuccessBalasan = "";
     private static boolean isKonfirmasiManual = false;
     private static boolean isSaveButtonClicked = false;
+    private static boolean isOnSaving = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,6 +205,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
         lastSuccessBalasan = "";
         isKonfirmasiManual = false;
         isSaveButtonClicked = false;
+        isOnSaving = false;
 
         initEvent();
         initLocationManual();
@@ -849,6 +851,12 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 public void onClick(View view2) {
 
                     if(alert != null) alert.dismiss();
+
+                    if(isOnSaving){
+                        Toast.makeText(context, "Harap tunggu hingga proses selesai dan ulangi menyimpan", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
                     saveData();
                 }
             });
@@ -1005,6 +1013,12 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                             edtNominal.setText(harga);
 
                             if(!isKonfirmasiManual && isSaveButtonClicked){
+
+                                if(isOnSaving){
+                                    Toast.makeText(context, "Harap tunggu hingga proses selesai", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+
                                 saveData();
                             }
                         }
@@ -1033,6 +1047,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
     private static void saveData() {
 
+        isOnSaving = true;
         isLoading(true);
         final ProgressDialog progressDialog = new ProgressDialog(context, R.style.AppTheme_Login_Dialog);
         progressDialog.setIndeterminate(true);
@@ -1112,6 +1127,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             @Override
             public void onSuccess(String result) {
 
+                isOnSaving = false;
                 isLoading(false);
                 progressDialog.dismiss();
 
@@ -1145,6 +1161,8 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
             @Override
             public void onError(String result) {
+
+                isOnSaving = false;
                 isLoading(false);
                 progressDialog.dismiss();
                 //Toast.makeText(context, "Terjadi kesalahan saat menyimpan data, harap ulangi kembali", Toast.LENGTH_LONG).show();
@@ -1460,7 +1478,11 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             }
         });
 
-        alert.show();
+        try {
+            alert.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private static void showKonfirmasiDialog(){
@@ -1553,6 +1575,12 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                                 lastSN = "";
                                 selectedHarga = nominal;
                                 edtNominal.setText(nominal);
+
+                                if(isOnSaving){
+                                    Toast.makeText(context, "Harap tunggu hingga proses selesai dan ulangi menyimpan", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+
                                 saveData();
                             }
                         })
@@ -1592,6 +1620,14 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
         }catch (Exception e){
             e.printStackTrace();
         }
+
+        isSaveButtonClicked = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isSaveButtonClicked = false;
     }
 
     @Override
