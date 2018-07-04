@@ -8,8 +8,8 @@ public class ServerURL {
 
     //private static final String baseURL = "http://192.168.43.200/psp/";
     //private static final String baseURL = "http://api.putmasaripratama.co.id/";
-    //private static final String baseURL = "http://119.2.53.122/mobilesalesforce/";
-    private static final String baseURL = "http://192.168.12.138/psp/";
+    private static final String baseURL = "http://119.2.53.122/mobilesalesforce/";
+    //private static final String baseURL = "http://192.168.12.138/psp/";
 
     public static final String login = baseURL + "api/auth/login/";
     public static final String getLatestVersion = baseURL + "api/auth/get_latest_version/";
@@ -69,6 +69,9 @@ public class ServerURL {
     public static final String getDeposite = baseURL + "api/deposit/get_deposit/";
     public static final String saveDeposite = baseURL + "api/deposit/save/";
     public static final String savePengajuanDeposite = baseURL + "api/deposit/apv_pengajuan_deposit/";
+    public static final String getHistoryDeposit = baseURL + "api/deposit/get_pengajuan_deposit/";
+    public static final String getPengajuanHeader = baseURL + "api/deposit/header_pengajuan_approval/";
+    public static final String getPengajuanDetail = baseURL + "api/deposit/detail_pengajuan_approval/";
 
     public static final String getTcashReseller= baseURL + "api/tcash/get_reseller/";
     public static final String getPenjualanTcash= baseURL + "api/tcash/get_penjualan_tcash/";

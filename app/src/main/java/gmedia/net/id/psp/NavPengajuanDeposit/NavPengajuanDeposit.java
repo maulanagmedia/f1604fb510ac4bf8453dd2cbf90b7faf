@@ -61,6 +61,7 @@ public class NavPengajuanDeposit extends AppCompatActivity {
     private boolean isLoading = false;
     private String TAG = "test";
     private String nik = "";
+    private String kdcus = "", nama = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,14 +89,24 @@ public class NavPengajuanDeposit extends AppCompatActivity {
         session = new SessionManager(context);
         nik = session.getUserDetails().get(SessionManager.TAG_UID);
 
+        Bundle bundle = getIntent().getExtras();
+
+        if(bundle != null){
+
+            kdcus = bundle.getString("kdcus", "");
+            nama = bundle.getString("nama", "");
+
+            setTitle("Pengajuan a/n " + nama);
+
+            isLoading = false;
+            getDataPengajuan();
+        }
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        isLoading = false;
-        getDataPengajuan();
     }
 
     private void getDataPengajuan() {
@@ -107,13 +118,14 @@ public class NavPengajuanDeposit extends AppCompatActivity {
 
         try {
             jBody.put("nik", nik);
+            jBody.put("kdcus", kdcus);
             jBody.put("keyword", keyword);
             jBody.put("start", String.valueOf(start));
             jBody.put("end", String.valueOf(count));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ApiVolley apiVolley = new ApiVolley(context, jBody, "POST", ServerURL.getPengajuanDeposit, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley apiVolley = new ApiVolley(context, jBody, "POST", ServerURL.getPengajuanDetail, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -135,8 +147,9 @@ public class NavPengajuanDeposit extends AppCompatActivity {
                                     jo.getString("nama"),
                                     jo.getString("debit"),
                                     jo.getString("nilai_status"),
-                                    jo.getString("tgl"),
-                                    jo.getString("status")));
+                                    jo.getString("tgl") +" "+ jo.getString("jam"),
+                                    jo.getString("status"),
+                                    jo.getString("keterangan")));
 
                         }
                     }
@@ -212,13 +225,14 @@ public class NavPengajuanDeposit extends AppCompatActivity {
 
         try {
             jBody.put("nik", nik);
+            jBody.put("kdcus", kdcus);
             jBody.put("keyword", keyword);
             jBody.put("start", String.valueOf(start));
             jBody.put("end", String.valueOf(count));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ApiVolley apiVolley = new ApiVolley(context, jBody, "POST", ServerURL.getPengajuanDeposit, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley apiVolley = new ApiVolley(context, jBody, "POST", ServerURL.getPengajuanDetail, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -240,8 +254,9 @@ public class NavPengajuanDeposit extends AppCompatActivity {
                                     jo.getString("nama"),
                                     jo.getString("debit"),
                                     jo.getString("nilai_status"),
-                                    jo.getString("tgl"),
-                                    jo.getString("status")));
+                                    jo.getString("tgl") +" "+ jo.getString("jam"),
+                                    jo.getString("status"),
+                                    jo.getString("keterangan")));
 
                         }
 
@@ -270,6 +285,7 @@ public class NavPengajuanDeposit extends AppCompatActivity {
 
         final TextView tvText1 = (TextView) viewDialog.findViewById(R.id.tv_text1);
         final TextView tvText2 = (TextView) viewDialog.findViewById(R.id.tv_text2);
+        final Button btnBatal = (Button) viewDialog.findViewById(R.id.btn_batal);
         final Button btnTolak = (Button) viewDialog.findViewById(R.id.btn_tolak);
         final Button btnSetujui = (Button) viewDialog.findViewById(R.id.btn_setuju);
 
@@ -278,6 +294,14 @@ public class NavPengajuanDeposit extends AppCompatActivity {
 
         final AlertDialog alert = builder.create();
         alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        btnBatal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                alert.dismiss();
+            }
+        });
 
         btnTolak.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -452,10 +476,7 @@ public class NavPengajuanDeposit extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(NavPengajuanDeposit.this, MainNavigationActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
+        super.onBackPressed();
         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
     }
 }

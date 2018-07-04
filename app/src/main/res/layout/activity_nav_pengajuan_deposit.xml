@@ -6,10 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".NavPengajuanDeposit.NavPengajuanDeposit">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="* Tekan pada list untuk melakukan penyetujuan atau penolakan pengajuan deposit."
+        android:padding="@dimen/default_margin_small"
+        android:id="@+id/tv_footer"
+        android:textColor="@color/color_black"/>
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lv_deposit"></ListView>
+        android:id="@+id/lv_deposit"
+        android:layout_above="@id/tv_footer"></ListView>
 
     <ProgressBar
         android:layout_width="wrap_content"

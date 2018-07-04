@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_item"
+        android:layout_margin="@dimen/default_margin_small"
+        android:padding="@dimen/default_margin_tiny"
+        android:weightSum="1">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:layout_height="match_parent"
+            android:padding="@dimen/default_margin_tiny"
+            android:src="@mipmap/ic_store_black"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_item1"
+                style="@style/titleList2"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:layout_height="match_parent"
+            android:padding="@dimen/default_margin_tiny"
+            android:src="@mipmap/ic_next_red"/>
+    </LinearLayout>
+
+</LinearLayout>

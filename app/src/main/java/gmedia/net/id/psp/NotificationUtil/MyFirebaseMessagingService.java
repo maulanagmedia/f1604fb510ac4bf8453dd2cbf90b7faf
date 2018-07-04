@@ -23,6 +23,7 @@ import java.util.Map;
 import gmedia.net.id.psp.LocationService.LocationUpdater;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.NavPOL.ListOutletLocation;
+import gmedia.net.id.psp.NavPengajuanDeposit.HeaderPengajuanDeposit;
 import gmedia.net.id.psp.NavPengajuanDeposit.NavPengajuanDeposit;
 import gmedia.net.id.psp.NavVerifikasiOutlet.ActVerifikasiOutlet;
 import gmedia.net.id.psp.PelunasanPenjualan.PelunasanPenjualan;
@@ -120,7 +121,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     intent = new Intent(this, ListOutletLocation.class);
                     break;
                 case 6:
-                    intent = new Intent(this, NavPengajuanDeposit.class);
+                    intent = new Intent(this, HeaderPengajuanDeposit.class);
                     break;
                 default:
                     intent = new Intent(this, MainNavigationActivity.class);

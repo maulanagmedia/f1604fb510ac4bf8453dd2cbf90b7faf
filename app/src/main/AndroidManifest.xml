@@ -188,6 +188,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="ACT_MKIOS" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
@@ -306,10 +307,16 @@
             android:name=".NavMarketSurveyAOC.MarketSurveyAOC"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".NavMarketSurveyAOC.ActMarketSurveyAOC"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".NavPengajuanDeposit.NavPengajuanDeposit"
+        <activity
+            android:name=".NavMarketSurveyAOC.ActMarketSurveyAOC"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavPengajuanDeposit.NavPengajuanDeposit"
             android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".NavPengajuanDeposit.MainPengajuanDeposit" />
+        <activity android:name=".NavPengajuanDeposit.HistoryPengajuanDeposit" />
+        <activity android:name=".NavPengajuanDeposit.HeaderPengajuanDeposit">
             <intent-filter>
                 <action android:name="ACT_DEPOSIT" />
                 <category android:name="android.intent.category.DEFAULT" />

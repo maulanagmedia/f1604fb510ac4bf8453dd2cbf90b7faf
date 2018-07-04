@@ -41,6 +41,7 @@ import gmedia.net.id.psp.NavKomplain.ActKomplain;
 import gmedia.net.id.psp.NavMarketSurvey.ActMarketSurvey;
 import gmedia.net.id.psp.NavMarketSurveyAOC.ActMarketSurveyAOC;
 import gmedia.net.id.psp.NavPOL.ListOutletLocation;
+import gmedia.net.id.psp.NavPengajuanDeposit.MainPengajuanDeposit;
 import gmedia.net.id.psp.NavPengajuanDeposit.NavPengajuanDeposit;
 import gmedia.net.id.psp.NavPreorderPerdana.ActPreorderPerdanaActivity;
 import gmedia.net.id.psp.NavTambahCustomer.ActTambahOutlet;
@@ -510,7 +511,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(context, NavPengajuanDeposit.class);
+                Intent intent = new Intent(context, MainPengajuanDeposit.class);
                 context.startActivity(intent);
                 ((Activity)context).finish();
             }
