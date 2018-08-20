@@ -473,15 +473,13 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
                 if(photoFromCameraURI != null){
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(photoFromCameraURI));
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        bitmap = rotateImage(bitmap, 90);
-                    }
-
-                    bitmap = scaleDown(bitmap, 360, true);
-
-
                     if(bitmap != null){
 
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            bitmap = rotateImage(bitmap, 90);
+                        }
+
+                        bitmap = scaleDown(bitmap, 360, true);
                         photoList.add(bitmap);
                         adapter.notifyDataSetChanged();
                     }

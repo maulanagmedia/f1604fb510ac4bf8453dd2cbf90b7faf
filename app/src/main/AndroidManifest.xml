@@ -312,16 +312,31 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".NavPengajuanDeposit.NavPengajuanDeposit"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavPengajuanDeposit.MainPengajuanDeposit"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavPengajuanDeposit.HistoryPengajuanDeposit"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavPengajuanDeposit.HeaderPengajuanDeposit"
             android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".NavPengajuanDeposit.MainPengajuanDeposit" />
-        <activity android:name=".NavPengajuanDeposit.HistoryPengajuanDeposit" />
-        <activity android:name=".NavPengajuanDeposit.HeaderPengajuanDeposit">
             <intent-filter>
                 <action android:name="ACT_DEPOSIT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".NavMarketSurveyMD.ActMarketSurveyMD"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavMarketSurveyMD.DetailMarketSurveyMD"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".OrderDirectSelling.HistoryDirectSelling"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

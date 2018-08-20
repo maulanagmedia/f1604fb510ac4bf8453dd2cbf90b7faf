@@ -148,10 +148,14 @@ public class ResellerTcash extends AppCompatActivity {
                     List<CustomItem> items = new ArrayList<CustomItem>();
                     String keyword = actvReseller.getText().toString().trim().toUpperCase();
 
-                    for (CustomItem item: tableList){
+                    if(tableList != null && tableList.size() > 0){
 
-                        if(item.getItem2().toUpperCase().contains(keyword)) items.add(item);
+                        for (CustomItem item: tableList){
+
+                            if(item.getItem2().toUpperCase().contains(keyword)) items.add(item);
+                        }
                     }
+
 
                     getTableList(items);
                     iv.hideSoftKey(ResellerTcash.this);

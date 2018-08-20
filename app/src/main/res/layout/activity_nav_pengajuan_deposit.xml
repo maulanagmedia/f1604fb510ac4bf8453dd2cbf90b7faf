@@ -6,10 +6,109 @@
     android:layout_height="match_parent"
     tools:context=".NavPengajuanDeposit.NavPengajuanDeposit">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_footer"
+        android:paddingTop="@dimen/default_margin_small"
+        android:paddingLeft="@dimen/default_margin_small"
+        android:paddingRight="@dimen/default_margin_small"
+        android:background="@color/color_grey_2"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Total"
+                android:textStyle="bold"
+                android:textColor="@color/color_black"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rp 0"
+            android:id="@+id/tv_total"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="right"
+            android:textColor="@color/color_black"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_line"
+            android:layout_marginTop="@dimen/default_margin_tiny"
+            android:layout_marginBottom="@dimen/default_margin_tiny"
+            android:background="@color/color_black"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingTop="@dimen/default_margin_tiny"
+                android:paddingBottom="@dimen/default_margin_tiny"
+                android:weightSum="1">
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="0.95"
+                    android:layout_height="36dp"
+                    android:background="@drawable/btn_login_1"
+                    android:text="Tolak"
+                    android:id="@+id/btn_tolak"
+                    android:layout_marginTop="@dimen/default_margin_tiny"
+                    android:textColor="@color/color_white"
+                    android:layout_marginBottom="@dimen/default_margin_small"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingTop="@dimen/default_margin_tiny"
+                android:paddingBottom="@dimen/default_margin_tiny"
+                android:weightSum="1">
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="0.95"
+                    android:layout_height="36dp"
+                    android:background="@drawable/btn_login_2"
+                    android:text="Terima"
+                    android:id="@+id/btn_terima"
+                    android:textColor="@color/color_white"
+                    android:layout_marginTop="@dimen/default_margin_tiny"
+                    android:layout_marginBottom="@dimen/default_margin_small"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:visibility="gone"
         android:text="* Tekan pada list untuk melakukan penyetujuan atau penolakan pengajuan deposit."
         android:padding="@dimen/default_margin_small"
         android:id="@+id/tv_footer"
@@ -19,7 +118,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/lv_deposit"
-        android:layout_above="@id/tv_footer"></ListView>
+        android:layout_above="@id/ll_footer"></ListView>
 
     <ProgressBar
         android:layout_width="wrap_content"

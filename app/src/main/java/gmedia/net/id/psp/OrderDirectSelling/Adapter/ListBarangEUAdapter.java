@@ -90,7 +90,12 @@ public class ListBarangEUAdapter extends ArrayAdapter{
 
         final CustomItem itemSelected = items.get(position);
         holder.tvItem.setText(itemSelected.getItem2());
-        holder.rbItem.setText(itemSelected.getItem3());
+        if(!itemSelected.getItem3().equals("0")){
+            holder.rbItem.setText(iv.ChangeToRupiahFormat(itemSelected.getItem3()));
+        }else{
+            holder.rbItem.setText("");
+        }
+
 
         if(selectedItem == position){
 

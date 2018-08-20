@@ -24,9 +24,6 @@ public class SmsReceiverService extends BroadcastReceiver {
         Log.d("SMSReceiver","SMS message text: "+
                 shortMessage.getDisplayMessageBody());
 
-        if(shortMessage.getOriginatingAddress().contains("MKIOS")
-                || !shortMessage.getOriginatingAddress().contains("MKIOS")){
-            DetailInjectPulsa.addTambahBalasan(shortMessage.getDisplayMessageBody());
-        }
+        DetailInjectPulsa.addTambahBalasan(shortMessage.getOriginatingAddress(), shortMessage.getDisplayMessageBody());
     }
 }

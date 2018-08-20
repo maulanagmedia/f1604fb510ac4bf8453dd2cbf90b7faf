@@ -129,7 +129,8 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            listPengajuan.add(new CustomItem(jo.getString("id"),
+                            listPengajuan.add(new CustomItem(
+                                    jo.getString("id"),
                                     jo.getString("nama"),
                                     jo.getString("debit"),
                                     jo.getString("nilai_status"),

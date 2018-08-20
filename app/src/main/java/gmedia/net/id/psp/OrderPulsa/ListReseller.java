@@ -72,6 +72,7 @@ public class ListReseller extends AppCompatActivity {
         masterList = new ArrayList<>();
         pbProses.setVisibility(View.VISIBLE);
         String nik = session.getUserDetails().get(SessionManager.TAG_NIK);
+        //String nik = "PWJ0026";
         ApiVolley request = new ApiVolley(ListReseller.this, new JSONObject(), "GET", ServerURL.getReseller+nik, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {

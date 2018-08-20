@@ -28,7 +28,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_input_up"
+                    android:background="@drawable/bg_input_1"
                     android:padding="@dimen/default_margin_small">
 
                     <TextView
@@ -56,18 +56,51 @@
                         android:paddingBottom="0dp"
                         android:gravity="left"/>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tv_item5"
-                        android:text=""
                         android:layout_below="@id/tv_item1"
-                        android:textColor="@color/color_white"
-                        style="@style/subtitleList"
-                        android:paddingTop="0dp"
-                        android:paddingBottom="0dp"
-                        android:gravity="left"
-                        android:textSize="15sp"/>
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <CheckBox
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_white"
+                            android:text=""
+                            android:id="@+id/cb_barang"
+                            android:textSize="15sp"
+                            android:buttonTint="@color/color_white"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_item5"
+                            android:text=""
+                            android:visibility="gone"
+                            android:textColor="@color/color_white"
+                            style="@style/subtitleList"
+                            android:paddingTop="0dp"
+                            android:paddingBottom="0dp"
+                            android:gravity="left"
+                            android:textSize="15sp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_item6"
+                            android:text=""
+                            android:textColor="@color/color_white"
+                            style="@style/subtitleList"
+                            android:paddingTop="0dp"
+                            android:paddingBottom="0dp"
+                            android:gravity="right"
+                            android:textSize="15sp"/>
+
+                    </LinearLayout>
 
                 </RelativeLayout>
 
@@ -76,6 +109,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
+                    android:visibility="gone"
                     android:weightSum="1">
 
                     <LinearLayout

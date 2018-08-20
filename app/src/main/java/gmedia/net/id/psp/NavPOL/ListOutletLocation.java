@@ -423,6 +423,19 @@ public class ListOutletLocation extends AppCompatActivity {
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish();
+                    }else{
+
+                        Intent intent = new Intent(context, FormMapsActivity.class);
+                        intent.putExtra("kdcus", selectedItem.getItem1());
+                        intent.putExtra("nama", selectedItem.getItem2());
+                        intent.putExtra("pengaju", selectedItem.getItem8());
+                        intent.putExtra("terverifikasi", false);
+                        intent.putExtra("flag", flagSPV);
+                        intent.putExtra("latitude", selectedItem.getItem6());
+                        intent.putExtra("longitude", selectedItem.getItem7());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
                     }
                 }
             });

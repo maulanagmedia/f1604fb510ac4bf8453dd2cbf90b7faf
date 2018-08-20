@@ -18,7 +18,7 @@ public class USSDService extends AccessibilityService {
     public void onAccessibilityEvent(AccessibilityEvent event) {
         Log.d(TAG, "onAccessibilityEvent");
         String text = event.getText().toString();
-        DetailInjectPulsa.addTambahBalasan(text);
+        DetailInjectPulsa.addTambahBalasan("", text);
         Log.d(TAG, text);
     }
 

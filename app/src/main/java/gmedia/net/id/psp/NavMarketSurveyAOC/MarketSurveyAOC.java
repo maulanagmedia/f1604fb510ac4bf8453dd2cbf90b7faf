@@ -494,6 +494,7 @@ public class MarketSurveyAOC extends AppCompatActivity implements LocationListen
         if(jDataRekomendasi.length() == 0){
 
             Toast.makeText(context, "Harap tambahkan data rekomendasi", Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
             return;
         }
 
@@ -516,6 +517,7 @@ public class MarketSurveyAOC extends AppCompatActivity implements LocationListen
         if(jDataPostman.length() == 0){
 
             Toast.makeText(context, "Harap tambahkan data postmat", Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
             return;
         }
 

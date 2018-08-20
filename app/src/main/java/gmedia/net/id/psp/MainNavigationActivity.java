@@ -75,6 +75,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
     private String latestVersion = "";
     private String link = "";
     private boolean updateRequired = false;
+    private AlertDialog dialogVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,6 +206,10 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
             public void onSuccess(String result) {
 
                 JSONObject responseAPI;
+                if(dialogVersion != null){
+                    if(dialogVersion.isShowing()) dialogVersion.dismiss();
+                }
+
                 try {
                     responseAPI = new JSONObject(result);
                     String status = responseAPI.getJSONObject("metadata").getString("status");
@@ -216,10 +221,10 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
 
                         if(!version.trim().equals(latestVersion.trim()) && link.length() > 0){
 
-                            final AlertDialog.Builder builder = new AlertDialog.Builder(MainNavigationActivity.this);
                             if(updateRequired){
 
-                                builder.setIcon(R.mipmap.ic_launcher)
+                                dialogVersion = new AlertDialog.Builder(MainNavigationActivity.this)
+                                        .setIcon(R.mipmap.ic_launcher)
                                         .setTitle("Update")
                                         .setMessage("Versi terbaru "+latestVersion+" telah tersedia, mohon download versi terbaru.")
                                         .setPositiveButton("Update Sekarang", new DialogInterface.OnClickListener() {
@@ -233,7 +238,8 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                                         .show();
                             }else{
 
-                                builder.setIcon(R.mipmap.ic_launcher)
+                                dialogVersion = new AlertDialog.Builder(MainNavigationActivity.this)
+                                        .setIcon(R.mipmap.ic_launcher)
                                         .setTitle("Update")
                                         .setMessage("Versi terbaru "+latestVersion+" telah tersedia, mohon download versi terbaru.")
                                         .setPositiveButton("Update Sekarang", new DialogInterface.OnClickListener() {
@@ -262,6 +268,9 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
             @Override
             public void onError(String result) {
 
+                if(dialogVersion != null){
+                    if(dialogVersion.isShowing()) dialogVersion.dismiss();
+                }
             }
         });
     }

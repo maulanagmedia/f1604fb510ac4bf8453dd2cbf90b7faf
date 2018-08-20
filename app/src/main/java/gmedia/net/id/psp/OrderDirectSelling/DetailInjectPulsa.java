@@ -144,10 +144,11 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
     private boolean isEvent = false, isPOI = false;
     private Button btnAppInfo;
     private LinearLayout llJarak;
-    private static String lastKodebrg = "", lastFlagOrder = "", lastSN = "", lastSuccessBalasan = "";
+    private static String lastKodebrg = "", lastFlagOrder = "", lastSN = "", lastSuccessBalasan = "", lastSuccessSender = "";
     private static boolean isKonfirmasiManual = false;
     private static boolean isSaveButtonClicked = false;
     private static boolean isOnSaving = false;
+    private static String transactionID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +171,8 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
         setTitle("Detail Inject Pulsa");
         context = this;
+
+        transactionID = iv.getCurrentDate(FormatItem.formatDateTimePure);
 
         initUI();
     }
@@ -203,6 +206,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
         jarak = "";
         lastSN = "";
         lastSuccessBalasan = "";
+        lastSuccessSender = "";
         isKonfirmasiManual = false;
         isSaveButtonClicked = false;
         isOnSaving = false;
@@ -645,7 +649,15 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            listBarang.add(new CustomItem(jo.getString("kodebrg"), jo.getString("namabrg"), jo.getString("hargajual"), "0", jo.getString("flag"), jo.getString("pin"), jo.getString("format"), jo.getString("balasan")));
+                            listBarang.add(new CustomItem(
+                                    jo.getString("kodebrg"),
+                                    jo.getString("namabrg"),
+                                    jo.getString("hargajual"),
+                                    "0",
+                                    jo.getString("flag"),
+                                    jo.getString("pin"),
+                                    jo.getString("format"),
+                                    jo.getString("balasan")));
                             //1. kdbrg
                             //2. namabrg
                             //3. hargajual
@@ -771,11 +783,23 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 @Override
                 public void onClick(View view2) {
 
-                    if(alert != null) alert.dismiss();
+                    if(alert != null) {
+                        try {
+
+                            alert.dismiss();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
                 }
             });
 
-            alert.show();
+            try {
+                alert.show();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
         }else if(state == 2){ // failed
             final AlertDialog.Builder builder = new AlertDialog.Builder(context);
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -794,11 +818,22 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 @Override
                 public void onClick(View view2) {
 
-                    if(alert != null) alert.dismiss();
+                    if(alert != null) {
+                        try {
+
+                            alert.dismiss();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
                 }
             });
 
-            alert.show();
+            try {
+                alert.show();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }else if(state == 3){
 
             final AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -819,7 +854,15 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 @Override
                 public void onClick(View view2) {
 
-                    if(alert != null) alert.dismiss();
+                    if(alert != null){
+
+                        try {
+
+                            alert.dismiss();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
                     getBarang();
                 }
             });
@@ -850,7 +893,14 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 @Override
                 public void onClick(View view2) {
 
-                    if(alert != null) alert.dismiss();
+                    if(alert != null){
+                        try {
+
+                            alert.dismiss();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
 
                     if(isOnSaving){
                         Toast.makeText(context, "Harap tunggu hingga proses selesai dan ulangi menyimpan", Toast.LENGTH_LONG).show();
@@ -886,8 +936,16 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 @Override
                 public void onClick(View view2) {
 
-                    if(alert != null) alert.dismiss();
-                    logBalasan(lastSuccessBalasan);
+                    if(alert != null) {
+
+                        try {
+
+                            alert.dismiss();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                    logBalasan(lastSuccessSender, lastSuccessBalasan);
                 }
             });
 
@@ -942,7 +1000,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
         }
     }
 
-    public static void addTambahBalasan(String text){
+    public static void addTambahBalasan(String sender, String text){
 
         if(session != null
                 && edtNomor != null
@@ -963,25 +1021,27 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                     balasanAdapter.addData(item);
                 }
 
-                logBalasan(text);
+                logBalasan(sender, text);
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
     }
 
-    private static void logBalasan(final String text) {
+    private static void logBalasan(final  String sender, final String text) {
 
         isLoading(true);
         String nik = session.getUserDetails().get(SessionManager.TAG_UID);
 
         if(text.toLowerCase().contains("berhasil")){
             lastSuccessBalasan = text;
+            lastSuccessSender = sender;
         }
 
         JSONObject jBody = new JSONObject();
         try {
             jBody.put("nik", nik);
+            jBody.put("sender", sender);
             jBody.put("balasan", text);
             jBody.put("flag_order", lastFlagOrder);
             jBody.put("nomor", edtNomor.getText().toString());
@@ -1028,6 +1088,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                     e.printStackTrace();
                     if(text.toLowerCase().contains("berhasil")){
                         lastSuccessBalasan = text;
+                        lastSuccessSender = sender;
                         showDialog(5, "Laporan tidak masuk, harap tekan ulangi proses");
                     }
                 }
@@ -1038,6 +1099,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 isLoading(false);
                 if(text.toLowerCase().contains("berhasil")){
                     lastSuccessBalasan = text;
+                    lastSuccessSender = sender;
                     showDialog(5, "Laporan tidak masuk, harap tekan ulangi proses");
                 }
             }
@@ -1096,6 +1158,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             jDataDetail.put("nomor_event", nomor);
             jDataDetail.put("jarak", jarak);
             jDataDetail.put("sn", lastSN);
+            jDataDetail.put("transaction_id", String.valueOf(transactionID));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1129,7 +1192,12 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
                 isOnSaving = false;
                 isLoading(false);
-                progressDialog.dismiss();
+                try {
+
+                    progressDialog.dismiss();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 
                 String superMessage = "Terjadi kesalahan saat menyimpan data, harap ulangi";
                 try {
@@ -1164,7 +1232,14 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
                 isOnSaving = false;
                 isLoading(false);
-                progressDialog.dismiss();
+
+                try {
+
+                    progressDialog.dismiss();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
                 //Toast.makeText(context, "Terjadi kesalahan saat menyimpan data, harap ulangi kembali", Toast.LENGTH_LONG).show();
                 showDialog(4, "Laporan tidak masuk, harap tekan ulangi proses");
             }
@@ -1446,7 +1521,14 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             @Override
             public void onClick(View view2) {
 
-                if(alert != null) alert.dismiss();
+                if(alert != null) {
+                    try {
+
+                        alert.dismiss();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
 
                 AlertDialog alertDialog = new AlertDialog.Builder(context)
                         .setIcon(R.mipmap.ic_launcher)
@@ -1539,7 +1621,14 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             public void onClick(View view2) {
 
                 isKonfirmasiManual = false;
-                if(alert != null) alert.dismiss();
+                if(alert != null) {
+                    try {
+
+                        alert.dismiss();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
                 //showDialogLoading();
             }
         });
@@ -1596,7 +1685,12 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             }
         });
 
-        alert.show();
+        try {
+            alert.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override

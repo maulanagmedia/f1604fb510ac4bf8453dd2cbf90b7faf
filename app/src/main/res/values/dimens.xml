@@ -14,6 +14,7 @@
 
     <dimen name="title_text_list">18sp</dimen>
     <dimen name="subtitle_text_list">12sp</dimen>
+    <dimen name="subtitle_text_list1">11sp</dimen>
     <dimen name="value_text_list">15sp</dimen>
     <dimen name="default_line">0.75dp</dimen>
 

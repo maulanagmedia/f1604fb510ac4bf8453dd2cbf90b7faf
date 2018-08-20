@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -51,17 +52,20 @@ public class NavPengajuanDeposit extends AppCompatActivity {
     private View footerList;
     private ListView lvDeposit;
     private ProgressBar pbLoading;
-    private ItemValidation iv = new ItemValidation();
+    private static ItemValidation iv = new ItemValidation();
     private SessionManager session;
     private Context context;
     private List<CustomItem> listPengajuan, moreData;
-    private ListPengajuanDepositAdapter adapterDeposit;
-    private int start = 0, count = 10;
+    private static ListPengajuanDepositAdapter adapterDeposit;
+    private int start = 0, count = 40;
     private String keyword = "";
     private boolean isLoading = false;
     private String TAG = "test";
     private String nik = "";
     private String kdcus = "", nama = "";
+    private static TextView tvTotal;
+    private Button btnTolak, btnTerima;
+    private static String total = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +90,12 @@ public class NavPengajuanDeposit extends AppCompatActivity {
         footerList = li.inflate(R.layout.footer_list, null);
         lvDeposit = (ListView) findViewById(R.id.lv_deposit);
         pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
+        tvTotal = (TextView) findViewById(R.id.tv_total);
+        btnTolak = (Button) findViewById(R.id.btn_tolak);
+        btnTerima = (Button) findViewById(R.id.btn_terima);
         session = new SessionManager(context);
         nik = session.getUserDetails().get(SessionManager.TAG_UID);
+        total = "0";
 
         Bundle bundle = getIntent().getExtras();
 
@@ -96,12 +104,62 @@ public class NavPengajuanDeposit extends AppCompatActivity {
             kdcus = bundle.getString("kdcus", "");
             nama = bundle.getString("nama", "");
 
-            setTitle("Pengajuan a/n " + nama);
+            setTitle("Pengajuan");
+            getSupportActionBar().setSubtitle("a/n " + nama);
 
             isLoading = false;
             getDataPengajuan();
-        }
 
+            initEvent();
+        }
+    }
+
+    private void initEvent() {
+
+        btnTolak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(adapterDeposit == null || adapterDeposit.getItems().size() == 0){
+
+                    Toast.makeText(context, "Data masih kosong, harap diisi", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                showDialogTolak();
+            }
+        });
+
+        btnTerima.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(adapterDeposit == null || adapterDeposit.getItems().size() == 0){
+
+                    Toast.makeText(context, "Data masih kosong, harap diisi", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                final AlertDialog alertTerima = new AlertDialog.Builder(context)
+                        .setIcon(R.mipmap.ic_launcher)
+                        .setTitle("Konfirmasi")
+                        .setMessage("Anda yakin ingin menyetujui deposit ini?")
+                        .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                saveData("2", "");
+                            }
+                        })
+                        .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //alert.dismiss();
+                            }
+                        })
+                        .show();
+            }
+        });
     }
 
     @Override
@@ -149,7 +207,9 @@ public class NavPengajuanDeposit extends AppCompatActivity {
                                     jo.getString("nilai_status"),
                                     jo.getString("tgl") +" "+ jo.getString("jam"),
                                     jo.getString("status"),
-                                    jo.getString("keterangan")));
+                                    jo.getString("keterangan"),
+                                    "0"
+                            ));
 
                         }
                     }
@@ -205,7 +265,7 @@ public class NavPengajuanDeposit extends AppCompatActivity {
                 }
             });
 
-            lvDeposit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /*lvDeposit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -213,7 +273,7 @@ public class NavPengajuanDeposit extends AppCompatActivity {
 
                     if(item.getItem6().equals("1")) showDialog(item);
                 }
-            });
+            });*/
         }
     }
 
@@ -256,7 +316,9 @@ public class NavPengajuanDeposit extends AppCompatActivity {
                                     jo.getString("nilai_status"),
                                     jo.getString("tgl") +" "+ jo.getString("jam"),
                                     jo.getString("status"),
-                                    jo.getString("keterangan")));
+                                    jo.getString("keterangan"),
+                                    "0"
+                            ));
 
                         }
 
@@ -356,7 +418,85 @@ public class NavPengajuanDeposit extends AppCompatActivity {
         alert.show();
     }
 
-    private void saveData(String id, String flag) {
+    private void showDialogTolak(){
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View viewDialog = inflater.inflate(R.layout.dialog_message, null);
+        builder.setView(viewDialog);
+
+        final EditText edtMessage = (EditText) viewDialog.findViewById(R.id.edt_message);
+        final Button btnBatal = (Button) viewDialog.findViewById(R.id.btn_batal);
+        final Button btnOk = (Button) viewDialog.findViewById(R.id.btn_ok);
+
+        final AlertDialog alert = builder.create();
+        alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        btnBatal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                alert.dismiss();
+            }
+        });
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final AlertDialog alertTolak = new AlertDialog.Builder(context)
+                        .setIcon(R.mipmap.ic_launcher)
+                        .setTitle("Konfirmasi")
+                        .setMessage("Anda yakin ingin menolak pengajuan ini?")
+                        .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                if(edtMessage.getText().toString().isEmpty()){
+
+                                    edtMessage.setError("Alasan penolakan harap diisi");
+                                    edtMessage.requestFocus();
+                                    return;
+                                }else{
+                                    edtMessage.setError(null);
+                                }
+
+                                alert.dismiss();
+                                saveData( "9", edtMessage.getText().toString());
+                            }
+                        })
+                        .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //alert.dismiss();
+                            }
+                        })
+                        .show();
+            }
+        });
+
+        alert.show();
+    }
+
+    public static void updateHarga(){
+
+        double totalDouble = 0;
+        if(adapterDeposit != null){
+
+            for(CustomItem item:adapterDeposit.getItems()){
+
+                if(item.getItem8().equals("1")){
+
+                    totalDouble += iv.parseNullDouble(item.getItem3());
+                }
+            }
+        }
+
+        total = iv.doubleToString(totalDouble);
+        tvTotal.setText(iv.ChangeToRupiahFormat(totalDouble));
+    }
+
+    private void saveData(String flag, String alasan) {
 
         isLoading = true;
         final ProgressDialog progressDialog = new ProgressDialog(NavPengajuanDeposit.this, R.style.AppTheme_Login_Dialog);
@@ -364,51 +504,74 @@ public class NavPengajuanDeposit extends AppCompatActivity {
         progressDialog.setMessage("Menyimpan...");
         progressDialog.setCancelable(false);
         progressDialog.show();
+        if(adapterDeposit != null && adapterDeposit.getItems().size() > 0){
 
-        JSONObject jData = new JSONObject();
-        try {
-            jData.put("id", id);
-            jData.put("nik", nik);
-            jData.put("apv", flag);
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
+            JSONArray jArray = new JSONArray();
 
-        ApiVolley request = new ApiVolley(context, jData, "POST", ServerURL.savePengajuanDeposite, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
-            @Override
-            public void onSuccess(String result) {
+            for(CustomItem item : adapterDeposit.getItems()){
 
-                String message = "Terjadi kesalahan saat memproses data, silahkan ulangi kembali";
-                isLoading = false;
-                progressDialog.dismiss();
+                if(item.getItem8().equals("1")){
 
-                try {
+                    JSONObject jo = new JSONObject();
+                    try {
+                        jo.put("id", item.getItem1());
+                        jo.put("nik", nik);
+                        jo.put("apv", flag);
+                        jo.put("keterangan", alasan);
 
-                    JSONObject response = new JSONObject(result);
-                    String status = response.getJSONObject("metadata").getString("status");
-                    message = response.getJSONObject("metadata").getString("message");
-                    if(iv.parseNullInteger(status) == 200){
-
-                        progressDialog.dismiss();
-                        message = response.getJSONObject("response").getString("message");
-                        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-                        getDataPengajuan();
-
+                        jArray.put(jo);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
                 }
             }
 
-            @Override
-            public void onError(String result) {
-
-                Snackbar.make(findViewById(android.R.id.content), "Terjadi kesalahan saat memproses data, harap ulangi kembali", Snackbar.LENGTH_LONG).show();
-                isLoading = false;
-                progressDialog.dismiss();
+            JSONObject jData = new JSONObject();
+            try {
+                jData.put("approval", jArray);
+            }catch (JSONException e){
+                e.printStackTrace();
             }
-        });
+
+            ApiVolley request = new ApiVolley(context, jData, "POST", ServerURL.savePengajuanDeposite, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+                @Override
+                public void onSuccess(String result) {
+
+                    String message = "Terjadi kesalahan saat memproses data, silahkan ulangi kembali";
+                    isLoading = false;
+                    progressDialog.dismiss();
+
+                    try {
+
+                        JSONObject response = new JSONObject(result);
+                        String status = response.getJSONObject("metadata").getString("status");
+                        message = response.getJSONObject("metadata").getString("message");
+                        if(iv.parseNullInteger(status) == 200){
+
+                            progressDialog.dismiss();
+                            message = response.getJSONObject("response").getString("message");
+                            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+                            getDataPengajuan();
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onError(String result) {
+
+                    Snackbar.make(findViewById(android.R.id.content), "Terjadi kesalahan saat memproses data, harap ulangi kembali", Snackbar.LENGTH_LONG).show();
+                    isLoading = false;
+                    progressDialog.dismiss();
+                }
+            });
+        }else {
+            Toast.makeText(context, "Barang masih kosong", Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
+        }
     }
 
     @Override

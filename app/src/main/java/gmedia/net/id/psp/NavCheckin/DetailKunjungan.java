@@ -462,17 +462,16 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
 
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(photoFromCameraURI));
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    bitmap = rotateImage(bitmap, 90);
-                }
-
-                bitmap = scaleDown(bitmap, 380, true);
-
-
                 if(bitmap != null){
 
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        bitmap = rotateImage(bitmap, 90);
+                    }
+
+                    bitmap = scaleDown(bitmap, 380, true);
                     photoList.add(bitmap);
                     adapter.notifyDataSetChanged();
+
                 }
             } catch (IOException e) {
                 e.printStackTrace();

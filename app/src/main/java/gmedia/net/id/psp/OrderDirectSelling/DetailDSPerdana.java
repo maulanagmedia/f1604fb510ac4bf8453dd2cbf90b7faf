@@ -556,6 +556,7 @@ public class DetailDSPerdana extends AppCompatActivity implements LocationListen
                 jDataDetail.put("jarak", jarak);
                 jDataDetail.put("no_surat_jalan", item.getItem6());
                 jDataDetail.put("id_surat_jalan", item.getItem7());
+                jDataDetail.put("transaction_id", "0");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

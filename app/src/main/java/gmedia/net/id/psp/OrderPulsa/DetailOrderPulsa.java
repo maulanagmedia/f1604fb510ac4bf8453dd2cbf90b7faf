@@ -718,11 +718,23 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                 @Override
                 public void onClick(View view2) {
 
-                    if(alert != null) alert.dismiss();
+                    if(alert != null) {
+
+                        try {
+                            alert.dismiss();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
                 }
             });
 
-            alert.show();
+            try {
+                alert.show();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
         }else if(state == 2){ // failed
             final AlertDialog.Builder builder = new AlertDialog.Builder(DetailOrderPulsa.this);
             LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -741,11 +753,22 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                 @Override
                 public void onClick(View view2) {
 
-                    if(alert != null) alert.dismiss();
+                    if(alert != null) {
+
+                        try {
+                            alert.dismiss();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
                 }
             });
 
-            alert.show();
+            try {
+                alert.show();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }else if(state == 3){
 
             final AlertDialog.Builder builder = new AlertDialog.Builder(DetailOrderPulsa.this);
@@ -766,7 +789,14 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                 @Override
                 public void onClick(View view2) {
 
-                    if(alert != null) alert.dismiss();
+                    if(alert != null) {
+                        try {
+                            alert.dismiss();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+
                     getRSDetail();
                 }
             });
@@ -1149,7 +1179,11 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             public void onSuccess(String result) {
 
                 isLoading(false);
-                progressDialog.dismiss();
+                try {
+                    progressDialog.dismiss();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 
                 String superMessage = "Terjadi kesalahan saat menyimpan data, harap ulangi";
                 try {
@@ -1182,7 +1216,13 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             @Override
             public void onError(String result) {
                 isLoading(false);
-                progressDialog.dismiss();
+
+                try {
+                    progressDialog.dismiss();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
                 Toast.makeText(DetailOrderPulsa.this, "Terjadi kesalahan saat menyimpan data, harap ulangi kembali", Toast.LENGTH_LONG).show();
             }
         });

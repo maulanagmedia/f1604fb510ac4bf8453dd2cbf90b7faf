@@ -43,6 +43,7 @@ import java.util.Locale;
 
 import gmedia.net.id.psp.LoginScreen;
 import gmedia.net.id.psp.MainNavigationActivity;
+import gmedia.net.id.psp.OrderDirectSelling.HistoryDirectSelling;
 import gmedia.net.id.psp.OrderPerdana.DetailOrderPerdana;
 import gmedia.net.id.psp.OrderPulsa.DetailOrderPulsa;
 import gmedia.net.id.psp.OrderTcash.DetailTcashOrder;
@@ -519,7 +520,15 @@ public class RiwayatPenjualan extends AppCompatActivity {
 
                         currentFlag = selectedItem.getItem5();
 
-                        getDetailPenjualan(selectedItem.getItem2(), currentFlag, selectedItem.getItem8());
+                        if(currentFlag.equals("DS")){
+
+                            Intent intent = new Intent(RiwayatPenjualan.this, HistoryDirectSelling.class);
+                            intent.putExtra("nobukti", selectedItem.getItem2());
+                            startActivity(intent);
+                        }else{
+                            getDetailPenjualan(selectedItem.getItem2(), currentFlag, selectedItem.getItem8());
+                        }
+
                     }
                 }
             });
