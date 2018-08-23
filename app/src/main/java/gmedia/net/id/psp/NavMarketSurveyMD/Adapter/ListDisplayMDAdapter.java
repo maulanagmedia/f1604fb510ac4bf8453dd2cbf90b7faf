@@ -89,7 +89,7 @@ public class ListDisplayMDAdapter extends ArrayAdapter{
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if(!editable.toString().equals(items.get(position).getItem3())){
+                /*if(!editable.toString().equals(itemSelected.getItem3()) && !editable.toString().isEmpty()){
 
                     String cleanString = editable.toString().replaceAll("[,.]", "");
                     finalHolder.edtText1.removeTextChangedListener(this);
@@ -106,8 +106,13 @@ public class ListDisplayMDAdapter extends ArrayAdapter{
                     finalHolder.edtText1.setSelection(formatted.length());
 
                     finalHolder.edtText1.addTextChangedListener(this);
-                }
+                }*/
 
+                try {
+                    items.get(position).setItem3(editable.toString());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -125,7 +130,7 @@ public class ListDisplayMDAdapter extends ArrayAdapter{
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if(!editable.toString().equals(items.get(position).getItem4())){
+                /*if(!editable.toString().equals(itemSelected.getItem4()) && !editable.toString().isEmpty()){
 
                     String cleanString = editable.toString().replaceAll("[,.]", "");
                     finalHolder.edtText2.removeTextChangedListener(this);
@@ -142,7 +147,13 @@ public class ListDisplayMDAdapter extends ArrayAdapter{
                     finalHolder.edtText2.setSelection(formatted.length());
 
                     finalHolder.edtText2.addTextChangedListener(this);
+                }*/
+                try {
+                    items.get(position).setItem4(editable.toString());
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+
             }
         });
 
@@ -160,7 +171,7 @@ public class ListDisplayMDAdapter extends ArrayAdapter{
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if(!editable.toString().equals(items.get(position).getItem6())){
+                /*if(!editable.toString().equals(itemSelected.getItem6()) && !editable.toString().isEmpty()){
 
                     String cleanString = editable.toString().replaceAll("[,.]", "");
                     finalHolder.edtText3.removeTextChangedListener(this);
@@ -177,13 +188,22 @@ public class ListDisplayMDAdapter extends ArrayAdapter{
                     finalHolder.edtText3.setSelection(formatted.length());
 
                     finalHolder.edtText3.addTextChangedListener(this);
+                }*/
+                try {
+                    items.get(position).setItem6(editable.toString());
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         });
 
-        holder.edtText1.setText(iv.ChangeToCurrencyFormat(itemSelected.getItem3()));
+        /*holder.edtText1.setText(iv.ChangeToCurrencyFormat(itemSelected.getItem3()));
         holder.edtText2.setText(iv.ChangeToCurrencyFormat(itemSelected.getItem4()));
-        holder.edtText3.setText(iv.ChangeToCurrencyFormat(itemSelected.getItem6()));
+        holder.edtText3.setText(iv.ChangeToCurrencyFormat(itemSelected.getItem6()));*/
+
+        holder.edtText1.setText(itemSelected.getItem3());
+        holder.edtText2.setText(itemSelected.getItem4());
+        holder.edtText3.setText(itemSelected.getItem6());
 
         return convertView;
 

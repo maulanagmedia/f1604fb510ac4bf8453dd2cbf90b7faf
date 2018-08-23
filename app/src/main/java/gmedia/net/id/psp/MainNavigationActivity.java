@@ -230,6 +230,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                                         .setPositiveButton("Update Sekarang", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
+                                                dialogVersion.dismiss();
                                                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
                                                 startActivity(browserIntent);
                                             }
@@ -245,6 +246,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                                         .setPositiveButton("Update Sekarang", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
+                                                dialogVersion.dismiss();
                                                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
                                                 startActivity(browserIntent);
                                             }
