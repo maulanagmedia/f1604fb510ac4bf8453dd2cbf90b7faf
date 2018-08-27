@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -55,6 +56,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.ImageUtils;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.PermissionUtils;
 import com.maulana.custommodul.SessionManager;
 
 import org.json.JSONArray;
@@ -279,7 +281,7 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
 
         }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 
-            try {
+            /*try {
 
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(photoFromCameraURI));
                 bitmap = scaleDown(bitmap, 380, true);
@@ -296,6 +298,18 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            }*/
+
+            if(data != null){
+                bitmap = (Bitmap) data.getExtras().get("data");
+                bitmap = scaleDown(bitmap, 360, true);
+                if(bitmap != null){
+
+                    photoList.add(bitmap);
+                    adapter.notifyDataSetChanged();
+                }
+            }else{
+                Toast.makeText(DetailVerifikasiOutlet.this, "Gambar tidak termuat, harap ulangi kembali", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -404,27 +418,54 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
 
     private void openCamera(){
 
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            Uri photoURL = null;
-            try {
-                photoURL = FileProvider.getUriForFile(DetailVerifikasiOutlet.this,
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        createImageFile());
-                photoFromCameraURI = photoURL.toString();
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                Log.i(TAG, "IOException");
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURL);
-                startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
-            }
+        if(PermissionUtils.hasPermissions(DetailVerifikasiOutlet.this,Manifest.permission.CAMERA)){
+
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+            /*if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                Uri photoURL = null;
+                try {
+                    photoURL = FileProvider.getUriForFile(context,
+                            BuildConfig.APPLICATION_ID + ".provider",
+                            createImageFile());
+                    photoFromCameraURI = photoURL.toString();
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    // Error occurred while creating the File
+                    Log.i(TAG, "IOException");
+                }
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURL);
+                    startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }*/
+        }else{
+
+            android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(DetailVerifikasiOutlet.this)
+                    .setTitle("Ijin dibutuhkan")
+                    .setMessage("Ijin dibutuhkan untuk mengakses kamera, harap ubah ijin kamera ke \"diperbolehkan\"")
+                    .setPositiveButton("Buka Ijin", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+                            intent.setData(uri);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
+                    .show();
         }
     }
 
