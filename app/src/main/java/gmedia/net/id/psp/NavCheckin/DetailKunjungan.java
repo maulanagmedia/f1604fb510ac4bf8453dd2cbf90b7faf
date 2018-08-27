@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
@@ -67,6 +68,7 @@ import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ImageUtils;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.PermissionUtils;
 import com.maulana.custommodul.SessionManager;
 
 import org.json.JSONArray;
@@ -458,7 +460,7 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
 
         }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 
-            try {
+            /*try {
 
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(photoFromCameraURI));
 
@@ -475,6 +477,18 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            }*/
+
+            if(data != null){
+                bitmap = (Bitmap) data.getExtras().get("data");
+                bitmap = scaleDown(bitmap, 360, true);
+                if(bitmap != null){
+
+                    photoList.add(bitmap);
+                    adapter.notifyDataSetChanged();
+                }
+            }else{
+                Toast.makeText(context, "Gambar tidak termuat, harap ulangi kembali", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -788,27 +802,54 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
 
     private void openCamera(){
 
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            Uri photoURL = null;
-            try {
-                photoURL = FileProvider.getUriForFile(context,
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        createImageFile());
-                photoFromCameraURI = photoURL.toString();
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                Log.i(TAG, "IOException");
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURL);
-                startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
-            }
+        if(PermissionUtils.hasPermissions(context,Manifest.permission.CAMERA)){
+
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+            /*if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                Uri photoURL = null;
+                try {
+                    photoURL = FileProvider.getUriForFile(context,
+                            BuildConfig.APPLICATION_ID + ".provider",
+                            createImageFile());
+                    photoFromCameraURI = photoURL.toString();
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    // Error occurred while creating the File
+                    Log.i(TAG, "IOException");
+                }
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURL);
+                    startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }*/
+        }else{
+
+            android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(context)
+                    .setTitle("Ijin dibutuhkan")
+                    .setMessage("Ijin dibutuhkan untuk mengakses kamera, harap ubah ijin kamera ke \"diperbolehkan\"")
+                    .setPositiveButton("Buka Ijin", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+                            intent.setData(uri);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
+                    .show();
         }
     }
 
@@ -906,7 +947,7 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
             @Override
             public void onSuccess(String result) {
 
-                progressDialog.dismiss();
+                if(progressDialog != null) if(progressDialog.isShowing()) progressDialog.dismiss();
                 try {
 
                     JSONObject response = new JSONObject(result);
@@ -939,7 +980,7 @@ public class DetailKunjungan extends AppCompatActivity implements LocationListen
             @Override
             public void onError(String result) {
 
-                progressDialog.dismiss();
+                if(progressDialog != null) if(progressDialog.isShowing()) progressDialog.dismiss();
                 Toast.makeText(DetailKunjungan.this, "Terjadi kesalahan, mohon ulangi kembali", Toast.LENGTH_LONG).show();
                 btnSimpan.setEnabled(true);
             }

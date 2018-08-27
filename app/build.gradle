@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric' // for crashlitycs
 
 android {
     compileSdkVersion 26
@@ -7,8 +8,8 @@ android {
         applicationId "gmedia.net.id.psp"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 28
-        versionName '26.5.1'
+        versionCode 29
+        versionName '26.6.2'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -44,5 +45,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:11.4.2'
     androidTestImplementation 'junit:junit:4.12'
     implementation 'com.android.support:design:26.1.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5' // for crashlitycs
 }
 apply plugin: 'com.google.gms.google-services'

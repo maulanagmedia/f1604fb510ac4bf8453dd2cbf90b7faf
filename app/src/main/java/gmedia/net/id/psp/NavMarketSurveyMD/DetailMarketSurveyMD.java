@@ -24,6 +24,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -77,6 +78,7 @@ import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ImageUtils;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.PermissionUtils;
 import com.maulana.custommodul.SessionManager;
 
 import org.json.JSONArray;
@@ -88,6 +90,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -101,6 +104,7 @@ import gmedia.net.id.psp.Adapter.AutocompleteAdapter;
 import gmedia.net.id.psp.BuildConfig;
 import gmedia.net.id.psp.CustomView.CustomMapView;
 import gmedia.net.id.psp.MapsOutletActivity;
+import gmedia.net.id.psp.NavMarketSurvey.DetailMarketSurvey;
 import gmedia.net.id.psp.NavMarketSurveyMD.Adapter.ListDisplayMDAdapter;
 import gmedia.net.id.psp.NavMarketSurveyMD.Adapter.ListPostmatMDAdapter;
 import gmedia.net.id.psp.NavMarketSurveyMD.Adapter.ListRekomendasiMDAdapter;
@@ -537,6 +541,7 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
             @Override
             public void onSuccess(String result) {
 
+                btnSimpan.setEnabled(true);
                 try {
 
                     JSONObject response = new JSONObject(result);
@@ -556,10 +561,9 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
                 } catch (JSONException e) {
                     progressDialog.dismiss();
                     Toast.makeText(context, "Terjadi kesalahan, mohon ulangi kembali", Toast.LENGTH_LONG).show();
-                    btnSimpan.setEnabled(true);
                 }
 
-                btnSimpan.setEnabled(true);
+                //btnSimpan.setEnabled(true);
             }
 
             @Override
@@ -620,27 +624,54 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
 
     private void openCamera(){
 
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            Uri photoURL = null;
-            try {
-                photoURL = FileProvider.getUriForFile(context,
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        createImageFile());
-                photoFromCameraURI = photoURL.toString();
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                Log.i(TAG, "IOException");
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURL);
-                startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
-            }
+        if(PermissionUtils.hasPermissions(context,Manifest.permission.CAMERA)){
+
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+            /*if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                Uri photoURL = null;
+                try {
+                    photoURL = FileProvider.getUriForFile(context,
+                            BuildConfig.APPLICATION_ID + ".provider",
+                            createImageFile());
+                    photoFromCameraURI = photoURL.toString();
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    // Error occurred while creating the File
+                    Log.i(TAG, "IOException");
+                }
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURL);
+                    startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }*/
+        }else{
+
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setTitle("Ijin dibutuhkan")
+                    .setMessage("Ijin dibutuhkan untuk mengakses kamera, harap ubah ijin kamera ke \"diperbolehkan\"")
+                    .setPositiveButton("Buka Ijin", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+                            intent.setData(uri);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
+                    .show();
         }
     }
 
@@ -875,15 +906,16 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
 
         }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 
-            try {
+            /*try {
 
                 if(photoFromCameraURI != null){
 
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(photoFromCameraURI));
+                    //bitmap = (Bitmap) data.getExtras().get("data");
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    *//*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         bitmap = rotateImage(bitmap, 90);
-                    }
+                    }*//*
 
                     bitmap = scaleDown(bitmap, 360, true);
 
@@ -896,7 +928,20 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            }*/
+
+            if(data != null){
+                bitmap = (Bitmap) data.getExtras().get("data");
+                bitmap = scaleDown(bitmap, 360, true);
+                if(bitmap != null){
+
+                    photoList.add(bitmap);
+                    adapter.notifyDataSetChanged();
+                }
+            }else{
+                Toast.makeText(context, "Gambar tidak termuat, harap ulangi kembali", Toast.LENGTH_LONG).show();
             }
+
         }
     }
 
@@ -916,8 +961,37 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
     private Bitmap rotateImage(Bitmap source, float angle){
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
+
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
+
+    /*private class RotateTask extends AsyncTask<Void, Void, Bitmap> {
+        private WeakReference<ImageView> imgInputView;
+        private WeakReference<Bitmap> rotateBitmap;
+
+        public RotateTask(ImageView imgInputView){
+            this.imgInputView = new WeakReference<ImageView>(imgInputView);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            //if you want to show progress dialog
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
+            rotateBitmap = new WeakReference<Bitmap>(Bitmap.createBitmap(rotated, 0, 0,rotated.getWidth(), rotated.getHeight(), matrix, true));
+            return rotateBitmap.get();
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            //dismiss progress dialog
+            imgInputView.get().setImageBitmap(result);
+        }
+    }*/
 
     private void initLocation() {
 
@@ -1068,10 +1142,13 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
             idSurvey = bundle.getString("id", "");
             if(!idSurvey.isEmpty()){
 
+                btnSimpan.setVisibility(View.GONE);
                 btnSimpan.setEnabled(false);
                 llJarak.setVisibility(View.GONE);
                 getDataSurvey();
             }else{
+
+                btnSimpan.setEnabled(true);
                 refreshMode = true;
                 updateAllLocation();
             }
