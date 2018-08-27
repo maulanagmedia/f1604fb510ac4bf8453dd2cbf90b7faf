@@ -274,14 +274,10 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
         adapterPostmat = new ListPostmatMDAdapter((Activity) context, listPostmat);
         lvPostmat.setAdapter(adapterPostmat);
 
-        initCollapsingToolbar();
-
-        editMode = false;
-
-        initLocation();
-
         initEvent();
-
+        initCollapsingToolbar();
+        editMode = false;
+        initLocation();
     }
 
     private void initEvent() {
@@ -499,6 +495,7 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
 
             Toast.makeText(context, "Harap lengkapi data rekomendasi", Toast.LENGTH_LONG).show();
             progressDialog.dismiss();
+            btnSimpan.setEnabled(true);
             return;
         }
 
@@ -522,6 +519,7 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
 
             Toast.makeText(context, "Harap lengkapi data postmat", Toast.LENGTH_LONG).show();
             progressDialog.dismiss();
+            btnSimpan.setEnabled(true);
             return;
         }
 
@@ -1155,6 +1153,7 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
 
         }else{
 
+            btnSimpan.setEnabled(true);
             refreshMode = true;
             updateAllLocation();
         }
