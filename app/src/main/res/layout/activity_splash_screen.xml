@@ -7,17 +7,22 @@
     android:background="@drawable/ic_background"
     tools:context="gmedia.net.id.psp.SplashScreen">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_white_transparant1"/>
+
     <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@drawable/ic_logo_psp"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:src="@drawable/ic_isidw_i"
         android:id="@+id/iv_psp"
         android:layout_centerInParent="true"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PSP CELLULAR"
+        android:text="PSP SALES FORCE"
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="20sp"

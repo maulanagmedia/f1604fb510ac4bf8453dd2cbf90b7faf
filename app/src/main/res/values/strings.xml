@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PSP Sales</string>
+    <string name="app_name">ISIDW Type I</string>
     <integer name="count_table">20</integer>
     <string name="title_activity_main_navigation">MainNavigationActivity</string>
 

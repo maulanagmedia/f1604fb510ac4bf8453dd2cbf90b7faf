@@ -6,6 +6,7 @@
 
     <color name="color_white">#ffffff</color>
     <color name="color_white_transparant">#ccffffff</color>
+    <color name="color_white_transparant1">#97ffffff</color>
     <color name="color_white_transparant2">#70ffffff</color>
     <color name="btn_color">#ec1c25</color>
     <color name="btn_color_active">#c99b9d</color>

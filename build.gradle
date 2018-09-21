@@ -29,11 +29,6 @@ subprojects {
         maven {
             url "https://maven.google.com" // Google's Maven repository
         }
-
-        // for Crashlytics
-        maven {
-            url 'https://maven.google.com/'
-        }
     }
 
     // for xzing
@@ -49,6 +44,11 @@ allprojects {
     repositories {
         jcenter()
         google()
+		
+		// for Crashlytics
+        maven {
+            url 'https://maven.google.com/'
+        }
     }
 }
 

@@ -546,14 +546,16 @@ public class NavPengajuanDeposit extends AppCompatActivity {
                         JSONObject response = new JSONObject(result);
                         String status = response.getJSONObject("metadata").getString("status");
                         message = response.getJSONObject("metadata").getString("message");
+
                         if(iv.parseNullInteger(status) == 200){
 
                             progressDialog.dismiss();
                             message = response.getJSONObject("response").getString("message");
-                            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                             getDataPengajuan();
 
                         }
+
+                        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();

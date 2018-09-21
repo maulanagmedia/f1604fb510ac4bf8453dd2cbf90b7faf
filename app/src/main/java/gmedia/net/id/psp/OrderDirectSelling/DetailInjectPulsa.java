@@ -984,7 +984,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             //Log.d(TAG, "granted");
         }else{
             //Log.d(TAG, "not granted");
-            Snackbar.make(findViewById(android.R.id.content), "Mohon ijinkan accessibility pada PSP Sales, Cari PSP Sales dan ubah enable",
+            Snackbar.make(findViewById(android.R.id.content), "Mohon ijinkan accessibility pada "+getResources().getString(R.string.app_name)+", Cari " + getResources().getString(R.string.app_name) + " dan ubah enable",
                     Snackbar.LENGTH_INDEFINITE).setAction("OK",
                     new View.OnClickListener() {
                         @Override
