@@ -206,7 +206,6 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/color_black"
                             android:layout_marginRight="@dimen/default_margin_tiny"
-                            android:layout_marginLeft="@dimen/default_margin_tiny"
                             android:text="Recharge Share"/>
                     </LinearLayout>
 
