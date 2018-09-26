@@ -181,24 +181,33 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/color_black"
                             android:layout_marginLeft="@dimen/default_margin_tiny"
-                            android:text="Unit"/>
+                            android:text="Display Share"/>
 
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_weight="0.3"
+                            android:layout_weight="0.2"
                             android:layout_height="wrap_content"
                             android:textColor="@color/color_black"
                             android:layout_marginLeft="@dimen/default_margin_tiny"
-                            android:text="Belanja(Rp)/ Minggu"/>
+                            android:text="Belanja Share"/>
 
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_weight="0.3"
+                            android:layout_weight="0.2"
                             android:layout_height="wrap_content"
                             android:textColor="@color/color_black"
                             android:layout_marginRight="@dimen/default_margin_tiny"
                             android:layout_marginLeft="@dimen/default_margin_tiny"
-                            android:text="Penjualan/ Unit"/>
+                            android:text="Sales Share"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.2"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_black"
+                            android:layout_marginRight="@dimen/default_margin_tiny"
+                            android:layout_marginLeft="@dimen/default_margin_tiny"
+                            android:text="Recharge Share"/>
                     </LinearLayout>
 
                     <TextView

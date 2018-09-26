@@ -37,7 +37,7 @@ public class ListDisplayMDAdapter extends ArrayAdapter{
 
     private static class ViewHolder {
         private TextView tvText1;
-        private EditText edtText1, edtText2, edtText3;
+        private EditText edtText1, edtText2, edtText3, edtText4;
     }
 
     public List<CustomItem> getItems(){
@@ -47,11 +47,7 @@ public class ListDisplayMDAdapter extends ArrayAdapter{
 
     @Override
     public int getCount() {
-        if(items.size() < ItemLength.ListLength){
-            return super.getCount();
-        }else{
-            return ItemLength.ListLength;
-        }
+        return super.getCount();
     }
 
     @Override
@@ -66,6 +62,7 @@ public class ListDisplayMDAdapter extends ArrayAdapter{
             holder.edtText1 = (EditText) convertView.findViewById(R.id.edt_text1);
             holder.edtText2 = (EditText) convertView.findViewById(R.id.edt_text2);
             holder.edtText3 = (EditText) convertView.findViewById(R.id.edt_text3);
+            holder.edtText4 = (EditText) convertView.findViewById(R.id.edt_text4);
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
@@ -197,6 +194,46 @@ public class ListDisplayMDAdapter extends ArrayAdapter{
             }
         });
 
+        finalHolder.edtText4.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                /*if(!editable.toString().equals(itemSelected.getItem6()) && !editable.toString().isEmpty()){
+
+                    String cleanString = editable.toString().replaceAll("[,.]", "");
+                    finalHolder.edtText3.removeTextChangedListener(this);
+
+                    String formatted = iv.ChangeToCurrencyFormat(cleanString);
+
+                    try {
+                        items.get(position).setItem6(cleanString);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                    finalHolder.edtText3.setText(formatted);
+                    finalHolder.edtText3.setSelection(formatted.length());
+
+                    finalHolder.edtText3.addTextChangedListener(this);
+                }*/
+                try {
+                    items.get(position).setItem7(editable.toString());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
         /*holder.edtText1.setText(iv.ChangeToCurrencyFormat(itemSelected.getItem3()));
         holder.edtText2.setText(iv.ChangeToCurrencyFormat(itemSelected.getItem4()));
         holder.edtText3.setText(iv.ChangeToCurrencyFormat(itemSelected.getItem6()));*/
@@ -204,6 +241,7 @@ public class ListDisplayMDAdapter extends ArrayAdapter{
         holder.edtText1.setText(itemSelected.getItem3());
         holder.edtText2.setText(itemSelected.getItem4());
         holder.edtText3.setText(itemSelected.getItem6());
+        holder.edtText4.setText(itemSelected.getItem7());
 
         return convertView;
 

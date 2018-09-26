@@ -47,6 +47,7 @@ public class HeaderPengajuanDeposit extends AppCompatActivity {
     private boolean isLoading = false;
     private String TAG = "test";
     private String nik = "";
+    private boolean isPerdana = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,17 @@ public class HeaderPengajuanDeposit extends AppCompatActivity {
         pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
         session = new SessionManager(context);
         nik = session.getUserDetails().get(SessionManager.TAG_UID);
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+
+            isPerdana = (bundle.getString("perdana", "")).isEmpty() ? false : true;
+
+            if(isPerdana){
+
+                setTitle("Reseller Pembeli Perdana");
+            }
+        }
     }
 
     @Override
@@ -91,6 +103,7 @@ public class HeaderPengajuanDeposit extends AppCompatActivity {
         try {
             jBody.put("nik", nik);
             jBody.put("keyword", keyword);
+            jBody.put("flag", (isPerdana ? "2" : "1"));
             jBody.put("start", String.valueOf(start));
             jBody.put("end", String.valueOf(count));
         } catch (JSONException e) {
@@ -150,6 +163,7 @@ public class HeaderPengajuanDeposit extends AppCompatActivity {
 
                     CustomItem item = (CustomItem) adapterView.getItemAtPosition(i);
                     Intent intent = new Intent(context, NavPengajuanDeposit.class);
+                    intent.putExtra("flag", (isPerdana ? "2" : "1"));
                     intent.putExtra("kdcus", item.getItem1());
                     intent.putExtra("nama", item.getItem2());
                     startActivity(intent);

@@ -62,7 +62,7 @@ public class NavPengajuanDeposit extends AppCompatActivity {
     private boolean isLoading = false;
     private String TAG = "test";
     private String nik = "";
-    private String kdcus = "", nama = "";
+    private String kdcus = "", nama = "", flag = "";
     private static TextView tvTotal;
     private Button btnTolak, btnTerima;
     private static String total = "0";
@@ -103,8 +103,10 @@ public class NavPengajuanDeposit extends AppCompatActivity {
 
             kdcus = bundle.getString("kdcus", "");
             nama = bundle.getString("nama", "");
+            flag = bundle.getString("flag", "");
 
             setTitle("Pengajuan");
+            if(flag.equals("2")) setTitle("Pembelian Perdana");
             getSupportActionBar().setSubtitle("a/n " + nama);
 
             isLoading = false;
@@ -178,6 +180,7 @@ public class NavPengajuanDeposit extends AppCompatActivity {
             jBody.put("nik", nik);
             jBody.put("kdcus", kdcus);
             jBody.put("keyword", keyword);
+            jBody.put("flag", flag);
             jBody.put("start", String.valueOf(start));
             jBody.put("end", String.valueOf(count));
         } catch (JSONException e) {
@@ -287,6 +290,7 @@ public class NavPengajuanDeposit extends AppCompatActivity {
             jBody.put("nik", nik);
             jBody.put("kdcus", kdcus);
             jBody.put("keyword", keyword);
+            jBody.put("flag", flag);
             jBody.put("start", String.valueOf(start));
             jBody.put("end", String.valueOf(count));
         } catch (JSONException e) {
@@ -496,7 +500,7 @@ public class NavPengajuanDeposit extends AppCompatActivity {
         tvTotal.setText(iv.ChangeToRupiahFormat(totalDouble));
     }
 
-    private void saveData(String flag, String alasan) {
+    private void saveData(String type, String alasan) {
 
         isLoading = true;
         final ProgressDialog progressDialog = new ProgressDialog(NavPengajuanDeposit.this, R.style.AppTheme_Login_Dialog);
@@ -516,7 +520,7 @@ public class NavPengajuanDeposit extends AppCompatActivity {
                     try {
                         jo.put("id", item.getItem1());
                         jo.put("nik", nik);
-                        jo.put("apv", flag);
+                        jo.put("apv", type);
                         jo.put("keterangan", alasan);
 
                         jArray.put(jo);

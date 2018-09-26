@@ -10,4 +10,11 @@
 
     <integer name="menu_animation_duration">500</integer>
     <integer name="menu_p_animation_duration">300</integer>
+
+    <string name="msg_connection_issue">Cannot connect to Internet...Please check your connection!</string>
+    <string name="msg_server_issue">The server could not be found. Please try again after some time!!</string>
+    <string name="msg_auth_issue">Cannot connect to Internet...Please check your connection</string>
+    <string name="msg_parsing_issue">Parsing error! Please try again after some time!!</string>
+    <string name="msg_noinet_issue">Cannot connect to Internet...Please check your connection!</string>
+    <string name="msg_timeout_issue">Connection TimeOut! Please check your internet connection.</string>
 </resources>

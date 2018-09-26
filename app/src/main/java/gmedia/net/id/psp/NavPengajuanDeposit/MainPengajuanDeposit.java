@@ -19,7 +19,7 @@ import gmedia.net.id.psp.R;
 public class MainPengajuanDeposit extends AppCompatActivity {
 
     private ItemValidation iv = new ItemValidation();
-    private RelativeLayout llPengajuan, llHistory;
+    private RelativeLayout llPengajuan, llHistory, llPembelianPerdana;
     private SessionManager session;
     private Context context;
 
@@ -44,12 +44,23 @@ public class MainPengajuanDeposit extends AppCompatActivity {
     private void initUI() {
 
         llPengajuan = (RelativeLayout) findViewById(R.id.ll_pengajuan);
+        llPembelianPerdana = (RelativeLayout) findViewById(R.id.ll_pembelian_perdana);
         llHistory = (RelativeLayout) findViewById(R.id.ll_history);
 
         initEvent();
     }
 
     private void initEvent() {
+
+        llPembelianPerdana.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(context, HeaderPengajuanDeposit.class);
+                intent.putExtra("perdana", "1");
+                startActivity(intent);
+            }
+        });
 
         llPengajuan.setOnClickListener(new View.OnClickListener() {
             @Override

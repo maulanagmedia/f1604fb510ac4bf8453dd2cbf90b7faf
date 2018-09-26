@@ -27,7 +27,7 @@
             android:layout_marginLeft="@dimen/default_margin_tiny"
             style="@style/formControlInput"
             android:id="@+id/edt_text1"
-            android:hint="Unit"
+            android:hint="0"
             android:gravity="right"
             android:text=""
             android:inputType="number"
@@ -35,27 +35,40 @@
 
         <EditText
             android:layout_width="0dp"
-            android:layout_weight="0.3"
+            android:layout_weight="0.2"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin_tiny"
             android:textColor="@color/color_black"
             style="@style/formControlInput"
             android:id="@+id/edt_text2"
-            android:hint="100000"
+            android:hint="0"
             android:gravity="right"
             android:inputType="number"
             android:imeOptions="actionNext"/>
 
         <EditText
             android:layout_width="0dp"
-            android:layout_weight="0.3"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_black"
+            android:layout_marginLeft="@dimen/default_margin_tiny"
+            style="@style/formControlInput"
+            android:id="@+id/edt_text3"
+            android:hint="0"
+            android:gravity="right"
+            android:inputType="number"
+            android:imeOptions="actionNext"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
             android:layout_height="wrap_content"
             android:textColor="@color/color_black"
             android:layout_marginRight="@dimen/default_margin_tiny"
             android:layout_marginLeft="@dimen/default_margin_tiny"
             style="@style/formControlInput"
-            android:id="@+id/edt_text3"
-            android:hint="100000"
+            android:id="@+id/edt_text4"
+            android:hint="0"
             android:gravity="right"
             android:inputType="number"
             android:imeOptions="actionNext"/>

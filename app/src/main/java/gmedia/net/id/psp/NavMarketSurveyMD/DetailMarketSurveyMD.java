@@ -455,6 +455,7 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
                 jDataSurvey.put("unit_"+item.getItem5(), ((item.getItem3().equals("")) ? "0" : item.getItem3()));
                 jDataSurvey.put("order_"+item.getItem5(), ((item.getItem4().equals("")) ? "0" : item.getItem4()));
                 jDataSurvey.put("penjualan_"+item.getItem5(), ((item.getItem6().equals("")) ? "0" : item.getItem6()));
+                jDataSurvey.put("recharge_"+item.getItem5(), ((item.getItem7().equals("")) ? "0" : item.getItem7()));
             }
 
         } catch (JSONException e) {
@@ -1107,6 +1108,7 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
                                         "",
                                         "",
                                         jo.getString("field_name"),
+                                        "",
                                         ""));
                             }
                         }
@@ -1205,6 +1207,7 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
                             item.setItem3(jSurvey.getString("unit_"+item.getItem5()));
                             item.setItem4(jSurvey.getString("order_"+item.getItem5()));
                             item.setItem6(jSurvey.getString("penjualan_"+item.getItem5()));
+                            item.setItem7(jSurvey.getString("recharge_"+item.getItem5()));
                         }
 
                         adapterDisplay.notifyDataSetChanged();
