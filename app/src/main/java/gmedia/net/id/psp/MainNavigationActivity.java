@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -30,8 +32,11 @@ import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.RuntimePermissionsActivity;
 import com.maulana.custommodul.SessionManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import gmedia.net.id.psp.DaftarPiutang.PiutangPerOutlet;
 import gmedia.net.id.psp.InfoDeposit.ActDeposit;
@@ -326,7 +331,6 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                 }
             });
         }
-
     }
 
     @Override
@@ -347,7 +351,30 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         }
 
         statusCheck();
+        checkInstallerApplication();
         checkVersion();
+    }
+
+    private void checkInstallerApplication(){
+
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> pkgAppsList = context.getPackageManager().queryIntentActivities( mainIntent, 0);
+
+        JSONArray jPackage = new JSONArray();
+        for(ResolveInfo info: pkgAppsList){
+
+            JSONObject jo = new JSONObject();
+
+            try {
+                jo.put("package", info.activityInfo.packageName);
+                jPackage.put(jo);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //Log.d("Text", "checkInstallerApplication: ");
     }
 
     public static void changeNavigationState(Context context, int position){
