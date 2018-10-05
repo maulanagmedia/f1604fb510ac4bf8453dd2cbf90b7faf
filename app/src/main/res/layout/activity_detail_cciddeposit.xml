@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NavPengajuanDeposit.DetailCCIDDeposit">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:scrollbarSize="3dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/formGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/formControlLabel2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Order" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:id="@+id/edt_order"
+                        style="@style/formControlInput.disable"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/formGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/formControlLabel2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ambil CCID" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin_tiny"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:weightSum="1">
+
+                    <Button
+                        android:id="@+id/btn_scan"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_margin_tiny"
+                        android:layout_marginBottom="@dimen/default_margin_tiny"
+                        android:layout_marginLeft="@dimen/default_margin_tiny"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_login"
+                        android:text="Scan CCID"
+                        android:textColor="@color/color_white" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/formGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_item"
+                android:paddingBottom="@dimen/default_margin_small"
+                android:paddingLeft="@dimen/default_margin_small"
+                android:paddingRight="@dimen/default_margin_small">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/formControlLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/default_margin_tiny"
+                            android:paddingRight="@dimen/default_margin_tiny"
+                            android:text="No" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/formControlLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/default_margin_tiny"
+                            android:paddingRight="@dimen/default_margin_tiny"
+                            android:text="Barang" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/formControlLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/default_margin_tiny"
+                            android:paddingRight="@dimen/default_margin_tiny"
+                            android:text="Harga" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.maulana.custommodul.CustomView.NestedListView
+                        android:id="@+id/lv_perdana"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="true"></com.maulana.custommodul.CustomView.NestedListView>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/formControlLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:gravity="right"
+                    android:text="Tap CCID untuk melihat detail"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/formGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/formControlLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total CCID &amp; Harga" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <EditText
+                        android:id="@+id/edt_total_ccid"
+                        style="@style/formControlInput.disable"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:background="@drawable/bg_input_disable_l"
+                        android:gravity="center" />
+
+                    <EditText
+                        android:id="@+id/edt_total_harga"
+                        style="@style/formControlInput.disable"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.3"
+                        android:background="@drawable/bg_input_disable_r"
+                        android:gravity="right" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/formGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <Button
+                        android:id="@+id/btn_maps_event"
+                        android:layout_width="0dp"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/default_margin_small"
+                        android:layout_marginTop="@dimen/default_margin_tiny"
+                        android:layout_weight="0.4"
+                        android:background="@drawable/btn_form"
+                        android:text="Peta Customer"
+                        android:textColor="@color/color_white" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.1"
+                        android:visibility="gone"
+                        android:orientation="vertical"></LinearLayout>
+
+                    <Button
+                        android:id="@+id/btn_proses"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/default_margin"
+                        android:layout_marginTop="@dimen/default_margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_login"
+                        android:text="Simpan"
+                        android:textColor="@color/color_white" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pb_loading"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+
+</android.support.constraint.ConstraintLayout>

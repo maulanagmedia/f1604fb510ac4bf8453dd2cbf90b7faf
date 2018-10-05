@@ -12,22 +12,31 @@
         android:layout_marginBottom="@dimen/modul_margin_default"
         android:weightSum="1">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="240dp"
             android:layout_height="90dp"
-            android:orientation="vertical"
             android:id="@+id/ll_head"
-            android:gravity="center"
             android:background="@drawable/bg_dialog_red"
             >
 
             <ProgressBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.White"/>
+                android:theme="@style/AppTheme.White"
+                android:layout_centerInParent="true"/>
 
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:id="@+id/iv_cancel"
+                android:src="@mipmap/ic_cancel"
+                android:background="?attr/selectableItemBackground"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="4dp"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/modul_margin_default"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:weightSum="2">
 
                 <Button
@@ -66,15 +75,6 @@
                     android:id="@+id/btn_ok"
                     android:text="Batalkan"/>
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:layout_marginLeft="4dp"
-                    android:textColor="@color/color_red_dialog"
-                    android:textSize="12sp"
-                    android:id="@+id/btn_konfirmasi"
-                    android:text="Konfirmasi Transaksi Sudah Masuk"/>
             </LinearLayout>
 
 

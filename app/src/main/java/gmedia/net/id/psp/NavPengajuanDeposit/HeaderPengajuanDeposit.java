@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -162,7 +161,7 @@ public class HeaderPengajuanDeposit extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                     CustomItem item = (CustomItem) adapterView.getItemAtPosition(i);
-                    Intent intent = new Intent(context, NavPengajuanDeposit.class);
+                    Intent intent = new Intent(context, DetailPengajuanDeposit.class);
                     intent.putExtra("flag", (isPerdana ? "2" : "1"));
                     intent.putExtra("kdcus", item.getItem1());
                     intent.putExtra("nama", item.getItem2());

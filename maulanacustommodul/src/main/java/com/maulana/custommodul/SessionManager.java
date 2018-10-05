@@ -129,6 +129,10 @@ public class SessionManager {
 		return pref.getString(TAG_USERNAME, "");
 	}
 
+	public String getNikGA(){
+		return pref.getString(TAG_UID, "");
+	}
+
 	public String getPassword(){
 		return pref.getString(TAG_PASSWORD, "");
 	}

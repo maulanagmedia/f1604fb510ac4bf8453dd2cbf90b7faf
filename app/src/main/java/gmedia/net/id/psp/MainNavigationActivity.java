@@ -6,9 +6,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -270,6 +272,8 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                checkInstallerApplication();
             }
 
             @Override
@@ -351,7 +355,6 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         }
 
         statusCheck();
-        checkInstallerApplication();
         checkVersion();
     }
 
@@ -367,14 +370,98 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
             JSONObject jo = new JSONObject();
 
             try {
+                jo.put("nik", session.getNikGA());
                 jo.put("package", info.activityInfo.packageName);
+                jo.put("name", GetAppName(info.activityInfo.packageName));
                 jPackage.put(jo);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        //Log.d("Text", "checkInstallerApplication: ");
+        JSONObject jBody = new JSONObject();
+        try {
+            jBody.put("data", jPackage);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.saveInstalledApps, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        String flag = response.getJSONObject("response").getString("flag");
+                        String message = response.getJSONObject("response").getString("message");
+
+                        if(flag.equals("1")){
+
+                            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+                            stopCurrentService();
+                            Intent intent = new Intent(MainNavigationActivity.this, LoginScreen.class);
+                            session.logoutUser(intent);
+                        }else{
+                            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+
+            }
+        });
+    }
+
+    private String GetAppName(String ApkPackageName){
+
+        String Name = "";
+
+        ApplicationInfo applicationInfo;
+
+        PackageManager packageManager = context.getPackageManager();
+
+        try {
+
+            applicationInfo = packageManager.getApplicationInfo(ApkPackageName, 0);
+
+            if(applicationInfo!=null){
+
+                Name = (String)packageManager.getApplicationLabel(applicationInfo);
+            }
+
+        }catch (PackageManager.NameNotFoundException e) {
+
+            e.printStackTrace();
+        }
+        return Name;
+    }
+
+    private Drawable getAppIconByPackageName(String ApkTempPackageName){
+
+        Drawable drawable;
+
+        try{
+            drawable = context.getPackageManager().getApplicationIcon(ApkTempPackageName);
+
+        }
+        catch (PackageManager.NameNotFoundException e){
+
+            e.printStackTrace();
+
+            drawable = ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
+        }
+        return drawable;
     }
 
     public static void changeNavigationState(Context context, int position){

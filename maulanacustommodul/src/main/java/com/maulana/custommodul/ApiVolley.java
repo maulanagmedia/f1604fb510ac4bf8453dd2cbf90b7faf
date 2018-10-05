@@ -205,6 +205,7 @@ public class ApiVolley {
                 public boolean verify(String hostname, SSLSession session) {
                     if (hostname.equalsIgnoreCase("putmasaripratama.co.id") ||
                             hostname.equalsIgnoreCase("api.putmasaripratama.co.id") ||
+                            hostname.equalsIgnoreCase("reports.crashlytics.com") ||
                             hostname.equalsIgnoreCase("api.crashlytics.com") ||
                             hostname.equalsIgnoreCase("settings.crashlytics.com") ||
                             hostname.equalsIgnoreCase("clients4.google.com") ||

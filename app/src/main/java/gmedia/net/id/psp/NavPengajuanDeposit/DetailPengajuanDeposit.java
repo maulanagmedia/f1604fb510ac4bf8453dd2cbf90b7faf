@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -29,6 +28,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;
@@ -38,16 +39,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.NavPengajuanDeposit.Adapter.ListPengajuanDepositAdapter;
 import gmedia.net.id.psp.R;
-import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ServerURL;
 
-public class NavPengajuanDeposit extends AppCompatActivity {
+public class DetailPengajuanDeposit extends AppCompatActivity {
 
     private View footerList;
     private ListView lvDeposit;
@@ -66,6 +67,7 @@ public class NavPengajuanDeposit extends AppCompatActivity {
     private static TextView tvTotal;
     private Button btnTolak, btnTerima;
     private static String total = "0";
+    public HashMap<String, List<CustomItem>> listCCID = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,8 @@ public class NavPengajuanDeposit extends AppCompatActivity {
         setTitle("Pengajuan Deposit");
 
         initUI();
+
+        listCCID = new HashMap<>();
     }
 
     private void initUI() {
@@ -139,6 +143,21 @@ public class NavPengajuanDeposit extends AppCompatActivity {
                 if(adapterDeposit == null || adapterDeposit.getItems().size() == 0){
 
                     Toast.makeText(context, "Data masih kosong, harap diisi", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                boolean isSelected = false;
+                for(CustomItem item:adapterDeposit.getItems()){
+
+                    if(item.getItem8().equals("1")){
+                        isSelected = true;
+                        break;
+                    }
+                }
+
+                if(!isSelected){
+
+                    Toast.makeText(context, "Harap pilih minimal satu item untuk disetujui", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -204,7 +223,8 @@ public class NavPengajuanDeposit extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            listPengajuan.add(new CustomItem(jo.getString("id"),
+                            listPengajuan.add(new CustomItem(
+                                    jo.getString("id"),
                                     jo.getString("nama"),
                                     jo.getString("debit"),
                                     jo.getString("nilai_status"),
@@ -238,7 +258,7 @@ public class NavPengajuanDeposit extends AppCompatActivity {
         lvDeposit.setAdapter(null);
         if(listItem != null){
 
-            adapterDeposit = new ListPengajuanDepositAdapter((Activity) context, listItem);
+            adapterDeposit = new ListPengajuanDepositAdapter((Activity) context, listItem, flag);
             lvDeposit.addFooterView(footerList);
             lvDeposit.setAdapter(adapterDeposit);
             lvDeposit.removeFooterView(footerList);
@@ -503,7 +523,7 @@ public class NavPengajuanDeposit extends AppCompatActivity {
     private void saveData(String type, String alasan) {
 
         isLoading = true;
-        final ProgressDialog progressDialog = new ProgressDialog(NavPengajuanDeposit.this, R.style.AppTheme_Login_Dialog);
+        final ProgressDialog progressDialog = new ProgressDialog(DetailPengajuanDeposit.this, R.style.AppTheme_Login_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Menyimpan...");
         progressDialog.setCancelable(false);
@@ -516,28 +536,76 @@ public class NavPengajuanDeposit extends AppCompatActivity {
 
                 if(item.getItem8().equals("1")){
 
-                    JSONObject jo = new JSONObject();
-                    try {
-                        jo.put("id", item.getItem1());
-                        jo.put("nik", nik);
-                        jo.put("apv", type);
-                        jo.put("keterangan", alasan);
+                    if(flag.equals("2")){
 
-                        jArray.put(jo);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        List<CustomItem> selectedItem = listCCID.get(item.getItem1());
+                        for(CustomItem item2: selectedItem){
+                            JSONObject jDataDetail = new JSONObject();
+                            try {
+                                jDataDetail.put("nobukti","");
+                                jDataDetail.put("nik", nik);
+                                jDataDetail.put("kodebrg", item2.getItem1());
+                                jDataDetail.put("ccid", item2.getItem3());
+                                jDataDetail.put("harga", item2.getItem4());
+                                jDataDetail.put("jumlah", item2.getItem5());
+                                jDataDetail.put("total", item2.getItem4());
+                                jDataDetail.put("kdcus", kdcus);
+                                jDataDetail.put("nama", nama);
+                                jDataDetail.put("alamat", "");
+                                jDataDetail.put("nomor", "");
+                                jDataDetail.put("nomor_event", "");
+                                jDataDetail.put("jarak", "");
+                                jDataDetail.put("no_surat_jalan", item2.getItem6());
+                                jDataDetail.put("id_surat_jalan", item2.getItem7());
+                                jDataDetail.put("transaction_id", "0");
+                                jDataDetail.put("is_rs", "1");
+                                jDataDetail.put("id_transaksi", item.getItem1());
+                                jDataDetail.put("keterangan", alasan);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            jArray.put(jDataDetail);
+                        }
+                    }else{
+
+                        JSONObject jo = new JSONObject();
+                        try {
+                            jo.put("id", item.getItem1());
+                            jo.put("nik", nik);
+                            jo.put("apv", type);
+                            jo.put("keterangan", alasan);
+
+                            jArray.put(jo);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
 
             JSONObject jData = new JSONObject();
-            try {
-                jData.put("approval", jArray);
-            }catch (JSONException e){
-                e.printStackTrace();
+
+            String saveUrl = ServerURL.savePengajuanDeposite;
+
+            if(flag.equals("2")){
+
+                saveUrl = ServerURL.savePengajuanDepositePerdana;
+
+                try {
+                    jData.put("data", jArray);
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }else{
+                try {
+                    jData.put("approval", jArray);
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
             }
 
-            ApiVolley request = new ApiVolley(context, jData, "POST", ServerURL.savePengajuanDeposite, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+            ApiVolley request = new ApiVolley(context, jData, "POST", saveUrl, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
                 @Override
                 public void onSuccess(String result) {
 
@@ -577,6 +645,28 @@ public class NavPengajuanDeposit extends AppCompatActivity {
         }else {
             Toast.makeText(context, "Barang masih kosong", Toast.LENGTH_LONG).show();
             progressDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 9 && data != null && resultCode == RESULT_OK){
+            String jsonItems = data.getStringExtra("data");
+
+            Type typeList = new TypeToken<List<CustomItem>>(){}.getType();
+            Gson gson = new Gson();
+            List<CustomItem> selectedCCID = gson.fromJson(jsonItems, typeList);
+            String id = data.getStringExtra("id");
+            listCCID.put(id, selectedCCID);
+
+            if(selectedCCID == null || selectedCCID.size() == 0){
+
+                adapterDeposit.updateStatus(id, "0");
+
+            }
+
+            Log.d(TAG, "onActivityResult: ");
         }
     }
 

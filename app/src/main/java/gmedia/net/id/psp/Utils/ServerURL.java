@@ -9,8 +9,8 @@ public class ServerURL {
     //private static final String baseURL = "http://192.168.43.200/psp/";
     //private static final String baseURL = "http://api.putmasaripratama.co.id/";
     //private static final String baseURL = "http://119.2.53.122/mobilesalesforce/";
-    private static final String baseURL = "https://api.putmasaripratama.co.id/";
-    //private static final String baseURL = "http://192.168.17.4/psp/";
+    //private static final String baseURL = "https://api.putmasaripratama.co.id/";
+    private static final String baseURL = "http://192.168.17.4/psp/";
 
     public static final String login = baseURL + "api/auth/login/";
     public static final String getLatestVersion = baseURL + "api/auth/get_latest_version/";
@@ -70,6 +70,7 @@ public class ServerURL {
     public static final String getDeposite = baseURL + "api/deposit/get_deposit/";
     public static final String saveDeposite = baseURL + "api/deposit/save/";
     public static final String savePengajuanDeposite = baseURL + "api/deposit/apv_pengajuan_deposit/";
+    public static final String savePengajuanDepositePerdana = baseURL + "api/Deposit/approval_perdana/";
     public static final String getHistoryDeposit = baseURL + "api/deposit/get_pengajuan_deposit/";
     public static final String getPengajuanHeader = baseURL + "api/deposit/header_pengajuan_approval/";
     public static final String getPengajuanDetail = baseURL + "api/deposit/detail_pengajuan_approval/";
@@ -105,4 +106,6 @@ public class ServerURL {
     public static final String getProvider = baseURL + "api/event/get_provide/";
     public static final String getRiwayatDS = baseURL + "api/event/get_riwayat_ds/";
     public static final String saveLogMock = baseURL + "api/auth/insert_log_mock/";
+    public static final String saveInstalledApps = baseURL + "api/auth/save_apps/";
+    public static final String getCCIDDeposit = baseURL + "api/Deposit/view_ccid/";
 }

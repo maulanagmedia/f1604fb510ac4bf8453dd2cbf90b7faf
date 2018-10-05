@@ -24,12 +24,8 @@ import gmedia.net.id.psp.LocationService.LocationUpdater;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.NavPOL.ListOutletLocation;
 import gmedia.net.id.psp.NavPengajuanDeposit.HeaderPengajuanDeposit;
-import gmedia.net.id.psp.NavPengajuanDeposit.NavPengajuanDeposit;
 import gmedia.net.id.psp.NavVerifikasiOutlet.ActVerifikasiOutlet;
-import gmedia.net.id.psp.PelunasanPenjualan.PelunasanPenjualan;
 import gmedia.net.id.psp.PenjualanHariIni.PenjualanHariIni;
-import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;
-import gmedia.net.id.psp.PenjualanPerdana.PenjualanPerdana;
 import gmedia.net.id.psp.R;
 
 

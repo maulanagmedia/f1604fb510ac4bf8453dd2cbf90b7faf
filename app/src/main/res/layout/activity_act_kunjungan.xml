@@ -196,7 +196,6 @@
                                 android:text="Terkunjungi tidak belanja"/>
                         </LinearLayout>
                     </LinearLayout>
-
                 </LinearLayout>
 
                 <ListView

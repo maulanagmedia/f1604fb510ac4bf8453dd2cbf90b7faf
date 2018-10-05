@@ -1,6 +1,7 @@
 package gmedia.net.id.psp.NavPengajuanDeposit.Adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,8 @@ import com.maulana.custommodul.ItemValidation;
 
 import java.util.List;
 
-import gmedia.net.id.psp.NavPengajuanDeposit.NavPengajuanDeposit;
+import gmedia.net.id.psp.NavPengajuanDeposit.DetailCCIDDeposit;
+import gmedia.net.id.psp.NavPengajuanDeposit.DetailPengajuanDeposit;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
 
@@ -29,11 +31,13 @@ public class ListPengajuanDepositAdapter extends ArrayAdapter{
     private Activity context;
     private List<CustomItem> items;
     private ItemValidation iv = new ItemValidation();
+    private String flag = "";
 
-    public ListPengajuanDepositAdapter(Activity context, List<CustomItem> items) {
+    public ListPengajuanDepositAdapter(Activity context, List<CustomItem> items, String flag) {
         super(context, R.layout.cv_list_pengajuan_deposit, items);
         this.context = context;
         this.items = items;
+        this.flag = flag;
     }
 
     private static class ViewHolder {
@@ -44,6 +48,23 @@ public class ListPengajuanDepositAdapter extends ArrayAdapter{
     public void addMoreData(List<CustomItem> itemsToAdd){
 
         items.addAll(itemsToAdd);
+        notifyDataSetChanged();
+    }
+
+    public void updateStatus(String id, String status){
+
+        int position = 0;
+        for(CustomItem item : items){
+
+            if(item.getItem1().equals(id)) {
+
+                items.get(position).setItem8(status);
+                break;
+            }
+            position ++;
+        }
+
+        DetailPengajuanDeposit.updateHarga();
         notifyDataSetChanged();
     }
 
@@ -99,11 +120,22 @@ public class ListPengajuanDepositAdapter extends ArrayAdapter{
                 if(b){
 
                     items.get(position).setItem8("1");
+
                 }else{
                     items.get(position).setItem8("0");
+
+                    if(flag.equals("2")) ((DetailPengajuanDeposit) context).listCCID.remove(items.get(position).getItem1());
                 }
-                NavPengajuanDeposit.updateHarga();
+                DetailPengajuanDeposit.updateHarga();
                 notifyDataSetChanged();
+
+                if(b && flag.equals("2")){
+
+                    Intent intent = new Intent(context, DetailCCIDDeposit.class);
+                    intent.putExtra("id", items.get(position).getItem1());
+                    intent.putExtra("order", items.get(position).getItem7());
+                    context.startActivityForResult(intent, 9);
+                }
             }
         });
         return convertView;
