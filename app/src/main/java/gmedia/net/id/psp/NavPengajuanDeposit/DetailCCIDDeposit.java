@@ -167,9 +167,9 @@ public class DetailCCIDDeposit extends AppCompatActivity {
                 DialogBox.showDialog(context, 3, "Gagal mendapatkan CCID, silahkan ulangi kembali");
             } else {
 
-                //getDetailCCID(result.getContents());
-                String[] a = {"xdxxx0350000042506809", "xdxxx0350000042506807", "xdxxx0350000042506808", "xdxxx0350000042506806", "xdxxx0050000371774706"};
-                getDetailCCID(a[conter]);
+                getDetailCCID(result.getContents());
+                //String[] a = {"xdxxx0350000042506809", "xdxxx0350000042506807", "xdxxx0350000042506808", "xdxxx0350000042506806", "xdxxx0050000371774706"};
+                //getDetailCCID(a[conter]);
                 conter++;
             }
         } else {
