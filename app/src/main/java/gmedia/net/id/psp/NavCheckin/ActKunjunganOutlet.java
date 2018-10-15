@@ -511,7 +511,14 @@ public class ActKunjunganOutlet extends AppCompatActivity implements LocationLis
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("alamat"), jo.getString("notelp"), jo.getString("nohp"), jo.getString("status"), jo.getString("jarak")));
+                            masterList.add(new CustomItem(
+                                    jo.getString("kdcus")
+                                    , jo.getString("nama")
+                                    , jo.getString("alamat")
+                                    , jo.getString("notelp")
+                                    , jo.getString("nohp")
+                                    , jo.getString("status")
+                                    , jo.getString("jarak")));
                         }
                     }
 
