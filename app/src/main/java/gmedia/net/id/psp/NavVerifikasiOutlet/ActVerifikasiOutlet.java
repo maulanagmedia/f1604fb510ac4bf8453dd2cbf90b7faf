@@ -35,9 +35,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import gmedia.net.id.psp.LoginScreen;
 import gmedia.net.id.psp.MainNavigationActivity;
-import gmedia.net.id.psp.NavCheckin.Adapter.ListCheckinAdapter;
+import gmedia.net.id.psp.NavKunjungan.Adapter.ListCheckinAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
 

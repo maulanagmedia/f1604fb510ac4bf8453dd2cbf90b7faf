@@ -1,10 +1,8 @@
 package gmedia.net.id.psp.NavVerifikasiOutlet;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -33,7 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import gmedia.net.id.psp.NavCheckin.Adapter.ListCheckinAdapter;
+import gmedia.net.id.psp.NavKunjungan.Adapter.ListCheckinAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
 

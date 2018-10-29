@@ -1,4 +1,4 @@
-package gmedia.net.id.psp.NavCheckin;
+package gmedia.net.id.psp.NavKunjungan;
 
 import android.Manifest;
 import android.app.Activity;
@@ -19,14 +19,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Environment;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -65,7 +62,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.maulana.custommodul.ApiVolley;
-import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ImageUtils;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.PermissionUtils;
@@ -89,7 +85,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import gmedia.net.id.psp.BuildConfig;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.TambahCustomer.Adapter.PhotosAdapter;
 import gmedia.net.id.psp.Utils.MockLocChecker;

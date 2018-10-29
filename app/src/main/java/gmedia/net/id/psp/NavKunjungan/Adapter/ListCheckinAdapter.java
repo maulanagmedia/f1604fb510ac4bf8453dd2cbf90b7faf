@@ -1,4 +1,4 @@
-package gmedia.net.id.psp.NavCheckin.Adapter;
+package gmedia.net.id.psp.NavKunjungan.Adapter;
 
 import android.app.Activity;
 import android.text.Html;
@@ -21,20 +21,20 @@ import gmedia.net.id.psp.Utils.Status;
  * Created by Shin on 1/8/2017.
  */
 
-public class KunjunganOutletAdapter extends ArrayAdapter{
+public class ListCheckinAdapter extends ArrayAdapter{
 
     private Activity context;
     private List<CustomItem> items;
     private ItemValidation iv = new ItemValidation();
 
-    public KunjunganOutletAdapter(Activity context, List<CustomItem> items) {
-        super(context, R.layout.cv_list_kunjungan_outlet, items);
+    public ListCheckinAdapter(Activity context, List<CustomItem> items) {
+        super(context, R.layout.cv_list_customer_checkin, items);
         this.context = context;
         this.items = items;
     }
 
     private static class ViewHolder {
-        private TextView tvItem1, tvItem2, tvItem3;
+        private TextView tvItem1, tvItem2, tvItem3, tvItem4, tvItem5;
     }
 
     public void addMoreData(List<CustomItem> moreData){
@@ -55,10 +55,12 @@ public class KunjunganOutletAdapter extends ArrayAdapter{
 
         if(convertView == null){
             LayoutInflater inflater = context.getLayoutInflater();
-            convertView = inflater.inflate(R.layout.cv_list_kunjungan_outlet, null);
+            convertView = inflater.inflate(R.layout.cv_list_customer_checkin, null);
             holder.tvItem1 = (TextView) convertView.findViewById(R.id.tv_item1);
             holder.tvItem2 = (TextView) convertView.findViewById(R.id.tv_item2);
             holder.tvItem3 = (TextView) convertView.findViewById(R.id.tv_item3);
+            holder.tvItem4 = (TextView) convertView.findViewById(R.id.tv_item4);
+            holder.tvItem5 = (TextView) convertView.findViewById(R.id.tv_item5);
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
@@ -67,19 +69,9 @@ public class KunjunganOutletAdapter extends ArrayAdapter{
         final CustomItem itemSelected = items.get(position);
         holder.tvItem1.setText(itemSelected.getItem2());
         holder.tvItem2.setText(itemSelected.getItem3());
-
-        String keterangan = "";
-        if(iv.parseNullDouble(itemSelected.getItem7()) <= 6371){
-            if(iv.parseNullDouble(itemSelected.getItem7()) <= 1){
-                keterangan = iv.doubleToString(iv.parseNullDouble(itemSelected.getItem7()) * 1000, "2") + " m";
-            }else{
-                keterangan = iv.doubleToString(iv.parseNullDouble(itemSelected.getItem7()), "2") + " km";
-            }
-        }else{
-            keterangan = "Jarak outlet tidak diketahui";
-        }
-
-        holder.tvItem3.setText(keterangan);
+        holder.tvItem3.setText(itemSelected.getItem4());
+        holder.tvItem4.setText(itemSelected.getItem5());
+        holder.tvItem5.setText(Html.fromHtml(Status.customer(iv.parseNullInteger(itemSelected.getItem6()))));
         return convertView;
 
     }

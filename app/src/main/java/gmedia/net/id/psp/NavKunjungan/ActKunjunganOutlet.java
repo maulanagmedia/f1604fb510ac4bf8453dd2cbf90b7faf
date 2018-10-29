@@ -1,4 +1,4 @@
-package gmedia.net.id.psp.NavCheckin;
+package gmedia.net.id.psp.NavKunjungan;
 
 import android.Manifest;
 import android.app.Activity;
@@ -7,9 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Criteria;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -62,14 +60,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-import gmedia.net.id.psp.MainNavigationActivity;
-import gmedia.net.id.psp.NavCheckin.Adapter.KunjunganOutletAdapter;
-import gmedia.net.id.psp.NavCheckin.Adapter.ListCheckinAdapter;
+import gmedia.net.id.psp.NavKunjungan.Adapter.KunjunganOutletAdapter;
 import gmedia.net.id.psp.NavMapsKunjungan.MapsKunjunganActivity;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;

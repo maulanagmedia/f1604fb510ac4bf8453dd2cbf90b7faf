@@ -25,7 +25,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -45,8 +44,8 @@ import gmedia.net.id.psp.InfoDeposit.ActDeposit;
 import gmedia.net.id.psp.LocationService.LocationUpdater;
 import gmedia.net.id.psp.NavAccount.NavAccount;
 import gmedia.net.id.psp.NavChangePassword.NavChangePassword;
-import gmedia.net.id.psp.NavCheckin.ActKunjungan;
-import gmedia.net.id.psp.NavCheckin.NavCheckin;
+import gmedia.net.id.psp.NavKunjungan.ActKunjungan;
+import gmedia.net.id.psp.NavKunjungan.NavCheckin;
 import gmedia.net.id.psp.NavHome.NavHome;
 import gmedia.net.id.psp.NavKomplain.ActKomplain;
 import gmedia.net.id.psp.NavKomplain.NavKomplain;

@@ -153,7 +153,7 @@
             android:name=".NavKomplain.DetailComplaint"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".NavCheckin.DetailCheckin"
+            android:name=".NavKunjungan.DetailCheckin"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -161,7 +161,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".NavCheckin.ActKunjunganOutlet"
+            android:name=".NavKunjungan.ActKunjunganOutlet"
             android:screenOrientation="portrait" />
 
         <service
@@ -179,7 +179,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NavCheckin.DetailKunjungan"
+            android:name=".NavKunjungan.DetailKunjungan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".PenjualanHariIni.PenjualanHariIni"
@@ -226,10 +226,10 @@
             android:name=".DaftarPiutang.PiutangPerOutlet"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".NavCheckin.ActKunjungan"
+            android:name=".NavKunjungan.ActKunjungan"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".NavCheckin.ListSalesKunjungan"
+            android:name=".NavKunjungan.ListSalesKunjungan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".NavMapsKunjungan.MapsKunjunganActivity"

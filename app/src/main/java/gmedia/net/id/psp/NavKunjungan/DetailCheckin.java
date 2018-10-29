@@ -1,4 +1,4 @@
-package gmedia.net.id.psp.NavCheckin;
+package gmedia.net.id.psp.NavKunjungan;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -17,7 +17,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -77,7 +76,6 @@ import gmedia.net.id.psp.CustomView.CustomMapView;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.TambahCustomer.Adapter.PhotosAdapter;
 import gmedia.net.id.psp.TambahCustomer.Model.AreaModel;
-import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.MockLocChecker;
 import gmedia.net.id.psp.Utils.ServerURL;
 

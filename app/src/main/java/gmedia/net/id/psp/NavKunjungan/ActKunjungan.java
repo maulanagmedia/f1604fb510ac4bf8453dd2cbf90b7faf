@@ -1,4 +1,4 @@
-package gmedia.net.id.psp.NavCheckin;
+package gmedia.net.id.psp.NavKunjungan;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Locale;
 
 import gmedia.net.id.psp.MainNavigationActivity;
-import gmedia.net.id.psp.NavCheckin.Adapter.ListKunjunganAdapter;
+import gmedia.net.id.psp.NavKunjungan.Adapter.ListKunjunganAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ServerURL;

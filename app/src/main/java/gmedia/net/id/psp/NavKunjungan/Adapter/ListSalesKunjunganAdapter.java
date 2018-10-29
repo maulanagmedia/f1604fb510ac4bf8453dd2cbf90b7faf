@@ -1,7 +1,6 @@
-package gmedia.net.id.psp.NavCheckin.Adapter;
+package gmedia.net.id.psp.NavKunjungan.Adapter;
 
 import android.app.Activity;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,27 +13,26 @@ import com.maulana.custommodul.ItemValidation;
 import java.util.List;
 
 import gmedia.net.id.psp.R;
-import gmedia.net.id.psp.Utils.Status;
 
 
 /**
  * Created by Shin on 1/8/2017.
  */
 
-public class ListCheckinAdapter extends ArrayAdapter{
+public class ListSalesKunjunganAdapter extends ArrayAdapter{
 
     private Activity context;
     private List<CustomItem> items;
     private ItemValidation iv = new ItemValidation();
 
-    public ListCheckinAdapter(Activity context, List<CustomItem> items) {
-        super(context, R.layout.cv_list_customer_checkin, items);
+    public ListSalesKunjunganAdapter(Activity context, List<CustomItem> items) {
+        super(context, R.layout.cv_list_sales, items);
         this.context = context;
         this.items = items;
     }
 
     private static class ViewHolder {
-        private TextView tvItem1, tvItem2, tvItem3, tvItem4, tvItem5;
+        private TextView tvItem1, tvItem2;
     }
 
     public void addMoreData(List<CustomItem> moreData){
@@ -55,12 +53,9 @@ public class ListCheckinAdapter extends ArrayAdapter{
 
         if(convertView == null){
             LayoutInflater inflater = context.getLayoutInflater();
-            convertView = inflater.inflate(R.layout.cv_list_customer_checkin, null);
+            convertView = inflater.inflate(R.layout.cv_list_sales, null);
             holder.tvItem1 = (TextView) convertView.findViewById(R.id.tv_item1);
             holder.tvItem2 = (TextView) convertView.findViewById(R.id.tv_item2);
-            holder.tvItem3 = (TextView) convertView.findViewById(R.id.tv_item3);
-            holder.tvItem4 = (TextView) convertView.findViewById(R.id.tv_item4);
-            holder.tvItem5 = (TextView) convertView.findViewById(R.id.tv_item5);
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
@@ -68,10 +63,7 @@ public class ListCheckinAdapter extends ArrayAdapter{
 
         final CustomItem itemSelected = items.get(position);
         holder.tvItem1.setText(itemSelected.getItem2());
-        holder.tvItem2.setText(itemSelected.getItem3());
-        holder.tvItem3.setText(itemSelected.getItem4());
-        holder.tvItem4.setText(itemSelected.getItem5());
-        holder.tvItem5.setText(Html.fromHtml(Status.customer(iv.parseNullInteger(itemSelected.getItem6()))));
+        holder.tvItem2.setText(itemSelected.getItem3() + " outlet telah dikunjungi");
         return convertView;
 
     }

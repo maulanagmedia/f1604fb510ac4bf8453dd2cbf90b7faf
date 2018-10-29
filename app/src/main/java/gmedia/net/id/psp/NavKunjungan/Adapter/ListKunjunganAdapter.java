@@ -1,7 +1,6 @@
-package gmedia.net.id.psp.NavCheckin.Adapter;
+package gmedia.net.id.psp.NavKunjungan.Adapter;
 
 import android.app.Activity;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import java.util.List;
 
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.FormatItem;
-import gmedia.net.id.psp.Utils.Status;
 
 
 /**

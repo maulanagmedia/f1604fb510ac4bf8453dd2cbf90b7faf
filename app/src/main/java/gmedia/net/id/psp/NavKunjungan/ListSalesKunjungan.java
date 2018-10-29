@@ -1,30 +1,24 @@
-package gmedia.net.id.psp.NavCheckin;
+package gmedia.net.id.psp.NavKunjungan;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
@@ -38,20 +32,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import gmedia.net.id.psp.NavCheckin.Adapter.ListCheckinAdapter;
+import gmedia.net.id.psp.NavKunjungan.Adapter.ListSalesKunjunganAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
 
-import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-
-public class NavCheckin extends Fragment {
+public class ListSalesKunjungan extends AppCompatActivity {
 
     private Context context;
-    private View layout;
     private ItemValidation iv = new ItemValidation();
     private SessionManager session;
-    private AutoCompleteTextView actvCustomer;
-    private ListView lvCustomer;
+    private AutoCompleteTextView actvSales;
+    private ListView lvSales;
     private ProgressBar pbLoading;
     private boolean firstLoad = true;
     private boolean isLoading = false;
@@ -59,33 +50,36 @@ public class NavCheckin extends Fragment {
     private String keyword = "";
     private View footerList;
     private List<CustomItem> masterList;
-    private ListCheckinAdapter adapter;
-
-    public NavCheckin() {
-        // Required empty public constructor
-    }
+    private ListSalesKunjunganAdapter adapter;
+    private String flag = "";
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_list_sales_kunjungan);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
 
-    }
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        layout = inflater.inflate(R.layout.fragment_nav_checkin, container, false);
-        context = getContext();
+            flag = bundle.getString("flag");
+        }
+
+        setTitle("Kunjungan Sales");
+        getSupportActionBar().setSubtitle("Pilih Sales");
+
+        context = this;
         initUI();
-        return layout;
     }
 
     private void initUI() {
 
-        actvCustomer = (AutoCompleteTextView) layout.findViewById(R.id.actv_customer);
-        lvCustomer = (ListView) layout.findViewById(R.id.lv_customer);
-        pbLoading = (ProgressBar) layout.findViewById(R.id.pb_proses);
+        actvSales = (AutoCompleteTextView) findViewById(R.id.actv_sales);
+        lvSales= (ListView) findViewById(R.id.lv_sales);
+        pbLoading = (ProgressBar) findViewById(R.id.pb_proses);
         LayoutInflater li = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         footerList = li.inflate(R.layout.layout_footer_listview, null);
         session = new SessionManager(context);
@@ -93,7 +87,7 @@ public class NavCheckin extends Fragment {
         count = getResources().getInteger(R.integer.count_table);
         keyword = "";
 
-        lvCustomer.setOnScrollListener(new AbsListView.OnScrollListener() {
+        lvSales.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
 
@@ -102,9 +96,9 @@ public class NavCheckin extends Fragment {
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
 
-                if(absListView.getLastVisiblePosition() == i2-1 && lvCustomer.getCount() > (count-1) && !isLoading ){
+                if(absListView.getLastVisiblePosition() == i2-1 && lvSales.getCount() > (count-1) && !isLoading ){
                     isLoading = true;
-                    lvCustomer.addFooterView(footerList);
+                    lvSales.addFooterView(footerList);
                     startIndex += count;
                     getMoreData();
 
@@ -114,14 +108,14 @@ public class NavCheckin extends Fragment {
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
-        keyword = actvCustomer.getText().toString();
+        keyword = actvSales.getText().toString();
         startIndex = 0;
-        getDataCustomer();
+        getSalesKunjungan();
     }
 
-    private void getDataCustomer() {
+    private void getSalesKunjungan() {
 
         masterList = new ArrayList<>();
         pbLoading.setVisibility(View.VISIBLE);
@@ -129,7 +123,7 @@ public class NavCheckin extends Fragment {
         JSONObject jBody = new JSONObject();
         try {
             jBody.put("nik", nik);
-            jBody.put("kdcus", "");
+            jBody.put("flag", flag);
             jBody.put("keyword", keyword);
             jBody.put("start", String.valueOf(startIndex));
             jBody.put("count", String.valueOf(count));
@@ -137,7 +131,7 @@ public class NavCheckin extends Fragment {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getCustomerKunjungan, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getSalesKunjungan, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -153,7 +147,7 @@ public class NavCheckin extends Fragment {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("alamat"), jo.getString("notelp"), jo.getString("nohp"), jo.getString("status")));
+                            masterList.add(new CustomItem(jo.getString("nik"), jo.getString("nama"), jo.getString("jml")));
                         }
                     }
 
@@ -188,7 +182,7 @@ public class NavCheckin extends Fragment {
         JSONObject jBody = new JSONObject();
         try {
             jBody.put("nik", nik);
-            jBody.put("kdcus", "");
+            jBody.put("flag", flag);
             jBody.put("keyword", keyword);
             jBody.put("start", String.valueOf(startIndex));
             jBody.put("count", String.valueOf(count));
@@ -196,7 +190,7 @@ public class NavCheckin extends Fragment {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getCustomerKunjungan, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getSalesKunjungan, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -211,18 +205,18 @@ public class NavCheckin extends Fragment {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            moreList.add(new CustomItem(jo.getString("kdcus"), jo.getString("nama"), jo.getString("alamat"), jo.getString("notelp"), jo.getString("nohp"), jo.getString("status")));
+                            moreList.add(new CustomItem(jo.getString("nik"), jo.getString("nama"), jo.getString("jml")));
                         }
                     }
 
-                    lvCustomer.removeFooterView(footerList);
+                    lvSales.removeFooterView(footerList);
                     if(adapter != null) adapter.addMoreData(moreList);
                     isLoading = false;
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     isLoading = false;
-                    lvCustomer.removeFooterView(footerList);
+                    lvSales.removeFooterView(footerList);
                 }
             }
 
@@ -230,7 +224,7 @@ public class NavCheckin extends Fragment {
             public void onError(String result) {
 
                 isLoading = false;
-                lvCustomer.removeFooterView(footerList);
+                lvSales.removeFooterView(footerList);
             }
         });
     }
@@ -240,7 +234,7 @@ public class NavCheckin extends Fragment {
         if(firstLoad){
             firstLoad = false;
 
-            actvCustomer.addTextChangedListener(new TextWatcher() {
+            actvSales.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -254,24 +248,24 @@ public class NavCheckin extends Fragment {
                 @Override
                 public void afterTextChanged(Editable editable) {
 
-                    if(actvCustomer.getText().length() == 0){
+                    if(actvSales.getText().length() == 0){
                         keyword = "";
                         startIndex = 0;
-                        getDataCustomer();
+                        getSalesKunjungan();
                     }
                 }
             });
         }
 
-        actvCustomer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        actvSales.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
 
                 if(i == EditorInfo.IME_ACTION_SEARCH){
 
-                    keyword = actvCustomer.getText().toString();
+                    keyword = actvSales.getText().toString();
                     startIndex = 0;
-                    getDataCustomer();
+                    getSalesKunjungan();
 
                     iv.hideSoftKey(context);
                     return true;
@@ -284,24 +278,40 @@ public class NavCheckin extends Fragment {
 
     private void getTableList(List<CustomItem> tableList) {
 
-        lvCustomer.setAdapter(null);
+        lvSales.setAdapter(null);
 
         if(tableList != null && tableList.size() > 0){
 
-            adapter = new ListCheckinAdapter(((Activity)context), tableList);
-            lvCustomer.setAdapter(adapter);
+            adapter = new ListSalesKunjunganAdapter(((Activity)context), tableList);
+            lvSales.setAdapter(adapter);
 
-            lvCustomer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            lvSales.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                     CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
-
-                    Intent intent = new Intent(context, DetailCheckin.class);
-                    intent.putExtra("kdcus", selectedItem.getItem1());
-                    ((Activity) context).startActivity(intent);
+                    Intent intent = new Intent(ListSalesKunjungan.this, ActKunjungan.class);
+                    intent.putExtra("nik", selectedItem.getItem1());
+                    intent.putExtra("nama", selectedItem.getItem2());
+                    startActivity(intent);
                 }
             });
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

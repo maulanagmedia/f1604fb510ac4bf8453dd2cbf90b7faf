@@ -33,7 +33,7 @@ import java.util.TimerTask;
 import gmedia.net.id.psp.CustomView.WrapContentViewPager;
 import gmedia.net.id.psp.DaftarPiutang.PiutangPerOutlet;
 import gmedia.net.id.psp.InfoDeposit.ActDeposit;
-import gmedia.net.id.psp.NavCheckin.ActKunjungan;
+import gmedia.net.id.psp.NavKunjungan.ActKunjungan;
 import gmedia.net.id.psp.NavEvent.ActEvent;
 import gmedia.net.id.psp.NavEvent.DetailEvent;
 import gmedia.net.id.psp.NavHome.Adapter.HeaderSliderAdapter;
