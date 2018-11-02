@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
@@ -72,6 +73,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import gmedia.net.id.psp.MapsOutletActivity;
 import gmedia.net.id.psp.NavPengajuanDeposit.Adapter.ListPengajuanDepositAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
@@ -159,6 +161,17 @@ public class DetailPengajuanDeposit extends AppCompatActivity implements Locatio
         createLocationCallback();
         createLocationRequest();
         buildLocationSettingsRequest();
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        setCriteria();
+        latitude = 0;
+        longitude = 0;
+        location = new Location("set");
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
+
+        updateAllLocation();
+        //location = getLocation();
     }
 
     private void initUI() {
@@ -173,6 +186,10 @@ public class DetailPengajuanDeposit extends AppCompatActivity implements Locatio
         session = new SessionManager(context);
         nik = session.getUserDetails().get(SessionManager.TAG_UID);
         total = "0";
+
+        edtJarak = (EditText) findViewById(R.id.edt_jarak);
+        ivRefreshPosition = (ImageView) findViewById(R.id.iv_refresh_position);
+        btnMapsOutlet = (Button) findViewById(R.id.btn_maps_outlet);
 
         Bundle bundle = getIntent().getExtras();
 
@@ -228,6 +245,13 @@ public class DetailPengajuanDeposit extends AppCompatActivity implements Locatio
                     }
                 }
 
+                if(jarak.equals("")){
+
+                    Snackbar.make(findViewById(android.R.id.content), "Mohon tunggu hinggan posisi diketahui / tekan refresh pada bagian jarak", Snackbar.LENGTH_LONG).show();
+                    edtJarak.requestFocus();
+                    return;
+                }
+
                 if(!isSelected){
 
                     Toast.makeText(context, "Harap pilih minimal satu item untuk disetujui", Toast.LENGTH_LONG).show();
@@ -252,6 +276,37 @@ public class DetailPengajuanDeposit extends AppCompatActivity implements Locatio
                             }
                         })
                         .show();
+            }
+        });
+
+        ivRefreshPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(!isUpdateLocation){
+                    updateAllLocation();
+                }
+            }
+        });
+
+        btnMapsOutlet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(latitudeOutlet != "" && longitudeOutlet != ""){
+
+                    Intent intent = new Intent(context, MapsOutletActivity.class);
+                    intent.putExtra("lat", iv.doubleToStringFull(latitude));
+                    intent.putExtra("long", iv.doubleToStringFull(longitude));
+                    intent.putExtra("lat_outlet", latitudeOutlet);
+                    intent.putExtra("long_outlet", longitudeOutlet);
+                    intent.putExtra("nama", nama);
+
+                    startActivity(intent);
+                }else{
+
+                    Toast.makeText(context, "Harap tunggu hingga proses pencarian lokasi selesai", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -676,6 +731,27 @@ public class DetailPengajuanDeposit extends AppCompatActivity implements Locatio
                 }catch (JSONException e){
                     e.printStackTrace();
                 }
+            }
+
+            PackageInfo pInfo = null;
+            String version = "";
+
+            try {
+                pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            version = pInfo.versionName;
+
+            try {
+                jData.put("version", version);
+                jData.put("kdcus", kdcus);
+                jData.put("nik", session.getNikGA());
+                jData.put("latitude", iv.doubleToStringFull(location.getLatitude()));
+                jData.put("longitude", iv.doubleToStringFull(location.getLongitude()));
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
             ApiVolley request = new ApiVolley(context, jData, "POST", saveUrl, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {

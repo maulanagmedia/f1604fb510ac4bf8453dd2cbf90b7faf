@@ -507,15 +507,21 @@ public class DetailCustomer extends AppCompatActivity implements LocationListene
 
     public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
                                    boolean filter) {
-        float ratio = Math.min(
-                (float) maxImageSize / realImage.getWidth(),
-                (float) maxImageSize / realImage.getHeight());
-        int width = Math.round((float) ratio * realImage.getWidth());
-        int height = Math.round((float) ratio * realImage.getHeight());
+        try {
 
-        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
-                height, filter);
-        return newBitmap;
+            float ratio = Math.min(
+                    (float) maxImageSize / realImage.getWidth(),
+                    (float) maxImageSize / realImage.getHeight());
+            int width = Math.round((float) ratio * realImage.getWidth());
+            int height = Math.round((float) ratio * realImage.getHeight());
+
+            realImage = Bitmap.createScaledBitmap(realImage, width,
+                    height, filter);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return realImage;
     }
 
     private Bitmap rotateImage(Bitmap source, float angle){

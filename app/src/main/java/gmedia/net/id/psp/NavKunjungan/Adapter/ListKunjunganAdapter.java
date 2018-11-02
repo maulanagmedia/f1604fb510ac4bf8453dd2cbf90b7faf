@@ -73,8 +73,8 @@ public class ListKunjunganAdapter extends ArrayAdapter{
 
         if(itemSelected.getItem8().equals("0")){ // bukan pjp tapi terkunjungi
 
-            holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_yellow));
-            holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_yellow));
+            holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_red));
+            holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_red));
         }else if(itemSelected.getItem8().equals("1")){ // pjp terkunjungi
             holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_green));
             holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_green));
@@ -82,12 +82,15 @@ public class ListKunjunganAdapter extends ArrayAdapter{
             holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_black));
             holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_black));
         }else if(itemSelected.getItem8().equals("3")){ // terkunjungi tidak belanja
-            holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_blue));
-            holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_blue));
+            holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_yellow));
+            holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_yellow));
         }else if(itemSelected.getItem8().equals("4")){ // PJP terkunjungi, belanja, tidak survey
-            holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_pink));
-            holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_pink));
-        }else{ // checkin tidak belanja tidak survey
+            holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_yellow));
+            holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_yellow));
+        }else if(itemSelected.getItem8().equals("5")){ // checkin tidak belanja tidak survey
+            holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_black));
+            holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_black));
+        }else{
             holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_red));
             holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_red));
         }

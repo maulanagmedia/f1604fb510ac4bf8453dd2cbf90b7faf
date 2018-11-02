@@ -121,7 +121,7 @@
                                 android:textSize="10sp"
                                 android:textColor="@color/color_black"
                                 android:layout_marginRight="@dimen/default_margin_small"
-                                android:text="PJP Terkunjungi"/>
+                                android:text="PJP Lengkap"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -143,7 +143,7 @@
                                 android:textColor="@color/color_black"
                                 android:layout_marginRight="@dimen/default_margin_small"
                                 android:textSize="10sp"
-                                android:text="PJP Hanya Checkin"/>
+                                android:text="Non PJP"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -172,7 +172,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/color_black"
                                 android:textSize="10sp"
-                                android:text="Diluar PJP"/>
+                                android:text="PJP Hanya Belanja/ Hanya Survey"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -184,7 +184,7 @@
                             <ImageView
                                 android:layout_width="15dp"
                                 android:layout_height="15dp"
-                                android:background="@color/color_blue"
+                                android:background="@color/color_black"
                                 android:layout_marginLeft="@dimen/default_margin_small"
                                 android:layout_marginRight="@dimen/default_margin_small"/>
 
@@ -195,7 +195,7 @@
                                 android:textSize="10sp"
                                 android:singleLine="true"
                                 android:ellipsize="end"
-                                android:text="PJP Survey Tidak Belanja"/>
+                                android:text="PJP Tidak Lengkap/ Belum Terkunjungi"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -204,6 +204,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/default_margin_small"
+                        android:visibility="gone"
                         android:weightSum="2">
 
                         <LinearLayout
