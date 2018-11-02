@@ -143,7 +143,7 @@
                                 android:textColor="@color/color_black"
                                 android:layout_marginRight="@dimen/default_margin_small"
                                 android:textSize="10sp"
-                                android:text="PJP Belum terkunjungi"/>
+                                android:text="PJP Hanya Checkin"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -193,7 +193,61 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/color_black"
                                 android:textSize="10sp"
-                                android:text="Terkunjungi tidak belanja"/>
+                                android:singleLine="true"
+                                android:ellipsize="end"
+                                android:text="PJP Survey Tidak Belanja"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/default_margin_small"
+                        android:weightSum="2">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:background="@color/color_pink"
+                                android:layout_marginLeft="@dimen/default_margin_small"
+                                android:layout_marginRight="@dimen/default_margin_small"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/color_black"
+                                android:textSize="10sp"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                android:text="PJP Belanja Tidak Survey"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:background="@color/color_black"
+                                android:layout_marginLeft="@dimen/default_margin_small"
+                                android:layout_marginRight="@dimen/default_margin_small"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/color_black"
+                                android:textSize="10sp"
+                                android:text="PJP Belum Terkunjungi"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

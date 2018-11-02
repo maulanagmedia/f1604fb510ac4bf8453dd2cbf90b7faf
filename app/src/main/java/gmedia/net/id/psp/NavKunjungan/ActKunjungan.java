@@ -282,7 +282,16 @@ public class ActKunjungan extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("kdcus"), jo.getString("timestamp"), jo.getString("nama"), jo.getString("jarak"), jo.getString("alamat"), jo.getString("outlet_location"), jo.getString("nik"), jo.getString("is_pjp"), jo.getString("id")));
+                            masterList.add(new CustomItem(
+                                    jo.getString("kdcus")
+                                    , jo.getString("timestamp")
+                                    , jo.getString("nama")
+                                    , jo.getString("jarak")
+                                    , jo.getString("alamat")
+                                    , jo.getString("outlet_location")
+                                    , jo.getString("nik")
+                                    , jo.getString("is_pjp")
+                                    , jo.getString("id")));
                         }
                     }
 

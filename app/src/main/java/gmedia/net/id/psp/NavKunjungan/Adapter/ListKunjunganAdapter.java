@@ -79,11 +79,17 @@ public class ListKunjunganAdapter extends ArrayAdapter{
             holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_green));
             holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_green));
         }else if(itemSelected.getItem8().equals("2")){ // pjb belum terkunjungi
-            holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_red));
-            holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_red));
-        }else{ // terkunjungi tidak belanja
+            holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_black));
+            holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_black));
+        }else if(itemSelected.getItem8().equals("3")){ // terkunjungi tidak belanja
             holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_blue));
             holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_blue));
+        }else if(itemSelected.getItem8().equals("4")){ // PJP terkunjungi, belanja, tidak survey
+            holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_pink));
+            holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_pink));
+        }else{ // checkin tidak belanja tidak survey
+            holder.llTime.setBackgroundColor(context.getResources().getColor(R.color.color_red));
+            holder.ivTime.setBackground(context.getResources().getDrawable(R.drawable.bg_round_red));
         }
 
         holder.tvItem2.setText(itemSelected.getItem3());
