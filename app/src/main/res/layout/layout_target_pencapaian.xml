@@ -342,7 +342,6 @@
                         </LinearLayout>
                     </LinearLayout>
 
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -438,21 +437,228 @@
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     style="@style/home_title"
-                                    android:text="Target Perdana"/>
+                                    android:text="Target Data/Bulk"/>
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     style="@style/home_title"
-                                    android:text="Omset Perdana"/>
+                                    android:text="Omset Data/Bulk"/>
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     style="@style/home_title"
-                                    android:text="GAP Perdana"/>
+                                    android:text="GAP Data/Bulk"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="3"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/tv_ds_target_data_mkios"
+                                    android:text=""
+                                    style="@style/home_subtitle"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/tv_ds_omset_data_mkios"
+                                    android:text=""
+                                    style="@style/home_subtitle"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/tv_ds_gap_data_mkios"
+                                    android:text=""
+                                    style="@style/home_subtitle"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_margin="@dimen/default_margin_tiny"
+                            android:background="@color/color_white"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="3"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="Target Revenue Digital"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="Omset Revenue Digital"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="GAP Revenue Digital"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="3"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/tv_ds_target_revenue_digital"
+                                    android:text=""
+                                    style="@style/home_subtitle"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/tv_ds_omset_revenue_digital"
+                                    android:text=""
+                                    style="@style/home_subtitle"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/tv_ds_gap_revenue_digital"
+                                    android:text=""
+                                    style="@style/home_subtitle"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_margin="@dimen/default_margin_tiny"
+                            android:background="@color/color_white"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="3"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="Daily PJP"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="Effective Call"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="GAP PJP"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="3"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/tv_ds_daily_pjp"
+                                    android:text=""
+                                    style="@style/home_subtitle"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/tv_ds_effective_call"
+                                    android:text=""
+                                    style="@style/home_subtitle"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/tv_ds_gap_pjp"
+                                    android:text=""
+                                    style="@style/home_subtitle"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_margin="@dimen/default_margin_tiny"
+                            android:background="@color/color_white"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="3"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="Target Sell Out ARPU"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="Sell Out ARPU"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    style="@style/home_title"
+                                    android:text="GAP Sell Out ARPU"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -505,21 +711,21 @@
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     style="@style/home_title"
-                                    android:text="Target Bulk"/>
+                                    android:text="Target Akuisisi Kantin"/>
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     style="@style/home_title"
-                                    android:text="Omset Bulk"/>
+                                    android:text="Akuisisi Kantin"/>
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     style="@style/home_title"
-                                    android:text="GAP Bulk"/>
+                                    android:text="GAP Akuisisi Kantin"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -533,81 +739,26 @@
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     style="@style/home_subtitle"
-                                    android:id="@+id/tv_ds_target_bulk"/>
+                                    android:id="@+id/tv_ds_target_akuisisi_kantin"/>
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     style="@style/home_subtitle"
-                                    android:id="@+id/tv_ds_omset_bulk"/>
+                                    android:id="@+id/tv_ds_akuisisi_kantin"/>
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     style="@style/home_subtitle"
-                                    android:id="@+id/tv_ds_gap_bulk"/>
+                                    android:id="@+id/tv_ds_gap_akuisisi_kantin"/>
                             </LinearLayout>
                         </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/default_margin_small"
-                            android:layout_margin="@dimen/default_margin_tiny"
-                            android:background="@color/color_white"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:weightSum="2"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_weight="1"
-                                    android:layout_height="wrap_content"
-                                    style="@style/home_title"
-                                    android:text="Target Survey"/>
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_weight="1"
-                                    android:layout_height="wrap_content"
-                                    style="@style/home_title"
-                                    android:text="Effective Call"/>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:weightSum="2"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_weight="1"
-                                    android:layout_height="wrap_content"
-                                    style="@style/home_subtitle"
-                                    android:id="@+id/tv_ds_target_survey"/>
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_weight="1"
-                                    android:layout_height="wrap_content"
-                                    style="@style/home_subtitle"
-                                    android:id="@+id/tv_ds_effective_call"/>
-                            </LinearLayout>
-                        </LinearLayout>
-
                     </LinearLayout>
-
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
 </android.support.design.widget.CoordinatorLayout>

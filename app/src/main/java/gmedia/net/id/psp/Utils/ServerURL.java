@@ -41,7 +41,7 @@ public class ServerURL {
     public static final String getStokDetail = baseURL + "api/stok/get_stok_detail/";
 
     public static final String getUserInfo = baseURL + "api/profile/get_user_info/";
-    public static final String getUserOmset= baseURL + "api/profile/get_user_omset/";
+    public static final String getUserOmset= baseURL + "api/profile/get_user_omset_baru/";
 
     public static final String getPromosi = baseURL + "api/promosi/get_promosi/";
 

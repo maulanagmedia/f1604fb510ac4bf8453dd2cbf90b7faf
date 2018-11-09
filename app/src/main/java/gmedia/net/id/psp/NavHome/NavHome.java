@@ -97,7 +97,9 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
     private LinearLayout llDirectSelling;
     private LinearLayout llMenuPenjualanReseller, llMenuDirectSelling, llMenuSPV, llMenuMD, llMenuOperasional, llPengajuanDeposit, llMarketSurveyMD;
     private LinearLayout llIDS, llDS;
-    private TextView tvDSTargetMkios, tvDSOmsetMkios, tvDSGapMkios, tvDSTargetPerdana, tvDSOmsetPerdana, tvDSGapPerdana, tvDSTargetBulk, tvDSOmsetBulk, tvDSGapBulk, tvTargetSurvey, tvEffectiveCall;
+    private TextView tvDSTargetMkios, tvDSOmsetMkios, tvDSGapMkios, tvDSTargetPerdana, tvDSOmsetPerdana, tvDSGapPerdana;
+    private TextView tvDSTargetDataMkios, tvDSOmsetDataMkios, tvDSGAPDataMkios, tvDSTargetRevenueDigital, tvDSOmsetRevenueDigital
+            ,tvDSGAPRevenueDigital, tvDSDailyPJP, tvDSEffectiveCall, tvDSGAPPJP, tvDSTargetAkuisisi, tvDSAkuisisi, tvDSGAPAkuisisi;
 
     public NavHome() {
         // Required empty public constructor
@@ -270,16 +272,25 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
         tvDSOmsetMkios = (TextView) layout.findViewById(R.id.tv_ds_omset_mkios);
         tvDSGapMkios = (TextView) layout.findViewById(R.id.tv_ds_gap_mkios);
 
+        tvDSTargetDataMkios = (TextView) layout.findViewById(R.id.tv_ds_target_data_mkios);
+        tvDSOmsetDataMkios = (TextView) layout.findViewById(R.id.tv_ds_omset_data_mkios);
+        tvDSGAPDataMkios = (TextView) layout.findViewById(R.id.tv_ds_gap_data_mkios);
+
+        tvDSTargetRevenueDigital = (TextView) layout.findViewById(R.id.tv_ds_target_revenue_digital);
+        tvDSOmsetRevenueDigital = (TextView) layout.findViewById(R.id.tv_ds_omset_revenue_digital);
+        tvDSGAPRevenueDigital = (TextView) layout.findViewById(R.id.tv_ds_gap_revenue_digital);
+
+        tvDSDailyPJP = (TextView) layout.findViewById(R.id.tv_ds_daily_pjp);
+        tvDSEffectiveCall = (TextView) layout.findViewById(R.id.tv_ds_effective_call);
+        tvDSGAPPJP = (TextView) layout.findViewById(R.id.tv_ds_gap_pjp);
+
         tvDSTargetPerdana = (TextView) layout.findViewById(R.id.tv_ds_target_perdana);
         tvDSOmsetPerdana = (TextView) layout.findViewById(R.id.tv_ds_omset_perdana);
         tvDSGapPerdana = (TextView) layout.findViewById(R.id.tv_ds_gap_perdana);
 
-        tvDSTargetBulk = (TextView) layout.findViewById(R.id.tv_ds_target_bulk);
-        tvDSOmsetBulk = (TextView) layout.findViewById(R.id.tv_ds_omset_bulk);
-        tvDSGapBulk = (TextView) layout.findViewById(R.id.tv_ds_gap_bulk);
-
-        tvTargetSurvey = (TextView) layout.findViewById(R.id.tv_ds_target_survey);
-        tvEffectiveCall = (TextView) layout.findViewById(R.id.tv_ds_effective_call);
+        tvDSTargetAkuisisi = (TextView) layout.findViewById(R.id.tv_ds_target_akuisisi_kantin);
+        tvDSAkuisisi = (TextView) layout.findViewById(R.id.tv_ds_akuisisi_kantin);
+        tvDSGAPAkuisisi = (TextView) layout.findViewById(R.id.tv_ds_gap_akuisisi_kantin);
 
         initEvent();
 
@@ -647,9 +658,9 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
 
                         if(session.getLevel().equals("SF") || session.getLevel().equals("MD")){
 
-                            tvTargetMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("target_mkios"))));
-                            tvOmsetMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_mkios"))));
-                            tvGapMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("gap_mkios"))));
+                            tvTargetMkios.setText(iv.ChangeToCurrencyFormat(item.getString("target_mkios")));
+                            tvOmsetMkios.setText(iv.ChangeToCurrencyFormat(item.getString("omset_mkios")));
+                            tvGapMkios.setText(iv.ChangeToCurrencyFormat(item.getString("gap_mkios")));
 
                             tvTargetPerdana.setText(item.getString("target_perdana"));
                             tvOmsetPerdana.setText(item.getString("omset_perdana"));
@@ -663,20 +674,30 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener{
 
                         }else{
 
-                            tvDSTargetMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("target_mkios"))));
-                            tvDSOmsetMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_mkios"))));
-                            tvDSGapMkios.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("gap_mkios"))));
+                            tvDSTargetMkios.setText(iv.ChangeToCurrencyFormat(item.getString("target_mkios")));
+                            tvDSOmsetMkios.setText(iv.ChangeToCurrencyFormat(item.getString("omset_mkios")));
+                            tvDSGapMkios.setText(iv.ChangeToCurrencyFormat(item.getString("gap_mkios")));
 
-                            tvDSTargetPerdana.setText(item.getString("target_perdana"));
-                            tvDSOmsetPerdana.setText(item.getString("omset_perdana"));
-                            tvDSGapPerdana.setText(item.getString("gap_perdana"));
+                            tvDSTargetDataMkios.setText(iv.ChangeToCurrencyFormat(item.getString("target_data_bulk")));
+                            tvDSOmsetDataMkios.setText(iv.ChangeToCurrencyFormat(item.getString("omset_data_bulk")));
+                            tvDSGAPDataMkios.setText(iv.ChangeToCurrencyFormat(item.getString("gap_data_bulk")));
 
-                            tvDSTargetBulk.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("target_bulk"))));
-                            tvDSOmsetBulk.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("omset_bulk"))));
-                            tvDSGapBulk.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("gap_bulk"))));
+                            tvDSTargetRevenueDigital.setText(iv.ChangeToCurrencyFormat(item.getString("target_revenue")));
+                            tvDSOmsetRevenueDigital.setText(iv.ChangeToCurrencyFormat(item.getString("omset_revenue")));
+                            tvDSGAPRevenueDigital.setText(iv.ChangeToCurrencyFormat(item.getString("gap_revenue")));
 
-                            tvTargetSurvey.setText(item.getString("target_survey"));
-                            tvEffectiveCall.setText(item.getString("effective_call"));
+                            tvDSDailyPJP.setText(iv.ChangeToCurrencyFormat(item.getString("daily_pjp")));
+                            tvDSEffectiveCall.setText(iv.ChangeToCurrencyFormat(item.getString("effective_call")));
+                            tvDSGAPPJP.setText(iv.ChangeToCurrencyFormat(item.getString("gap_pjp")));
+
+                            tvDSTargetPerdana.setText(iv.ChangeToCurrencyFormat(item.getString("target_sellout")));
+                            tvDSOmsetPerdana.setText(iv.ChangeToCurrencyFormat(item.getString("omset_sellout")));
+                            tvDSGapPerdana.setText(iv.ChangeToCurrencyFormat(item.getString("gap_sellout")));
+
+                            tvDSTargetAkuisisi.setText(iv.ChangeToCurrencyFormat(item.getString("omset_akuisisi")));
+                            tvDSAkuisisi.setText(iv.ChangeToCurrencyFormat(item.getString("target_akuisisi")));
+                            tvDSGAPAkuisisi.setText(iv.ChangeToCurrencyFormat(item.getString("gap_akuisisi")));
+
                         }
 
                         tvTotalOmset.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(item.getString("total_omset"))));

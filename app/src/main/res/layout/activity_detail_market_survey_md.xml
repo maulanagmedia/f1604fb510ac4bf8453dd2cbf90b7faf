@@ -165,6 +165,7 @@
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/default_margin_tiny"
                         android:layout_marginBottom="@dimen/default_margin_tiny"
+                        android:visibility="gone"
                         android:weightSum="1">
 
                         <TextView

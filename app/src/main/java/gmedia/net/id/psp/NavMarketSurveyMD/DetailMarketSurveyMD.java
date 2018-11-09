@@ -439,6 +439,8 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
 
         JSONObject jDataSurvey = new JSONObject();
 
+        boolean isEmpty = false;
+
         try {
             jDataSurvey.put("nik", session.getUserInfo(SessionManager.TAG_UID));
             jDataSurvey.put("kdcus",lastKdcus);
@@ -456,10 +458,30 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
                 jDataSurvey.put("order_"+item.getItem5(), ((item.getItem4().equals("")) ? "0" : item.getItem4()));
                 jDataSurvey.put("penjualan_"+item.getItem5(), ((item.getItem6().equals("")) ? "0" : item.getItem6()));
                 jDataSurvey.put("recharge_"+item.getItem5(), ((item.getItem7().equals("")) ? "0" : item.getItem7()));
+                jDataSurvey.put("unit_small_"+item.getItem5(), ((item.getItem8().equals("")) ? "0" : item.getItem8()));
+                jDataSurvey.put("unit_medium_"+item.getItem5(), ((item.getItem9().equals("")) ? "0" : item.getItem9()));
+                jDataSurvey.put("unit_high_"+item.getItem5(), ((item.getItem10().equals("")) ? "0" : item.getItem10()));
+                jDataSurvey.put("penjualan_small_"+item.getItem5(), ((item.getItem11().equals("")) ? "0" : item.getItem11()));
+                jDataSurvey.put("penjualan_medium_"+item.getItem5(), ((item.getItem12().equals("")) ? "0" : item.getItem12()));
+                jDataSurvey.put("penjualan_high_"+item.getItem5(), ((item.getItem13().equals("")) ? "0" : item.getItem13()));
+
+                if(item.getItem4().isEmpty() || item.getItem7().isEmpty() || item.getItem8().isEmpty() || item.getItem9().isEmpty()
+                        || item.getItem10().isEmpty() || item.getItem11().isEmpty() || item.getItem12().isEmpty() || item.getItem13().isEmpty()){
+
+                    isEmpty = true;
+                }
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+        if(isEmpty){
+
+            Toast.makeText(context, "Jumlah Display Perdana tidak boleh ada yang kosong, minimal 0", Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
+            btnSimpan.setEnabled(true);
+            return;
         }
 
         JSONArray jDataImages = new JSONArray();
@@ -1114,6 +1136,12 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
                                         "",
                                         jo.getString("field_name"),
                                         "",
+                                        "",
+                                        "",
+                                        "",
+                                        "",
+                                        "",
+                                        "",
                                         ""));
                             }
                         }
@@ -1213,6 +1241,12 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
                             item.setItem4(jSurvey.getString("order_"+item.getItem5()));
                             item.setItem6(jSurvey.getString("penjualan_"+item.getItem5()));
                             item.setItem7(jSurvey.getString("recharge_"+item.getItem5()));
+                            item.setItem8(jSurvey.getString("unit_small_"+item.getItem5()));
+                            item.setItem9(jSurvey.getString("unit_medium_"+item.getItem5()));
+                            item.setItem10(jSurvey.getString("unit_high_"+item.getItem5()));
+                            item.setItem11(jSurvey.getString("penjualan_small_"+item.getItem5()));
+                            item.setItem12(jSurvey.getString("penjualan_medium_"+item.getItem5()));
+                            item.setItem13(jSurvey.getString("penjualan_high_"+item.getItem5()));
                         }
 
                         adapterDisplay.notifyDataSetChanged();
