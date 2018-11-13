@@ -452,7 +452,18 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
             jDataSurvey.put("state", state);
             jDataSurvey.put("kodearea", session.getUserInfo(SessionManager.TAG_AREA));
 
-            List<CustomItem> dataDisplay = ((ListDisplayMDAdapter)lvDisplay.getAdapter()).getItems();
+            List<CustomItem> dataDisplay = new ArrayList<>();
+            try {
+
+                dataDisplay = ((ListDisplayMDAdapter) lvDisplay.getAdapter()).getItems();
+            }catch (Exception e){
+
+                e.printStackTrace();
+                Toast.makeText(context, "Data display tidak termuat, harap ulangi proses", Toast.LENGTH_LONG).show();
+                getProvider();
+                return;
+            }
+
             for(CustomItem item : dataDisplay){
                 jDataSurvey.put("unit_"+item.getItem5(), ((item.getItem3().equals("")) ? "0" : item.getItem3()));
                 jDataSurvey.put("order_"+item.getItem5(), ((item.getItem4().equals("")) ? "0" : item.getItem4()));
@@ -1142,7 +1153,10 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
                                         "",
                                         "",
                                         "",
-                                        ""));
+                                        "",
+                                        jo.getString("color"),
+                                        jo.getString("color_text")
+                                        ));
                             }
                         }
                     }

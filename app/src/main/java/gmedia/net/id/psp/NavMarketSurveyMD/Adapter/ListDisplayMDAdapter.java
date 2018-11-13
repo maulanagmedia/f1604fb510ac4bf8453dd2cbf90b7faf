@@ -1,6 +1,7 @@
 package gmedia.net.id.psp.NavMarketSurveyMD.Adapter;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.maulana.custommodul.CustomItem;
@@ -39,6 +41,8 @@ public class ListDisplayMDAdapter extends ArrayAdapter{
         private TextView tvText1;
         private EditText edtText1, edtText2, edtText3, edtText4;
         private EditText edtText5, edtText6, edtText7, edtText8;
+        private LinearLayout llContainer;
+        private TextView tvTitle1, tvTitle2, tvTitle3, tvTitle4, tvTitle5, tvTitle6, tvTitle7, tvTitle8, tvTitle9, tvTitle10;
     }
 
     public List<CustomItem> getItems(){
@@ -68,6 +72,18 @@ public class ListDisplayMDAdapter extends ArrayAdapter{
             holder.edtText6 = (EditText) convertView.findViewById(R.id.edt_text6);
             holder.edtText7 = (EditText) convertView.findViewById(R.id.edt_text7);
             holder.edtText8 = (EditText) convertView.findViewById(R.id.edt_text8);
+            holder.llContainer = (LinearLayout) convertView.findViewById(R.id.ll_container);
+
+            holder.tvTitle1 = (TextView) convertView.findViewById(R.id.tv_title1);
+            holder.tvTitle2 = (TextView) convertView.findViewById(R.id.tv_title2);
+            holder.tvTitle3 = (TextView) convertView.findViewById(R.id.tv_title3);
+            holder.tvTitle4 = (TextView) convertView.findViewById(R.id.tv_title4);
+            holder.tvTitle5 = (TextView) convertView.findViewById(R.id.tv_title5);
+            holder.tvTitle6 = (TextView) convertView.findViewById(R.id.tv_title6);
+            holder.tvTitle7 = (TextView) convertView.findViewById(R.id.tv_title7);
+            holder.tvTitle8 = (TextView) convertView.findViewById(R.id.tv_title8);
+            holder.tvTitle9 = (TextView) convertView.findViewById(R.id.tv_title9);
+            holder.tvTitle10 = (TextView) convertView.findViewById(R.id.tv_title10);
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
@@ -262,6 +278,19 @@ public class ListDisplayMDAdapter extends ArrayAdapter{
         holder.edtText6.setText(itemSelected.getItem12());
         holder.edtText7.setText(itemSelected.getItem13());
         holder.edtText8.setText(itemSelected.getItem7());
+
+        holder.llContainer.setBackgroundColor(Color.parseColor(itemSelected.getItem14()));
+        holder.tvText1.setTextColor(Color.parseColor(itemSelected.getItem15()));
+        holder.tvTitle1.setTextColor(Color.parseColor(itemSelected.getItem15()));
+        holder.tvTitle2.setTextColor(Color.parseColor(itemSelected.getItem15()));
+        holder.tvTitle3.setTextColor(Color.parseColor(itemSelected.getItem15()));
+        holder.tvTitle4.setTextColor(Color.parseColor(itemSelected.getItem15()));
+        holder.tvTitle5.setTextColor(Color.parseColor(itemSelected.getItem15()));
+        holder.tvTitle6.setTextColor(Color.parseColor(itemSelected.getItem15()));
+        holder.tvTitle7.setTextColor(Color.parseColor(itemSelected.getItem15()));
+        holder.tvTitle8.setTextColor(Color.parseColor(itemSelected.getItem15()));
+        holder.tvTitle9.setTextColor(Color.parseColor(itemSelected.getItem15()));
+        holder.tvTitle10.setTextColor(Color.parseColor(itemSelected.getItem15()));
 
         return convertView;
 

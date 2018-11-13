@@ -2,7 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:id="@+id/ll_container"
+    android:padding="@dimen/default_margin_small"
+    android:layout_marginBottom="@dimen/default_margin_tiny">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/default_margin_tiny"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/title_text_list"
+        android:textColor="@color/color_black"
+        android:id="@+id/tv_text1"
+        android:gravity="center"
+        android:text=""/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,28 +25,23 @@
         android:layout_marginBottom="@dimen/default_margin_tiny"
         android:weightSum="1">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="0.2"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/default_margin_tiny"
-            />
-
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.6"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin_tiny"
             android:gravity="center"
+            android:id="@+id/tv_title1"
             android:textColor="@color/color_black"
             android:text="Display Share"/>
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="0.2"
+            android:layout_weight="0.4"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin_tiny"
             android:gravity="center"
+            android:id="@+id/tv_title2"
             android:textColor="@color/color_black"
             android:text="Belanja"/>
 
@@ -44,15 +52,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="1">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="0.2"
-            android:layout_marginLeft="@dimen/default_margin_tiny"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_black"
-            android:id="@+id/tv_text1"
-            android:text=""/>
 
         <EditText
             android:layout_width="0dp"
@@ -95,7 +94,7 @@
 
         <EditText
             android:layout_width="0dp"
-            android:layout_weight="0.2"
+            android:layout_weight="0.4"
             android:layout_height="wrap_content"
             android:textColor="@color/color_black"
             android:layout_marginRight="@dimen/default_margin_tiny"
@@ -115,18 +114,13 @@
         android:layout_marginBottom="@dimen/default_margin_tiny"
         android:weightSum="1">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="0.2"
-            android:layout_height="match_parent"
-            />
-
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.2"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin_tiny"
             android:gravity="center"
+            android:id="@+id/tv_title3"
             android:textColor="@color/color_black"
             android:text="Small"/>
 
@@ -136,6 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin_tiny"
             android:gravity="center"
+            android:id="@+id/tv_title4"
             android:textColor="@color/color_black"
             android:text="Medium"/>
 
@@ -145,6 +140,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin_tiny"
             android:gravity="center"
+            android:id="@+id/tv_title5"
             android:textColor="@color/color_black"
             android:text="High"/>
 
@@ -158,28 +154,23 @@
         android:layout_marginBottom="@dimen/default_margin_tiny"
         android:weightSum="1">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="0.2"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/default_margin_tiny"
-            />
-
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.6"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin_tiny"
             android:gravity="center"
+            android:id="@+id/tv_title6"
             android:textColor="@color/color_black"
             android:text="Sales Share"/>
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="0.2"
+            android:layout_weight="0.4"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin_tiny"
             android:gravity="center"
+            android:id="@+id/tv_title7"
             android:textColor="@color/color_black"
             android:text="Recharge"/>
 
@@ -190,14 +181,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="1">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="0.2"
-            android:layout_marginLeft="@dimen/default_margin_tiny"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_black"
-            android:text=""/>
 
         <EditText
             android:layout_width="0dp"
@@ -240,7 +223,7 @@
 
         <EditText
             android:layout_width="0dp"
-            android:layout_weight="0.2"
+            android:layout_weight="0.4"
             android:layout_height="wrap_content"
             android:textColor="@color/color_black"
             android:layout_marginRight="@dimen/default_margin_tiny"
@@ -259,18 +242,13 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="0.2"
-            android:layout_height="match_parent"
-            />
-
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.2"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin_tiny"
             android:gravity="center"
+            android:id="@+id/tv_title8"
             android:textColor="@color/color_black"
             android:text="Small"/>
 
@@ -280,6 +258,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin_tiny"
             android:gravity="center"
+            android:id="@+id/tv_title9"
             android:textColor="@color/color_black"
             android:text="Medium"/>
 
@@ -289,14 +268,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin_tiny"
             android:gravity="center"
+            android:id="@+id/tv_title10"
             android:textColor="@color/color_black"
             android:text="High"/>
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/default_line"
-        android:layout_marginTop="@dimen/default_margin_tiny"
-        android:layout_marginBottom="@dimen/default_margin_tiny"
-        android:background="@color/color_grey"/>
 </LinearLayout>

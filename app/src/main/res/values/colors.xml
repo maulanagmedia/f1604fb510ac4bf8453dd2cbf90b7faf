@@ -49,4 +49,6 @@
     <color name="color_ds_blue">#50b7e9</color>
     <color name="color_ds_blue_active">#88cef1</color>
 
+    <color name="color_test">#f7f7f7</color>
+
 </resources>
