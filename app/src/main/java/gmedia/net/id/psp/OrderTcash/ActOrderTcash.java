@@ -1,25 +1,34 @@
 package gmedia.net.id.psp.OrderTcash;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.leonardus.irfan.bluetoothprinter.Model.Item;
+import com.leonardus.irfan.bluetoothprinter.Model.Transaksi;
+import com.leonardus.irfan.bluetoothprinter.PspPrinter;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;
@@ -60,6 +69,8 @@ public class ActOrderTcash extends AppCompatActivity {
     private String dateFrom, dateTo;
     private ImageButton ibShow;
     private FloatingActionButton fabAdd;
+    private PspPrinter printer;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +83,17 @@ public class ActOrderTcash extends AppCompatActivity {
         );
         setTitle("Penjualan Tcash");
         session = new SessionManager(ActOrderTcash.this);
+        context = this;
+        printer = new PspPrinter(context);
+        printer.startService();
 
         initUI();
+    }
+
+    @Override
+    protected void onDestroy() {
+        printer.startService();
+        super.onDestroy();
     }
 
     private void initUI() {
@@ -239,7 +259,15 @@ public class ActOrderTcash extends AppCompatActivity {
                                 lastTaggal = jo.getString("tgl");
                             }
 
-                            masterList.add(new CustomItem("I", jo.getString("nonota"), jo.getString("nama"), jo.getString("total"), jo.getString("flag"), jo.getString("tgl"), jo.getString("kode")));
+                            masterList.add(new CustomItem(
+                                    "I"
+                                    , jo.getString("nonota")
+                                    , jo.getString("nama")
+                                    , jo.getString("total")
+                                    , jo.getString("flag")
+                                    , jo.getString("tgl")
+                                    , jo.getString("kode")));
+
                             total += iv.parseNullLong(jo.getString("total"));
 
                             if(i < items.length() - 1){
@@ -346,12 +374,77 @@ public class ActOrderTcash extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                    CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
+                    final CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
                     if(selectedItem.getItem1().equals("I")){
-                        Intent intent = new Intent(ActOrderTcash.this, DetailTcashOrder.class);
-                        intent.putExtra("nonota", selectedItem.getItem2());
-                        intent.putExtra("kode", selectedItem.getItem7());
-                        startActivity(intent);
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                        View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
+                        builder.setView(viewDialog);
+
+                        final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
+                        final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
+
+                        btnTutup.setText("Detail");
+
+                        final AlertDialog alert = builder.create();
+                        alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                        List<Item> items = new ArrayList<>();
+                        items.add(new Item("Tcash", 1, iv.parseNullDouble(selectedItem.getItem4())));
+
+                        Calendar date = Calendar.getInstance();
+                        final Transaksi transaksi = new Transaksi(selectedItem.getItem3(), session.getUser(), selectedItem.getItem2(), date.getTime(), items);
+
+                        btnTutup.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view2) {
+
+                                if(alert != null){
+
+                                    try {
+
+                                        alert.dismiss();
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                Intent intent = new Intent(ActOrderTcash.this, DetailTcashOrder.class);
+                                intent.putExtra("nonota", selectedItem.getItem2());
+                                intent.putExtra("kode", selectedItem.getItem7());
+                                startActivity(intent);
+                            }
+                        });
+
+                        btnCetak.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                if(!printer.bluetoothAdapter.isEnabled()) {
+
+                                    printer.dialogBluetooth.show();
+                                    Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
+                                }else{
+
+                                    if(printer.isPrinterReady()){
+
+                                        printer.print(transaksi);
+
+                                    }else{
+
+                                        Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
+                                        printer.showDevices();
+                                    }
+                                }
+                            }
+                        });
+
+                        try {
+                            alert.show();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                 }
             });

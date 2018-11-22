@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -25,6 +26,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -52,6 +54,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.leonardus.irfan.bluetoothprinter.Model.Item;
+import com.leonardus.irfan.bluetoothprinter.Model.Transaksi;
+import com.leonardus.irfan.bluetoothprinter.PspPrinter;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.SessionManager;
@@ -59,6 +64,10 @@ import com.maulana.custommodul.SessionManager;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import gmedia.net.id.psp.MapsOutletActivity;
 import gmedia.net.id.psp.R;
@@ -117,6 +126,8 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private Boolean mRequestingLocationUpdates;
     private Location mCurrentLocation;
+    private PspPrinter printer;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +148,10 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
         createLocationRequest();
         buildLocationSettingsRequest();
 
+        context = this;
+        printer = new PspPrinter(context);
+        printer.startService();
+
         initUI();
     }
 
@@ -144,6 +159,12 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
     protected void onResume() {
         super.onResume();
         MockLocChecker checker = new MockLocChecker(DetailTcashOrder.this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        printer.startService();
+        super.onDestroy();
     }
 
     private void initUI() {
@@ -702,12 +723,78 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
                     if(iv.parseNullInteger(status) == 200){
 
                         String message = response.getJSONObject("response").getString("message");
+                        String nonota = response.getJSONObject("response").getString("nobukti");
                         Toast.makeText(DetailTcashOrder.this, message, Toast.LENGTH_LONG).show();
                         //Snackbar.make(findViewById(android.R.id.content), "Order Pulsa berhasil ditambahkan", Snackbar.LENGTH_LONG).show();
-                        Intent intent = new Intent(DetailTcashOrder.this, ActOrderTcash.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        finish();
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                        View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
+                        builder.setView(viewDialog);
+                        builder.setCancelable(false);
+
+                        final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
+                        final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
+
+                        final AlertDialog alert = builder.create();
+                        alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                        List<Item> items = new ArrayList<>();
+                        items.add(new Item("Tcash ", iv.parseNullInteger(edtNominal.getText().toString()), iv.parseNullDouble(hargaTcash)));
+
+                        Calendar date = Calendar.getInstance();
+                        final Transaksi transaksi = new Transaksi(namaRS, session.getUser(), nonota, date.getTime(), items);
+
+                        btnTutup.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view2) {
+
+                                if(alert != null){
+
+                                    try {
+
+                                        alert.dismiss();
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                Intent intent = new Intent(DetailTcashOrder.this, ActOrderTcash.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+
+                        btnCetak.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                if(!printer.bluetoothAdapter.isEnabled()) {
+
+                                    printer.dialogBluetooth.show();
+                                    Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
+                                }else{
+
+                                    if(printer.isPrinterReady()){
+
+                                        printer.print(transaksi);
+
+                                    }else{
+
+                                        Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
+                                        printer.showDevices();
+                                    }
+                                }
+                            }
+                        });
+
+                        try {
+                            alert.show();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
                     }else{
                         Toast.makeText(DetailTcashOrder.this, superMessage, Toast.LENGTH_LONG).show();
                     }

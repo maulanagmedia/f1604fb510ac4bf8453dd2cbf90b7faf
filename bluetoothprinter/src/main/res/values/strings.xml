@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BluetoothPrinter</string>
+    <string name="cari_device">Cari Device</string>
+    <string name="berhenti">Berhenti</string>
+    <string name="device_bluetooth_printer">Device Bluetooth Printer (Pilih salah satu)</string>
+    <string name="device_bluetooth_ditemukan">Device Bluetooth ditemukan</string>
+</resources>

@@ -1,13 +1,17 @@
 package gmedia.net.id.psp.RiwayatPenjualan;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -15,6 +19,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -24,6 +29,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.leonardus.irfan.bluetoothprinter.Model.Item;
+import com.leonardus.irfan.bluetoothprinter.Model.Transaksi;
+import com.leonardus.irfan.bluetoothprinter.PspPrinter;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;
@@ -72,6 +80,8 @@ public class RiwayatPenjualan extends AppCompatActivity {
     private String nik = "";
     private String flagJabatan = "";
     private int selectedSalesPosition = 0;
+    private PspPrinter printer;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +99,18 @@ public class RiwayatPenjualan extends AppCompatActivity {
             session.logoutUser(intent);
         }
 
+        context = this;
+        printer = new PspPrinter(context);
+        printer.startService();
+
         initUI();
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        printer.stopService();
+        super.onDestroy();
     }
 
     private void initUI() {
@@ -115,7 +136,6 @@ public class RiwayatPenjualan extends AppCompatActivity {
 
         initEvent();
     }
-
 
     private void checkSupervisor(){
 
@@ -407,7 +427,17 @@ public class RiwayatPenjualan extends AppCompatActivity {
                                 lastTaggal = jo.getString("tgl");
                             }
 
-                            masterList.add(new CustomItem("I", jo.getString("nonota"), jo.getString("nama"), jo.getString("piutang"), jo.getString("flag"), jo.getString("tgl"), jo.getString("app_flag"), jo.getString("jarak"), jo.getString("flag_nama")));
+                            masterList.add(new CustomItem(
+                                    "I"
+                                    , jo.getString("nonota")
+                                    , jo.getString("nama")
+                                    , jo.getString("piutang")
+                                    , jo.getString("flag")
+                                    , jo.getString("tgl")
+                                    , jo.getString("app_flag")
+                                    , jo.getString("jarak")
+                                    , jo.getString("flag_nama")));
+
                             total += iv.parseNullLong(jo.getString("piutang"));
 
                             if(i < items.length() - 1){
@@ -514,21 +544,83 @@ public class RiwayatPenjualan extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                    CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
+                    final CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
 
                     if(selectedItem.getItem1().equals("I")){
 
                         currentFlag = selectedItem.getItem5();
 
-                        if(currentFlag.equals("DS")){
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                        View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
+                        builder.setView(viewDialog);
 
-                            Intent intent = new Intent(RiwayatPenjualan.this, HistoryDirectSelling.class);
-                            intent.putExtra("nobukti", selectedItem.getItem2());
-                            startActivity(intent);
-                        }else{
-                            getDetailPenjualan(selectedItem.getItem2(), currentFlag, selectedItem.getItem8());
+                        final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
+                        final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
+
+                        btnTutup.setText("Detail");
+
+                        final AlertDialog alert = builder.create();
+                        alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                        List<Item> items = new ArrayList<>();
+                        items.add(new Item(selectedItem.getItem9().isEmpty() ? selectedItem.getItem5() : selectedItem.getItem9(), 1, iv.parseNullDouble(selectedItem.getItem4())));
+
+                        Calendar date = Calendar.getInstance();
+                        final Transaksi transaksi = new Transaksi(selectedItem.getItem3(), session.getUser(), selectedItem.getItem2(), date.getTime(), items);
+
+                        btnTutup.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view2) {
+
+                                if(alert != null){
+
+                                    try {
+
+                                        alert.dismiss();
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                if(currentFlag.equals("DS")){
+
+                                    Intent intent = new Intent(RiwayatPenjualan.this, HistoryDirectSelling.class);
+                                    intent.putExtra("nobukti", selectedItem.getItem2());
+                                    startActivity(intent);
+                                }else{
+                                    getDetailPenjualan(selectedItem.getItem2(), currentFlag, selectedItem.getItem8());
+                                }
+                            }
+                        });
+
+                        btnCetak.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                if(!printer.bluetoothAdapter.isEnabled()) {
+
+                                    printer.dialogBluetooth.show();
+                                    Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
+                                }else{
+
+                                    if(printer.isPrinterReady()){
+
+                                        printer.print(transaksi);
+                                    }else{
+
+                                        Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
+                                        printer.showDevices();
+                                    }
+                                }
+                            }
+                        });
+
+                        try {
+                            alert.show();
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
-
                     }
                 }
             });

@@ -51,4 +51,6 @@
 
     <color name="color_test">#f7f7f7</color>
 
+    <color name="color_text_dialog">#1e83d6</color>
+
 </resources>

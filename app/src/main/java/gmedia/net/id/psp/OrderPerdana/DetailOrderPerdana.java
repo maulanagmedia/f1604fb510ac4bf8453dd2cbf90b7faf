@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -59,6 +60,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.leonardus.irfan.bluetoothprinter.Model.Item;
+import com.leonardus.irfan.bluetoothprinter.Model.Transaksi;
+import com.leonardus.irfan.bluetoothprinter.PspPrinter;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;
@@ -71,6 +75,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -152,6 +157,9 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
     private Boolean mRequestingLocationUpdates;
     private Location mCurrentLocation;
 
+    private Context context;
+    private PspPrinter printer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,6 +180,10 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         createLocationRequest();
         buildLocationSettingsRequest();
 
+        context = this;
+        printer = new PspPrinter(context);
+        printer.startService();
+
         initUI();
     }
 
@@ -180,6 +192,12 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         super.onResume();
 
         MockLocChecker checker = new MockLocChecker(DetailOrderPerdana.this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        printer.startService();
+        super.onDestroy();
     }
 
     private void initUI() {
@@ -924,7 +942,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         saveData(listItem);
     }
 
-    private void saveData(List<CustomItem> listItem) {
+    private void saveData(final List<CustomItem> listItem) {
 
         btnProses.setEnabled(false);
         // Jual D lama
@@ -1076,13 +1094,79 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                     if(iv.parseNullInteger(status) == 200){
 
                         String message = "Order Perdana berhasil disimpan";
+                        String nonota = response.getJSONObject("response").getString("nobukti");
                         if(editMode) message = "Order "+ noBukti + " berhasil diubah";
                         Toast.makeText(DetailOrderPerdana.this, message, Toast.LENGTH_LONG).show();
-                        //Snackbar.make(findViewById(android.R.id.content), "Order Pulsa berhasil ditambahkan", Snackbar.LENGTH_LONG).show();
-                        Intent intent = new Intent(DetailOrderPerdana.this, PenjualanHariIni.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        finish();
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                        View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
+                        builder.setView(viewDialog);
+                        builder.setCancelable(false);
+
+                        final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
+                        final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
+
+                        final AlertDialog alert = builder.create();
+                        alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                        List<Item> items = new ArrayList<>();
+
+                        items.add(new Item(namaBrg, listItem.size(), totalHarga));
+
+                        Calendar date = Calendar.getInstance();
+                        final Transaksi transaksi = new Transaksi(namaCus, session.getUser(), nonota, date.getTime(), items);
+
+                        btnTutup.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view2) {
+
+                                if(alert != null){
+
+                                    try {
+
+                                        alert.dismiss();
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                //Snackbar.make(findViewById(android.R.id.content), "Order Pulsa berhasil ditambahkan", Snackbar.LENGTH_LONG).show();
+                                Intent intent = new Intent(DetailOrderPerdana.this, PenjualanHariIni.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+
+                        btnCetak.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                if(!printer.bluetoothAdapter.isEnabled()) {
+
+                                    printer.dialogBluetooth.show();
+                                    Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
+                                }else{
+
+                                    if(printer.isPrinterReady()){
+
+                                        printer.print(transaksi);
+                                    }else{
+
+                                        Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
+                                        printer.showDevices();
+                                    }
+                                }
+
+                            }
+                        });
+
+                        try {
+                            alert.show();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }else{
                         Toast.makeText(DetailOrderPerdana.this, superMessage, Toast.LENGTH_LONG).show();
                     }
@@ -1192,7 +1276,16 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            ccidList.add(new CustomItem(jo.getString("kodebrg"), jo.getString("ccid"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("hpp"), jo.getString("tgl_do"), jo.getString("nodo"), jo.getString("nobukti")));
+                            ccidList.add(new CustomItem(
+                                    jo.getString("kodebrg")
+                                    , jo.getString("ccid")
+                                    , jo.getString("namabrg")
+                                    , jo.getString("harga")
+                                    , jo.getString("hpp")
+                                    , jo.getString("tgl_do")
+                                    , jo.getString("nodo")
+                                    , jo.getString("nobukti")));
+
                             listCCIDLama.add(new CustomItem(jo.getString("kodebrg"), jo.getString("ccid"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("hpp"), jo.getString("tgl_do"), jo.getString("nodo"), jo.getString("nobukti")));
                             masterCCID.add(i, new OptionItem(jo.getString("kodebrg"), jo.getString("ccid"), jo.getString("namabrg"), jo.getString("harga"), jo.getString("hpp"), jo.getString("tgl_do"), jo.getString("nodo"), jo.getString("nobukti") , true));
                         }

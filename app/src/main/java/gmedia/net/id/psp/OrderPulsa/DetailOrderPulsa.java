@@ -55,6 +55,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.leonardus.irfan.bluetoothprinter.Model.Item;
+import com.leonardus.irfan.bluetoothprinter.Model.Transaksi;
+import com.leonardus.irfan.bluetoothprinter.PspPrinter;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;
@@ -65,6 +68,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -93,6 +97,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
     private final String TAG = "DetailOrderPulsa";
     private boolean editMode = false;
     private ScrollView hsvPulsa;
+    private Context context;
 
     // Location
     private double latitude, longitude;
@@ -125,6 +130,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private Boolean mRequestingLocationUpdates;
     private Location mCurrentLocation;
+    private PspPrinter printer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +151,10 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
         createLocationRequest();
         buildLocationSettingsRequest();
 
+        context = this;
+        printer = new PspPrinter(context);
+        printer.startService();
+
         initUI();
     }
 
@@ -152,6 +162,12 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
     protected void onResume() {
         super.onResume();
         MockLocChecker checker = new MockLocChecker(DetailOrderPulsa.this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        printer.startService();
+        super.onDestroy();
     }
 
     private void initUI() {
@@ -965,7 +981,6 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             }
         }
 
-
         if(kodeRS.equals("")){
             Snackbar.make(findViewById(android.R.id.content), "Reseller tidak ditemukan", Snackbar.LENGTH_LONG).show();
             return;
@@ -1077,7 +1092,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             pushJsonData(dataInsert, "Bulk "+ edtBulk.getText().toString(), "0" + iv.doubleToStringRound(hasilBulk)+"*", iv.doubleToStringRound(totalBulk));
         }
 
-        saveData();
+        saveData(orderList);
     }
 
     private void pushJsonData(SortedMap<String, String> data, final String keteranganOrder, String orderFormat, String total) {
@@ -1129,7 +1144,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
         jsonArray.put(jBody);
     }
 
-    private void saveData() {
+    private void saveData(final List<CustomItem> orderList) {
 
         isLoading(true);
         final ProgressDialog progressDialog = new ProgressDialog(DetailOrderPulsa.this, R.style.AppTheme_Login_Dialog);
@@ -1194,14 +1209,89 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
 
                     if(iv.parseNullInteger(status) == 200){
 
+                        String nobukti = response.getJSONObject("response").getString("nobukti");
                         String message = response.getJSONObject("response").getString("message");
                         if(editMode) message = "Order "+ nonota+ " berhasil diubah";
+
                         Toast.makeText(DetailOrderPulsa.this, message, Toast.LENGTH_LONG).show();
-                        //Snackbar.make(findViewById(android.R.id.content), "Order Pulsa berhasil ditambahkan", Snackbar.LENGTH_LONG).show();
-                        Intent intent = new Intent(DetailOrderPulsa.this, PenjualanHariIni.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        finish();
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                        View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
+                        builder.setView(viewDialog);
+                        builder.setCancelable(false);
+
+                        final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
+                        final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
+
+                        final AlertDialog alert = builder.create();
+                        alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                        List<Item> items = new ArrayList<>();
+                        for(CustomItem item :orderList){
+
+                            items.add(new Item("Denom "+item.getItem2(), iv.parseNullInteger(item.getItem3()), iv.parseNullDouble(item.getItem4())));
+                        }
+
+                        if(iv.parseNullDouble(edtBulk.getText().toString()) > 0){
+
+                            items.add(new Item("Bulk", 1, totalBulk));
+                        }
+
+                        Calendar date = Calendar.getInstance();
+                        final Transaksi transaksi = new Transaksi(namaRS, session.getUser(), nobukti, date.getTime(), items);
+
+                        btnTutup.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view2) {
+
+                                if(alert != null){
+
+                                    try {
+
+                                        alert.dismiss();
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                //Snackbar.make(findViewById(android.R.id.content), "Order Pulsa berhasil ditambahkan", Snackbar.LENGTH_LONG).show();
+                                Intent intent = new Intent(DetailOrderPulsa.this, PenjualanHariIni.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+
+                        btnCetak.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                if(!printer.bluetoothAdapter.isEnabled()) {
+
+                                    printer.dialogBluetooth.show();
+                                    Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
+                                }else{
+
+                                    if(printer.isPrinterReady()){
+
+                                        printer.print(transaksi);
+
+                                    }else{
+
+                                        Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
+                                        printer.showDevices();
+                                    }
+                                }
+                            }
+                        });
+
+                        try {
+                            alert.show();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
                     }else{
                         //Toast.makeText(DetailOrderPulsa.this, superMessage, Toast.LENGTH_LONG).show();
                         showDialog(2,superMessage);

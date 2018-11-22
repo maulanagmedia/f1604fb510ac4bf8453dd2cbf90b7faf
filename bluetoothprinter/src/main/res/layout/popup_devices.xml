@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:minHeight="@dimen/popup_height"
+    android:minWidth="@dimen/popup_width">
+
+    <TextView
+        android:id="@+id/txt_devices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#acacac"
+        android:padding="@dimen/padding5"
+        android:text="@string/device_bluetooth_printer"
+        android:textColor="#fff"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/list_devices"
+        android:layout_weight="0.3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <TextView
+        android:id="@+id/txt_discovered"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#acacac"
+        android:padding="@dimen/padding5"
+        android:text="@string/device_bluetooth_ditemukan"
+        android:textColor="#fff"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/list_discovered"
+        android:layout_weight="0.7"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <LinearLayout
+        android:id="@+id/layout_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_devices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cari_device" />
+
+</LinearLayout>

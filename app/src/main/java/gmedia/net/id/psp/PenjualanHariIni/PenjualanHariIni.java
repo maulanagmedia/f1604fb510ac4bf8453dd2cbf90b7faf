@@ -1,22 +1,30 @@
 package gmedia.net.id.psp.PenjualanHariIni;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.leonardus.irfan.bluetoothprinter.Model.Item;
+import com.leonardus.irfan.bluetoothprinter.Model.Transaksi;
+import com.leonardus.irfan.bluetoothprinter.PspPrinter;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;
@@ -27,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import gmedia.net.id.psp.MainNavigationActivity;
@@ -49,6 +58,8 @@ public class PenjualanHariIni extends AppCompatActivity {
     private List<CustomItem> masterList;
     private boolean firstLoad = true;
     private String currentFlag = "";
+    private PspPrinter printer;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +71,9 @@ public class PenjualanHariIni extends AppCompatActivity {
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
         setTitle("Penjualan Hari Ini");
+        context = this;
+        printer = new PspPrinter(context);
+        printer.startService();
 
         initUI();
     }
@@ -79,6 +93,12 @@ public class PenjualanHariIni extends AppCompatActivity {
         super.onResume();
         keyword = actvOutlet.getText().toString();
         getPenjualanHariIni();
+    }
+
+    @Override
+    protected void onDestroy() {
+        printer.startService();
+        super.onDestroy();
     }
 
     private void getPenjualanHariIni() {
@@ -115,7 +135,17 @@ public class PenjualanHariIni extends AppCompatActivity {
 
                             JSONObject jo = items.getJSONObject(i);
 
-                            masterList.add(new CustomItem("I", jo.getString("nonota"), jo.getString("nama"), jo.getString("piutang"), jo.getString("flag"), jo.getString("tgl"), jo.getString("app_flag"), jo.getString("jarak"), jo.getString("status")));
+                            masterList.add(new CustomItem(
+                                    "I"
+                                    , jo.getString("nonota")
+                                    , jo.getString("nama")
+                                    , jo.getString("piutang")
+                                    , jo.getString("flag")
+                                    , jo.getString("tgl")
+                                    , jo.getString("app_flag")
+                                    , jo.getString("jarak")
+                                    , jo.getString("status")));
+
                             if(!jo.getString("flag").toUpperCase().equals("MKIOS_TR") && !jo.getString("flag").toUpperCase().equals("TCASH_TR")){
                                 total += iv.parseNullLong(jo.getString("piutang"));
                             }
@@ -265,7 +295,6 @@ public class PenjualanHariIni extends AppCompatActivity {
                         dsList.add(itemApPosition);
                     }
                 }
-
             }
 
             if(mkiosTrList.size() > 0){
@@ -305,13 +334,76 @@ public class PenjualanHariIni extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                    CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
+                    final CustomItem selectedItem = (CustomItem) adapterView.getItemAtPosition(i);
 
                     if(selectedItem.getItem1().equals("I")){
 
-                        currentFlag = selectedItem.getItem5().equals("MKIOS_TR") ? "MKIOS" : (selectedItem.getItem5().equals("TCASH_TR") ? "TCASH" : selectedItem.getItem5());
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                        View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
+                        builder.setView(viewDialog);
 
-                        getDetailPenjualan(selectedItem.getItem2(), currentFlag, selectedItem.getItem8());
+                        final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
+                        final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
+
+                        btnTutup.setText("Detail");
+
+                        final AlertDialog alert = builder.create();
+                        alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                        List<Item> items = new ArrayList<>();
+                        items.add(new Item(selectedItem.getItem5(), 1, iv.parseNullDouble(selectedItem.getItem4())));
+
+                        Calendar date = Calendar.getInstance();
+                        final Transaksi transaksi = new Transaksi(selectedItem.getItem3(), session.getUser(), selectedItem.getItem2(), date.getTime(), items);
+
+                        btnTutup.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view2) {
+
+                                if(alert != null){
+
+                                    try {
+
+                                        alert.dismiss();
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                currentFlag = selectedItem.getItem5().equals("MKIOS_TR") ? "MKIOS" : (selectedItem.getItem5().equals("TCASH_TR") ? "TCASH" : selectedItem.getItem5());
+                                getDetailPenjualan(selectedItem.getItem2(), currentFlag, selectedItem.getItem8());
+                            }
+                        });
+
+                        btnCetak.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                if(!printer.bluetoothAdapter.isEnabled()) {
+
+                                    printer.dialogBluetooth.show();
+                                    Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
+                                }else{
+
+                                    if(printer.isPrinterReady()){
+
+                                        printer.print(transaksi);
+
+                                    }else{
+
+                                        Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
+                                        printer.showDevices();
+                                    }
+                                }
+                            }
+                        });
+
+                        try {
+                            alert.show();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                 }
             });

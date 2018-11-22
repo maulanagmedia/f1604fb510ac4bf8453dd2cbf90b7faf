@@ -1,1 +1,1 @@
-include ':app', ':zxing-android-embedded', ':maulanacustommodul'
+include ':app', ':zxing-android-embedded', ':maulanacustommodul', ':bluetoothprinter'

@@ -3,7 +3,7 @@ apply plugin: 'io.fabric' // for crashlitycs
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '28.0.2'
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "gmedia.net.id.psp"
         minSdkVersion 21
@@ -45,7 +45,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:11.4.2'
     androidTestImplementation 'junit:junit:4.12'
     implementation 'com.android.support:design:26.1.0'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5' // for crashlitycs
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
+    // for crashlitycs
     implementation 'com.google.code.gson:gson:2.8.0'
+    implementation project(':bluetoothprinter')
 }
 apply plugin: 'com.google.gms.google-services'
