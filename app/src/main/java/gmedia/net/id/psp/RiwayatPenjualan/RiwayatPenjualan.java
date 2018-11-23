@@ -80,7 +80,6 @@ public class RiwayatPenjualan extends AppCompatActivity {
     private String nik = "";
     private String flagJabatan = "";
     private int selectedSalesPosition = 0;
-    private PspPrinter printer;
     private Context context;
 
     @Override
@@ -100,8 +99,6 @@ public class RiwayatPenjualan extends AppCompatActivity {
         }
 
         context = this;
-        printer = new PspPrinter(context);
-        printer.startService();
 
         initUI();
     }
@@ -109,7 +106,6 @@ public class RiwayatPenjualan extends AppCompatActivity {
     @Override
     protected void onDestroy() {
 
-        printer.stopService();
         super.onDestroy();
     }
 
@@ -550,83 +546,14 @@ public class RiwayatPenjualan extends AppCompatActivity {
 
                         currentFlag = selectedItem.getItem5();
 
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-                        View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
-                        builder.setView(viewDialog);
+                        if(currentFlag.equals("DS")){
 
-                        final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
-                        final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
+                            Intent intent = new Intent(RiwayatPenjualan.this, HistoryDirectSelling.class);
+                            intent.putExtra("nobukti", selectedItem.getItem2());
+                            startActivity(intent);
 
-                        btnTutup.setText("Detail");
-
-                        final AlertDialog alert = builder.create();
-                        alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-                        List<Item> items = new ArrayList<>();
-                        items.add(new Item(selectedItem.getItem9().isEmpty() ? selectedItem.getItem5() : selectedItem.getItem9(), "-", iv.parseNullDouble(selectedItem.getItem4())));
-
-                        Calendar date = Calendar.getInstance();
-                        final Transaksi transaksi = new Transaksi(
-                                selectedItem.getItem3()
-                                ,session.getUser()
-                                ,selectedItem.getItem2()
-                                ,date.getTime()
-                                ,items
-                                ,iv.ChangeFormatDateString(selectedItem.getItem6(), FormatItem.formatDate, FormatItem.formatDateDisplay)
-                        );
-
-                        btnTutup.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view2) {
-
-                                if(alert != null){
-
-                                    try {
-
-                                        alert.dismiss();
-                                    }catch (Exception e){
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                                if(currentFlag.equals("DS")){
-
-                                    Intent intent = new Intent(RiwayatPenjualan.this, HistoryDirectSelling.class);
-                                    intent.putExtra("nobukti", selectedItem.getItem2());
-                                    startActivity(intent);
-                                }else{
-                                    getDetailPenjualan(selectedItem.getItem2(), currentFlag, selectedItem.getItem8());
-                                }
-                            }
-                        });
-
-                        btnCetak.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                if(!printer.bluetoothAdapter.isEnabled()) {
-
-                                    printer.dialogBluetooth.show();
-                                    Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
-                                }else{
-
-                                    if(printer.isPrinterReady()){
-
-                                        printer.print(transaksi);
-                                    }else{
-
-                                        Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
-                                        printer.showDevices();
-                                    }
-                                }
-                            }
-                        });
-
-                        try {
-                            alert.show();
-                        }catch (Exception e){
-                            e.printStackTrace();
+                        }else{
+                            getDetailPenjualan(selectedItem.getItem2(), currentFlag, selectedItem.getItem8());
                         }
                     }
                 }
@@ -684,6 +611,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
                                     intent.putExtra("harga", jo.getString("harga"));
                                     intent.putExtra("noba", jo.getString("no_ba"));
                                     intent.putExtra("status", jo.getString("status"));
+                                    intent.putExtra("tglnota", jo.getString("tgl"));
                                     intent.putExtra("jarak", jarak);
                                     startActivity(intent);
                                     break;

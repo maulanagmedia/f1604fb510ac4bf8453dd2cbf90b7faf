@@ -78,8 +78,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.TreeMap;
 
 import gmedia.net.id.psp.MapsOutletActivity;
 import gmedia.net.id.psp.OrderPerdana.Adapter.ListCCIDAdapter;
@@ -159,6 +161,8 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
 
     private Context context;
     private PspPrinter printer;
+    private Button btnCetakData;
+    private String tglNota = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,6 +233,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         edtTotalCCID = (EditText) findViewById(R.id.edt_total_ccid);
         edtTotalHarga = (EditText) findViewById(R.id.edt_total_harga);
         btnProses = (Button) findViewById(R.id.btn_proses);
+        btnCetakData = (Button) findViewById(R.id.btn_cetak);
 
         isProses = false;
         totalHarga = 0;
@@ -238,17 +243,19 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         ccidList = new ArrayList<>();
         if(bundle != null){
 
-            suratJalan = bundle.getString("suratjalan");
-            noCus = bundle.getString("nocus");
-            namaCus = bundle.getString("namacus");
-            notelpCus = bundle.getString("notelpcus");
-            kdBrg = bundle.getString("kodebrg");
-            namaBrg = bundle.getString("namabrg");
-            crBayar = bundle.getString("crbayar");
-            tempo = bundle.getString("tempo");
-            kdGudang = bundle.getString("kdgudang");
-            hargaBrg = bundle.getString("harga");
-            noBa = bundle.getString("noba");
+            suratJalan = bundle.getString("suratjalan","");
+            noCus = bundle.getString("nocus","");
+            namaCus = bundle.getString("namacus","");
+            notelpCus = bundle.getString("notelpcus","");
+            kdBrg = bundle.getString("kodebrg","");
+            namaBrg = bundle.getString("namabrg","");
+            crBayar = bundle.getString("crbayar","");
+            tempo = bundle.getString("tempo","");
+            kdGudang = bundle.getString("kdgudang","");
+            hargaBrg = bundle.getString("harga","");
+            noBa = bundle.getString("noba","");
+            tglNota = bundle.getString("tglnota",iv.getCurrentDate(FormatItem.formatDate));
+            tglNota = iv.ChangeFormatDateString(tglNota, FormatItem.formatDate, FormatItem.formatDateDisplay);
 
             edtNamaBarang.setText(namaBrg);
             edtHarga.setText(hargaBrg);
@@ -258,7 +265,6 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             updateHargaTotal();
             lvCCID.setAdapter(adapter);
 
-
             noBukti = bundle.getString("nobukti");
             if(noBukti != null && noBukti.length() > 0 ){
 
@@ -266,6 +272,8 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                 edtNobukti.setText(noBukti);
                 status = bundle.getString("status");
                 btnProses.setEnabled(false);
+                btnProses.setVisibility(View.GONE);
+                btnCetakData.setVisibility(View.VISIBLE);
 
                 String jarak = bundle.getString("jarak");
 
@@ -840,6 +848,140 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                 }
             }
         });
+
+        btnCetakData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(editMode){
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                    View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
+                    builder.setView(viewDialog);
+                    builder.setCancelable(false);
+
+                    final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
+                    final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
+
+                    final AlertDialog alert = builder.create();
+                    alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                    List<Item> items = new ArrayList<>();
+
+                    HashMap<String, DataBufferCCID> hCCID = new HashMap<String, DataBufferCCID>();
+
+                    for(CustomItem ccid: ccidList){
+
+                        boolean isExist = false;
+                        String key = ccid.getItem3() +" "+ iv.ChangeToCurrencyFormat(ccid.getItem4());
+
+                        if(hCCID.containsKey(key)){
+                            isExist = true;
+                        }
+
+                        if(isExist){
+
+                            DataBufferCCID data = hCCID.get(key);
+                            int newJml = data.getJml() + 1;
+                            double newHarga = data.getHarga() + iv.parseNullDouble(ccid.getItem4());
+
+                            hCCID.put(key, new DataBufferCCID(newJml, newHarga));
+                        }else{
+
+                            hCCID.put(key, new DataBufferCCID(1, iv.parseNullDouble(ccid.getItem4())));
+                        }
+                    }
+
+                    for ( String key : hCCID.keySet() ) {
+                        DataBufferCCID data = hCCID.get(key);
+                        items.add(new Item(key, String.valueOf(data.getJml()), data.harga));
+                    }
+
+                    Calendar date = Calendar.getInstance();
+                    final Transaksi transaksi = new Transaksi(namaCus, session.getUser(), noBukti, date.getTime(), items, tglNota);
+
+                    btnTutup.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view2) {
+
+                            if(alert != null){
+
+                                try {
+
+                                    alert.dismiss();
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            //Snackbar.make(findViewById(android.R.id.content), "Order Pulsa berhasil ditambahkan", Snackbar.LENGTH_LONG).show();
+                            Intent intent = new Intent(DetailOrderPerdana.this, PenjualanHariIni.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+
+                    btnCetak.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            if(!printer.bluetoothAdapter.isEnabled()) {
+
+                                printer.dialogBluetooth.show();
+                                Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
+                            }else{
+
+                                if(printer.isPrinterReady()){
+
+                                    printer.print(transaksi);
+                                }else{
+
+                                    Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
+                                    printer.showDevices();
+                                }
+                            }
+
+                        }
+                    });
+
+                    try {
+                        alert.show();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private class DataBufferCCID{
+
+        private int jml;
+        private double harga;
+
+        public DataBufferCCID(int jml, double harga){
+
+            this.jml = jml;
+            this.harga = harga;
+        }
+
+        public int getJml(){
+            return this.jml;
+        }
+
+        public double getHarga(){
+            return this.harga;
+        }
+
+        public void setJml(int jml) {
+            this.jml = jml;
+        }
+
+        public void setHarga(double harga) {
+            this.harga = harga;
+        }
     }
 
     private void validateSaveData() {

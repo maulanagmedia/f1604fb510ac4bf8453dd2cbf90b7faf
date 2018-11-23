@@ -516,6 +516,18 @@
                         android:id="@+id/btn_proses"
                         android:textColor="@color/color_white"
                         android:background="@drawable/btn_login"/>
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:layout_height="wrap_content"
+                        android:text="Cetak"
+                        android:visibility="gone"
+                        android:layout_marginTop="@dimen/default_margin_small"
+                        android:layout_marginBottom="@dimen/default_margin"
+                        android:id="@+id/btn_cetak"
+                        android:textColor="@color/color_white"
+                        android:background="@drawable/btn_login"/>
                 </LinearLayout>
 
             </LinearLayout>
