@@ -59,6 +59,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.leonardus.irfan.bluetoothprinter.Model.Item;
+import com.leonardus.irfan.bluetoothprinter.Model.Transaksi;
+import com.leonardus.irfan.bluetoothprinter.PspPrinter;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;
@@ -70,12 +73,14 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 import gmedia.net.id.psp.MapsOutletActivity;
 import gmedia.net.id.psp.NavPengajuanDeposit.Adapter.ListPengajuanDepositAdapter;
 import gmedia.net.id.psp.R;
+import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class DetailPengajuanDeposit extends AppCompatActivity implements LocationListener {
@@ -130,6 +135,7 @@ public class DetailPengajuanDeposit extends AppCompatActivity implements Locatio
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private Boolean mRequestingLocationUpdates;
     private Location mCurrentLocation;
+    private PspPrinter printer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +148,8 @@ public class DetailPengajuanDeposit extends AppCompatActivity implements Locatio
         );
 
         context = this;
+        printer = new PspPrinter(context);
+        printer.startService();
 
         setTitle("Pengajuan Deposit");
 
@@ -314,6 +322,12 @@ public class DetailPengajuanDeposit extends AppCompatActivity implements Locatio
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        printer.startService();
+        super.onDestroy();
     }
 
     private void getDataPengajuan() {
@@ -772,8 +786,79 @@ public class DetailPengajuanDeposit extends AppCompatActivity implements Locatio
 
                             progressDialog.dismiss();
                             message = response.getJSONObject("response").getString("message");
-                            getDataPengajuan();
+                            String nobukti = response.getJSONObject("response").getString("nobukti");
 
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                            View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
+                            builder.setView(viewDialog);
+                            builder.setCancelable(false);
+
+                            final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
+                            final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
+
+                            final AlertDialog alert = builder.create();
+                            alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                            List<Item> items = new ArrayList<>();
+
+                            for(CustomItem item : adapterDeposit.getItems()){
+
+                                if(item.getItem8().equals("1")){
+
+                                    items.add(new Item(item.getItem7(), "-", iv.parseNullDouble(item.getItem3())));
+                                }
+                            }
+
+                            Calendar date = Calendar.getInstance();
+                            final Transaksi transaksi = new Transaksi(nama, session.getUser(), nobukti, date.getTime(), items, iv.getCurrentDate(FormatItem.formatDateDisplay2));
+
+                            btnTutup.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view2) {
+
+                                    if(alert != null){
+
+                                        try {
+
+                                            alert.dismiss();
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    getDataPengajuan();
+                                }
+                            });
+
+                            btnCetak.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    if(!printer.bluetoothAdapter.isEnabled()) {
+
+                                        printer.dialogBluetooth.show();
+                                        Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
+                                    }else{
+
+                                        if(printer.isPrinterReady()){
+
+                                            printer.print(transaksi);
+
+                                        }else{
+
+                                            Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
+                                            printer.showDevices();
+                                        }
+                                    }
+                                }
+                            });
+
+                            try {
+                                alert.show();
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
 
                         Toast.makeText(context, message, Toast.LENGTH_LONG).show();

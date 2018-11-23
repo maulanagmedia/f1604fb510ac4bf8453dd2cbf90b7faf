@@ -28,6 +28,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.leonardus.irfan.bluetoothprinter.Model.Item;
+import com.leonardus.irfan.bluetoothprinter.Model.Transaksi;
+import com.leonardus.irfan.bluetoothprinter.PspPrinter;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;
@@ -38,10 +41,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import gmedia.net.id.psp.NavPengajuanDeposit.Adapter.ListHistoryDepositAdapter;
 import gmedia.net.id.psp.R;
+import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class HistoryPengajuanDeposit extends AppCompatActivity {
@@ -59,6 +64,7 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
     private boolean isLoading = false;
     private String TAG = "test";
     private String nik = "";
+    private PspPrinter printer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +77,8 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
         );
 
         context = this;
+        printer = new PspPrinter(context);
+        printer.startService();
 
         setTitle("History Deposit");
 
@@ -197,6 +205,71 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                     CustomItem item = (CustomItem) adapterView.getItemAtPosition(i);
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                    View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
+                    builder.setView(viewDialog);
+                    builder.setCancelable(false);
+
+                    final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
+                    final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
+
+                    final AlertDialog alert = builder.create();
+                    alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                    List<Item> items = new ArrayList<>();
+                    items.add(new Item(item.getItem7(), "-", iv.parseNullDouble(item.getItem3())));
+
+                    Calendar date = Calendar.getInstance();
+                    final Transaksi transaksi = new Transaksi(item.getItem2(), session.getUser(), "", date.getTime(), items, iv.ChangeFormatDateString(item.getItem5(), FormatItem.formatDate2, FormatItem.formatDateDisplay2));
+
+                    btnTutup.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view2) {
+
+                            if(alert != null){
+
+                                try {
+
+                                    alert.dismiss();
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            getDataPengajuan();
+                        }
+                    });
+
+                    btnCetak.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            if(!printer.bluetoothAdapter.isEnabled()) {
+
+                                printer.dialogBluetooth.show();
+                                Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
+                            }else{
+
+                                if(printer.isPrinterReady()){
+
+                                    printer.print(transaksi);
+
+                                }else{
+
+                                    Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
+                                    printer.showDevices();
+                                }
+                            }
+                        }
+                    });
+
+                    try {
+                        alert.show();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
 
                     //if(item.getItem6().equals("1")) showDialog(item);
                 }
