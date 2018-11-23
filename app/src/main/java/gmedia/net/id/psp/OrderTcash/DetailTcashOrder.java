@@ -740,10 +740,10 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
                         alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
                         List<Item> items = new ArrayList<>();
-                        items.add(new Item("Tcash ", iv.parseNullInteger(edtNominal.getText().toString()), iv.parseNullDouble(hargaTcash)));
+                        items.add(new Item("Tcash ", "-", iv.parseNullDouble(hargaTcash)));
 
                         Calendar date = Calendar.getInstance();
-                        final Transaksi transaksi = new Transaksi(namaRS, session.getUser(), nonota, date.getTime(), items);
+                        final Transaksi transaksi = new Transaksi(namaRS, session.getUser(), nonota, date.getTime(), items, iv.getCurrentDate(FormatItem.formatDateDisplay2));
 
                         btnTutup.setOnClickListener(new View.OnClickListener() {
                             @Override

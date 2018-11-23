@@ -74,6 +74,7 @@ public class PspPrinter extends BluetoothPrinter {
             outputStream.write(String.format("Reseller    :  %s\n", transaksi.getOutlet()).getBytes());
             outputStream.write(String.format("Sales       :  %s\n", transaksi.getSales()).getBytes());
             outputStream.write(String.format("No. Nota    :  %s\n", transaksi.getNo_nota()).getBytes());
+            outputStream.write(String.format("Tgl Nota    :  %s\n", transaksi.getTglTransaksi()).getBytes());
 
             outputStream.write(PrintFormatter.NEW_LINE);
 
@@ -88,7 +89,7 @@ public class PspPrinter extends BluetoothPrinter {
             for(int i = 0; i < listItem.size(); i++){
                 Item t =  listItem.get(i);
                 String nama = t.getNama();
-                String jumlah = String.valueOf(t.getJumlah());
+                String jumlah = t.getJumlah();
                 String harga_total = RupiahFormatter.getRupiah(t.getHarga()/**t.getJumlah()*/);
 
                 int n = 1;
@@ -140,7 +141,7 @@ public class PspPrinter extends BluetoothPrinter {
             outputStream.write("Terima Kasih\n".getBytes());
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault());
-            String currentDateandTime = sdf.format(transaksi.getTgl_transaksi());
+            String currentDateandTime = sdf.format(transaksi.getTglNota());
 
             outputStream.write(String.format("%s\n", currentDateandTime).getBytes());
             outputStream.write("==============================\n".getBytes());

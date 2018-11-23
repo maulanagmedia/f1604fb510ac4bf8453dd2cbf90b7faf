@@ -1230,16 +1230,16 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                         List<Item> items = new ArrayList<>();
                         for(CustomItem item :orderList){
 
-                            items.add(new Item("Denom "+item.getItem2(), iv.parseNullInteger(item.getItem3()), iv.parseNullDouble(item.getItem4())));
+                            items.add(new Item("Denom "+item.getItem2(), item.getItem3(), iv.parseNullDouble(item.getItem4())));
                         }
 
                         if(iv.parseNullDouble(edtBulk.getText().toString()) > 0){
 
-                            items.add(new Item("Bulk", 1, totalBulk));
+                            items.add(new Item("Bulk", "-", totalBulk));
                         }
 
                         Calendar date = Calendar.getInstance();
-                        final Transaksi transaksi = new Transaksi(namaRS, session.getUser(), nobukti, date.getTime(), items);
+                        final Transaksi transaksi = new Transaksi(namaRS, session.getUser(), nobukti, date.getTime(), items, iv.getCurrentDate(FormatItem.formatDateDisplay2));
 
                         btnTutup.setOnClickListener(new View.OnClickListener() {
                             @Override

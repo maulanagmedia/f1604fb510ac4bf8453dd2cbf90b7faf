@@ -44,6 +44,7 @@ import gmedia.net.id.psp.OrderPulsa.DetailOrderPulsa;
 import gmedia.net.id.psp.OrderTcash.DetailTcashOrder;
 import gmedia.net.id.psp.PenjualanHariIni.Adapter.PenjualanHariIniAdapter;
 import gmedia.net.id.psp.R;
+import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class PenjualanHariIni extends AppCompatActivity {
@@ -352,10 +353,17 @@ public class PenjualanHariIni extends AppCompatActivity {
                         alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
                         List<Item> items = new ArrayList<>();
-                        items.add(new Item(selectedItem.getItem5(), 1, iv.parseNullDouble(selectedItem.getItem4())));
+                        items.add(new Item(selectedItem.getItem5(), "-", iv.parseNullDouble(selectedItem.getItem4())));
 
                         Calendar date = Calendar.getInstance();
-                        final Transaksi transaksi = new Transaksi(selectedItem.getItem3(), session.getUser(), selectedItem.getItem2(), date.getTime(), items);
+                        final Transaksi transaksi = new Transaksi(
+                                selectedItem.getItem3()
+                                ,session.getUser()
+                                ,selectedItem.getItem2()
+                                ,date.getTime()
+                                ,items
+                                ,iv.ChangeFormatDateString(selectedItem.getItem6(), FormatItem.formatDate, FormatItem.formatDateDisplay)
+                        );
 
                         btnTutup.setOnClickListener(new View.OnClickListener() {
                             @Override

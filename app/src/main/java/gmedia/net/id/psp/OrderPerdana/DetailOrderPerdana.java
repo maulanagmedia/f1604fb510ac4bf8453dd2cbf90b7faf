@@ -1112,10 +1112,10 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
 
                         List<Item> items = new ArrayList<>();
 
-                        items.add(new Item(namaBrg, listItem.size(), totalHarga));
+                        items.add(new Item(namaBrg, String.valueOf(listItem.size()), totalHarga));
 
                         Calendar date = Calendar.getInstance();
-                        final Transaksi transaksi = new Transaksi(namaCus, session.getUser(), nonota, date.getTime(), items);
+                        final Transaksi transaksi = new Transaksi(namaCus, session.getUser(), nonota, date.getTime(), items, iv.getCurrentDate(FormatItem.formatDateDisplay2));
 
                         btnTutup.setOnClickListener(new View.OnClickListener() {
                             @Override

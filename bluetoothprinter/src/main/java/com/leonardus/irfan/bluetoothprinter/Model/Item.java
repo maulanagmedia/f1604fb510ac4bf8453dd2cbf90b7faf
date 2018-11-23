@@ -2,16 +2,16 @@ package com.leonardus.irfan.bluetoothprinter.Model;
 
 public class Item {
     private String nama;
-    private int jumlah;
+    private String jumlah;
     private double harga;
 
-    public Item(String nama, int jumlah, double harga){
+    public Item(String nama, String jumlah, double harga){
         this.nama = nama;
         this.jumlah = jumlah;
         this.harga = harga;
     }
 
-    public int getJumlah() {
+    public String getJumlah() {
         return jumlah;
     }
 

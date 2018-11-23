@@ -1,6 +1,5 @@
 package com.leonardus.irfan.bluetoothprinter.Model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,16 +7,18 @@ public class Transaksi {
     private String outlet;
     private String sales;
     private String no_nota;
-    private Date tgl_transaksi;
+    private Date tglNota;
     private double tunai;
     private List<Item> listItem;
+    private String tglTransaksi;
 
-    public Transaksi(String outlet, String sales, String no_nota, Date tgl_transaksi, List<Item> listItem){
+    public Transaksi(String outlet, String sales, String no_nota, Date tglNota, List<Item> listItem, String tglTransaksi){
         this.outlet = outlet;
         this.sales = sales;
         this.no_nota = no_nota;
-        this.tgl_transaksi = tgl_transaksi;
+        this.tglNota = tglNota;
         this.listItem = listItem;
+        this.tglTransaksi = tglTransaksi;
     }
 
     public void setTunai(double tunai){
@@ -32,8 +33,8 @@ public class Transaksi {
         return no_nota;
     }
 
-    public Date getTgl_transaksi() {
-        return tgl_transaksi;
+    public Date getTglNota() {
+        return tglNota;
     }
 
     public List<Item> getListItem() {
@@ -46,5 +47,13 @@ public class Transaksi {
 
     public String getSales() {
         return sales;
+    }
+
+    public String getTglTransaksi() {
+        return tglTransaksi;
+    }
+
+    public void setTglTransaksi(String tglTransaksi) {
+        this.tglTransaksi = tglTransaksi;
     }
 }

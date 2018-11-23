@@ -391,10 +391,18 @@ public class ActOrderTcash extends AppCompatActivity {
                         alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
                         List<Item> items = new ArrayList<>();
-                        items.add(new Item("Tcash", 1, iv.parseNullDouble(selectedItem.getItem4())));
+                        items.add(new Item("Tcash", "-", iv.parseNullDouble(selectedItem.getItem4())));
+
 
                         Calendar date = Calendar.getInstance();
-                        final Transaksi transaksi = new Transaksi(selectedItem.getItem3(), session.getUser(), selectedItem.getItem2(), date.getTime(), items);
+                        final Transaksi transaksi = new Transaksi(
+                                selectedItem.getItem3()
+                                ,session.getUser()
+                                ,selectedItem.getItem2()
+                                ,date.getTime()
+                                ,items
+                                ,iv.ChangeFormatDateString(selectedItem.getItem6(), FormatItem.formatDate, FormatItem.formatDateDisplay)
+                                );
 
                         btnTutup.setOnClickListener(new View.OnClickListener() {
                             @Override
