@@ -196,7 +196,9 @@ public class HistoryDirectSelling extends AppCompatActivity {
 
                     for (CustomItem item: tableList){
 
-                        if(item.getItem2().toUpperCase().contains(keyword)) items.add(item);
+                        if(item.getItem3().toUpperCase().contains(keyword)
+                                || item.getItem7().toUpperCase().contains(keyword)
+                                || item.getItem9().toUpperCase().contains(keyword)) items.add(item);
                     }
 
                     getTableList(items);
