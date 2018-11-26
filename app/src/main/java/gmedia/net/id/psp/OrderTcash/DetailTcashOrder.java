@@ -128,6 +128,8 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
     private Location mCurrentLocation;
     private PspPrinter printer;
     private Context context;
+    private Button btnCetakDetail;
+    private String tglTransaksi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,23 +189,28 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
         btnProses = (Button) findViewById(R.id.btn_proses);
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
         btnMapsOutlet = (Button) findViewById(R.id.btn_maps_outlet);
+        btnCetakDetail = (Button) findViewById(R.id.btn_cetak);
 
         session = new SessionManager(DetailTcashOrder.this);
         nikMKIOS = session.getUserInfo(SessionManager.TAG_NIK);
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
 
-            kode = bundle.getString("kode");
-            nonota = bundle.getString("nonota");
+            kode = bundle.getString("kode", "");
+            nonota = bundle.getString("nonota", "");
 
-            if(nonota != null && nonota.length() >0){
+            if(!nonota.isEmpty()){
 
                 edtNominal.setBackground(getResources().getDrawable(R.drawable.bg_input_disable));
                 edtNominal.setFocusable(false);
                 btnProses.setEnabled(false);
+                btnProses.setVisibility(View.GONE);
+                btnCetakDetail.setVisibility(View.VISIBLE);
                 edtNonota.setText(nonota);
                 edtKeterangan.setBackground(getResources().getDrawable(R.drawable.bg_input_disable));
                 edtKeterangan.setFocusable(false);
+                tglTransaksi = bundle.getString("tgl", iv.getCurrentDate(FormatItem.formatTimestamp));
+
                 getDetailOrder();
             }else{
 
@@ -385,10 +392,13 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
             @Override
             public void onSuccess(String result) {
 
+                String message = "Terjadi kesalahan saat memuat data, harap ulangi";
+
                 try {
 
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
+                    message = response.getJSONObject("metadata").getString("message");
 
                     if(iv.parseNullInteger(status) == 200){
 
@@ -396,25 +406,112 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            edtNamaReseller.setText(jo.getString("nama"));
+                            namaRS = jo.getString("nama");
+                            edtNamaReseller.setText(namaRS);
                             edtNominal.setText(jo.getString("value_tcash"));
-                            edtHarga.setText(iv.ChangeToRupiahFormat(jo.getString("hargatcash")));
+                            hargaTcash = jo.getString("hargatcash");
+                            edtHarga.setText(iv.ChangeToRupiahFormat(hargaTcash));
                             edtKeterangan.setText(jo.getString("pesan"));
                             break;
                         }
+                    }else{
+                        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                     }
 
                     pbProses.setVisibility(View.GONE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     pbProses.setVisibility(View.GONE);
+
                 }
+
+                setCetakORder();
             }
 
             @Override
             public void onError(String result) {
 
                 pbProses.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void setCetakORder() {
+
+        btnCetakDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(!nonota.isEmpty()){
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                    View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
+                    builder.setView(viewDialog);
+                    builder.setCancelable(false);
+
+                    final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
+                    final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
+
+                    final AlertDialog alert = builder.create();
+                    alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                    List<Item> items = new ArrayList<>();
+                    items.add(new Item("Tcash", "-", iv.parseNullDouble(hargaTcash)));
+
+                    Calendar date = Calendar.getInstance();
+                    final Transaksi transaksi = new Transaksi(namaRS, session.getUser(), nonota, date.getTime(), items, iv.ChangeFormatDateString(tglTransaksi, FormatItem.formatTimestamp, FormatItem.formatDateDisplay2));
+
+                    btnTutup.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view2) {
+
+                            if(alert != null){
+
+                                try {
+
+                                    alert.dismiss();
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            Intent intent = new Intent(DetailTcashOrder.this, ActOrderTcash.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+
+                    btnCetak.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            if(!printer.bluetoothAdapter.isEnabled()) {
+
+                                printer.dialogBluetooth.show();
+                                Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
+                            }else{
+
+                                if(printer.isPrinterReady()){
+
+                                    printer.print(transaksi);
+
+                                }else{
+
+                                    Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
+                                    printer.showDevices();
+                                }
+                            }
+                        }
+                    });
+
+                    try {
+                        alert.show();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
             }
         });
     }
@@ -958,7 +1055,6 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
     }
 
     private void getHarga(){
-
 
         if(iv.parseNullLong(edtNominal.getText().toString()) <= 0){
 

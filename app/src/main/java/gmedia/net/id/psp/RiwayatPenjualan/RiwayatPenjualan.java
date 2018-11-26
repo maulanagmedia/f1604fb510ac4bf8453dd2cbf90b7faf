@@ -621,6 +621,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
                                     intent.putExtra("flag", jo.getString("flag"));
                                     intent.putExtra("koders", jo.getString("kode"));
                                     intent.putExtra("kode_cv", jo.getString("kode_cv"));
+                                    intent.putExtra("tgl", jo.getString("tgl"));
                                     intent.putExtra("jarak", jarak);
                                     startActivity(intent);
                                     break;
@@ -628,6 +629,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
                                     Intent intent = new Intent(RiwayatPenjualan.this, DetailTcashOrder.class);
                                     intent.putExtra("nonota", jo.getString("nonota"));
                                     intent.putExtra("koders", jo.getString("kode"));
+                                    intent.putExtra("tgl", jo.getString("tgl"));
                                     startActivity(intent);
                                 }
                             }

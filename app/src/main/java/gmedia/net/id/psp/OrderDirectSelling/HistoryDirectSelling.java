@@ -2,20 +2,29 @@ package gmedia.net.id.psp.OrderDirectSelling;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.leonardus.irfan.bluetoothprinter.Model.Item;
+import com.leonardus.irfan.bluetoothprinter.Model.Transaksi;
+import com.leonardus.irfan.bluetoothprinter.PspPrinter;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;
@@ -26,10 +35,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import gmedia.net.id.psp.OrderDirectSelling.Adapter.HistoryDSAdapter;
 import gmedia.net.id.psp.R;
+import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class HistoryDirectSelling extends AppCompatActivity {
@@ -43,6 +54,7 @@ public class HistoryDirectSelling extends AppCompatActivity {
     private SessionManager session;
     private Context context;
     private String nobukti = "";
+    private PspPrinter printer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +66,8 @@ public class HistoryDirectSelling extends AppCompatActivity {
         );
 
         context = this;
+        printer = new PspPrinter(context);
+        printer.startService();
         session = new SessionManager(context);
         setTitle("Riwayat Penjualan DS");
 
@@ -72,6 +86,12 @@ public class HistoryDirectSelling extends AppCompatActivity {
             nobukti = bundle.getString("nobukti", "");
             getData();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        printer.stopService();
+        super.onDestroy();
     }
 
     private void getData() {
@@ -198,6 +218,83 @@ public class HistoryDirectSelling extends AppCompatActivity {
             HistoryDSAdapter adapter = new HistoryDSAdapter((Activity) context, tableList);
             lvHistory.setAdapter(adapter);
 
+            lvHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    CustomItem item = (CustomItem) adapterView.getItemAtPosition(i);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                    View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
+                    builder.setView(viewDialog);
+
+                    final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
+                    final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
+
+                    final AlertDialog alert = builder.create();
+                    alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                    List<Item> items = new ArrayList<>();
+                    items.add(new Item(item.getItem3(), "-", iv.parseNullDouble(item.getItem5())));
+
+                    Calendar date = Calendar.getInstance();
+                    final Transaksi transaksi = new Transaksi(
+                            item.getItem7()
+                            ,session.getUser()
+                            ,nobukti
+                            ,date.getTime()
+                            ,items
+                            ,iv.ChangeFormatDateString(item.getItem2(), FormatItem.formatDate, FormatItem.formatDateDisplay)
+                    );
+
+                    btnTutup.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view2) {
+
+                            if(alert != null){
+
+                                try {
+
+                                    alert.dismiss();
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            }
+
+                        }
+                    });
+
+                    btnCetak.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            if(!printer.bluetoothAdapter.isEnabled()) {
+
+                                printer.dialogBluetooth.show();
+                                Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
+                            }else{
+
+                                if(printer.isPrinterReady()){
+
+                                    printer.print(transaksi, "");
+
+                                }else{
+
+                                    Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
+                                    printer.showDevices();
+                                }
+                            }
+                        }
+                    });
+
+                    try {
+                        alert.show();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+            });
         }
     }
 

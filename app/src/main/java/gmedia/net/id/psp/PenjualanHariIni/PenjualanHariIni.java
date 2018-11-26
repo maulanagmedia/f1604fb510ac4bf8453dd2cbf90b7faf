@@ -339,79 +339,83 @@ public class PenjualanHariIni extends AppCompatActivity {
 
                     if(selectedItem.getItem1().equals("I")){
 
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-                        View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
-                        builder.setView(viewDialog);
+                        currentFlag = selectedItem.getItem5().equals("MKIOS_TR") ? "MKIOS" : (selectedItem.getItem5().equals("TCASH_TR") ? "TCASH" : selectedItem.getItem5());
 
-                        final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
-                        final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
+                        if(currentFlag.equals("DS")){
 
-                        btnTutup.setText("Detail");
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                            View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
+                            builder.setView(viewDialog);
 
-                        final AlertDialog alert = builder.create();
-                        alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
+                            final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
 
-                        List<Item> items = new ArrayList<>();
-                        items.add(new Item(selectedItem.getItem5(), "-", iv.parseNullDouble(selectedItem.getItem4())));
+                            final AlertDialog alert = builder.create();
+                            alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-                        Calendar date = Calendar.getInstance();
-                        final Transaksi transaksi = new Transaksi(
-                                selectedItem.getItem3()
-                                ,session.getUser()
-                                ,selectedItem.getItem2()
-                                ,date.getTime()
-                                ,items
-                                ,iv.ChangeFormatDateString(selectedItem.getItem6(), FormatItem.formatDate, FormatItem.formatDateDisplay)
-                        );
+                            List<Item> items = new ArrayList<>();
+                            items.add(new Item(selectedItem.getItem5(), "-", iv.parseNullDouble(selectedItem.getItem4())));
 
-                        btnTutup.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view2) {
+                            Calendar date = Calendar.getInstance();
+                            final Transaksi transaksi = new Transaksi(
+                                    selectedItem.getItem3()
+                                    ,session.getUser()
+                                    ,selectedItem.getItem2()
+                                    ,date.getTime()
+                                    ,items
+                                    ,iv.ChangeFormatDateString(selectedItem.getItem6(), FormatItem.formatDate, FormatItem.formatDateDisplay)
+                            );
 
-                                if(alert != null){
+                            btnTutup.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view2) {
 
-                                    try {
+                                    if(alert != null){
 
-                                        alert.dismiss();
-                                    }catch (Exception e){
-                                        e.printStackTrace();
+                                        try {
+
+                                            alert.dismiss();
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                        }
                                     }
+
                                 }
+                            });
 
-                                currentFlag = selectedItem.getItem5().equals("MKIOS_TR") ? "MKIOS" : (selectedItem.getItem5().equals("TCASH_TR") ? "TCASH" : selectedItem.getItem5());
-                                getDetailPenjualan(selectedItem.getItem2(), currentFlag, selectedItem.getItem8());
-                            }
-                        });
+                            btnCetak.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
 
-                        btnCetak.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
+                                    if(!printer.bluetoothAdapter.isEnabled()) {
 
-                                if(!printer.bluetoothAdapter.isEnabled()) {
-
-                                    printer.dialogBluetooth.show();
-                                    Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
-                                }else{
-
-                                    if(printer.isPrinterReady()){
-
-                                        printer.print(transaksi);
-
+                                        printer.dialogBluetooth.show();
+                                        Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
                                     }else{
 
-                                        Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
-                                        printer.showDevices();
+                                        if(printer.isPrinterReady()){
+
+                                            printer.print(transaksi, "");
+
+                                        }else{
+
+                                            Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
+                                            printer.showDevices();
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
 
-                        try {
-                            alert.show();
-                        }catch (Exception e){
-                            e.printStackTrace();
+                            try {
+                                alert.show();
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }else{
+                            getDetailPenjualan(selectedItem.getItem2(), currentFlag, selectedItem.getItem8());
                         }
+
                     }
                 }
             });
@@ -467,6 +471,7 @@ public class PenjualanHariIni extends AppCompatActivity {
                                     intent.putExtra("harga", jo.getString("harga"));
                                     intent.putExtra("noba", jo.getString("no_ba"));
                                     intent.putExtra("status", jo.getString("status"));
+                                    intent.putExtra("tglnota", jo.getString("tgl"));
                                     intent.putExtra("jarak", jarak);
                                     startActivity(intent);
                                     break;
@@ -476,6 +481,7 @@ public class PenjualanHariIni extends AppCompatActivity {
                                     intent.putExtra("flag", jo.getString("flag"));
                                     intent.putExtra("koders", jo.getString("kode"));
                                     intent.putExtra("kode_cv", jo.getString("kode_cv"));
+                                    intent.putExtra("tgl", jo.getString("tgl"));
                                     intent.putExtra("jarak", jarak);
                                     startActivity(intent);
                                     break;
@@ -483,6 +489,7 @@ public class PenjualanHariIni extends AppCompatActivity {
                                     Intent intent = new Intent(PenjualanHariIni.this, DetailTcashOrder.class);
                                     intent.putExtra("nonota", jo.getString("nonota"));
                                     intent.putExtra("koders", jo.getString("kode"));
+                                    intent.putExtra("tgl", jo.getString("tgl"));
                                     startActivity(intent);
                                 }
                             }

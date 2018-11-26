@@ -117,7 +117,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
     private ImageView ivRefreshPosition;
     private String jarak = "",range = "", latitudeOutlet = "", longitudeOutlet = "";
     private Button btnMapsOutlet;
-    private String kodeCV = "";
+    private String kodeCV = "", tglTransaksi = "";
 
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
@@ -131,6 +131,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
     private Boolean mRequestingLocationUpdates;
     private Location mCurrentLocation;
     private PspPrinter printer;
+    private Button btnCetakDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,6 +203,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
         edtKeterangan = (EditText) findViewById(R.id.edt_keterangan);
         btnProses = (Button) findViewById(R.id.btn_proses);
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
+        btnCetakDetail = (Button) findViewById(R.id.btn_cetak);
         btnMapsOutlet = (Button) findViewById(R.id.btn_maps_outlet);
 
         isProses = false;
@@ -210,16 +212,19 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
 
-            kodeRS = bundle.getString("koders");
-            nonota = bundle.getString("nonota");
+            kodeRS = bundle.getString("koders", "");
+            nonota = bundle.getString("nonota", "");
 
-            if(nonota != null && nonota.length()>0){
+            if(!nonota.isEmpty()){
 
                 kodeCV = bundle.getString("kode_cv","");
+                tglTransaksi = bundle.getString("tgl", iv.getCurrentDate(FormatItem.formatTimestamp));
                 editMode = true;
                 flag = bundle.getString("flag");
                 edtNonota.setText(nonota);
                 btnProses.setEnabled(false);
+                btnProses.setVisibility(View.GONE);
+                btnCetakDetail.setVisibility(View.VISIBLE);
                 String jarak = bundle.getString("jarak");
 
                 String keteranganJarak = "";
@@ -946,6 +951,86 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                 }else{
 
                     Toast.makeText(DetailOrderPulsa.this, "Harap tunggu hingga proses pencarian lokasi selesai", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        btnCetakDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(editMode){
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                    View viewDialog = inflater.inflate(R.layout.dialog_cetak, null);
+                    builder.setView(viewDialog);
+                    builder.setCancelable(false);
+
+                    final Button btnTutup = (Button) viewDialog.findViewById(R.id.btn_tutup);
+                    final Button btnCetak = (Button) viewDialog.findViewById(R.id.btn_cetak);
+
+                    final AlertDialog alert = builder.create();
+                    alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                    List<Item> items = new ArrayList<>();
+
+                    if(!edtS5.getText().toString().equals("0")) items.add(new Item("Denom 5k", edtS5.getText().toString(), total5));
+                    if(!edtS10.getText().toString().equals("0")) items.add(new Item("Denom 10k", edtS10.getText().toString(), total10));
+                    if(!edtS20.getText().toString().equals("0")) items.add(new Item("Denom 20k", edtS20.getText().toString(), total20));
+                    if(!edtS25.getText().toString().equals("0")) items.add(new Item("Denom 25k", edtS25.getText().toString(), total25));
+                    if(!edtS50.getText().toString().equals("0")) items.add(new Item("Denom 50k", edtS50.getText().toString(), total50));
+                    if(!edtS100.getText().toString().equals("0")) items.add(new Item("Denom 100k", edtS100.getText().toString(), total100));
+                    if(!edtBulk.getText().toString().equals("0")) items.add(new Item("Bulk", "-", totalBulk));
+
+                    Calendar date = Calendar.getInstance();
+                    final Transaksi transaksi = new Transaksi(namaRS, session.getUser(), nonota, date.getTime(), items, iv.ChangeFormatDateString(tglTransaksi, FormatItem.formatTimestamp, FormatItem.formatDateDisplay2));
+
+                    btnTutup.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view2) {
+
+                            if(alert != null){
+
+                                try {
+
+                                    alert.dismiss();
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            }
+
+                        }
+                    });
+
+                    btnCetak.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            if(!printer.bluetoothAdapter.isEnabled()) {
+
+                                printer.dialogBluetooth.show();
+                                Toast.makeText(context, "Hidupkan bluetooth anda kemudian klik cetak kembali", Toast.LENGTH_LONG).show();
+                            }else{
+
+                                if(printer.isPrinterReady()){
+
+                                    printer.print(transaksi);
+
+                                }else{
+
+                                    Toast.makeText(context, "Harap pilih device printer telebih dahulu", Toast.LENGTH_LONG).show();
+                                    printer.showDevices();
+                                }
+                            }
+                        }
+                    });
+
+                    try {
+                        alert.show();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
         });
