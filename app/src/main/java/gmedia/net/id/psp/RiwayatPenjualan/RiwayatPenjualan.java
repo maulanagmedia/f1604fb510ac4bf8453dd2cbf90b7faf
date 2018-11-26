@@ -35,6 +35,7 @@ import com.leonardus.irfan.bluetoothprinter.PspPrinter;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.OptionItem;
 import com.maulana.custommodul.SessionManager;
 
 import org.json.JSONArray;
@@ -78,7 +79,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
     private LinearLayout llTop;
     private Spinner spSales;
     private String nik = "";
-    private String flagJabatan = "";
+    private String flagJabatan = "", namaSales = "";
     private int selectedSalesPosition = 0;
     private Context context;
 
@@ -127,6 +128,8 @@ public class RiwayatPenjualan extends AppCompatActivity {
 
         tvFrom.setText(dateFrom);
         tvTo.setText(dateTo);
+
+        namaSales = session.getUser();
 
         checkSupervisor();
 
@@ -274,6 +277,8 @@ public class RiwayatPenjualan extends AppCompatActivity {
 
                         ((TextView) spSales.getSelectedView()).setTextColor(getResources().getColor(R.color.color_white));
                         selectedSalesPosition = position;
+                        CustomItem salesAtPosition = salesList.get(selectedSalesPosition);
+                        namaSales = salesAtPosition.getItem2();
                     }
                 }
 
@@ -550,10 +555,11 @@ public class RiwayatPenjualan extends AppCompatActivity {
 
                             Intent intent = new Intent(RiwayatPenjualan.this, HistoryDirectSelling.class);
                             intent.putExtra("nobukti", selectedItem.getItem2());
+                            intent.putExtra("namasales", namaSales);
                             startActivity(intent);
 
                         }else{
-                            getDetailPenjualan(selectedItem.getItem2(), currentFlag, selectedItem.getItem8());
+                            getDetailPenjualan(selectedItem.getItem2(), currentFlag, selectedItem.getItem8(), selectedItem.getItem3());
                         }
                     }
                 }
@@ -562,7 +568,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
     }
 
     //TODO: get detail order Mkios / GA
-    private void getDetailPenjualan(String nonota, final String flag, final String jarak) {
+    private void getDetailPenjualan(String nonota, final String flag, final String jarak, final String namaOutlet) {
 
         pbProses.setVisibility(View.VISIBLE);
         JSONObject jBody = new JSONObject();
@@ -613,6 +619,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
                                     intent.putExtra("status", jo.getString("status"));
                                     intent.putExtra("tglnota", jo.getString("tgl"));
                                     intent.putExtra("jarak", jarak);
+                                    intent.putExtra("namasales", namaSales);
                                     startActivity(intent);
                                     break;
                                 }else if (flag.equals("MKIOS")){
@@ -623,6 +630,8 @@ public class RiwayatPenjualan extends AppCompatActivity {
                                     intent.putExtra("kode_cv", jo.getString("kode_cv"));
                                     intent.putExtra("tgl", jo.getString("tgl"));
                                     intent.putExtra("jarak", jarak);
+                                    intent.putExtra("namasales", namaSales);
+                                    intent.putExtra("namaoutlet", namaOutlet);
                                     startActivity(intent);
                                     break;
                                 }else if(flag.equals("TCASH")){
@@ -630,6 +639,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
                                     intent.putExtra("nonota", jo.getString("nonota"));
                                     intent.putExtra("koders", jo.getString("kode"));
                                     intent.putExtra("tgl", jo.getString("tgl"));
+                                    intent.putExtra("namasales", namaSales);
                                     startActivity(intent);
                                 }
                             }

@@ -47,8 +47,8 @@ public class PspPrinter extends BluetoothPrinter {
     // this will send text data to be printed by the bluetooth printer
     public void print(Transaksi transaksi){
         final int NAMA_MAX = 15;
-        final int JUMLAH_MAX = 4;
-        final int HARGA_TOTAL_MAX = 11;
+        final int JUMLAH_MAX = 5;
+        final int HARGA_TOTAL_MAX = 10;
 
         if(bluetoothDevice == null){
             Toast.makeText(context, "Sambungkan ke device printer terlebih dahulu!", Toast.LENGTH_SHORT).show();
@@ -57,7 +57,7 @@ public class PspPrinter extends BluetoothPrinter {
 
         try {
             double jum = 0;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
             //PROSES CETAK HEADER
             outputStream.write(PrintFormatter.DEFAULT_STYLE);
@@ -104,7 +104,7 @@ public class PspPrinter extends BluetoothPrinter {
                 }
 
                 String[] nama_array = leftAligned(nama, NAMA_MAX, n);
-                String[] jumlah_array = leftAligned(jumlah, JUMLAH_MAX, n);
+                String[] jumlah_array = rightAligned(jumlah, JUMLAH_MAX, n);
                 String[] harga_total_array = rightAligned(harga_total, HARGA_TOTAL_MAX, n);
 
                 for(int j = 0; j < n; j++){
@@ -140,7 +140,7 @@ public class PspPrinter extends BluetoothPrinter {
             outputStream.write(PrintFormatter.ALIGN_CENTER);
             outputStream.write("Terima Kasih\n".getBytes());
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault());
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
             String currentDateandTime = sdf.format(transaksi.getTglNota());
 
             outputStream.write(String.format("%s\n", currentDateandTime).getBytes());
@@ -165,7 +165,7 @@ public class PspPrinter extends BluetoothPrinter {
 
         try {
             double jum = 0;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
             //PROSES CETAK HEADER
             outputStream.write(PrintFormatter.DEFAULT_STYLE);
@@ -212,7 +212,7 @@ public class PspPrinter extends BluetoothPrinter {
                 }
 
                 String[] nama_array = leftAligned(nama, NAMA_MAX, n);
-                String[] jumlah_array = leftAligned(jumlah, JUMLAH_MAX, n);
+                String[] jumlah_array = rightAligned(jumlah, JUMLAH_MAX, n);
                 String[] harga_total_array = rightAligned(harga_total, HARGA_TOTAL_MAX, n);
 
                 for(int j = 0; j < n; j++){
@@ -248,7 +248,7 @@ public class PspPrinter extends BluetoothPrinter {
             outputStream.write(PrintFormatter.ALIGN_CENTER);
             outputStream.write("Terima Kasih\n".getBytes());
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault());
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
             String currentDateandTime = sdf.format(transaksi.getTglNota());
 
             outputStream.write(String.format("%s\n", currentDateandTime).getBytes());

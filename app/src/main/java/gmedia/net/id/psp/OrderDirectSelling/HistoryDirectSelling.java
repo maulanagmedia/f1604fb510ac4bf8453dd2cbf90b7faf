@@ -55,6 +55,7 @@ public class HistoryDirectSelling extends AppCompatActivity {
     private Context context;
     private String nobukti = "";
     private PspPrinter printer;
+    private String namaSales = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,7 @@ public class HistoryDirectSelling extends AppCompatActivity {
         if(bundle != null){
 
             nobukti = bundle.getString("nobukti", "");
+            namaSales = bundle.getString("namasales",session.getUser());
             getData();
         }
     }
@@ -242,7 +244,7 @@ public class HistoryDirectSelling extends AppCompatActivity {
                     Calendar date = Calendar.getInstance();
                     final Transaksi transaksi = new Transaksi(
                             item.getItem7()
-                            ,session.getUser()
+                            ,namaSales
                             ,nobukti
                             ,date.getTime()
                             ,items

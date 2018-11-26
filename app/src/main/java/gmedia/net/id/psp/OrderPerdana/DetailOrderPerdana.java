@@ -163,6 +163,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
     private PspPrinter printer;
     private Button btnCetakData;
     private String tglNota = "";
+    private String namaSales = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -269,6 +270,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
             if(noBukti != null && noBukti.length() > 0 ){
 
                 editMode = true;
+                namaSales = bundle.getString("namasales",session.getUser());
                 edtNobukti.setText(noBukti);
                 status = bundle.getString("status");
                 btnProses.setEnabled(false);
@@ -899,7 +901,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                     }
 
                     Calendar date = Calendar.getInstance();
-                    final Transaksi transaksi = new Transaksi(namaCus, session.getUser(), noBukti, date.getTime(), items, tglNota);
+                    final Transaksi transaksi = new Transaksi(namaCus, namaSales, noBukti, date.getTime(), items, tglNota);
 
                     btnTutup.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -915,11 +917,11 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                                 }
                             }
 
-                            //Snackbar.make(findViewById(android.R.id.content), "Order Pulsa berhasil ditambahkan", Snackbar.LENGTH_LONG).show();
+                            /*//Snackbar.make(findViewById(android.R.id.content), "Order Pulsa berhasil ditambahkan", Snackbar.LENGTH_LONG).show();
                             Intent intent = new Intent(DetailOrderPerdana.this, PenjualanHariIni.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
-                            finish();
+                            finish();*/
                         }
                     });
 

@@ -132,6 +132,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
     private Location mCurrentLocation;
     private PspPrinter printer;
     private Button btnCetakDetail;
+    private String namaSales = "", namaOutlet = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,6 +219,8 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             if(!nonota.isEmpty()){
 
                 kodeCV = bundle.getString("kode_cv","");
+                namaSales = bundle.getString("namasales",session.getUser());
+                namaOutlet = bundle.getString("namaoutlet","");
                 tglTransaksi = bundle.getString("tgl", iv.getCurrentDate(FormatItem.formatTimestamp));
                 editMode = true;
                 flag = bundle.getString("flag");
@@ -677,7 +680,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
 
                             kodeRS = jo.getString("kode");
                             nomorRS = jo.getString("nomor");
-                            namaRS = jo.getString("nama");
+                            namaRS = (jo.getString("nama").isEmpty() ? namaOutlet : jo.getString("nama"));
                             levelRS = jo.getString("level");
                             noUpline = jo.getString("nomor_upline");
                             pinRS = jo.getString("pin");
@@ -984,7 +987,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                     if(!edtBulk.getText().toString().equals("0")) items.add(new Item("Bulk", "-", totalBulk));
 
                     Calendar date = Calendar.getInstance();
-                    final Transaksi transaksi = new Transaksi(namaRS, session.getUser(), nonota, date.getTime(), items, iv.ChangeFormatDateString(tglTransaksi, FormatItem.formatTimestamp, FormatItem.formatDateDisplay2));
+                    final Transaksi transaksi = new Transaksi(namaRS, namaSales, nonota, date.getTime(), items, iv.ChangeFormatDateString(tglTransaksi, FormatItem.formatTimestamp, FormatItem.formatDateDisplay2));
 
                     btnTutup.setOnClickListener(new View.OnClickListener() {
                         @Override

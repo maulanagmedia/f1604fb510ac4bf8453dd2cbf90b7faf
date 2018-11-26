@@ -130,6 +130,7 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
     private Context context;
     private Button btnCetakDetail;
     private String tglTransaksi;
+    private String namaSales = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,6 +202,7 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
 
             if(!nonota.isEmpty()){
 
+                namaSales = bundle.getString("namasales",session.getUser());
                 edtNominal.setBackground(getResources().getDrawable(R.drawable.bg_input_disable));
                 edtNominal.setFocusable(false);
                 btnProses.setEnabled(false);
@@ -459,7 +461,7 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
                     items.add(new Item("Tcash", "-", iv.parseNullDouble(hargaTcash)));
 
                     Calendar date = Calendar.getInstance();
-                    final Transaksi transaksi = new Transaksi(namaRS, session.getUser(), nonota, date.getTime(), items, iv.ChangeFormatDateString(tglTransaksi, FormatItem.formatTimestamp, FormatItem.formatDateDisplay2));
+                    final Transaksi transaksi = new Transaksi(namaRS, namaSales, nonota, date.getTime(), items, iv.ChangeFormatDateString(tglTransaksi, FormatItem.formatTimestamp, FormatItem.formatDateDisplay2));
 
                     btnTutup.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -475,10 +477,10 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
                                 }
                             }
 
-                            Intent intent = new Intent(DetailTcashOrder.this, ActOrderTcash.class);
+                            /*Intent intent = new Intent(DetailTcashOrder.this, ActOrderTcash.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
-                            finish();
+                            finish();*/
                         }
                     });
 
