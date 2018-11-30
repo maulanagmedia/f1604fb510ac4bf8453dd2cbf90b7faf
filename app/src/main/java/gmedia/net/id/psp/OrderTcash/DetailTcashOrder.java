@@ -164,11 +164,11 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
         MockLocChecker checker = new MockLocChecker(DetailTcashOrder.this);
     }
 
-    @Override
+   /* @Override
     protected void onDestroy() {
-        printer.startService();
+        printer.stopService();
         super.onDestroy();
-    }
+    }*/
 
     private void initUI() {
 

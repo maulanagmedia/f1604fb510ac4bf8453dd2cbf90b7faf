@@ -324,11 +324,11 @@ public class DetailPengajuanDeposit extends AppCompatActivity implements Locatio
         super.onResume();
     }
 
-    @Override
+    /*@Override
     protected void onDestroy() {
-        printer.startService();
+        printer.stopService();
         super.onDestroy();
-    }
+    }*/
 
     private void getDataPengajuan() {
 

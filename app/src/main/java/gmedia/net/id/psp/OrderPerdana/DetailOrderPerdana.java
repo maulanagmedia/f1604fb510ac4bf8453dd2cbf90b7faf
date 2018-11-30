@@ -199,11 +199,11 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
         MockLocChecker checker = new MockLocChecker(DetailOrderPerdana.this);
     }
 
-    @Override
+    /*@Override
     protected void onDestroy() {
-        printer.startService();
+        printer.stopService();
         super.onDestroy();
-    }
+    }*/
 
     private void initUI() {
 

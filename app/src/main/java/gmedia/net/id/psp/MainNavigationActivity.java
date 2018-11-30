@@ -28,6 +28,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.leonardus.irfan.bluetoothprinter.PspPrinter;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.RuntimePermissionsActivity;
@@ -82,6 +83,7 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
     private String link = "";
     private boolean updateRequired = false;
     private AlertDialog dialogVersion;
+    private PspPrinter printer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,8 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
         setSupportActionBar(toolbar);
         context = this;
         dialogActive = false;
+        printer = new PspPrinter(context);
+        printer.startService();
 
         if (ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.WRITE_SETTINGS) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
@@ -130,6 +134,8 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
             if(bundle.getBoolean("exit", false)){
                 exitState = true;
                 //finish();
+
+                printer.stopService();
                 Intent startMain = new Intent(Intent.ACTION_MAIN);
                 startMain.addCategory(Intent.CATEGORY_HOME);
                 startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

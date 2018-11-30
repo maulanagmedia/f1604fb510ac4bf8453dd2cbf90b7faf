@@ -96,11 +96,11 @@ public class PenjualanHariIni extends AppCompatActivity {
         getPenjualanHariIni();
     }
 
-    @Override
+    /*@Override
     protected void onDestroy() {
-        printer.startService();
+        printer.stopService();
         super.onDestroy();
-    }
+    }*/
 
     private void getPenjualanHariIni() {
 

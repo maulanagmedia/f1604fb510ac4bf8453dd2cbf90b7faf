@@ -41,7 +41,12 @@ public class PspPrinter extends BluetoothPrinter {
 
     public boolean isPrinterReady(){
 
-        return bluetoothDevice != null;
+        boolean isSocketConncet = false;
+        if(socket != null){
+
+            isSocketConncet = socket.isConnected();
+        }
+        return bluetoothDevice != null && isSocketConncet;
     }
 
     // this will send text data to be printed by the bluetooth printer
@@ -150,6 +155,8 @@ public class PspPrinter extends BluetoothPrinter {
             outputStream.write(PrintFormatter.NEW_LINE);
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(context, "Koneksi printer terputus, harap koneksi ulang bluetooth anda", Toast.LENGTH_LONG).show();
+            stopService();
         }
     }
 
@@ -258,6 +265,8 @@ public class PspPrinter extends BluetoothPrinter {
             outputStream.write(PrintFormatter.NEW_LINE);
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(context, "Koneksi printer terputus, harap koneksi ulang bluetooth anda", Toast.LENGTH_LONG).show();
+            stopService();
         }
     }
 

@@ -31,7 +31,6 @@ import android.widget.Toast;
 
 import com.leonardus.irfan.bluetoothprinter.Model.Item;
 import com.leonardus.irfan.bluetoothprinter.Model.Transaksi;
-import com.leonardus.irfan.bluetoothprinter.PspPrinter;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.ItemValidation;

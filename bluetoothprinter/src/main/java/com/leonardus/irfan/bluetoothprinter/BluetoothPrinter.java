@@ -51,9 +51,9 @@ public class BluetoothPrinter {
     Context context;
 
     public BluetoothAdapter bluetoothAdapter;
-    private BluetoothSocket socket;
-    BluetoothDevice bluetoothDevice;
-    OutputStream outputStream;
+    public static BluetoothSocket socket;
+    public static BluetoothDevice bluetoothDevice;
+    public static OutputStream outputStream;
     private InputStream inputStream;
     private ProgressBar progressbar;
     private Button btn_devices;

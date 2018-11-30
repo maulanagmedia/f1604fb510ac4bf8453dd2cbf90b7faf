@@ -90,11 +90,11 @@ public class HistoryDirectSelling extends AppCompatActivity {
         }
     }
 
-    @Override
+    /*@Override
     protected void onDestroy() {
         printer.stopService();
         super.onDestroy();
-    }
+    }*/
 
     private void getData() {
 

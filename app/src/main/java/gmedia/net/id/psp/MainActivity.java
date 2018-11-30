@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.leonardus.irfan.bluetoothprinter.PspPrinter;
 import com.maulana.custommodul.SessionManager;
 
 import gmedia.net.id.psp.DaftarPiutang.DaftarPiutang;
@@ -34,17 +35,24 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout llOrderPulsa, llOrderPerdana, llPenjualanPulsa, llPenjualanPerdana, llSemuaPenjualan, llpelunasanPenjualan, llDaftarPiutang;
     SessionManager session;
     private LinearLayout llStokSales;
+    private PspPrinter printer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        printer = new PspPrinter(this);
+        printer.startService();
+
         //Check close statement
         doubleBackToExitPressedOnce = false;
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             if(bundle.getBoolean("exit", false)){
+
+                printer.stopService();
+
                 exitState = true;
                 finish();
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
