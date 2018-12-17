@@ -476,8 +476,14 @@ public class DetailMarketSurveyMD extends AppCompatActivity implements LocationL
                 jDataSurvey.put("penjualan_medium_"+item.getItem5(), ((item.getItem12().equals("")) ? "0" : item.getItem12()));
                 jDataSurvey.put("penjualan_high_"+item.getItem5(), ((item.getItem13().equals("")) ? "0" : item.getItem13()));
 
-                if(item.getItem4().isEmpty() || item.getItem7().isEmpty() || item.getItem8().isEmpty() || item.getItem9().isEmpty()
-                        || item.getItem10().isEmpty() || item.getItem11().isEmpty() || item.getItem12().isEmpty() || item.getItem13().isEmpty()){
+                if(item.getItem4().isEmpty()
+                        || item.getItem7().isEmpty()
+                        || item.getItem8().isEmpty()
+                        || item.getItem9().isEmpty()
+                        || item.getItem10().isEmpty()
+                        || item.getItem11().isEmpty()
+                        || item.getItem12().isEmpty()
+                        || item.getItem13().isEmpty()){
 
                     isEmpty = true;
                 }

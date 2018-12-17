@@ -35,6 +35,7 @@ public class PspPrinter extends BluetoothPrinter {
             (ex : btPrint.stopService())
     */
 
+    public static String npwpToko = "";
     public PspPrinter(Context context){
         super(context);
     }
@@ -76,10 +77,11 @@ public class PspPrinter extends BluetoothPrinter {
             outputStream.write(PrintFormatter.NEW_LINE);
 
             outputStream.write(PrintFormatter.ALIGN_LEFT);
-            outputStream.write(String.format("Reseller    :  %s\n", transaksi.getOutlet()).getBytes());
-            outputStream.write(String.format("Sales       :  %s\n", transaksi.getSales()).getBytes());
-            outputStream.write(String.format("No. Nota    :  %s\n", transaksi.getNo_nota()).getBytes());
-            outputStream.write(String.format("Tgl Nota    :  %s\n", transaksi.getTglTransaksi()).getBytes());
+            outputStream.write(String.format("NPWP     : %s\n", npwpToko).getBytes());
+            outputStream.write(String.format("Reseller : %s\n", transaksi.getOutlet()).getBytes());
+            outputStream.write(String.format("Sales    : %s\n", transaksi.getSales()).getBytes());
+            outputStream.write(String.format("No. Nota : %s\n", transaksi.getNo_nota()).getBytes());
+            outputStream.write(String.format("Tgl Nota : %s\n", transaksi.getTglTransaksi()).getBytes());
 
             outputStream.write(PrintFormatter.NEW_LINE);
 
@@ -120,10 +122,14 @@ public class PspPrinter extends BluetoothPrinter {
             }
 
             transaksi.setTunai(jum); //tunai selalu sama dengan jumlah
-            String jum_string, tunai_string;
+            String jum_string = "", tunai_string = "", dpp = "", ppn = "";
             //String kembali_string;
             jum_string = RupiahFormatter.getRupiah(jum);
             tunai_string = RupiahFormatter.getRupiah(transaksi.getTunai());
+            double dppDouble = jum/1.1;
+            dpp = RupiahFormatter.getRupiah(Math.round(dppDouble));
+            ppn = RupiahFormatter.getRupiah(Math.round(jum - dppDouble));
+
             //kembali_string = RupiahFormatter.getRupiah(transaksi.getTunai() - jum);
 
             outputStream.write(PrintFormatter.ALIGN_RIGHT);
@@ -137,6 +143,10 @@ public class PspPrinter extends BluetoothPrinter {
                 outputStream.write(" ".getBytes());
             }
             outputStream.write(kembali_string.getBytes());*/
+
+            outputStream.write(PrintFormatter.NEW_LINE);
+            outputStream.write(PrintFormatter.ALIGN_LEFT);
+            outputStream.write(String.format(Locale.getDefault(), "\nDPP : %s PPN : %s", dpp, ppn).getBytes());
 
             outputStream.write(PrintFormatter.NEW_LINE);
             outputStream.write(PrintFormatter.NEW_LINE);
@@ -186,10 +196,11 @@ public class PspPrinter extends BluetoothPrinter {
             outputStream.write(PrintFormatter.NEW_LINE);
 
             outputStream.write(PrintFormatter.ALIGN_LEFT);
-            outputStream.write(String.format("Nama        :  %s\n", transaksi.getOutlet()).getBytes());
-            outputStream.write(String.format("Sales       :  %s\n", transaksi.getSales()).getBytes());
-            outputStream.write(String.format("No. Nota    :  %s\n", transaksi.getNo_nota()).getBytes());
-            outputStream.write(String.format("Tgl Nota    :  %s\n", transaksi.getTglTransaksi()).getBytes());
+            outputStream.write(String.format("NPWP     : %s\n", npwpToko).getBytes());
+            outputStream.write(String.format("Nama     : %s\n", transaksi.getOutlet()).getBytes());
+            outputStream.write(String.format("Sales    : %s\n", transaksi.getSales()).getBytes());
+            outputStream.write(String.format("No. Nota : %s\n", transaksi.getNo_nota()).getBytes());
+            outputStream.write(String.format("Tgl Nota : %s\n", transaksi.getTglTransaksi()).getBytes());
 
             outputStream.write(PrintFormatter.NEW_LINE);
 
@@ -230,10 +241,14 @@ public class PspPrinter extends BluetoothPrinter {
             }
 
             transaksi.setTunai(jum); //tunai selalu sama dengan jumlah
-            String jum_string, tunai_string;
+            String jum_string = "", tunai_string = "", dpp = "", ppn = "";
             //String kembali_string;
             jum_string = RupiahFormatter.getRupiah(jum);
             tunai_string = RupiahFormatter.getRupiah(transaksi.getTunai());
+
+            double dppDouble = jum/1.1;
+            dpp = RupiahFormatter.getRupiah(Math.round(dppDouble));
+            ppn = RupiahFormatter.getRupiah(Math.round(jum - dppDouble));
             //kembali_string = RupiahFormatter.getRupiah(transaksi.getTunai() - jum);
 
             outputStream.write(PrintFormatter.ALIGN_RIGHT);
@@ -247,6 +262,10 @@ public class PspPrinter extends BluetoothPrinter {
                 outputStream.write(" ".getBytes());
             }
             outputStream.write(kembali_string.getBytes());*/
+
+            outputStream.write(PrintFormatter.NEW_LINE);
+            outputStream.write(PrintFormatter.ALIGN_LEFT);
+            outputStream.write(String.format(Locale.getDefault(), "\nDPP : %s PPN : %s", dpp, ppn).getBytes());
 
             outputStream.write(PrintFormatter.NEW_LINE);
             outputStream.write(PrintFormatter.NEW_LINE);

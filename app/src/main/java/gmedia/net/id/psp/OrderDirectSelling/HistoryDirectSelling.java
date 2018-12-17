@@ -196,11 +196,14 @@ public class HistoryDirectSelling extends AppCompatActivity {
                     List<CustomItem> items = new ArrayList<CustomItem>();
                     String keyword = actvKeyword.getText().toString().trim().toUpperCase();
 
-                    for (CustomItem item: tableList){
+                    if(tableList != null){
 
-                        if(item.getItem3().toUpperCase().contains(keyword)
-                                || item.getItem7().toUpperCase().contains(keyword)
-                                || item.getItem9().toUpperCase().contains(keyword)) items.add(item);
+                        for (CustomItem item: tableList){
+
+                            if(item.getItem3().toUpperCase().contains(keyword)
+                                    || item.getItem7().toUpperCase().contains(keyword)
+                                    || item.getItem9().toUpperCase().contains(keyword)) items.add(item);
+                        }
                     }
 
                     getTableList(items);

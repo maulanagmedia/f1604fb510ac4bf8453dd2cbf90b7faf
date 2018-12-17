@@ -8,8 +8,8 @@ android {
         applicationId "gmedia.net.id.psp"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 45
-        versionName '26.13.1'
+        versionCode 46
+        versionName '26.13.3'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -49,5 +49,6 @@ dependencies {
     // for crashlitycs
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation project(':bluetoothprinter')
+    implementation 'com.android.support:design:26.1.0'
 }
 apply plugin: 'com.google.gms.google-services'

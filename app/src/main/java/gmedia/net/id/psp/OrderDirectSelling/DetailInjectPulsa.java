@@ -1044,7 +1044,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             jBody.put("sender", sender);
             jBody.put("balasan", text);
             jBody.put("flag_order", lastFlagOrder);
-            jBody.put("nomor", edtNomor.getText().toString());
+            jBody.put("nomor", generalizePhoneNumber(edtNomor.getText().toString()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1067,19 +1067,28 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
                             String harga = response.getJSONObject("response").getString("harga");
                             String nomor = response.getJSONObject("response").getString("nomor");
-                            lastSN = response.getJSONObject("response").getString("sn");
-                            edtNomor.setText(nomor);
-                            selectedHarga = harga;
-                            edtNominal.setText(harga);
+                            String outstanding = response.getJSONObject("response").getString("outstanding");
 
-                            if(!isKonfirmasiManual && isSaveButtonClicked){
+                            // Validasi pertama, pakai nomor sama atau tidak
+                            // validasi kedua, jika nomor sama dan ada outstanding, batalkan
+                            if(generalizePhoneNumber(nomor).equals(generalizePhoneNumber(edtNomor.getText().toString()))
+                                    && !outstanding.equals("1")){
 
-                                if(isOnSaving){
-                                    Toast.makeText(context, "Harap tunggu hingga proses selesai", Toast.LENGTH_LONG).show();
-                                    return;
+                                lastSN = response.getJSONObject("response").getString("sn");
+
+                                edtNomor.setText(nomor);
+                                selectedHarga = harga;
+                                edtNominal.setText(harga);
+
+                                if(!isKonfirmasiManual && isSaveButtonClicked){
+
+                                    if(isOnSaving){
+                                        Toast.makeText(context, "Harap tunggu hingga proses selesai", Toast.LENGTH_LONG).show();
+                                        return;
+                                    }
+
+                                    saveData();
                                 }
-
-                                saveData();
                             }
                         }
                     }
@@ -1154,7 +1163,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             jDataDetail.put("kdcus", kdcus);
             jDataDetail.put("nama", nama);
             jDataDetail.put("alamat", alamat);
-            jDataDetail.put("nomor", edtNomor.getText().toString());
+            jDataDetail.put("nomor", generalizePhoneNumber(edtNomor.getText().toString()));
             jDataDetail.put("nomor_event", nomor);
             jDataDetail.put("jarak", jarak);
             jDataDetail.put("sn", lastSN);
@@ -1393,6 +1402,8 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                 isKonfirmasiManual = false;
                 lastFlagOrder = selectedItemOrder.getItem5();
                 lastKodebrg = selectedItemOrder.getItem1();
+
+                //Toast.makeText(context, generalizePhoneNumber(edtNomor.getText().toString()), Toast.LENGTH_LONG).show();
 
                 AlertDialog dialog = new AlertDialog.Builder(context)
                         .setTitle("Konfirmasi")
@@ -1691,6 +1702,27 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             e.printStackTrace();
         }
 
+    }
+
+    private static String generalizePhoneNumber(String number){
+
+        String result = number;
+
+        if(number.length() > 3){
+
+            if(number.startsWith("+62")){
+
+                result = number.replace("+62", "0");
+            }else if(number.startsWith("62")){
+
+                result = "0" + number.substring(2);
+            }else if(number.startsWith("8")){
+
+                result = "0" + number;
+            }
+        }
+
+        return result;
     }
 
     @Override

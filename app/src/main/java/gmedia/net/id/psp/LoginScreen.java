@@ -35,6 +35,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.leonardus.irfan.bluetoothprinter.PspPrinter;
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.RuntimePermissionsActivity;
@@ -467,6 +468,7 @@ public class LoginScreen extends RuntimePermissionsActivity {
                         String nikGa = response.getJSONObject("response").getString("nik_ga");
                         String area = response.getJSONObject("response").getString("kodearea");
                         String flag = response.getJSONObject("response").getString("flag");
+                        PspPrinter.npwpToko = response.getJSONObject("response").getString("npwp");
                         String statusSales = response.getJSONObject("response").getString("status");
                         String jabatan = response.getJSONObject("response").getString("status_bagian");
                         session.createLoginSession(nikGa,nik, nama ,edtUsername.getText().toString(),edtPassword.getText().toString(), (cbRemeber.isChecked())? "1": "0", jabatan,"", statusSales, area, flag);
