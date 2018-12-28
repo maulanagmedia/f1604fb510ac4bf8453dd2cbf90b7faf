@@ -88,7 +88,11 @@ public class ListReseller extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("kode"), jo.getString("nama"), jo.getString("nomor"), jo.getString("terakhir_order")));
+                            masterList.add(new CustomItem(
+                                    jo.getString("kode")
+                                    , jo.getString("nama")
+                                    , jo.getString("nomor")
+                                    , jo.getString("terakhir_order")));
                         }
                     }
 
