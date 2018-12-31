@@ -54,7 +54,7 @@ public class PenjualanHariIni extends AppCompatActivity {
     private ProgressBar pbProses;
     private ItemValidation iv = new ItemValidation();
     private SessionManager session;
-    private TextView tvTotal;
+    private TextView tvTotal, tvTotalDeposit;
     private String keyword = "";
     private List<CustomItem> masterList;
     private boolean firstLoad = true;
@@ -85,6 +85,7 @@ public class PenjualanHariIni extends AppCompatActivity {
         lvPenjualan = (ListView) findViewById(R.id.lv_penjualan);
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
         tvTotal = (TextView) findViewById(R.id.tv_total);
+        tvTotalDeposit = (TextView) findViewById(R.id.tv_total_deposit);
         session = new SessionManager(PenjualanHariIni.this);
         keyword = "";
     }
@@ -125,7 +126,7 @@ public class PenjualanHariIni extends AppCompatActivity {
                     String status = response.getJSONObject("metadata").getString("status");
                     masterList = new ArrayList<>();
 
-                    long total = 0, totalPerNama = 0;
+                    long total = 0, totalDeposit = 0, totalPerNama = 0;
                     String nama = "";
 
                     if(iv.parseNullInteger(status) == 200){
@@ -148,7 +149,12 @@ public class PenjualanHariIni extends AppCompatActivity {
                                     , jo.getString("status")));
 
                             if(!jo.getString("flag").toUpperCase().equals("MKIOS_TR") && !jo.getString("flag").toUpperCase().equals("TCASH_TR")){
-                                total += iv.parseNullLong(jo.getString("piutang"));
+                                if(jo.getString("app_flag").equals("1")){
+                                    total += iv.parseNullLong(jo.getString("piutang"));
+                                }else{
+                                    totalDeposit += iv.parseNullLong(jo.getString("piutang"));
+                                }
+
                             }
 
                             if(i < items.length() - 1){
@@ -179,6 +185,7 @@ public class PenjualanHariIni extends AppCompatActivity {
                     }
 
                     tvTotal.setText(iv.ChangeToRupiahFormat(total));
+                    tvTotalDeposit.setText(iv.ChangeToRupiahFormat(totalDeposit));
                     final List<CustomItem> tableList = new ArrayList<>(masterList);
                     getAutocompleteEvent(tableList);
                     getTableList(tableList);

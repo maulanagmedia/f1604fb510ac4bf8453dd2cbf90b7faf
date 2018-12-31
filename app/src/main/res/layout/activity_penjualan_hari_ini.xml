@@ -62,29 +62,72 @@
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Total"
-            android:textStyle="bold"
-            android:textColor="@color/color_black"/>
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/default_margin_small"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total Penjualan dari Deposit"
+                    android:textSize="11sp"
+                    android:textColor="@color/color_black"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Rp 0"
+                    android:id="@+id/tv_total_deposit"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:gravity="right"
+                    android:textColor="@color/color_black"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total Setoran"
+                    android:textSize="11sp"
+                    android:textColor="@color/color_black"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Rp 0"
+                    android:id="@+id/tv_total"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:gravity="right"
+                    android:textColor="@color/color_black"/>
+
+            </LinearLayout>
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Rp 0"
-            android:id="@+id/tv_total"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:gravity="right"
-            android:textColor="@color/color_black"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="11sp"
+            android:textSize="10sp"
+            android:layout_marginTop="@dimen/default_margin_small"
             android:textColor="@color/color_black"
             android:text="* Transaksi yang pending/ gagal tidak dihitung pada total"/>
+
     </LinearLayout>
 
     <LinearLayout

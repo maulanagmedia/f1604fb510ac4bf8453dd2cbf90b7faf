@@ -843,7 +843,7 @@ public class DetailPengajuanDeposit extends AppCompatActivity implements Locatio
 
                                         if(printer.isPrinterReady()){
 
-                                            printer.print(transaksi);
+                                            printer.print(transaksi, true);
 
                                         }else{
 

@@ -978,12 +978,12 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
 
                     List<Item> items = new ArrayList<>();
 
-                    if(!edtS5.getText().toString().equals("0")) items.add(new Item("Denom 5k", edtS5.getText().toString(), total5));
-                    if(!edtS10.getText().toString().equals("0")) items.add(new Item("Denom 10k", edtS10.getText().toString(), total10));
-                    if(!edtS20.getText().toString().equals("0")) items.add(new Item("Denom 20k", edtS20.getText().toString(), total20));
-                    if(!edtS25.getText().toString().equals("0")) items.add(new Item("Denom 25k", edtS25.getText().toString(), total25));
-                    if(!edtS50.getText().toString().equals("0")) items.add(new Item("Denom 50k", edtS50.getText().toString(), total50));
-                    if(!edtS100.getText().toString().equals("0")) items.add(new Item("Denom 100k", edtS100.getText().toString(), total100));
+                    if(!edtS5.getText().toString().equals("0")) items.add(new Item("5k @"+tvHargaS5.getText().toString(), edtS5.getText().toString(), total5));
+                    if(!edtS10.getText().toString().equals("0")) items.add(new Item("10k @"+tvHargaS10.getText().toString(), edtS10.getText().toString(), total10));
+                    if(!edtS20.getText().toString().equals("0")) items.add(new Item("20k @"+tvHargaS20.getText().toString(), edtS20.getText().toString(), total20));
+                    if(!edtS25.getText().toString().equals("0")) items.add(new Item("25k @"+tvHargaS25.getText().toString(), edtS25.getText().toString(), total25));
+                    if(!edtS50.getText().toString().equals("0")) items.add(new Item("50k @"+tvHargaS50.getText().toString(), edtS50.getText().toString(), total50));
+                    if(!edtS100.getText().toString().equals("0")) items.add(new Item("100k @"+tvHargaS100.getText().toString(), edtS100.getText().toString(), total100));
                     if(!edtBulk.getText().toString().equals("0")) items.add(new Item("Bulk", "-", totalBulk));
 
                     Calendar date = Calendar.getInstance();

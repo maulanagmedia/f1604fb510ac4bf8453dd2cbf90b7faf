@@ -876,7 +876,7 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                     for(CustomItem ccid: ccidList){
 
                         boolean isExist = false;
-                        String key = ccid.getItem3() +" "+ iv.ChangeToCurrencyFormat(ccid.getItem4());
+                        String key = ccid.getItem3() +" @"+ iv.ChangeToCurrencyFormat(ccid.getItem4());
 
                         if(hCCID.containsKey(key)){
                             isExist = true;

@@ -2,6 +2,7 @@ package gmedia.net.id.psp.NavPengajuanDeposit;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -22,7 +23,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,9 +44,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import gmedia.net.id.psp.NavPengajuanDeposit.Adapter.ListHistoryDepositAdapter;
 import gmedia.net.id.psp.R;
@@ -65,6 +73,11 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
     private String TAG = "test";
     private String nik = "";
     private PspPrinter printer;
+    private TextView tvFrom, tvTo;
+    private String dateFrom, dateTo;
+    private AutoCompleteTextView actvOutlet;
+    private ImageButton ibShow;
+    private TextView tvTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +96,7 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
         setTitle("History Deposit");
 
         initUI();
+        initEvent();
     }
 
     private void initUI() {
@@ -91,9 +105,102 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
         footerList = li.inflate(R.layout.footer_list, null);
         lvDeposit = (ListView) findViewById(R.id.lv_deposit);
         pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
+        tvFrom = (TextView) findViewById(R.id.tv_from);
+        tvTo = (TextView) findViewById(R.id.tv_to);
+        tvTotal = (TextView) findViewById(R.id.tv_total);
+        ibShow = (ImageButton) findViewById(R.id.ib_show);
         session = new SessionManager(context);
         nik = session.getUserDetails().get(SessionManager.TAG_UID);
+        actvOutlet = (AutoCompleteTextView) findViewById(R.id.actv_outlet);
+        dateFrom = iv.sumDate(iv.getCurrentDate(FormatItem.formatDateDisplay), -7, FormatItem.formatDateDisplay) ;
+        dateTo = iv.getCurrentDate(FormatItem.formatDateDisplay);
+        keyword = "";
+        tvFrom.setText(dateFrom);
+        tvTo.setText(dateTo);
 
+    }
+
+    private void initEvent(){
+
+        tvFrom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Calendar customDate;
+                SimpleDateFormat sdf = new SimpleDateFormat(FormatItem.formatDateDisplay);
+
+                Date dateValue = null;
+
+                try {
+                    dateValue = sdf.parse(dateFrom);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                customDate = Calendar.getInstance();
+                final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+                        customDate.set(Calendar.YEAR,year);
+                        customDate.set(Calendar.MONTH,month);
+                        customDate.set(Calendar.DATE,date);
+
+                        SimpleDateFormat sdFormat = new SimpleDateFormat(FormatItem.formatDateDisplay, Locale.US);
+                        dateFrom = sdFormat.format(customDate.getTime());
+                        tvFrom.setText(dateFrom);
+                    }
+                };
+
+                SimpleDateFormat yearOnly = new SimpleDateFormat("yyyy");
+                new DatePickerDialog(HistoryPengajuanDeposit.this ,date , iv.parseNullInteger(yearOnly.format(dateValue)),dateValue.getMonth(),dateValue.getDate()).show();
+            }
+        });
+
+        tvTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Calendar customDate;
+                SimpleDateFormat sdf = new SimpleDateFormat(FormatItem.formatDateDisplay);
+
+                Date dateValue = null;
+
+                try {
+                    dateValue = sdf.parse(dateTo);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                customDate = Calendar.getInstance();
+                final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+                        customDate.set(Calendar.YEAR,year);
+                        customDate.set(Calendar.MONTH,month);
+                        customDate.set(Calendar.DATE,date);
+
+                        SimpleDateFormat sdFormat = new SimpleDateFormat(FormatItem.formatDateDisplay, Locale.US);
+                        dateTo = sdFormat.format(customDate.getTime());
+                        tvTo.setText(dateTo);
+                    }
+                };
+
+                SimpleDateFormat yearOnly = new SimpleDateFormat("yyyy");
+                new DatePickerDialog(context,date , iv.parseNullInteger(yearOnly.format(dateValue)),dateValue.getMonth(),dateValue.getDate()).show();
+            }
+        });
+
+        ibShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                keyword = actvOutlet.getText().toString();
+                dateFrom = tvFrom.getText().toString();
+                dateTo = tvTo.getText().toString();
+                start = 0;
+                iv.hideSoftKey(context);
+                getDataPengajuan();
+            }
+        });
     }
 
     @Override
@@ -114,6 +221,8 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
         try {
             jBody.put("nik", nik);
             jBody.put("keyword", keyword);
+            jBody.put("datestart", iv.ChangeFormatDateString(dateFrom, FormatItem.formatDateDisplay, FormatItem.formatDate));
+            jBody.put("dateend", iv.ChangeFormatDateString(dateTo, FormatItem.formatDateDisplay, FormatItem.formatDate));
             jBody.put("start", String.valueOf(start));
             jBody.put("end", String.valueOf(count));
         } catch (JSONException e) {
@@ -254,7 +363,7 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
 
                                 if(printer.isPrinterReady()){
 
-                                    printer.print(transaksi);
+                                    printer.print(transaksi, true);
 
                                 }else{
 
@@ -286,6 +395,8 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
         try {
             jBody.put("nik", nik);
             jBody.put("keyword", keyword);
+            jBody.put("datestart", iv.ChangeFormatDateString(dateFrom, FormatItem.formatDateDisplay, FormatItem.formatDate));
+            jBody.put("dateend", iv.ChangeFormatDateString(dateTo, FormatItem.formatDateDisplay, FormatItem.formatDate));
             jBody.put("start", String.valueOf(start));
             jBody.put("end", String.valueOf(count));
         } catch (JSONException e) {
@@ -335,7 +446,7 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
         });
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.menu_search);
@@ -385,7 +496,7 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
         };
         MenuItemCompat.setOnActionExpandListener(searchItem, expandListener);
         return super.onCreateOptionsMenu(menu);
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
