@@ -234,6 +234,7 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
 
                 isLoading = false;
                 pbLoading.setVisibility(View.GONE);
+                double total = 0;
                 try {
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
@@ -255,6 +256,7 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
                                     jo.getString("status"),
                                     jo.getString("keterangan")));
 
+                            total += iv.parseNullDouble(jo.getString("debit"));
                         }
                     }
 
@@ -263,6 +265,8 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
                     setAdapter(null);
                     e.printStackTrace();
                 }
+
+                tvTotal.setText(iv.ChangeToCurrencyFormat(iv.doubleToString(total)));
             }
 
             @Override

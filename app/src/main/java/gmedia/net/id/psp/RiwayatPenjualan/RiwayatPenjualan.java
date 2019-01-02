@@ -67,7 +67,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
     private ProgressBar pbProses;
     private ItemValidation iv = new ItemValidation();
     private SessionManager session;
-    private TextView tvTotal;
+    private TextView tvTotal, tvTotalDeposit, tvTotalSales;
     private String keyword = "";
     private List<CustomItem> masterList, salesList;
     private boolean firstLoad = true;
@@ -117,6 +117,8 @@ public class RiwayatPenjualan extends AppCompatActivity {
         tvFrom = (TextView) findViewById(R.id.tv_from);
         tvTo = (TextView) findViewById(R.id.tv_to);
         tvTotal = (TextView) findViewById(R.id.tv_total);
+        tvTotalDeposit = (TextView) findViewById(R.id.tv_total_deposit);
+        tvTotalSales = (TextView) findViewById(R.id.tv_total_sales);
         ibShow = (ImageButton) findViewById(R.id.ib_show);
         llTop = (LinearLayout) findViewById(R.id.ll_top);
         spSales = (Spinner) findViewById(R.id.sp_sales);
@@ -409,7 +411,7 @@ public class RiwayatPenjualan extends AppCompatActivity {
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
 
-                    long total = 0, totalPerNama = 0;
+                    long total = 0, totalPerNama = 0, totalDeposit = 0, totalSales = 0;
                     String nama = "";
                     String lastTaggal = "";
 
@@ -440,6 +442,13 @@ public class RiwayatPenjualan extends AppCompatActivity {
 
                             total += iv.parseNullLong(jo.getString("piutang"));
 
+                            if(jo.getString("app_flag").equals("0")){
+
+                                totalDeposit += iv.parseNullLong(jo.getString("piutang"));
+                            }else{
+                                totalSales += iv.parseNullLong(jo.getString("piutang"));
+                            }
+
                             if(i < items.length() - 1){
 
                                 JSONObject jo2 = items.getJSONObject(i+1);
@@ -462,6 +471,8 @@ public class RiwayatPenjualan extends AppCompatActivity {
                     }
 
                     tvTotal.setText(iv.ChangeToRupiahFormat(total));
+                    tvTotalDeposit.setText(iv.ChangeToRupiahFormat(totalDeposit));
+                    tvTotalSales.setText(iv.ChangeToRupiahFormat(totalSales));
                     final List<CustomItem> tableList = new ArrayList<>(masterList);
                     getAutocompleteEvent(tableList);
                     getTableList(tableList);
