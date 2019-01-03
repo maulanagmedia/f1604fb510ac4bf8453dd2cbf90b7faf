@@ -8,14 +8,14 @@ android {
         applicationId "gmedia.net.id.psp"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 46
-        versionName '26.13.3'
+        versionCode 48
+        versionName '26.14.1'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

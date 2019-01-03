@@ -1110,27 +1110,51 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
         List<CustomItem> orderList = new ArrayList<>();
 
         if(iv.parseNullDouble(edtS5.getText().toString()) > 0){
-            orderList.add(new CustomItem("V5","5", edtS5.getText().toString(), iv.doubleToStringRound(total5)));
+            orderList.add(new CustomItem("V5"
+                    ,"5"
+                    ,edtS5.getText().toString()
+                    ,iv.doubleToStringRound(total5)
+                    ,tvHargaS5.getText().toString()));
         }
 
         if(iv.parseNullDouble(edtS10.getText().toString()) > 0){
-            orderList.add(new CustomItem("V10","10", edtS10.getText().toString(), iv.doubleToStringRound(total10)));
+            orderList.add(new CustomItem("V10"
+                    ,"10"
+                    ,edtS10.getText().toString()
+                    ,iv.doubleToStringRound(total10)
+                    ,tvHargaS10.getText().toString()));
         }
 
         if(iv.parseNullDouble(edtS20.getText().toString()) > 0){
-            orderList.add(new CustomItem("V20","20", edtS20.getText().toString(), iv.doubleToStringRound(total20)));
+            orderList.add(new CustomItem("V20"
+                    ,"20"
+                    ,edtS20.getText().toString()
+                    ,iv.doubleToStringRound(total20)
+                    ,tvHargaS20.getText().toString()));
         }
 
         if(iv.parseNullDouble(edtS25.getText().toString()) > 0){
-            orderList.add(new CustomItem("V25","25", edtS25.getText().toString(), iv.doubleToStringRound(total25)));
+            orderList.add(new CustomItem("V25"
+                    ,"25"
+                    ,edtS25.getText().toString()
+                    ,iv.doubleToStringRound(total25)
+                    ,tvHargaS25.getText().toString()));
         }
 
         if(iv.parseNullDouble(edtS50.getText().toString()) > 0){
-            orderList.add(new CustomItem("V50","50", edtS50.getText().toString(), iv.doubleToStringRound(total50)));
+            orderList.add(new CustomItem("V50"
+                    ,"50"
+                    ,edtS50.getText().toString()
+                    ,iv.doubleToStringRound(total50)
+                    ,tvHargaS50.getText().toString()));
         }
 
         if(iv.parseNullDouble(edtS100.getText().toString()) > 0){
-            orderList.add(new CustomItem("V100","100", edtS100.getText().toString(), iv.doubleToStringRound(total100)));
+            orderList.add(new CustomItem("V100"
+                    ,"100"
+                    ,edtS100.getText().toString()
+                    ,iv.doubleToStringRound(total100)
+                    ,tvHargaS100.getText().toString()));
         }
 
         jsonArray = new JSONArray();
@@ -1266,7 +1290,6 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             e.printStackTrace();
         }
 
-
         String url = ServerURL.saveMKIOS, method = "POST";
         if(editMode){
             try {
@@ -1318,7 +1341,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                         List<Item> items = new ArrayList<>();
                         for(CustomItem item :orderList){
 
-                            items.add(new Item("Denom "+item.getItem2(), item.getItem3(), iv.parseNullDouble(item.getItem4())));
+                            items.add(new Item(item.getItem2() + "k @" + item.getItem5(), item.getItem3(), iv.parseNullDouble(item.getItem4())));
                         }
 
                         if(iv.parseNullDouble(edtBulk.getText().toString()) > 0){
