@@ -348,18 +348,23 @@ public class BluetoothPrinter {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             BluetoothDevice selected_device = listDevices.get(position);
-            if(selected_device.getUuids()[0].getUuid().equals(BLUETOOTH_PRINTER_UUID)){
-                try{
-                    bluetoothDevice = selected_device;
-                    connectBluetooth();
-                    dialogDevices.dismiss();
+            try {
+
+                if(selected_device.getUuids()[0].getUuid().equals(BLUETOOTH_PRINTER_UUID)){
+                    try{
+                        bluetoothDevice = selected_device;
+                        connectBluetooth();
+                        dialogDevices.dismiss();
+                    }
+                    catch (IOException e){
+                        e.printStackTrace();
+                    }
                 }
-                catch (IOException e){
-                    e.printStackTrace();
+                else{
+                    Toast.makeText(context, "Device bukan Device Printer, coba Bluetooth lain", Toast.LENGTH_SHORT).show();
                 }
-            }
-            else{
-                Toast.makeText(context, "Device bukan Device Printer, coba Bluetooth lain", Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
     }

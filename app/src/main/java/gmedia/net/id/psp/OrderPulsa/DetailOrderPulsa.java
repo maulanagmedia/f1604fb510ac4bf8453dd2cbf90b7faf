@@ -620,6 +620,43 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
                             tvHargaS25.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(hargaS25)));
                             tvHargaS50.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(hargaS50)));
                             tvHargaS100.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(hargaS100)));
+
+                            if(jo.getString("status5").equals("1")){
+                                edtS5.setEnabled(true);
+                            }else{
+                                edtS5.setEnabled(false);
+                            }
+
+                            if(jo.getString("status10").equals("1")){
+                                edtS10.setEnabled(true);
+                            }else{
+                                edtS10.setEnabled(false);
+                            }
+
+                            if(jo.getString("status20").equals("1")){
+                                edtS20.setEnabled(true);
+                            }else{
+                                edtS20.setEnabled(false);
+                            }
+
+                            if(jo.getString("status25").equals("1")){
+                                edtS25.setEnabled(true);
+                            }else{
+                                edtS25.setEnabled(false);
+                            }
+
+                            if(jo.getString("status50").equals("1")){
+                                edtS50.setEnabled(true);
+                            }else{
+                                edtS50.setEnabled(false);
+                            }
+
+                            if(jo.getString("status100").equals("1")){
+                                edtS100.setEnabled(true);
+                            }else{
+                                edtS100.setEnabled(false);
+                            }
+
                             hitungTotal();
 
                             edtNamaRS.setText(namaRS);
