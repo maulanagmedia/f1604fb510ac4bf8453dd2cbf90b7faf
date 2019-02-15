@@ -95,9 +95,9 @@ public class LoginScreen extends RuntimePermissionsActivity {
                 LoginScreen.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 LoginScreen.this, android.Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 LoginScreen.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                LoginScreen.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                LoginScreen.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED /*|| ContextCompat.checkSelfPermission(
                 LoginScreen.this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                LoginScreen.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+                LoginScreen.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED*/) {
 
             LoginScreen.super.requestAppPermissions(new
                             String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -108,9 +108,9 @@ public class LoginScreen extends RuntimePermissionsActivity {
                             android.Manifest.permission.CAMERA,
                             android.Manifest.permission.WAKE_LOCK,
                             Manifest.permission.READ_PHONE_STATE,
-                            Manifest.permission.CALL_PHONE,
+                            Manifest.permission.CALL_PHONE/*,
                             Manifest.permission.RECEIVE_SMS,
-                            Manifest.permission.READ_SMS}, R.string
+                            Manifest.permission.READ_SMS*/}, R.string
                             .runtime_permissions_txt
                     , REQUEST_PERMISSIONS);
         }

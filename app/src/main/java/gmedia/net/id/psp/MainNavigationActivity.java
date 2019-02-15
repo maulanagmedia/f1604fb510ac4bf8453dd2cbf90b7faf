@@ -106,9 +106,9 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                 MainNavigationActivity.this, Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.WRITE_APN_SETTINGS) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                MainNavigationActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                MainNavigationActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED /*|| ContextCompat.checkSelfPermission(
                 MainNavigationActivity.this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                MainNavigationActivity.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+                MainNavigationActivity.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED*/) {
 
             MainNavigationActivity.super.requestAppPermissions(new
                             String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -120,9 +120,9 @@ public class MainNavigationActivity extends RuntimePermissionsActivity
                             Manifest.permission.WAKE_LOCK,
                             Manifest.permission.WRITE_APN_SETTINGS,
                             Manifest.permission.READ_PHONE_STATE,
-                            Manifest.permission.CALL_PHONE,
+                            Manifest.permission.CALL_PHONE/*,
                             Manifest.permission.RECEIVE_SMS,
-                            Manifest.permission.READ_SMS}, R.string
+                            Manifest.permission.READ_SMS*/}, R.string
                             .runtime_permissions_txt
                     , REQUEST_PERMISSIONS);
         }

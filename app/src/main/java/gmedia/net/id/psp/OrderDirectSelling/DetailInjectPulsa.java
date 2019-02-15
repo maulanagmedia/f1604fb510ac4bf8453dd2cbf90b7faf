@@ -998,6 +998,30 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
         if(!iv.isServiceRunning(context,USSDService.class)){
             startService(new Intent(context, USSDService.class));
         }
+
+        if(!checkNotificationEnabled()){
+
+            Toast.makeText(context, "Harap ijinkan aksesbilitas untuk menunjang berjalannya sistem", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(
+                    "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            startActivity(intent);
+        }
+    }
+
+    public boolean checkNotificationEnabled() {
+        try{
+            if(Settings.Secure.getString(getContentResolver(),
+                    "enabled_notification_listeners").contains(context.getPackageName()))
+            {
+                return true;
+            } else {
+                return false;
+            }
+
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static void addTambahBalasan(String sender, String text){
