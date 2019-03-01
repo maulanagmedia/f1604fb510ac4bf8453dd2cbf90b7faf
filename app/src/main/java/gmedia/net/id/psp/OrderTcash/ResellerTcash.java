@@ -53,7 +53,7 @@ public class ResellerTcash extends AppCompatActivity {
         );
 
         session = new SessionManager(ResellerTcash.this);
-        setTitle("Pilih Reseller TCash " +session.getLevel());
+        setTitle("Pilih Reseller Link Aja " +session.getLevel());
 
         initUI();
     }

@@ -140,7 +140,7 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
-        setTitle("Detail Tcash Order");
+        setTitle("Detail Link Aja Order");
 
         // getLocation update by google
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);

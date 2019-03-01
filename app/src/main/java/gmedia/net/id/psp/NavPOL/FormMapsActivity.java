@@ -648,6 +648,7 @@ public class FormMapsActivity extends FragmentActivity implements OnMapReadyCall
                 mMap.getUiSettings().setZoomControlsEnabled(true);
             }
 
+            /*
             mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                 @Override
                 public void onMarkerDragStart(Marker marker) {
@@ -677,6 +678,7 @@ public class FormMapsActivity extends FragmentActivity implements OnMapReadyCall
                     Log.d(TAG, "onMarkerDragEnd: " + latLng.latitude +" "+ latLng.longitude);
                 }
             });
+            */
         }
     }
 

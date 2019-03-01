@@ -311,7 +311,7 @@ public class PenjualanHariIni extends AppCompatActivity {
             }
 
             if(tcashTrList.size() > 0){
-                bufferList.add(new CustomItem("H", "Transaksi TCash"));
+                bufferList.add(new CustomItem("H", "Transaksi Link Aja"));
                 bufferList.addAll(tcashTrList);
             }
 
@@ -331,7 +331,7 @@ public class PenjualanHariIni extends AppCompatActivity {
             }
 
             if(tcashList.size() > 0){
-                bufferList.add(new CustomItem("H", "Penjualan TCash"));
+                bufferList.add(new CustomItem("H", "Penjualan Link Aja"));
                 bufferList.addAll(tcashList);
             }
 

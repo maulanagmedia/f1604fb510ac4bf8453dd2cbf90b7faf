@@ -115,7 +115,7 @@ public class PenjualanHariIniAdapter extends ArrayAdapter {
             if(item.getItem9() != null && item.getItem9().length() > 0){
 
                 holder.tvStatus.setVisibility(View.VISIBLE);
-                holder.tvStatus.setText(Html.fromHtml(item.getItem9()));
+                holder.tvStatus.setText(Html.fromHtml(item.getItem9().replace("TCash","Link Aja")));
 
             }else{
 

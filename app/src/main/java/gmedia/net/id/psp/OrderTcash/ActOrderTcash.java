@@ -81,7 +81,7 @@ public class ActOrderTcash extends AppCompatActivity {
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
-        setTitle("Penjualan Tcash");
+        setTitle("Penjualan Link Aja");
         session = new SessionManager(ActOrderTcash.this);
         context = this;
         printer = new PspPrinter(context);
