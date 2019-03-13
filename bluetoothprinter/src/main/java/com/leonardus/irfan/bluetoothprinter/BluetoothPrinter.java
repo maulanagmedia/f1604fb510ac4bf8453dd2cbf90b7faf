@@ -216,12 +216,22 @@ public class BluetoothPrinter {
         final Set<BluetoothDevice> paired = bluetoothAdapter.getBondedDevices();
         Object[] objectList = paired.toArray();
 
-        if(objectList.length > 0) {
-            for (Object device : objectList) {
-                BluetoothDevice bluetooth = (BluetoothDevice) device;
-                if(bluetooth.getUuids()[0].getUuid().equals(BLUETOOTH_PRINTER_UUID)){
-                    listDevicesData.add(bluetooth.getName() + "\n" + bluetooth.getAddress());
-                    listDevices.add(bluetooth);
+        if(objectList != null){
+
+            if(objectList.length > 0) {
+                for (Object device : objectList) {
+                    BluetoothDevice bluetooth = (BluetoothDevice) device;
+                    try {
+
+                        if(bluetooth.getUuids()[0].getUuid().equals(BLUETOOTH_PRINTER_UUID)){
+                            listDevicesData.add(bluetooth.getName() + "\n" + bluetooth.getAddress());
+                            listDevices.add(bluetooth);
+                        }
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                 }
             }
         }
