@@ -8,8 +8,8 @@ android {
         applicationId "gmedia.net.id.psp"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 53
-        versionName '26.16.0'
+        versionCode 54
+        versionName '26.17.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

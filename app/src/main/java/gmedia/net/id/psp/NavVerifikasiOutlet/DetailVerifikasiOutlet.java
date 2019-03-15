@@ -49,6 +49,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -99,11 +100,11 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
     private ItemValidation iv = new ItemValidation();
 
     // Location
-    private double latitude, longitude;
+    private double latitude, longitude, latitudeCurrent, longitudeCurrent;
     private LocationManager locationManager;
     private Criteria criteria;
     private String provider;
-    private Location location;
+    private Location location, locationCurrent;
     private final int REQUEST_PERMISSION_COARSE_LOCATION=2;
     private final int REQUEST_PERMISSION_FINE_LOCATION=3;
     public boolean isGPSEnabled = false;
@@ -656,6 +657,8 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
             jBody.put("data_customer", jDataCustomer);
             jBody.put("data_location", jDataLocation);
             jBody.put("data_images", jDataImages);
+            jBody.put("lat_admin", iv.doubleToStringFull(latitudeCurrent));
+            jBody.put("long_admin", iv.doubleToStringFull(longitudeCurrent));
             jBody.put("data_ktp", (bitmapKTP != null) ? ImageUtils.convert(bitmapKTP) : "");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -775,6 +778,8 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
             jBody.put("kdcus", kdcus);
             jBody.put("latitude", iv.doubleToStringFull(location.getLatitude()));
             jBody.put("longitude", iv.doubleToStringFull(location.getLongitude()));
+            jBody.put("lat_admin", iv.doubleToStringFull(latitudeCurrent));
+            jBody.put("long_admin", iv.doubleToStringFull(longitudeCurrent));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -889,6 +894,12 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
         location.setLatitude(latitude);
         location.setLongitude(longitude);
 
+        latitudeCurrent = 0;
+        longitudeCurrent = 0;
+        locationCurrent = new Location("set1");
+        locationCurrent.setLatitude(latitudeCurrent);
+        locationCurrent.setLongitude(longitudeCurrent);
+
         refreshMode = true;
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
@@ -914,7 +925,7 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
             @Override
             public void onClick(View view) {
 
-                refreshMode = true;
+                //refreshMode = true;
                 location = getLocation();
             }
         });
@@ -1104,6 +1115,7 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
                                 location.setLongitude(longitude);
                                 refreshMode = true;
                                 onLocationChanged(location);
+                                getLocation();
                             }
 
                             statusAktif = jo.getString("status");
@@ -1313,8 +1325,14 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
                 googleMap.clear();
                 googleMap.addMarker(new MarkerOptions()
                         .anchor(0.0f, 1.0f)
-                        .draggable(true)
+                        .snippet(edtNama.getText().toString())
                         .position(new LatLng(latitude, longitude)));
+
+                googleMap.addMarker(new MarkerOptions()
+                        .anchor(0.0f, 1.0f)
+                        .snippet("Anda")
+                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_person_point))
+                        .position(new LatLng(latitudeCurrent, longitudeCurrent)));
 
                 if (ActivityCompat.checkSelfPermission(DetailVerifikasiOutlet.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(DetailVerifikasiOutlet.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(DetailVerifikasiOutlet.this, "Please allow location access from your app permission", Toast.LENGTH_SHORT).show();
@@ -1331,7 +1349,7 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
 
                 updateKeterangan(position);
 
-                googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                /*googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                     @Override
                     public void onMarkerDragStart(Marker marker) {
 
@@ -1349,9 +1367,9 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
                         updateKeterangan(position);
                         Log.d(TAG, "onMarkerDragEnd: " + position.latitude +" "+ position.longitude);
                     }
-                });
+                });*/
 
-                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                /*googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(LatLng latLng) {
 
@@ -1363,7 +1381,7 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
                         updateKeterangan(latLng);
                         Log.d(TAG, "onMarkerDragEnd: " + latLng.latitude +" "+ latLng.longitude);
                     }
-                });
+                });*/
             }
         });
     }
@@ -1435,13 +1453,22 @@ public class DetailVerifikasiOutlet extends AppCompatActivity  implements Locati
     @Override
     public void onLocationChanged(Location location) {
 
+        latitudeCurrent = location.getLatitude();
+        longitudeCurrent = location.getLongitude();
+
+        //refreshMode = false;
         if(refreshMode){
+
             refreshMode = false;
             this.location = location;
             this.latitude = location.getLatitude();
             this.longitude = location.getLongitude();
             setPointMap();
+        }else{
+            setPointMap();
         }
+
+
     }
 
     @Override
