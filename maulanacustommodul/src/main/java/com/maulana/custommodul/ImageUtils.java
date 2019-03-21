@@ -54,7 +54,7 @@ public class ImageUtils {
     // General Image
     public void LoadRealImage(Context context, String uri, final ImageView image){
 
-        Picasso.with(context).load(Uri.parse(uri)).networkPolicy(NetworkPolicy.NO_CACHE).memoryPolicy(MemoryPolicy.NO_CACHE).into(image);
+        Picasso.with(context).load(Uri.parse(uri)).into(image);
     }
 
     public void LoadRealImage(Context context, String uri, final ImageView image, int thumb){

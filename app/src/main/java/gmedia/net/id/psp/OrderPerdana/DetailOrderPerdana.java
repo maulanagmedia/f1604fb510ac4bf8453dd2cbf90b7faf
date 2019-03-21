@@ -1526,13 +1526,69 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                     Log.d(TAG, "onActivityResult: Scan failed ");
                 } else {
 
-                    updateCCID(result.getContents());
+                    getBarangByCCID(result.getContents());
                 }
             } else {
                 // This is important, otherwise the result will not be passed to the fragment
                 super.onActivityResult(requestCode, resultCode, data);
             }
         }
+    }
+
+    private void getBarangByCCID(final String ccid) {
+
+        isLoading(true);
+        String nik = session.getUserDetails().get(SessionManager.TAG_UID);
+
+        JSONObject jBody = new JSONObject();
+        try {
+            jBody.put("ccid", ccid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getBarangByCCID, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                isLoading(false);
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray items = response.getJSONArray("response");
+                        for(int i  = 0; i < items.length(); i++){
+
+                            JSONObject jo = items.getJSONObject(i);
+
+                            updateCCID(jo.getString("ccid"));
+                            break;
+                        }
+
+                        if(items.length() == 0){
+
+                            Toast.makeText(context, "Barang "+ ccid +" tidak ditemukan di surat jalan hari ini", Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        Toast.makeText(context, "Barang tidak ditemukan di surat jalan hari ini", Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, "Terjadi kesalahan saat memuat data, harap ulangi", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+
+                isLoading(false);
+                Toast.makeText(context, "Terjadi kesalahan saat memuat data, harap ulangi", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void updateCCID(final String ccid){
@@ -1545,7 +1601,8 @@ public class DetailOrderPerdana extends AppCompatActivity implements LocationLis
                 boolean found = false;
                 try {
 
-                    finalCCID = ccid.substring(5,21);
+                    //finalCCID = ccid.substring(5,21);
+                    finalCCID = ccid;
                     //finalCCID = "0640000028317945";
 
                     int x = 0;

@@ -1006,6 +1006,7 @@ public class DetailDSPerdana extends AppCompatActivity implements LocationListen
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if(requestCode == REQUEST_CHECK_SETTINGS){
 
             if(resultCode == Activity.RESULT_CANCELED){
