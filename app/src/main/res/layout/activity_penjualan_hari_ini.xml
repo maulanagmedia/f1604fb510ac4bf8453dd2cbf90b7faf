@@ -103,6 +103,40 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Deposit LinkAja"
+                    android:textSize="11sp"
+                    android:textColor="@color/color_black"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Rp 0"
+                    android:id="@+id/tv_total_tcash"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:gravity="right"
+                    android:textColor="@color/color_black"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/default_margin_tiny"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="Total Setoran"
                     android:textSize="11sp"
                     android:textColor="@color/color_black"/>
@@ -118,6 +152,7 @@
                     android:textColor="@color/color_black"/>
 
             </LinearLayout>
+
         </LinearLayout>
 
         <TextView

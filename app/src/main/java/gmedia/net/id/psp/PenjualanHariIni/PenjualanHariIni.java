@@ -54,7 +54,7 @@ public class PenjualanHariIni extends AppCompatActivity {
     private ProgressBar pbProses;
     private ItemValidation iv = new ItemValidation();
     private SessionManager session;
-    private TextView tvTotal, tvTotalDeposit;
+    private TextView tvTotal, tvTotalTcash, tvTotalDeposit;
     private String keyword = "";
     private List<CustomItem> masterList;
     private boolean firstLoad = true;
@@ -85,6 +85,7 @@ public class PenjualanHariIni extends AppCompatActivity {
         lvPenjualan = (ListView) findViewById(R.id.lv_penjualan);
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
         tvTotal = (TextView) findViewById(R.id.tv_total);
+        tvTotalTcash = (TextView) findViewById(R.id.tv_total_tcash);
         tvTotalDeposit = (TextView) findViewById(R.id.tv_total_deposit);
         session = new SessionManager(PenjualanHariIni.this);
         keyword = "";
@@ -126,7 +127,7 @@ public class PenjualanHariIni extends AppCompatActivity {
                     String status = response.getJSONObject("metadata").getString("status");
                     masterList = new ArrayList<>();
 
-                    long total = 0, totalDeposit = 0, totalPerNama = 0;
+                    long total = 0, totalTcash = 0, totalDeposit = 0, totalPerNama = 0;
                     String nama = "";
 
                     if(iv.parseNullInteger(status) == 200){
@@ -150,7 +151,15 @@ public class PenjualanHariIni extends AppCompatActivity {
 
                             if(!jo.getString("flag").toUpperCase().equals("MKIOS_TR") && !jo.getString("flag").toUpperCase().equals("TCASH_TR")){
                                 if(jo.getString("app_flag").equals("1")){
-                                    total += iv.parseNullLong(jo.getString("piutang"));
+
+                                    if(jo.getString("flag").trim().toUpperCase().equals("TCASH")){
+
+                                        totalTcash += iv.parseNullLong(jo.getString("piutang"));
+                                    }else{
+
+                                        total += iv.parseNullLong(jo.getString("piutang"));
+                                    }
+
                                 }else{
                                     totalDeposit += iv.parseNullLong(jo.getString("piutang"));
                                 }
@@ -185,6 +194,8 @@ public class PenjualanHariIni extends AppCompatActivity {
                     }
 
                     tvTotal.setText(iv.ChangeToRupiahFormat(total));
+                    tvTotalTcash.setText(iv.ChangeToRupiahFormat(totalTcash));
+
                     tvTotalDeposit.setText(iv.ChangeToRupiahFormat(totalDeposit));
                     final List<CustomItem> tableList = new ArrayList<>(masterList);
                     getAutocompleteEvent(tableList);
