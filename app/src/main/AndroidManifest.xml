@@ -20,12 +20,6 @@
 
     <uses-feature android:name="android.hardware.camera" />
 
-    <!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the 'MyLocation' functionality.
-    -->
-
     <application
         android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
@@ -35,6 +29,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ActKonsinyasi.ActKonsinyasi" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -97,6 +93,42 @@
             android:name=".StokSales.StokSales"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ActKonsinyasi.InformasiBarang.OutletInfoBarang"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ActKonsinyasi.InformasiBarang.ActivityInfoBarang"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ActKonsinyasi.MutasiKonsinyasi.MutasiKonsinyasi"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ActKonsinyasi.MutasiKonsinyasi.OutletKonsinyasi"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ActKonsinyasi.Rekonsinyasi.OutletRekonsinyasi"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ActKonsinyasi.Rekonsinyasi.DetailRekonsinyasi"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ActKonsinyasi.MutasiKonsinyasi.BarangKonsinyasi"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ActKonsinyasi.MutasiKonsinyasi.DetailMutasiKonsinyasi"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ActKonsinyasi.Rekonsinyasi.Rekonsinyasi"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ActKonsinyasi.Retur.ActReturKonsinyasi"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ActKonsinyasi.Retur.OutletRetur"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ActKonsinyasi.Retur.DetailReturKonsinyasi"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".OrderPerdana.CustomerPerdana"
             android:screenOrientation="portrait" />
         <activity
@@ -123,9 +155,7 @@
         <activity
             android:name=".TambahCustomer.DetailCustomer"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <!-- Service -->
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- Service -->
         <service android:name=".NotificationUtil.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -144,8 +174,7 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/color_notif" />
 
-        <service android:name=".NotificationUtil.TokenGetter" />
-        <!-- Service -->
+        <service android:name=".NotificationUtil.TokenGetter" /> <!-- Service -->
         <activity
             android:name=".NavKomplain.DetailComplaint"
             android:screenOrientation="portrait" />
@@ -261,13 +290,13 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/config_service" />
         </service>
-
-        <!--<receiver android:name=".OrderDirectSelling.Service.SmsReceiverService">
+        <!--
+<receiver android:name=".OrderDirectSelling.Service.SmsReceiverService">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
-        </receiver>-->
-
+        </receiver>
+        -->
         <service
             android:name=".OrderDirectSelling.Service.NotificationService"
             android:label="@string/app_name"
@@ -345,7 +374,7 @@
         <activity
             android:name=".OrderDirectSelling.HistoryDirectSelling"
             android:screenOrientation="portrait" />
-        <activity android:name=".NavPengajuanDeposit.DetailCCIDDeposit"></activity>
+        <activity android:name=".NavPengajuanDeposit.DetailCCIDDeposit" />
     </application>
 
 </manifest>

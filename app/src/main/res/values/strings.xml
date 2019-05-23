@@ -10,6 +10,14 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="konfirmasi">Konfirmasi</string>
+    <string name="outlet">Outlet</string>
+    <string name="cari">Cari</string>
+    <string name="posisi_user">Posisi anda dengan outlet adalah :</string>
+    <string name="proses">Proses</string>
+    <string name="peta_outlet">Peta Outlet</string>
+    <string name="sales">Sales</string>
+    <string name="nama_customer">Nama Customer</string>
     <string name="title_activity_maps">Map</string>
     <string name="accessibility_description">Layanan ini untuk mengakses balasan USSD</string>
     <string name="title_activity_form_maps">Map</string>

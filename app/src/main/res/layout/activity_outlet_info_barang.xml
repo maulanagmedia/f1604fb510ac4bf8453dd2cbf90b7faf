@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActKonsinyasi.InformasiBarang.OutletInfoBarang">
+
+    <LinearLayout
+        android:id="@+id/ll_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/style_box_bordered_rounded"
+        android:layout_margin="@dimen/padding10"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/img_search"
+            android:contentDescription="@string/cari"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:padding="@dimen/padding8"
+            android:src="@drawable/search" />
+
+        <EditText
+            android:id="@+id/edt_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:background="@android:color/transparent"
+            android:ems="10"
+            android:hint="Nama Reseller"
+            android:inputType="textPersonName"
+            android:imeOptions="actionSearch"
+            android:padding="@dimen/padding10"
+            android:textSize="@dimen/text18" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_reseller"
+        android:layout_below="@id/ll_header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"/>
+
+</RelativeLayout>

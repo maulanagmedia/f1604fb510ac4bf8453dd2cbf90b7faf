@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActKonsinyasi.ActKonsinyasi"
+    android:layout_margin="@dimen/padding16">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_red"
+        android:gravity="center"
+        android:id="@+id/rl_mutasi"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/iv_l_1"
+            android:padding="@dimen/padding8"
+            android:layout_margin="@dimen/padding8"
+            android:src="@drawable/ic_mutasi_konsinyasi"
+            android:background="@drawable/bg_round_white"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_l_1"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/iv_r_1"
+            android:text="Mutasi Konsinyasi"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/text16"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/iv_r_1"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/padding5"
+            android:layout_margin="@dimen/padding8"
+            android:src="@drawable/right_arrow"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_red"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/padding8"
+        android:id="@+id/rl_rekonsinyasi"
+        app:layout_constraintTop_toBottomOf="@id/rl_mutasi">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/iv_l_2"
+            android:padding="@dimen/padding8"
+            android:layout_margin="@dimen/padding8"
+            android:src="@drawable/ic_note_pengajuan"
+            android:background="@drawable/bg_round_white"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_l_2"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/iv_r_2"
+            android:text="Rekon Stok Konsinyasi"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/text16"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/iv_r_2"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/padding5"
+            android:layout_margin="@dimen/padding8"
+            android:src="@drawable/right_arrow"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_red"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/padding8"
+        android:id="@+id/rl_info_barang"
+        app:layout_constraintTop_toBottomOf="@id/rl_rekonsinyasi">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/iv_l_3"
+            android:padding="@dimen/padding8"
+            android:layout_margin="@dimen/padding8"
+            android:src="@drawable/ic_info_barang_kon"
+            android:background="@drawable/bg_round_white"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_l_3"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/iv_r_3"
+            android:text="Info Barang"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/text16"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/iv_r_3"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/padding5"
+            android:layout_margin="@dimen/padding8"
+            android:src="@drawable/right_arrow"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_red"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/padding8"
+        android:id="@+id/rl_retur"
+        app:layout_constraintTop_toBottomOf="@id/rl_info_barang">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/iv_l_4"
+            android:padding="@dimen/padding8"
+            android:layout_margin="@dimen/padding8"
+            android:src="@drawable/ic_retur_konsinyasi"
+            android:background="@drawable/bg_round_white"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_l_4"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/iv_r_4"
+            android:text="Retur Konsinyasi"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/text16"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/iv_r_4"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/padding5"
+            android:layout_margin="@dimen/padding8"
+            android:src="@drawable/right_arrow"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

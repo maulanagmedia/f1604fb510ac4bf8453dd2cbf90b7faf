@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActKonsinyasi.InformasiBarang.ActivityInfoBarang">
+
+    <LinearLayout
+        android:id="@+id/ll_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/style_box_bordered_rounded"
+        android:layout_margin="@dimen/padding10"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/img_search"
+            android:contentDescription="@string/cari"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:padding="@dimen/padding8"
+            android:src="@drawable/search" />
+
+        <EditText
+            android:id="@+id/edt_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:background="@android:color/transparent"
+            android:ems="10"
+            android:hint="Nama Barang"
+            android:inputType="textPersonName"
+            android:imeOptions="actionSearch"
+            android:padding="@dimen/padding10"
+            android:textSize="@dimen/text18" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_barang"
+        android:layout_below="@id/ll_header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/ll_footer"
+        android:divider="@null"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f6f4f5"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:id="@+id/ll_footer"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/padding2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Jumlah CCID"
+                    android:textColor="@color/colorAccent"
+                    android:layout_marginRight="@dimen/padding5"
+                    />
+
+
+                <TextView
+                    android:id="@+id/tv_jml"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|center_vertical|end"
+                    android:text=""
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/text18"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Total"
+                    android:textColor="@color/colorAccent"
+                    android:layout_marginRight="@dimen/padding5"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_total"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|center_vertical|end"
+                    android:text=""
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/text18"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

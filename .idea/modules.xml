@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PSPTypeI.iml" filepath="$PROJECT_DIR$/PSPTypeI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PspTypeI.iml" filepath="$PROJECT_DIR$/PspTypeI.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/bluetoothprinter/bluetoothprinter.iml" filepath="$PROJECT_DIR$/bluetoothprinter/bluetoothprinter.iml" />
       <module fileurl="file://$PROJECT_DIR$/maulanacustommodul/maulanacustommodul.iml" filepath="$PROJECT_DIR$/maulanacustommodul/maulanacustommodul.iml" />

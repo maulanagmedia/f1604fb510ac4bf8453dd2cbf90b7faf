@@ -1,6 +1,7 @@
 package com.maulana.custommodul;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -41,7 +42,8 @@ public class ApiVolley {
 
     public static RequestQueue requestQueue;
 
-    public ApiVolley(final Context context, JSONObject jsonBody, String requestMethod, String REST_URL, final String successDialog, final String failDialog, final int showDialogFlag, final String t1, final String t2, final VolleyCallback callback){
+    public ApiVolley(final Context context, JSONObject jsonBody, String requestMethod,
+					 String REST_URL, final String successDialog, final String failDialog, final int showDialogFlag, final String t1, final String t2, final VolleyCallback callback){
 
         /*
         NOTE: you have to customize this class before you use it (haeder, etc)
@@ -82,7 +84,7 @@ public class ApiVolley {
 
             @Override
             public void onResponse(String response) {
-
+				Log.d("error response",response);
                 // Important Note : need to use try catch when parsing JSONObject, no need when parsing string
 
                 if(response == null || response.equals("null")) {
@@ -109,7 +111,7 @@ public class ApiVolley {
             @Override
 
             public void onErrorResponse(VolleyError error) {
-
+				Log.d("error response", error.getMessage());
                 String message = error.toString();
                 if (error instanceof NetworkError) {
                     message = context.getResources().getString(R.string.msg_connection_issue);

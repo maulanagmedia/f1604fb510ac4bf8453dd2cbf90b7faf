@@ -356,6 +356,7 @@ public class LoginScreen extends RuntimePermissionsActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+
                         }
                     }).show();
 

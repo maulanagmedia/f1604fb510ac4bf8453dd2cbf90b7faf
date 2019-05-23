@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text20">36sp</dimen>
+    <dimen name="text18">36sp</dimen>
+    <dimen name="text16">32sp</dimen>
+    <dimen name="text14">28sp</dimen>
+    <dimen name="text12">24sp</dimen>
+    <dimen name="text10">20sp</dimen>
+    <dimen name="text8">16sp</dimen>
+    <dimen name="text24">48sp</dimen>
+    <dimen name="padding2">4dp</dimen>
+    <dimen name="padding5">10dp</dimen>
+    <dimen name="padding8">12dp</dimen>
+    <dimen name="padding10">20dp</dimen>
+    <dimen name="padding12">22dp</dimen>
+    <dimen name="padding16">24dp</dimen>
+    <dimen name="padding20">40dp</dimen>
+    <dimen name="padding40">80dp</dimen>
+    <dimen name="single_button_size">300dp</dimen>
+    <dimen name="img_size_small">80dp</dimen>
+    <dimen name="img_size">100dp</dimen>
+    <dimen name="popup_width">800dp</dimen>
+    <dimen name="popup_height">1200dp</dimen>
+</resources>
