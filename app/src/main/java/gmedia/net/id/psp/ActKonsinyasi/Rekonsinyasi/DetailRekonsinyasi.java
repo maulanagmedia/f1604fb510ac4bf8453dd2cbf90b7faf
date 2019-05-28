@@ -20,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -74,6 +75,7 @@ import java.util.List;
 import gmedia.net.id.psp.ActKonsinyasi.Adapter.ListCCIDReKonsinyasiAdapter;
 //import gmedia.net.id.psp.ActivityHome;
 //import gmedia.net.id.psp.MapsResellerActivity;
+import gmedia.net.id.psp.ActKonsinyasi.Retur.DetailReturKonsinyasi;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.OrderDirectSelling.Adapter.ListCCIDAllAdapter;
 import gmedia.net.id.psp.R;
@@ -99,7 +101,7 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 	boolean canGetLocation = false;
 	private final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
 	private final long MIN_TIME_BW_UPDATES = 1; // 1 minute
-	private static String jarak = "";
+	private static String jarak = "", range = "";
 	private Button btnMapsOutlet;
 
 	private boolean isUpdateLocation = false;
@@ -342,7 +344,7 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 			e.printStackTrace();
 		}
 
-		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewBarangRekonsinyasi,"","",0,"","", new ApiVolley.VolleyCallback() {
+		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewBarangRekonsinyasi, "", "", 0, "", "", new ApiVolley.VolleyCallback() {
 			@Override
 			public void onSuccess(String result) {
 
@@ -730,7 +732,7 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 			e.printStackTrace();
 		}
 
-		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.simpanRekonsinyasi,"","",0,"","", new ApiVolley.VolleyCallback() {
+		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.simpanRekonsinyasi, "", "", 0, "", "", new ApiVolley.VolleyCallback() {
 			@Override
 			public void onSuccess(String result) {
 
@@ -1089,79 +1091,78 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 
 	private void getJarak() {
 
-		/*isLoading = true;
-		//dialogBox.showDialog(true);
+		isUpdateLocation = true;
+		pbProses.setVisibility(View.VISIBLE);
+		String nik = session.getUserDetails().get(SessionManager.TAG_UID);
 		JSONObject jBody = new JSONObject();
-
 		try {
-			jBody.put("nomor", "");
-			jBody.put("latitude", iv.doubleToStringFull(latitude));
-			jBody.put("longitude", iv.doubleToStringFull(longitude));
+			jBody.put("kode", "");
 			jBody.put("kdcus", kdcus);
+			jBody.put("lat", iv.doubleToStringFull(latitude));
+			jBody.put("long", iv.doubleToStringFull(longitude));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
-		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getJarakReseller, new ApiVolley.VolleyCallback() {
+		ApiVolley request = new ApiVolley(DetailRekonsinyasi.this, jBody, "POST", ServerURL.getJarak, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
 			@Override
 			public void onSuccess(String result) {
 
-				isLoading = false;
-				//dialogBox.dismissDialog();
-				String message = "";
+				isUpdateLocation = false;
+				pbProses.setVisibility(View.GONE);
 
 				try {
 
 					JSONObject response = new JSONObject(result);
 					String status = response.getJSONObject("metadata").getString("status");
-					message = response.getJSONObject("metadata").getString("message");
 
 					if (iv.parseNullInteger(status) == 200) {
 
-						JSONObject jo = response.getJSONObject("response");
-						String jarak = jo.getString("jarak");
-						tvJarak.setText(jarak);
+						JSONArray items = response.getJSONArray("response");
+						for (int i = 0; i < items.length(); i++) {
 
-					} else {
+							JSONObject jo = items.getJSONObject(i);
+							range = jo.getString("range");
+							jarak = jo.getString("jarak");
+							latitudeOutlet = jo.getString("latitude");
+							longitudeOutlet = jo.getString("longitude");
+							String pesan = jo.getString("pesan");
+							String keteranganJarak = "";
+							if (iv.parseNullDouble(jo.getString("jarak")) <= 6371) {
+								if (iv.parseNullDouble(jo.getString("jarak")) <= 1) {
+									keteranganJarak = iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")) * 1000, "2") + " m";
+								} else {
+									keteranganJarak = iv.doubleToString(iv.parseNullDouble(jo.getString("jarak")), "2") + " km";
+								}
 
-						DialogBox.showDialog(context, 3, message);
+								if (iv.parseNullDouble(jarak) > iv.parseNullDouble(range)) {
+
+									keteranganJarak = "<font color='#ec1c25'>" + keteranganJarak + "</font>";
+								}
+
+							} else {
+
+
+								keteranganJarak = "<font color='#ec1c25'>Lokasi outlet tidak diketahui</font>";
+							}
+
+							tvJarak.setText(Html.fromHtml(pesan + keteranganJarak));
+							break;
+						}
 					}
 
+
 				} catch (JSONException e) {
-
 					e.printStackTrace();
-                    *//*View.OnClickListener clickListener = new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            dialogBox.dismissDialog();
-                            getJarak();
-                        }
-                    };
-
-                    dialogBox.showDialog(clickListener, "Ulangi Proses", "Terjadi kesalahan, harap ulangi proses");*//*
-					Toast.makeText(context, "Terjadi kesalahan saat menghitung jarak, harap ulangi proses", Toast.LENGTH_LONG).show();
 				}
 			}
 
 			@Override
 			public void onError(String result) {
-
-				isLoading = false;
-                *//*dialogBox.dismissDialog();
-                View.OnClickListener clickListener = new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        dialogBox.dismissDialog();
-                        getJarak();
-                    }
-                };
-
-                dialogBox.showDialog(clickListener, "Ulangi Proses", "Terjadi kesalahan, harap ulangi proses");*//*
-				Toast.makeText(context, "Terjadi kesalahan saat menghitung jarak, harap ulangi proses", Toast.LENGTH_LONG).show();
+				isUpdateLocation = false;
+				pbProses.setVisibility(View.GONE);
 			}
-		});*/
+		});
 	}
 
 	@Override
