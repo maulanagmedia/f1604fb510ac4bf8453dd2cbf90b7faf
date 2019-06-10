@@ -1127,6 +1127,7 @@ public class DetailMutasiKonsinyasi extends AppCompatActivity implements Locatio
 
 					JSONObject response = new JSONObject(result);
 					String status = response.getJSONObject("metadata").getString("status");
+					String message = response.getJSONObject("metadata").getString("message");
 
 					if (iv.parseNullInteger(status) == 200) {
 
@@ -1161,6 +1162,9 @@ public class DetailMutasiKonsinyasi extends AppCompatActivity implements Locatio
 							tvJarak.setText(Html.fromHtml(pesan + keteranganJarak));
 							break;
 						}
+					}else{
+
+						tvJarak.setText(message);
 					}
 
 

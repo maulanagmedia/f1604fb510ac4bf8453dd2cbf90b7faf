@@ -1115,6 +1115,7 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 
 					JSONObject response = new JSONObject(result);
 					String status = response.getJSONObject("metadata").getString("status");
+					String message = response.getJSONObject("metadata").getString("message");
 
 					if (iv.parseNullInteger(status) == 200) {
 
@@ -1149,6 +1150,9 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 							tvJarak.setText(Html.fromHtml(pesan + keteranganJarak));
 							break;
 						}
+					}else{
+
+						tvJarak.setText(message);
 					}
 
 

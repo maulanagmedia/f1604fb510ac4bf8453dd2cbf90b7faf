@@ -159,11 +159,11 @@ public class OutletRetur extends AppCompatActivity {
 		/*listReller = prepareDataEKupon();
 		adapterReseller = new ListResellerPerdanaAdapter((Activity) context, listReller);
 		lvReseller.setAdapter(adapterReseller);*/
-        listReller.add(new CustomItem(
+        /*listReller.add(new CustomItem(
                 "1"
                 ,"Tetew"
                 ,"Jangli"
-        ));
+        ));*/
 
         isLoading = true;
         if(start == 0) dialogBox.showDialog(true);

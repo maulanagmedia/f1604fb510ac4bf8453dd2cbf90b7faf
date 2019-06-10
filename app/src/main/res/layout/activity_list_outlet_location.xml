@@ -62,7 +62,7 @@
                 android:hint="Nama Outlet"
                 android:background="@color/color_white"
                 android:inputType="textPersonName"
-                android:imeOptions="actionDone"
+                android:imeOptions="actionSearch"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/default_margin_small"
                 android:paddingRight="@dimen/default_margin_small" />

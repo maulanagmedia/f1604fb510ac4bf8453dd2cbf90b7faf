@@ -20,6 +20,7 @@ import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.CustomView.DialogBox;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,6 +65,7 @@ public class BarangKonsinyasi extends AppCompatActivity {
 					"haii",
 					"hoyuy",
 			};
+	private SessionManager session;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class BarangKonsinyasi extends AppCompatActivity {
 		}
 
 		context = this;
+		session = new SessionManager(context);
 		initUI();
 		initEvent();
 		initData();
@@ -177,6 +180,7 @@ public class BarangKonsinyasi extends AppCompatActivity {
             jBody.put("keyword", keyword);
             jBody.put("start", start);
             jBody.put("count", count);
+            jBody.put("nik", session.getNikGA());
         } catch (JSONException e) {
             e.printStackTrace();
         }

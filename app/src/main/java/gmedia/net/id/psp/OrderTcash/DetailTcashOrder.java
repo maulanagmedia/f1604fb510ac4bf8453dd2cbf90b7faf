@@ -905,6 +905,8 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
 
             @Override
             public void onError(String result) {
+
+                Toast.makeText(DetailTcashOrder.this, result, Toast.LENGTH_LONG).show();
                 isLoading(false);
                 btnProses.setEnabled(true);
                 progressDialog.dismiss();

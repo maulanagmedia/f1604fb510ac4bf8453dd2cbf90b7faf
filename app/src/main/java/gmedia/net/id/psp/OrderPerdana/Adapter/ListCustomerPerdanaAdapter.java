@@ -38,11 +38,12 @@ public class ListCustomerPerdanaAdapter extends ArrayAdapter{
 
     @Override
     public int getCount() {
-        if(items.size() < ItemLength.ListLength){
+        /*if(items.size() < ItemLength.ListLength){
             return super.getCount();
         }else{
             return ItemLength.ListLength;
-        }
+        }*/
+        return super.getCount();
     }
 
     @Override

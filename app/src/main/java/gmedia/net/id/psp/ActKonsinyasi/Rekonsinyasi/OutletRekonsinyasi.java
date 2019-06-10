@@ -147,6 +147,33 @@ public class OutletRekonsinyasi extends AppCompatActivity {
 			}
 		});
 
+		/*edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+
+				if(i == EditorInfo.IME_ACTION_SEARCH){
+
+					List<CustomItem> items = new ArrayList<CustomItem>();
+					String keyword = edtSearch.getText().toString().trim().toUpperCase();
+
+					if(listReller != null && listReller.size()>0){
+						for (CustomItem item: listReller){
+
+							if(item.getItem2().toUpperCase().contains(keyword) || item.getItem3().toUpperCase().contains(keyword)) items.add(item);
+						}
+					}
+
+					//getTableList(items);
+					adapterReseller = new ListCustomerPerdanaAdapter((Activity) context, items);
+					lvReseller.setAdapter(adapterReseller) ;
+					iv.hideSoftKey(OutletRekonsinyasi.this);
+					return true;
+				}
+
+				return false;
+			}
+		});*/
+
 		lvReseller.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -165,27 +192,29 @@ public class OutletRekonsinyasi extends AppCompatActivity {
 		adapterReseller = new ListCustomerPerdanaAdapter((Activity) context, listReller);
 		lvReseller.setAdapter(adapterReseller);*/
 		String nik = session.getUserDetails().get(SessionManager.TAG_UID);
-        listReller.add(new CustomItem(
+        /*listReller.add(new CustomItem(
                 "1"
                 ,"Tetew"
                 ,"Jangli"
-        ));
+        ));*/
 
         isLoading = true;
         if(start == 0) dialogBox.showDialog(true);
         JSONObject jBody = new JSONObject();
         lvReseller.addFooterView(footerList);
+		String area = session.getUserInfo(SessionManager.TAG_AREA);
 
         try {
             jBody.put("keyword", keyword);
             jBody.put("start", start);
             jBody.put("count", count);
             jBody.put("nik",nik);
+            jBody.put("area",area);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getCustomer,"","",0,"","", new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getOutletKonsinyasi,"","",0,"","", new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 

@@ -81,6 +81,7 @@ public class ServerURL {
 	public static final String getDetailPenjualanTcash = baseURL + "api/tcash/get_detail_penjualan_tcash/";
 	public static final String getTcashHarga = baseURL + "api/tcash/get_harga/";
 	public static final String saveTcash = baseURL + "api/tcash/save/";
+	public static final String saveTcashDev = baseURL + "api/tcash/save_dev/";
 
 	public static final String verifikasiOutlet = baseURL + "api/Verifikasi/verifikasi_outlet/";
 	public static final String aktivasiOutlet = baseURL + "api/Verifikasi/aktivasi_outlet/";
@@ -109,13 +110,13 @@ public class ServerURL {
 	public static final String saveLogMock = baseURL + "api/auth/insert_log_mock/";
 	public static final String saveInstalledApps = baseURL + "api/auth/save_apps/";
 	public static final String getCCIDDeposit = baseURL + "api/Deposit/view_ccid/";
-	public static final String viewKonsinyasi = "http://192.168.20.33/psp-sales/Konsinyasi/index";
-	public static final String viewBarangKonsinyasi = "http://192.168.20.33/psp-sales/Konsinyasi/view_barang";
-	public static final String viewDetailMutasiKonsinyasi = "http://192.168.20.33/psp-sales/Konsinyasi/list_ccid";
-	public static final String simpanKonsinyasi = "http://192.168.20.33/psp-sales/Konsinyasi/simpan_konsinyasi";
-	public static final String viewBarangRekonsinyasi = "http://192.168.20.33/psp-sales/Konsinyasi/view_barang_rekonsinyasi";
-	public static final String simpanRekonsinyasi = "http://192.168.20.33/psp-sales/Konsinyasi/simpan_rekonsinyasi";
-	public static final String getReturKonsinyasi = "http://192.168.20.33/psp-sales/Konsinyasi/history_retur";
-	public static final String getOutletKonsinyasi = "http://192.168.20.33/psp-sales/Konsinyasi/view_outlet";
-	public static final String returRekonsinyasi = "http://192.168.20.33/psp-sales/Konsinyasi/retur_konsinyasi";
+	public static final String viewKonsinyasi = baseURL + "api/Konsinyasi/index";
+	public static final String viewBarangKonsinyasi = baseURL + "api/Konsinyasi/view_barang";
+	public static final String viewDetailMutasiKonsinyasi = baseURL + "api/Konsinyasi/list_ccid";
+	public static final String simpanKonsinyasi = baseURL + "api/Konsinyasi/simpan_konsinyasi";
+	public static final String viewBarangRekonsinyasi = baseURL + "api/Konsinyasi/view_barang_rekonsinyasi";
+	public static final String simpanRekonsinyasi = baseURL + "api/Konsinyasi/simpan_rekonsinyasi";
+	public static final String getReturKonsinyasi = baseURL + "api/Konsinyasi/history_retur";
+	public static final String getOutletKonsinyasi = baseURL + "api/Konsinyasi/view_outlet";
+	public static final String returRekonsinyasi = baseURL + "api/Konsinyasi/retur_konsinyasi";
 }

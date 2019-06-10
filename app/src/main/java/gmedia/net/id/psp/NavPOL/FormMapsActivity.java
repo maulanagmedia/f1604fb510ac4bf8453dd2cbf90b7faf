@@ -639,7 +639,7 @@ public class FormMapsActivity extends FragmentActivity implements OnMapReadyCall
             if(location != null){
                 mMap.clear();
                 LatLng current = new LatLng(latitude, longitude);
-                markerOptions = new MarkerOptions().position(current).draggable(true).title("Lokasi");
+                markerOptions = new MarkerOptions().position(current).draggable(false).title("Lokasi");
                 mMap.addMarker(markerOptions);
                 updateKeterangan(current);
                 CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(current, 17f);
@@ -887,6 +887,8 @@ public class FormMapsActivity extends FragmentActivity implements OnMapReadyCall
         JSONObject jBody = new JSONObject();
         try {
             jBody.put("kdcus", kdCus);
+            jBody.put("setuju", isSetuju ? "1" : "0");
+            jBody.put("pengajuan", isTerverifikasi ? "1" : "0");
             jBody.put("data", jData);
         } catch (JSONException e) {
             e.printStackTrace();

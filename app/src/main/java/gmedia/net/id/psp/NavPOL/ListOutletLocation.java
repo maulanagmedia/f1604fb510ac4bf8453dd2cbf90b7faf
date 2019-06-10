@@ -11,18 +11,21 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.maulana.custommodul.ApiVolley;
@@ -392,6 +395,24 @@ public class ListOutletLocation extends AppCompatActivity {
                 getDataPelanggan();
 
                 iv.hideSoftKey(context);
+            }
+        });
+
+        edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+
+                if(i == EditorInfo.IME_ACTION_SEARCH){
+
+                    keyword = edtSearch.getText().toString();
+                    startIndex = 0;
+                    getDataPelanggan();
+
+                    iv.hideSoftKey(context);
+                    return true;
+                }
+
+                return false;
             }
         });
     }

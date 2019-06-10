@@ -111,7 +111,7 @@ public class ApiVolley {
             @Override
 
             public void onErrorResponse(VolleyError error) {
-				Log.d("error response", error.getMessage());
+				//Log.d("error response", error.getMessage());
                 String message = error.toString();
                 if (error instanceof NetworkError) {
                     message = context.getResources().getString(R.string.msg_connection_issue);

@@ -1007,7 +1007,7 @@
         <include
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
+            android:visibility="visible"
             layout="@layout/layout_target_pencapaian"/>
     </RelativeLayout>
 
