@@ -134,6 +134,7 @@ public class ListPengajuanDepositAdapter extends ArrayAdapter{
                     Intent intent = new Intent(context, DetailCCIDDeposit.class);
                     intent.putExtra("id", items.get(position).getItem1());
                     intent.putExtra("order", items.get(position).getItem7());
+                    intent.putExtra("jumlah", items.get(position).getItem9());
                     context.startActivityForResult(intent, 9);
                 }
             }

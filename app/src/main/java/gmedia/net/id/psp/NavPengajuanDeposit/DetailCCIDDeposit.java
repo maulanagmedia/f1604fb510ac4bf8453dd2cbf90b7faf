@@ -63,6 +63,7 @@ public class DetailCCIDDeposit extends AppCompatActivity {
     private SessionManager session;
     private int conter = 0;
     private Button btnAmbilCCIDList;
+    private String jumlahBarang = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +102,7 @@ public class DetailCCIDDeposit extends AppCompatActivity {
 
             idTransaksi = bundle.getString("id", "");
             String order = bundle.getString("order", "");
+            jumlahBarang = bundle.getString("jumlah", "0");
             edtOrder.setText(order);
         }
 
@@ -133,6 +135,12 @@ public class DetailCCIDDeposit extends AppCompatActivity {
                 if(listCCID == null || listCCID.size() == 0){
 
                     DialogBox.showDialog(context, 3, "Data masih kosong, harap scan barang");
+                    return;
+                }
+
+                if(listCCID.size() != iv.parseNullInteger(jumlahBarang)){
+
+                    DialogBox.showDialog(context, 3, "Jumlah tidak sesuai dengan pesanan, jumlah pesanan "+ jumlahBarang);
                     return;
                 }
 
@@ -274,7 +282,6 @@ public class DetailCCIDDeposit extends AppCompatActivity {
                                 "1",
                                 item.getAtt6(),
                                 item.getAtt5()));
-
                     }
 
                     masterCCID.get(x).setSelected(item.isSelected());
@@ -308,7 +315,7 @@ public class DetailCCIDDeposit extends AppCompatActivity {
         String nik = session.getNikGA();
 
         try {
-            jBody.put("kodegudang", "TMG0001");
+            jBody.put("kodegudang", nik);
             jBody.put("kodebrg", "");
             jBody.put("harga", "");
             jBody.put("id", idTransaksi);

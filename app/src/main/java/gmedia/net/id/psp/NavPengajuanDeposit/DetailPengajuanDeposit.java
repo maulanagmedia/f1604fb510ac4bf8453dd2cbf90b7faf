@@ -347,6 +347,7 @@ public class DetailPengajuanDeposit extends AppCompatActivity implements Locatio
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         ApiVolley apiVolley = new ApiVolley(context, jBody, "POST", ServerURL.getPengajuanDetail, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
@@ -373,7 +374,8 @@ public class DetailPengajuanDeposit extends AppCompatActivity implements Locatio
                                     jo.getString("tgl") +" "+ jo.getString("jam"),
                                     jo.getString("status"),
                                     jo.getString("keterangan"),
-                                    "0"
+                                    "0",
+                                    jo.getString("jumlah")
                             ));
 
                         }
@@ -483,7 +485,8 @@ public class DetailPengajuanDeposit extends AppCompatActivity implements Locatio
                                     jo.getString("tgl") +" "+ jo.getString("jam"),
                                     jo.getString("status"),
                                     jo.getString("keterangan"),
-                                    "0"
+                                    "0",
+                                    jo.getString("jumlah")
                             ));
 
                         }
