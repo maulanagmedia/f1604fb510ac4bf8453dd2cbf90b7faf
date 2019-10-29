@@ -45,6 +45,7 @@ import java.util.List;
 
 import gmedia.net.id.psp.NavPengajuanDeposit.Adapter.ListCCIDDDepositAdapter;
 import gmedia.net.id.psp.OrderPerdana.Adapter.ListCCIDCBAdapter;
+import gmedia.net.id.psp.OrderPerdana.Adapter.ListRentangCCIDAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
 
@@ -64,6 +65,7 @@ public class DetailCCIDDeposit extends AppCompatActivity {
     private int conter = 0;
     private Button btnAmbilCCIDList;
     private String jumlahBarang = "0";
+    private Button btnRentangCCID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +97,7 @@ public class DetailCCIDDeposit extends AppCompatActivity {
         edtTotalCCID = (EditText) findViewById(R.id.edt_total_ccid);
         edtTotalHarga = (EditText) findViewById(R.id.edt_total_harga);
         btnProses = (Button) findViewById(R.id.btn_proses);
+        btnRentangCCID = (Button) findViewById(R.id.btn_rentang_ccid);
 
         Bundle bundle = getIntent().getExtras();
 
@@ -167,6 +170,14 @@ public class DetailCCIDDeposit extends AppCompatActivity {
                             }
                         })
                         .show();
+            }
+        });
+
+        btnRentangCCID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                loadRentangCCID();
             }
         });
     }
@@ -370,6 +381,104 @@ public class DetailCCIDDeposit extends AppCompatActivity {
                 DialogBox.showDialog(context, 2, "Terjadi kesalahan saat memuat data, harap ulangi");
             }
         });
+    }
+
+    //endregion
+
+    //region ================================================ range ccid ===========================================
+
+    private boolean[] selectedRentang;
+    private void loadRentangCCID(){
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialog);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.layout_rentang_ccid, null);
+        builder.setView(view);
+
+        selectedRentang = new boolean[masterCCID.size()];
+        final List<OptionItem> rentangCCIDList = new ArrayList<>();
+        final EditText edtCCIDAwal = (EditText) view.findViewById(R.id.edt_ccid_awal);
+        final EditText edtCCIDAkhir = (EditText) view.findViewById(R.id.edt_ccid_akhir);
+        final EditText edtBanyakCCID = (EditText) view.findViewById(R.id.edt_banyak_ccid);
+        final Button btnAmbilCCID = (Button) view.findViewById(R.id.btn_ambil_ccid);
+        final ListView lvRentangCCID = (ListView) view.findViewById(R.id.lv_rentang_ccid);
+
+        btnAmbilCCID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(edtCCIDAwal.getText().length() == 0){
+                    edtCCIDAwal.setError("Harap di isi");
+                    return;
+                }else{
+                    edtCCIDAwal.setError(null);
+                }
+
+                if(edtCCIDAkhir.getText().length() == 0){
+                    edtCCIDAkhir.setError("Harap di isi");
+                    return;
+                }else{
+                    edtCCIDAkhir.setError(null);
+                }
+
+                selectedRentang = new boolean[masterCCID.size()];
+                for(int i = 0; i < masterCCID.size();i++) {
+                    selectedRentang[i] = false;
+                }
+
+                long ccidAwal = iv.parseNullLong(edtCCIDAwal.getText().toString());
+                long ccidAkhir = iv.parseNullLong(edtCCIDAkhir.getText().toString());
+                List<OptionItem> selectedItems = new ArrayList<OptionItem>();
+
+                for(int x = 0; x < masterCCID.size();x++){
+                    long selectedCCID = iv.parseNullLong(masterCCID.get(x).getText());
+                    if(selectedCCID >= ccidAwal && selectedCCID <= ccidAkhir){
+                        selectedRentang[x] = true;
+                        selectedItems.add(masterCCID.get(x));
+                    }
+                }
+
+                edtBanyakCCID.setText(String.valueOf(selectedItems.size()));
+
+                lvRentangCCID.setAdapter(null);
+                if(selectedItems != null && selectedItems.size() > 0){
+                    ListRentangCCIDAdapter adapter = new ListRentangCCIDAdapter((Activity) context, selectedItems);
+                    lvRentangCCID.setAdapter(adapter);
+                }
+            }
+        });
+
+        builder.setPositiveButton("Simpan", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                for(int x = 0; x < selectedRentang.length; x++){
+
+                    if(selectedRentang[x]){
+                        OptionItem item = masterCCID.get(x);
+                        masterCCID.get(x).setSelected(true);
+                        adapter.addData(new CustomItem(
+                                item.getValue(),
+                                item.getAtt1(),
+                                item.getText(),
+                                item.getAtt2(),
+                                "1",
+                                item.getAtt6(),
+                                item.getAtt5()));
+                    }
+                }
+            }
+        });
+
+        builder.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     //endregion
