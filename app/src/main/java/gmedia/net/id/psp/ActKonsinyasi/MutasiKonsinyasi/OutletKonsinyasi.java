@@ -211,7 +211,7 @@ public class OutletKonsinyasi extends AppCompatActivity {
 			e.printStackTrace();
 		}
 
-		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getCustomerPerdana, "", "", 0, "", "", new ApiVolley.VolleyCallback() {
+		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getCustomerPerdana, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
 			@Override
 			public void onSuccess(String result) {
 

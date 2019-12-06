@@ -25,6 +25,7 @@ import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.CustomView.DialogBox;
 import com.maulana.custommodul.FormatItem;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +47,7 @@ public class Rekonsinyasi extends AppCompatActivity {
 
 	private Context context;
 	private DialogBox dialogBox;
+	private SessionManager session;
 	private ItemValidation iv = new ItemValidation();
 	private FloatingActionButton fabAdd;
 	private TextView tvStart, tvEnd;
@@ -108,6 +110,7 @@ public class Rekonsinyasi extends AppCompatActivity {
 		}
 
 		context = this;
+		session = new SessionManager(context);
 		dialogBox = new DialogBox(context);
 		initUI();
 		initEvent();
@@ -255,7 +258,7 @@ public class Rekonsinyasi extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewBarangRekonsinyasi,"","",0,"","", new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewBarangRekonsinyasi,"","",0,session.getUsername(),session.getPassword(), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 

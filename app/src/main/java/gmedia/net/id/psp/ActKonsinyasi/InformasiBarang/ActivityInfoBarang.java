@@ -19,6 +19,7 @@ import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.CustomView.DialogBox;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +37,7 @@ public class ActivityInfoBarang extends AppCompatActivity {
 
 	private List<CustomItem> listReller = new ArrayList<>();
 	private ListView lvBarang;
+	private SessionManager session;
 	private ListInfoBarangAdapter adapterReseller;
 	private View footerList;
 	private Context context;
@@ -81,6 +83,7 @@ public class ActivityInfoBarang extends AppCompatActivity {
 		}
 
 		context = this;
+		session = new SessionManager(context);
 		initUI();
 		initEvent();
 		initData();
@@ -181,7 +184,7 @@ public class ActivityInfoBarang extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewBarangRekonsinyasi,"","",0,"","", new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewBarangRekonsinyasi,"","",0,session.getUsername(),session.getPassword(), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 

@@ -25,6 +25,7 @@ import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.CustomView.DialogBox;
 import com.maulana.custommodul.FormatItem;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -92,6 +93,7 @@ public class MutasiKonsinyasi extends AppCompatActivity {
 					"haii",
 					"hoyuy",
 			};
+	private SessionManager session;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +110,7 @@ public class MutasiKonsinyasi extends AppCompatActivity {
 		}
 
 		context = this;
+		session = new SessionManager(context);
 		dialogBox = new DialogBox(context);
 		initUI();
 		initEvent();
@@ -253,7 +256,7 @@ public class MutasiKonsinyasi extends AppCompatActivity {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewKonsinyasi, "", "", 0, "", "", new ApiVolley.VolleyCallback() {
+		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewKonsinyasi, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
 			@Override
 			public void onSuccess(String result) {
 

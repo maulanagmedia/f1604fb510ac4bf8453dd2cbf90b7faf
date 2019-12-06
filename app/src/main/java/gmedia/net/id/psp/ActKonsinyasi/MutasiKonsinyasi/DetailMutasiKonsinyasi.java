@@ -347,7 +347,7 @@ public class DetailMutasiKonsinyasi extends AppCompatActivity implements Locatio
 			e.printStackTrace();
 		}
 
-		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewDetailMutasiKonsinyasi,"","",0,"","", new ApiVolley.VolleyCallback() {
+		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewDetailMutasiKonsinyasi,"","",0,session.getUsername(),session.getPassword(), new ApiVolley.VolleyCallback() {
 			@Override
 			public void onSuccess(String result) {
 
@@ -744,7 +744,7 @@ public class DetailMutasiKonsinyasi extends AppCompatActivity implements Locatio
 			e.printStackTrace();
 		}
 
-		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.simpanKonsinyasi,"","",0,"","", new ApiVolley.VolleyCallback() {
+		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.simpanKonsinyasi,"","",0,session.getUsername(),session.getPassword(), new ApiVolley.VolleyCallback() {
 			@Override
 			public void onSuccess(String result) {
 

@@ -344,7 +344,7 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 			e.printStackTrace();
 		}
 
-		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewBarangRekonsinyasi, "", "", 0, "", "", new ApiVolley.VolleyCallback() {
+		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewBarangRekonsinyasi, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
 			@Override
 			public void onSuccess(String result) {
 
@@ -732,7 +732,7 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 			e.printStackTrace();
 		}
 
-		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.simpanRekonsinyasi, "", "", 0, "", "", new ApiVolley.VolleyCallback() {
+		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.simpanRekonsinyasi, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
 			@Override
 			public void onSuccess(String result) {
 

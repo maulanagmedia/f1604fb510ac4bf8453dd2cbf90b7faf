@@ -21,6 +21,7 @@ import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.CustomView.DialogBox;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +39,7 @@ import gmedia.net.id.psp.Utils.ServerURL;
 public class OutletInfoBarang extends AppCompatActivity {
 
 	private List<CustomItem> listReller = new ArrayList<>();
+	private SessionManager session;
 	private ListView lvReseller;
 	private ListResellerPerdanaAdapter adapterReseller;
 	private View footerList;
@@ -82,6 +84,7 @@ public class OutletInfoBarang extends AppCompatActivity {
 		}
 
 		context = this;
+		session = new SessionManager(context);
 		initUI();
 		initEvent();
 		initData();
@@ -163,14 +166,6 @@ public class OutletInfoBarang extends AppCompatActivity {
 	}
 
 	private void initData() {
-		/*listReller = prepareDataEKupon();
-		adapterReseller = new ListResellerPerdanaAdapter((Activity) context, listReller);
-		lvReseller.setAdapter(adapterReseller);*/
-        /*listReller.add(new CustomItem(
-                "1"
-                ,"Tetew"
-                ,"Jangli"
-        ));*/
 
         isLoading = true;
         if(start == 0) dialogBox.showDialog(true);
@@ -186,7 +181,7 @@ public class OutletInfoBarang extends AppCompatActivity {
         }
 
         ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getOutletKonsinyasi,
-				"","",0,"","", new ApiVolley.VolleyCallback() {
+				"","",0,session.getUsername(),session.getPassword(), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
