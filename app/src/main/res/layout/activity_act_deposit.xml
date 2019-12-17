@@ -152,7 +152,7 @@
             android:layout_height="match_parent"
             android:id="@+id/lv_deposit"></ListView>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_add_white"

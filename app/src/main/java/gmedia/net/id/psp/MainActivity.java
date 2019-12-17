@@ -2,7 +2,7 @@ package gmedia.net.id.psp;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,9 +16,6 @@ import com.maulana.custommodul.SessionManager;
 
 import gmedia.net.id.psp.DaftarPiutang.DaftarPiutang;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
-import gmedia.net.id.psp.OrderPerdana.ListBarang;
-import gmedia.net.id.psp.OrderPulsa.DetailOrderPulsa;
-import gmedia.net.id.psp.OrderPerdana.DetailOrderPerdana;
 import gmedia.net.id.psp.OrderPulsa.ListReseller;
 import gmedia.net.id.psp.PelunasanPenjualan.PelunasanPenjualan;
 import gmedia.net.id.psp.PenjualanMKIOS.PenjualanMKIOS;

@@ -1,18 +1,12 @@
 package gmedia.net.id.psp;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatDrawableManager;
+import androidx.appcompat.widget.AppCompatDrawableManager;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -21,7 +15,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -31,7 +24,6 @@ import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.SessionManager;
 
 import gmedia.net.id.psp.CustomView.CustomMapView;
-import gmedia.net.id.psp.NavMapsKunjungan.MapsKunjunganActivity;
 
 public class MapsOutletActivity extends AppCompatActivity {
 

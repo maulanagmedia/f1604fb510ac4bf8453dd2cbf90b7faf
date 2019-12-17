@@ -3,14 +3,13 @@ package gmedia.net.id.psp.ActKonsinyasi.InformasiBarang;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gmedia.net.id.psp.ActKonsinyasi.Adapter.ListInfoBarangAdapter;
-import gmedia.net.id.psp.ActKonsinyasi.Adapter.ListResellerPerdanaAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
 

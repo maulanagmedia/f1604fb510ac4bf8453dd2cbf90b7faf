@@ -3,8 +3,8 @@
     package="com.google.zxing.client.android.test" >
 
     <uses-sdk
-        android:minSdkVersion="9"
-        android:targetSdkVersion="9" />
+        android:minSdkVersion="14"
+        android:targetSdkVersion="14" />
 
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
@@ -35,7 +35,9 @@
         android:name="android.hardware.wifi"
         android:required="false" />
 
-    <application android:debuggable="true" >
+    <application
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+        android:debuggable="true" >
         <uses-library android:name="android.test.runner" />
 
         <activity

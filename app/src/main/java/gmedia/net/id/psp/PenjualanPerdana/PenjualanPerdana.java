@@ -2,8 +2,8 @@ package gmedia.net.id.psp.PenjualanPerdana;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,7 +37,6 @@ import gmedia.net.id.psp.LoginScreen;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
 import gmedia.net.id.psp.OrderPerdana.DetailOrderPerdana;
-import gmedia.net.id.psp.OrderPerdana.ListBarang;
 import gmedia.net.id.psp.PenjualanPerdana.Adapter.ListPerdanaAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;

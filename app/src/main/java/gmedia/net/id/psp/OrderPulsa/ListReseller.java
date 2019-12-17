@@ -1,7 +1,7 @@
 package gmedia.net.id.psp.OrderPulsa;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -31,7 +31,6 @@ import java.util.List;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.OrderPulsa.Adapter.ListResellerAdapter;
 import gmedia.net.id.psp.R;
-import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class ListReseller extends AppCompatActivity {

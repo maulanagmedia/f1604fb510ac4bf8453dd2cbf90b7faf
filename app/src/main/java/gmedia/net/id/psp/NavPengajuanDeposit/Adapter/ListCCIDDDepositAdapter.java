@@ -2,7 +2,7 @@ package gmedia.net.id.psp.NavPengajuanDeposit.Adapter;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +16,6 @@ import com.maulana.custommodul.ItemValidation;
 import java.util.List;
 
 import gmedia.net.id.psp.NavPengajuanDeposit.DetailCCIDDeposit;
-import gmedia.net.id.psp.OrderDirectSelling.DetailDSPerdana;
 import gmedia.net.id.psp.R;
 
 

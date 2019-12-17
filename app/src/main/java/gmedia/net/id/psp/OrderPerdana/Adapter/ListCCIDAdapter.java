@@ -2,8 +2,8 @@ package gmedia.net.id.psp.OrderPerdana.Adapter;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.view.menu.MenuView;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.view.menu.MenuView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

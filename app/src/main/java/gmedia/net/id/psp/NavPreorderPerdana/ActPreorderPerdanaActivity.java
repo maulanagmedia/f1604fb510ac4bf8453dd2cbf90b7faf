@@ -3,8 +3,8 @@ package gmedia.net.id.psp.NavPreorderPerdana;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,8 +35,6 @@ import java.util.List;
 
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.NavPreorderPerdana.Adapter.ListPreorderPerdanaAdapter;
-import gmedia.net.id.psp.NavTambahCustomer.Adapter.ListCustomerAdapter;
-import gmedia.net.id.psp.OrderPulsa.DetailOrderPulsa;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
 

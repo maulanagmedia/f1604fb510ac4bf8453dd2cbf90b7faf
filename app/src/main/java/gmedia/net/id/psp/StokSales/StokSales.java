@@ -2,7 +2,7 @@ package gmedia.net.id.psp.StokSales;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,7 +35,6 @@ import java.util.List;
 
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.R;
-import gmedia.net.id.psp.StokSales.Adapter.ListStokAdapter;
 import gmedia.net.id.psp.StokSales.Adapter.ListStokDetailAdapter;
 import gmedia.net.id.psp.Utils.ServerURL;
 

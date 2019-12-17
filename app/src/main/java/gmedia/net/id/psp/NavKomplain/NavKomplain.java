@@ -3,10 +3,9 @@ package gmedia.net.id.psp.NavKomplain;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -35,7 +34,6 @@ import java.util.List;
 
 import gmedia.net.id.psp.NavKomplain.Adapter.ListComplaintAdapter;
 import gmedia.net.id.psp.R;
-import gmedia.net.id.psp.TambahCustomer.DetailCustomer;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class NavKomplain extends Fragment {

@@ -2,7 +2,7 @@ package gmedia.net.id.psp.ActKonsinyasi;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +13,6 @@ import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.SessionManager;
 
 import gmedia.net.id.psp.ActKonsinyasi.InformasiBarang.OutletInfoBarang;
-import gmedia.net.id.psp.ActKonsinyasi.MutasiKonsinyasi.DetailMutasiKonsinyasi;
 import gmedia.net.id.psp.ActKonsinyasi.MutasiKonsinyasi.MutasiKonsinyasi;
 import gmedia.net.id.psp.ActKonsinyasi.Rekonsinyasi.Rekonsinyasi;
 import gmedia.net.id.psp.ActKonsinyasi.Retur.ActReturKonsinyasi;

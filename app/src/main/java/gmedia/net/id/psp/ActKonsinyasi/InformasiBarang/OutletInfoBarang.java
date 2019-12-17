@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gmedia.net.id.psp.ActKonsinyasi.Adapter.ListResellerPerdanaAdapter;
-import gmedia.net.id.psp.MainNavigationActivity;
-import gmedia.net.id.psp.NavPengajuanDeposit.MainPengajuanDeposit;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
 

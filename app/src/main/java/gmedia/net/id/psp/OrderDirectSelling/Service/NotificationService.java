@@ -1,12 +1,11 @@
 package gmedia.net.id.psp.OrderDirectSelling.Service;
 
-import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 
 import gmedia.net.id.psp.OrderDirectSelling.DetailInjectPulsa;

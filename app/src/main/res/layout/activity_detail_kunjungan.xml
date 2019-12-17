@@ -119,10 +119,10 @@
                 android:layout_height="wrap_content"
                 style="@style/formGroup">
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="160dp"
-                    android:id="@+id/rv_photo"></android.support.v7.widget.RecyclerView>
+                    android:id="@+id/rv_photo"></androidx.recyclerview.widget.RecyclerView>
 
                 <ImageButton
                     android:layout_width="50dp"

@@ -2,12 +2,11 @@ package gmedia.net.id.psp.OrderPerdana;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -40,11 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gmedia.net.id.psp.OrderPerdana.Adapter.ListBarangAdapter;
-import gmedia.net.id.psp.OrderPulsa.Adapter.ListResellerAdapter;
-import gmedia.net.id.psp.OrderPulsa.DetailOrderPulsa;
-import gmedia.net.id.psp.OrderPulsa.ListReseller;
 import gmedia.net.id.psp.R;
-import gmedia.net.id.psp.Utils.FormatItem;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class ListBarang extends AppCompatActivity {

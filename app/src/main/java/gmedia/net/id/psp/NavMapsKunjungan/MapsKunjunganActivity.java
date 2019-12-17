@@ -13,10 +13,10 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -64,7 +64,6 @@ import java.util.List;
 import gmedia.net.id.psp.CustomView.CustomMapView;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.R;
-import gmedia.net.id.psp.TambahCustomer.DetailCustomer;
 import gmedia.net.id.psp.Utils.ServerURL;
 
 public class MapsKunjunganActivity extends AppCompatActivity implements LocationListener {

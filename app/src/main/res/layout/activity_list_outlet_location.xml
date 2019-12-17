@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:id="@+id/ll_header">
 
-        <android.support.design.widget.TabLayout
+        <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_below="@id/ll_header"
@@ -27,20 +27,20 @@
             app:tabIndicatorColor="@color/color_white"
             android:weightSum="2">
 
-            <android.support.design.widget.TabItem
+            <com.google.android.material.tabs.TabItem
                 android:text="Terverifikasi"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:id="@+id/ti_terverifikasi"/>
 
-            <android.support.design.widget.TabItem
+            <com.google.android.material.tabs.TabItem
                 android:text="Butuh Verifikasi"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:id="@+id/ti_butuh_verifikasi"/>
-        </android.support.design.widget.TabLayout>
+        </com.google.android.material.tabs.TabLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
