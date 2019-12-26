@@ -107,7 +107,7 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
         session = new SessionManager(context);
         nik = session.getUserDetails().get(SessionManager.TAG_UID);
         actvOutlet = (AutoCompleteTextView) findViewById(R.id.actv_outlet);
-        dateFrom = iv.sumDate(iv.getCurrentDate(FormatItem.formatDateDisplay), -7, FormatItem.formatDateDisplay) ;
+        dateFrom = iv.sumDate(iv.getCurrentDate(FormatItem.formatDateDisplay), -7, FormatItem.formatDateDisplay);
         dateTo = iv.getCurrentDate(FormatItem.formatDateDisplay);
         keyword = "";
         tvFrom.setText(dateFrom);
@@ -223,6 +223,7 @@ public class HistoryPengajuanDeposit extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         ApiVolley apiVolley = new ApiVolley(context, jBody, "POST", ServerURL.getHistoryDeposit, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {

@@ -39,7 +39,7 @@ import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.TambahCustomer.DetailCustomer;
 import gmedia.net.id.psp.Utils.ServerURL;
 
-public class ActTambahOutlet extends AppCompatActivity {
+public class  ActTambahOutlet extends AppCompatActivity {
 
     private Context context;
     private ListView lvCustomer;

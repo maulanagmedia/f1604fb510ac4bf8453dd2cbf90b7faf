@@ -25,6 +25,7 @@ public class ServerURL {
 	public static final String getMkios = baseURL + "api/mkios/get_mkios/";
 
 	public static final String getCustomerPerdana = baseURL + "api/perdana/get_customer/";
+	public static final String getCustomerPerdanaManual = baseURL + "api/Event/save_jual_poi_manual?/";
 	public static final String getBarangPerdana = baseURL + "api/perdana/get_list_barang/";
 	public static final String getListCCIDPerdana = baseURL + "api/perdana/get_list_ccid/";
 	public static final String getSelectedCCIDPerdana = baseURL + "api/perdana/get_selected_ccid/";

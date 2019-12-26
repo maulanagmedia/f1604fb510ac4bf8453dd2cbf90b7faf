@@ -26,7 +26,6 @@ public class MainPengajuanDeposit extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_pengajuan_deposit);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
@@ -34,8 +33,6 @@ public class MainPengajuanDeposit extends AppCompatActivity {
         setTitle("Pengajuan Deposit");
 
         context = this;
-
-
         initUI();
 
     }

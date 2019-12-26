@@ -36,7 +36,7 @@ import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.SemuaPenjualan.Adapter.ListSemuaPenjalanAdapter;
 import gmedia.net.id.psp.Utils.ServerURL;
 
-public class SemuaPenjualan extends AppCompatActivity {
+public class  SemuaPenjualan extends AppCompatActivity {
 
     private ListView lvPenjualan;
     private List<CustomItem> masterList;

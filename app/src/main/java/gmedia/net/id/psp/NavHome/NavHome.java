@@ -34,6 +34,7 @@ import gmedia.net.id.psp.ActKonsinyasi.ActKonsinyasi;
 import gmedia.net.id.psp.CustomView.WrapContentViewPager;
 import gmedia.net.id.psp.DaftarPiutang.PiutangPerOutlet;
 import gmedia.net.id.psp.InfoDeposit.ActDeposit;
+import gmedia.net.id.psp.NavEvent.DetailEventManual;
 import gmedia.net.id.psp.NavKunjungan.ActKunjungan;
 import gmedia.net.id.psp.NavEvent.ActEvent;
 import gmedia.net.id.psp.NavEvent.DetailEvent;
@@ -84,7 +85,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 	private LinearLayout llOrderMkios, llPenjualanMkios, llOrderPerdana, llPenjualanPerdana, llDaftarPiutang, llStokSales;
 	private TextView tvNamaSales, tvTotalOmset, tvOmsetMkios, tvOmsetPerdana, tvTargetMkios, tvGapMkios, tvTargetPerdana, tvGapPerdana, tvTargetPJP, tvPencapaianPJP, tvGapPJP;
 	private LinearLayout llAddCustomer, llCheckIn, llKomplain;
-	private LinearLayout ll1, ll2, ll3, ll3a, ll4, ll5, ll6, ll7, ll8, ll9;
+	private LinearLayout ll1, ll2, ll3, ll3a, ll4, ll5, ll6, ll7, ll8, ll9, ll10;
 	private LinearLayout llOrderTcash;
 	private LinearLayout llPenjualan;
 	private LinearLayout llRiwayatPenjualan;
@@ -96,7 +97,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 	private LinearLayout llPreorderPerdana;
 	private LinearLayout llEvent, llMarketSurvey, llMarketSurveyAoc;
 	private LinearLayout llDirectSelling;
-	private LinearLayout llMenuPenjualanReseller, llMenuDirectSelling, llMenuSPV, llMenuMD, llMenuOperasional, llPengajuanDeposit, llMarketSurveyMD, llKonsinyasi;
+	private LinearLayout llMenuPenjualanReseller, llMenuDirectSelling, llMenuDirectSellingManual, llMenuSPV, llMenuMD, llMenuOperasional, llPengajuanDeposit, llMarketSurveyMD, llKonsinyasi;
 	private LinearLayout llIDS, llDS;
 	private TextView tvDSTargetMkios, tvDSOmsetMkios, tvDSGapMkios, tvDSTargetPerdana, tvDSOmsetPerdana, tvDSGapPerdana;
 	private TextView tvDSTargetDataMkios, tvDSOmsetDataMkios, tvDSGAPDataMkios, tvDSTargetRevenueDigital, tvDSOmsetRevenueDigital, tvDSGAPRevenueDigital, tvDSDailyPJP, tvDSEffectiveCall, tvDSGAPPJP, tvDSTargetAkuisisi, tvDSAkuisisi, tvDSGAPAkuisisi;
@@ -188,6 +189,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 		ll7 = (LinearLayout) layout.findViewById(R.id.ll_7);
 		ll8 = (LinearLayout) layout.findViewById(R.id.ll_8);
 		ll9 = (LinearLayout) layout.findViewById(R.id.ll_9);
+		ll10 = (LinearLayout) layout.findViewById(R.id.ll_10);
 
 		LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ll1.getLayoutParams();
 
@@ -204,9 +206,12 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 		ll7.setLayoutParams(lp);
 		ll8.setLayoutParams(lp);
 		ll9.setLayoutParams(lp);
+		ll10.setLayoutParams(lp);
+
 
 		llMenuPenjualanReseller = (LinearLayout) layout.findViewById(R.id.ll_penjualan_reseller);
 		llMenuDirectSelling = (LinearLayout) layout.findViewById(R.id.ll_menu_direct_selling);
+		llMenuDirectSellingManual = (LinearLayout) layout.findViewById(R.id.ll_direct_selling_manual);
 		llMenuSPV = (LinearLayout) layout.findViewById(R.id.ll_menu_spv);
 		llMenuOperasional = (LinearLayout) layout.findViewById(R.id.ll_operasional);
 		llMenuMD = (LinearLayout) layout.findViewById(R.id.ll_menu_md);
@@ -527,6 +532,15 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 				((Activity) context).finish();
 			}
 		});
+
+		llMenuDirectSellingManual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent (context, DetailEventManual.class);
+                context.startActivity(intent);
+                ((Activity) context).finish();
+            }
+        });
 
 		llPengajuanDeposit.setOnClickListener(new View.OnClickListener() {
 			@Override

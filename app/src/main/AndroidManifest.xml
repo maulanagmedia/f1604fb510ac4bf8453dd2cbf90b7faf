@@ -330,6 +330,10 @@
         <activity
             android:name=".NavEvent.DetailEvent"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".NavEvent.DetailEventManual"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".OrderDirectSelling.DetailDSPerdana"
             android:screenOrientation="portrait" />

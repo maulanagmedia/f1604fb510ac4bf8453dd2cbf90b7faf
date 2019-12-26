@@ -28,7 +28,8 @@
                     android:layout_height="match_parent"
                     tools:listitem="@layout/slider_pager_item"
                     android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"></gmedia.net.id.psp.CustomView.WrapContentViewPager>
+                    android:layout_alignParentStart="true">
+                </gmedia.net.id.psp.CustomView.WrapContentViewPager>
 
                 <RelativeLayout
                     android:id="@+id/rl_view_pager_indicator"
@@ -351,8 +352,91 @@
                                     android:textColor="@color/color_black"
                                     android:text="Market Survey TSA"/>
                             </LinearLayout>
-
                         </LinearLayout>
+<!--Tambahan-->
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/menu_height"
+                            android:id="@+id/ll_10"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginBottom="@dimen/default_margin_small"
+                            android:weightSum="3">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_direct_selling_manual"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_order_perdana"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Direct Manual"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+                       <!-- <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/menu_height"
+                            android:id="@+id/ll_10"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginBottom="@dimen/default_margin_small"
+                            android:weightSum="1">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:id="@+id/ll_direct_selling_manual"
+                                android:background="?attr/selectableItemBackground"
+                                android:gravity="center"
+                                android:weightSum="1">
+                                
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_order_perdana"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="Direct Selling Manual"/>
+
+                            </LinearLayout>
+                        </LinearLayout>-->
 
                         <LinearLayout
                             android:layout_width="match_parent"
