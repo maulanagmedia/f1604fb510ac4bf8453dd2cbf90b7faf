@@ -140,6 +140,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
     private Location mCurrentLocation;
     private boolean editMode = false;
     private static String nomor = "", radius = "", nama = "", alamat = "", kdcus = "", flagRadius = "", latitudePOI = "", longitudePOI = "", poiName = "";
+    private static boolean isManual = false;
     private boolean isEvent = false, isPOI = false;
     private Button btnAppInfo;
     private LinearLayout llJarak;
@@ -225,6 +226,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             longitudePOI =  bundle.getString("long_poi", "");
             radius = bundle.getString("radius", "");
             poiName = bundle.getString("poi", "");
+            isManual = bundle.getBoolean("is_manual", false);
 
             if(nomor.length() > 0){
 
@@ -1191,6 +1193,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             jDataDetail.put("jarak", jarak);
             jDataDetail.put("sn", lastSN);
             jDataDetail.put("transaction_id", String.valueOf(transactionID));
+            jDataDetail.put("manual", isManual? "1" : "0");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1436,26 +1439,33 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
-                                isSaveButtonClicked = true;
-                                showDialogLoading();
-                                String format = selectedItemOrder.getItem7().replace("[tujuan]",edtNomor.getText().toString());
-                                if(flagOrder.equals("BL2")){
-                                    format = format.replace("[nominal]", selectedHarga.substring(0, selectedHarga.length() - 3));
+                                if(isManual){
+
+                                    showKonfirmasiDialog();
                                 }else{
-                                    format = format.replace("[nominal]", selectedHarga);
+
+                                    isSaveButtonClicked = true;
+                                    showDialogLoading();
+                                    String format = selectedItemOrder.getItem7().replace("[tujuan]",edtNomor.getText().toString());
+                                    if(flagOrder.equals("BL2")){
+                                        format = format.replace("[nominal]", selectedHarga.substring(0, selectedHarga.length() - 3));
+                                    }else{
+                                        format = format.replace("[nominal]", selectedHarga);
+                                    }
+                                    format = format.replace("[pin]", selectedItemOrder.getItem6());
+                                    format = format.replace("#", Uri.encode("#"));
+
+                                    Log.d(TAG, "onClick: " + format);
+
+                                    //String code = "*123" + Uri.encode("#");
+                                    startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:" + format)));
+
+                                    lvBalasan.setAdapter(null);
+                                    listBalasan  = new ArrayList<>();
+                                    balasanAdapter = new ListBalasanInjectAdapter((Activity) context, listBalasan);
+                                    lvBalasan.setAdapter(balasanAdapter);
                                 }
-                                format = format.replace("[pin]", selectedItemOrder.getItem6());
-                                format = format.replace("#", Uri.encode("#"));
 
-                                Log.d(TAG, "onClick: " + format);
-
-                                //String code = "*123" + Uri.encode("#");
-                                startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:" + format)));
-
-                                lvBalasan.setAdapter(null);
-                                listBalasan  = new ArrayList<>();
-                                balasanAdapter = new ListBalasanInjectAdapter((Activity) context, listBalasan);
-                                lvBalasan.setAdapter(balasanAdapter);
                             }
                         })
                         .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {

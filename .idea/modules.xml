@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/PSPTypeI(Sales).iml" filepath="$PROJECT_DIR$/PSPTypeI(Sales).iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/bluetoothprinter/bluetoothprinter.iml" filepath="$PROJECT_DIR$/bluetoothprinter/bluetoothprinter.iml" />
-      <module fileurl="file://$PROJECT_DIR$/f1604fb510ac4bf8453dd2cbf90b7faf.iml" filepath="$PROJECT_DIR$/f1604fb510ac4bf8453dd2cbf90b7faf.iml" />
       <module fileurl="file://$PROJECT_DIR$/maulanacustommodul/maulanacustommodul.iml" filepath="$PROJECT_DIR$/maulanacustommodul/maulanacustommodul.iml" />
       <module fileurl="file://$PROJECT_DIR$/zxing-android-embedded/zxing-android-embedded.iml" filepath="$PROJECT_DIR$/zxing-android-embedded/zxing-android-embedded.iml" />
     </modules>

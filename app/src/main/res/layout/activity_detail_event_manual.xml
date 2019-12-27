@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="gmedia.net.id.psp.NavEvent.DetailEvent">
+    tools:context="gmedia.net.id.psp.NavEvent.DetailEventManual">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -157,41 +157,42 @@
 
             </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/formGroup"
-            android:gravity="center">
-
             <LinearLayout
-                android:layout_width="180dp"
-                android:layout_height="55dp"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:background="@drawable/btn_login"
-                android:id="@+id/simpan"
-                android:gravity="center"
-                android:weightSum="1">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/formGroup"
+                android:visibility="gone"
+                android:gravity="center">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.7"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
+                <LinearLayout
+                    android:layout_width="180dp"
+                    android:layout_height="55dp"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:background="@drawable/btn_login"
+                    android:id="@+id/simpan"
                     android:gravity="center"
-                    android:text="Simpan"
-                    android:textStyle=""
-                    android:textAllCaps="true"
-                    android:paddingLeft="@dimen/default_margin_tiny"
-                    android:paddingRight="@dimen/default_margin_tiny"
-                    android:paddingTop="@dimen/default_margin"
-                    android:paddingBottom="@dimen/default_margin"
-                    android:textColor="@color/color_white"/>
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.7"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:text="Simpan"
+                        android:textStyle=""
+                        android:textAllCaps="true"
+                        android:paddingLeft="@dimen/default_margin_tiny"
+                        android:paddingRight="@dimen/default_margin_tiny"
+                        android:paddingTop="@dimen/default_margin"
+                        android:paddingBottom="@dimen/default_margin"
+                        android:textColor="@color/color_white"/>
+                </LinearLayout>
+
             </LinearLayout>
 
-        </LinearLayout>
-
-            <!--<LinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/formGroup"
@@ -229,42 +230,7 @@
                         android:paddingBottom="@dimen/default_margin"
                         android:textColor="@color/color_white"/>
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/default_margin"
-                    android:background="@drawable/btn_login"
-                    android:gravity="center"
-                    android:id="@+id/ll_beli_perdana"
-                    android:weightSum="1">
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.3"
-                        android:padding="@dimen/default_margin_small"
-                        android:src="@drawable/ic_order_perdana"
-                        android:scaleType="fitCenter"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="0.7"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:gravity="center_vertical"
-                        android:text=" Beli Perdana "
-                        android:textStyle=""
-                        android:textAllCaps="true"
-                        android:paddingLeft="@dimen/default_margin_tiny"
-                        android:paddingRight="@dimen/default_margin_tiny"
-                        android:paddingTop="@dimen/default_margin"
-                        android:paddingBottom="@dimen/default_margin"
-                        android:textColor="@color/color_white"/>
-                </LinearLayout>
-
-            </LinearLayout>-->
+            </LinearLayout>
         </LinearLayout>
 
     </ScrollView>

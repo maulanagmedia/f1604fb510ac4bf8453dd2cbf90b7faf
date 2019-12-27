@@ -90,6 +90,7 @@ public class DetailEventManual extends AppCompatActivity {
         btnSimpan = (LinearLayout) findViewById(R.id.simpan);
         llPOI = (LinearLayout) findViewById(R.id.ll_poi);
         pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
+        llBeliPulsa = (LinearLayout) findViewById(R.id.ll_beli_pulsa);
         dialog = new DialogBox(context);
 
 
@@ -271,7 +272,7 @@ public class DetailEventManual extends AppCompatActivity {
             }
         });
 
-        /*llBeliPulsa.setOnClickListener(new View.OnClickListener() {
+        llBeliPulsa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -279,7 +280,7 @@ public class DetailEventManual extends AppCompatActivity {
             }
         });
 
-        llBeliPerdana.setOnClickListener(new View.OnClickListener() {
+        /*llBeliPerdana.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -287,11 +288,6 @@ public class DetailEventManual extends AppCompatActivity {
             }
         });*/
     }
-
-    /*"kdcus" : "GM0001",
-            "nama" : "Test",
-            "alamat" : "Jangli dalam",
-            "nik" : "2035"*/
 
     private void simpanData() {
 
@@ -307,7 +303,7 @@ public class DetailEventManual extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(context, body, "POST", ServerURL.getCustomerPerdanaManual, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(context, body, "POST", ServerURL.saveJualPOIManual, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
                 pbLoading.setVisibility(View.GONE);
@@ -339,9 +335,71 @@ public class DetailEventManual extends AppCompatActivity {
                 pbLoading.setVisibility(View.GONE);
             }
         });
+    }
 
+    private void redirectToDetail(boolean isPulsa){
 
+        //Validasi
 
+        if(actvPoi.getText().length() > 0 && !lastCus.equals(actvPoi.getText().toString())){
+            actvPoi.setError("POI tidak ditemukan");
+            actvPoi.requestFocus();
+            return;
+
+        }
+
+        if(isEvent && edtNomor.getText().toString().length() == 0){
+
+            Toast.makeText(context, "Data event tidak termuat, silahkan ulangi proses", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(actvPoi.getText().toString().length() > 0) {
+            selectedKdcus = actvPoi.getText().toString().equals(lastCus) ? lastKdcus: "";
+        }else{
+            selectedKdcus = "";
+        }
+
+        if(actvNama.getText().toString().length() == 0){
+
+            actvNama.setError("Nama harap diisi");
+            actvNama.requestFocus();
+            return;
+        }else{
+            actvNama.setError(null);
+            //selectedKdcus = actvNama.getText().toString().equals(lastCus) ? lastKdcus: "";
+        }
+
+        if(edtAlamat.getText().toString().length() == 0){
+
+            edtAlamat.setError("Alamat harap diisi");
+            edtAlamat.requestFocus();
+            return;
+        }else{
+
+            edtAlamat.setError(null);
+        }
+
+        Intent intent = new Intent(context, DetailInjectPulsa.class);
+        if(!isPulsa) intent = new Intent(context, DetailDSPerdana.class);
+
+        intent.putExtra("nama", actvNama.getText().toString());
+        intent.putExtra("alamat", edtAlamat.getText().toString());
+        intent.putExtra("nomor", nomor);
+        intent.putExtra("lat", latitude);
+        intent.putExtra("long", longitude);
+        intent.putExtra("radius", radius);
+        intent.putExtra("flag_radius", flagRadius);
+        intent.putExtra("is_manual", true);
+        if(lastCus.equals(actvPoi.getText().toString()) && !actvPoi.getText().toString().equals("")){
+            intent.putExtra("kdcus", lastKdcus);
+            intent.putExtra("lat_poi", latitudePOI);
+            intent.putExtra("long_poi", longitudePOI);
+            intent.putExtra("radius", lastRadius);
+            intent.putExtra("poi", lastCus);
+
+        }
+        startActivity(intent);
     }
 
     @Override
