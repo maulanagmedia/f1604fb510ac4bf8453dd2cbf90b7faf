@@ -72,6 +72,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //import gmedia.net.id.psp.ActDirectSelling.Adapter.ListCCIDAllAdapter;
+import gmedia.net.id.psp.ActKonsinyasi.ActKonsinyasi;
 import gmedia.net.id.psp.ActKonsinyasi.Adapter.ListCCIDReturKonsinyasiAdapter;
 //import gmedia.net.id.psp.ActivityHome;
 //import gmedia.net.id.psp.MapsResellerActivity;
@@ -749,7 +750,7 @@ public class DetailReturKonsinyasi extends AppCompatActivity implements Location
 					if (iv.parseNullInteger(status) == 200) {
 
 						Toast.makeText(context, superMessage, Toast.LENGTH_LONG).show();
-						Intent intent = new Intent(context, MainNavigationActivity.class);
+						Intent intent = new Intent(context, ActKonsinyasi.class);
 						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						intent.putExtra("flag", flag);
 						context.startActivity(intent);
