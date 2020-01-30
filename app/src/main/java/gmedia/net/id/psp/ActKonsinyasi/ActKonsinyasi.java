@@ -13,9 +13,12 @@ import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.SessionManager;
 
 import gmedia.net.id.psp.ActKonsinyasi.InformasiBarang.OutletInfoBarang;
+import gmedia.net.id.psp.ActKonsinyasi.MutasiKonsinyasi.DetailMutasiKonsinyasi;
 import gmedia.net.id.psp.ActKonsinyasi.MutasiKonsinyasi.MutasiKonsinyasi;
+import gmedia.net.id.psp.ActKonsinyasi.Rekonsinyasi.DetailRekonsinyasi;
 import gmedia.net.id.psp.ActKonsinyasi.Rekonsinyasi.Rekonsinyasi;
 import gmedia.net.id.psp.ActKonsinyasi.Retur.ActReturKonsinyasi;
+import gmedia.net.id.psp.ActKonsinyasi.Retur.DetailReturKonsinyasi;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.R;
 
@@ -52,10 +55,11 @@ public class ActKonsinyasi extends AppCompatActivity {
 		rlInfoBarang = (RelativeLayout) findViewById(R.id.rl_info_barang);
 		rlRetur = (RelativeLayout) findViewById(R.id.rl_retur);
 
-		/*Bundle bundle = getIntent().getExtras();
+		Bundle bundle = getIntent().getExtras();
 		if(bundle != null){
 
 			flag = bundle.getString("flag", "");
+			bundle.clear();
 
 			if(!flag.isEmpty()){
 
@@ -67,7 +71,7 @@ public class ActKonsinyasi extends AppCompatActivity {
 					startActivity(new Intent(context, ActReturKonsinyasi.class));
 				}
 			}
-		}*/
+		}
 	}
 
 	private void initAction() {

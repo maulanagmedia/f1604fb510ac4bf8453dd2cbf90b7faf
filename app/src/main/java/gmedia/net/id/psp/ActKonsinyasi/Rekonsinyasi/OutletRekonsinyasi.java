@@ -236,7 +236,7 @@ public class OutletRekonsinyasi extends AppCompatActivity {
                             JSONObject jo = jsonArray.getJSONObject(i);
                             listReller.add(new CustomItem(
                                     jo.getString("kdcus")
-                                    ,jo.getString("nama")
+                                    ,jo.getString("customer")
                                     ,jo.getString("alamat")
                             ));
                         }

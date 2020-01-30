@@ -228,6 +228,12 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
             poiName = bundle.getString("poi", "");
             isManual = bundle.getBoolean("is_manual", false);
 
+            if(isManual){
+
+                setTitle("Direct Sales DDS");
+                btnProses.setText("Simpan Transaksi");
+            }
+
             if(nomor.length() > 0){
 
                 //edtNomor.setText(nomor);

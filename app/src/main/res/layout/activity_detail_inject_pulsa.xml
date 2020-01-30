@@ -257,6 +257,7 @@
                         android:layout_height="wrap_content"
                         android:text=" Inject Pulsa "
                         android:id="@+id/btn_proses"
+                        android:textSize="13sp"
                         android:textColor="@color/color_white"
                         android:layout_marginTop="@dimen/default_margin_tiny"
                         android:layout_marginBottom="@dimen/default_margin_small"

@@ -72,10 +72,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 //import gmedia.net.id.psp.ActDirectSelling.Adapter.ListCCIDAllAdapter;
+import gmedia.net.id.psp.ActKonsinyasi.ActKonsinyasi;
 import gmedia.net.id.psp.ActKonsinyasi.Adapter.ListCCIDKonsinyasiAdapter;
 //import gmedia.net.id.psp.ActivityHome;
 //import gmedia.net.id.psp.MapsResellerActivity;
 import gmedia.net.id.psp.MainNavigationActivity;
+import gmedia.net.id.psp.MapsOutletActivity;
 import gmedia.net.id.psp.OrderDirectSelling.Adapter.ListCCIDAllAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
@@ -477,93 +479,20 @@ public class DetailMutasiKonsinyasi extends AppCompatActivity implements Locatio
 
 	private void getLokasiReseller() {
 
-		/*isLoading = true;
-		dialogBox.showDialog(true);
-		JSONObject jBody = new JSONObject();
+		if(latitudeOutlet != "" && longitudeOutlet != ""){
 
-		try {
-			jBody.put("nomor", "");
-			jBody.put("keyword", "");
-			jBody.put("start", "");
-			jBody.put("count", "");
-			jBody.put("kdcus", kdcus);
-		} catch (JSONException e) {
-			e.printStackTrace();
+			Intent intent = new Intent(DetailMutasiKonsinyasi.this, MapsOutletActivity.class);
+			intent.putExtra("lat", iv.doubleToStringFull(latitude));
+			intent.putExtra("long", iv.doubleToStringFull(longitude));
+			intent.putExtra("lat_outlet", latitudeOutlet);
+			intent.putExtra("long_outlet", longitudeOutlet);
+			intent.putExtra("nama", nama);
+
+			startActivity(intent);
+		}else{
+
+			Toast.makeText(DetailMutasiKonsinyasi.this, "Harap tunggu hingga proses pencarian lokasi selesai", Toast.LENGTH_LONG).show();
 		}
-
-		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getLokasiReseller, new ApiVolley.VolleyCallback() {
-			@Override
-			public void onSuccess(String result) {
-
-				isLoading = false;
-				dialogBox.dismissDialog();
-				String message = "Terjadi kesalahan saat memuat data, harap ulangi";
-
-				try {
-
-					JSONObject response = new JSONObject(result);
-					String status = response.getJSONObject("metadata").getString("status");
-					message = response.getJSONObject("metadata").getString("message");
-
-					if(iv.parseNullInteger(status) == 200){
-
-						JSONArray ja = response.getJSONArray("response");
-						JSONObject jo = ja.getJSONObject(0);
-						String namaRS = jo.getString("nama");
-						latitudeOutlet = jo.getString("latitude");
-						longitudeOutlet = jo.getString("longitude");
-						String photo = jo.getString("image");
-
-						if(latitude != 0 || longitude != 0){
-
-							Intent intent = new Intent(context, MapsResellerActivity.class);
-							intent.putExtra("lat", iv.doubleToStringFull(latitude));
-							intent.putExtra("long", iv.doubleToStringFull(longitude));
-							intent.putExtra("lat_outlet", latitudeOutlet);
-							intent.putExtra("long_outlet", longitudeOutlet);
-							intent.putExtra("nama", namaRS);
-							intent.putExtra("photo", photo);
-
-							startActivity(intent);
-						}
-					}else{
-
-						DialogBox.showDialog(context, 3, message);
-					}
-
-				} catch (JSONException e) {
-
-					e.printStackTrace();
-					View.OnClickListener clickListener = new View.OnClickListener() {
-						@Override
-						public void onClick(View view) {
-
-							dialogBox.dismissDialog();
-							getLokasiReseller();
-						}
-					};
-
-					dialogBox.showDialog(clickListener, "Ulangi Proses", "Terjadi kesalahan, harap ulangi proses");
-				}
-			}
-
-			@Override
-			public void onError(String result) {
-
-				isLoading = false;
-				dialogBox.dismissDialog();
-				View.OnClickListener clickListener = new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-
-						dialogBox.dismissDialog();
-						getLokasiReseller();
-					}
-				};
-
-				dialogBox.showDialog(clickListener, "Ulangi Proses", result);
-			}
-		});*/
 	}
 
 	private void showListCCID() {
@@ -760,7 +689,7 @@ public class DetailMutasiKonsinyasi extends AppCompatActivity implements Locatio
 					if(iv.parseNullInteger(status) == 200){
 
 						Toast.makeText(context, superMessage, Toast.LENGTH_LONG).show();
-						Intent intent = new Intent(context, MainNavigationActivity.class);
+						Intent intent = new Intent(context, ActKonsinyasi.class);
 						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						intent.putExtra("flag", flag);
 						context.startActivity(intent);
@@ -930,12 +859,13 @@ public class DetailMutasiKonsinyasi extends AppCompatActivity implements Locatio
 				//System.out.println(result.getContents());
 
 				//Menambahkan data CCID ke list
-				if (result.getContents().length() >= 21) {
+				getBarang(result.getContents());
+				/*if (result.getContents().length() >= 21) {
 
 					getBarang(result.getContents().substring(5, 21));
 				} else {
 					DialogBox.showDialog(context, 3, "Format CCID tidak benar");
-				}
+				}*/
 			}
 		}
 	}
