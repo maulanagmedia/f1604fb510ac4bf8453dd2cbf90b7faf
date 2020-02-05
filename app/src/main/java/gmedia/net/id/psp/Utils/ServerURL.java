@@ -117,6 +117,7 @@ public class ServerURL {
 	public static final String simpanKonsinyasi = baseURL + "api/Konsinyasi/simpan_konsinyasi";
 	public static final String viewBarangRekonsinyasi = baseURL + "api/Konsinyasi/view_barang_rekonsinyasi";
 	public static final String simpanRekonsinyasi = baseURL + "api/Konsinyasi/simpan_rekonsinyasi";
+	public static final String getRekonsinyasi = baseURL + "api/Konsinyasi/history_rekonsinyasi";
 	public static final String getReturKonsinyasi = baseURL + "api/Konsinyasi/history_retur";
 	public static final String getOutletKonsinyasi = baseURL + "api/Konsinyasi/view_outlet";
 	public static final String returRekonsinyasi = baseURL + "api/Konsinyasi/retur_konsinyasi";

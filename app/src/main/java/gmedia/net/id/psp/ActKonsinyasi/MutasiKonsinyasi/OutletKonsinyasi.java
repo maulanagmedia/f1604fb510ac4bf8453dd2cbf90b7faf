@@ -102,7 +102,7 @@ public class OutletKonsinyasi extends AppCompatActivity {
 		lvReseller.removeFooterView(footerList);
 		lvReseller.setAdapter(adapterReseller);
 
-		lvReseller.setOnScrollListener(new AbsListView.OnScrollListener() {
+		/*lvReseller.setOnScrollListener(new AbsListView.OnScrollListener() {
 			@Override
 			public void onScrollStateChanged(AbsListView absListView, int i) {
 
@@ -123,7 +123,7 @@ public class OutletKonsinyasi extends AppCompatActivity {
 			public void onScroll(AbsListView absListView, int i, int i1, int i2) {
 
 			}
-		});
+		});*/
 	}
 
 	private void initEvent() {

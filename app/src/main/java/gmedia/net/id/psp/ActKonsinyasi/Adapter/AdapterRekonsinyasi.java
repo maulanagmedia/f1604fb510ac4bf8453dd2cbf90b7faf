@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.maulana.custommodul.CustomItem;
+import com.maulana.custommodul.FormatItem;
 import com.maulana.custommodul.ItemValidation;
 
 import java.util.List;
@@ -38,10 +39,11 @@ public class AdapterRekonsinyasi extends RecyclerView.Adapter<AdapterRekonsinyas
     public void onBindViewHolder(@NonNull PiutangViewHolder holder, int position) {
 
         final CustomItem item = listItem.get(position);
+        holder.tvItem0.setText(iv.ChangeFormatDateString(item.getItem6(), FormatItem.formatTimestamp, FormatItem.formatDateTimeDisplay));
         holder.tvItem1.setText(item.getItem2());
         holder.tvItem2.setText(item.getItem3());
-        holder.tvItem3.setText(item.getItem4());
-        holder.tvItem4.setText(item.getItem5());
+        holder.tvItem3.setText(iv.ChangeToCurrencyFormat(item.getItem4()));
+        holder.tvItem4.setText(iv.ChangeToRupiahFormat(item.getItem5()));
 
         holder.cvContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,12 +66,13 @@ public class AdapterRekonsinyasi extends RecyclerView.Adapter<AdapterRekonsinyas
 
     class PiutangViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView tvItem1, tvItem2, tvItem3, tvItem4;
+        private TextView tvItem0, tvItem1, tvItem2, tvItem3, tvItem4;
         private CardView cvContainer;
 
         private PiutangViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            tvItem0 = itemView.findViewById(R.id.tv_item0);
             tvItem1 = itemView.findViewById(R.id.tv_item1);
             tvItem2 = itemView.findViewById(R.id.tv_item2);
             tvItem3 = itemView.findViewById(R.id.tv_item3);

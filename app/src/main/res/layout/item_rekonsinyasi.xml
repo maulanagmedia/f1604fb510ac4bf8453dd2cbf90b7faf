@@ -41,6 +41,16 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_item0"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#fff"
+                        android:gravity="right"
+                        android:paddingLeft="@dimen/padding5"
+                        android:paddingRight="@dimen/padding5"
+                        android:textSize="@dimen/text8" />
+
+                    <TextView
                         android:id="@+id/tv_item1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -64,7 +74,7 @@
                     android:id="@+id/imageView22"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.1"
+                    android:layout_weight="0"
                     android:padding="@dimen/padding5"
                     app:srcCompat="@drawable/right_arrow" />
 
@@ -97,7 +107,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tv_item4"
+                        android:id="@+id/tv_item3"
                         android:gravity="center_vertical|right"
                         android:text=""
                         android:textSize="@dimen/text14" />
@@ -118,7 +128,7 @@
                         android:text="Total"/>
 
                     <TextView
-                        android:id="@+id/tv_item3"
+                        android:id="@+id/tv_item4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical|right"

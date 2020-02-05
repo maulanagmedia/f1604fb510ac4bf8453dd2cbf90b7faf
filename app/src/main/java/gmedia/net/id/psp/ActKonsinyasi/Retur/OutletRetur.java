@@ -20,6 +20,7 @@ import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.CustomView.DialogBox;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +46,7 @@ public class OutletRetur extends AppCompatActivity {
 	private int start = 0, count = 10;
 	private EditText edtSearch;
 	private boolean isLoading = false;
+	private SessionManager session;
 	private String name[] =
 			{
 					"haii",
@@ -75,6 +77,7 @@ public class OutletRetur extends AppCompatActivity {
 		}
 
 		context = this;
+		session = new SessionManager(context);
 		initUI();
 		initEvent();
 		initData();
@@ -169,16 +172,20 @@ public class OutletRetur extends AppCompatActivity {
         if(start == 0) dialogBox.showDialog(true);
         JSONObject jBody = new JSONObject();
         lvReseller.addFooterView(footerList);
+		String area = session.getUserInfo(SessionManager.TAG_AREA);
+		String nik = session.getUserDetails().get(SessionManager.TAG_UID);
 
         try {
             jBody.put("keyword", keyword);
             jBody.put("start", start);
             jBody.put("count", count);
+			jBody.put("nik", nik);
+			jBody.put("area",area);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getOutletKonsinyasi,"","",0,"","", new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getOutletKonsinyasi,"","",0,session.getUsername(),session.getPassword(), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 

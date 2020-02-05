@@ -258,7 +258,8 @@ public class Rekonsinyasi extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewBarangRekonsinyasi,"","",0,session.getUsername(),session.getPassword(), new ApiVolley.VolleyCallback() {
+
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getRekonsinyasi,"","",0,session.getUsername(),session.getPassword(), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -280,11 +281,12 @@ public class Rekonsinyasi extends AppCompatActivity {
 
                             JSONObject jo = ja.getJSONObject(i);
                             listKonsinyasi.add(new CustomItem(
-                                    jo.getString("id")
-                                    ,jo.getString("customer")
-                                    ,iv.ChangeFormatDateString(jo.getString("usertgl"), FormatItem.formatTimestamp, FormatItem.formatDateTimeDisplay)
-                                    ,iv.ChangeToCurrencyFormat(jo.getString("total"))
-                                    ,jo.getString("jumlah_ccid")
+                                    jo.getString("nonota")
+                                    ,jo.getString("namabrg")
+                                    ,jo.getString("outlet")
+                                    ,jo.getString("jml")
+                                    ,jo.getString("total")
+                                    ,jo.getString("usertgl")
                             ));
 
                         }

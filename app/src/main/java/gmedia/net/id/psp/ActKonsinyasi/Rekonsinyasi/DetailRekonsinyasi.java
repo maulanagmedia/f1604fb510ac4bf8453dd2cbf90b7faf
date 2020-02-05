@@ -77,6 +77,7 @@ import gmedia.net.id.psp.ActKonsinyasi.Adapter.ListCCIDReKonsinyasiAdapter;
 //import gmedia.net.id.psp.ActivityHome;
 //import gmedia.net.id.psp.MapsResellerActivity;
 import gmedia.net.id.psp.MainNavigationActivity;
+import gmedia.net.id.psp.MapsOutletActivity;
 import gmedia.net.id.psp.OrderDirectSelling.Adapter.ListCCIDAllAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
@@ -262,7 +263,7 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 			public void onClick(View view) {
 
 				//validasi
-				if (adapter == null) {
+				/*if (adapter == null) {
 
 					Toast.makeText(context, "Silahkan masukkan minimal satu barang", Toast.LENGTH_LONG).show();
 					return;
@@ -272,7 +273,7 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 
 					Toast.makeText(context, "Silahkan masukkan minimal satu barang", Toast.LENGTH_LONG).show();
 					return;
-				}
+				}*/
 
 				String message = "Apakah anda yakin ingin memproses data?\n\n";
 				// if(editMode) message = "Apakah anda yakin ingin mengubah "+noBukti+" ?\n\n";
@@ -310,6 +311,20 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 			@Override
 			public void onClick(View view) {
 
+				if(latitudeOutlet != "" && longitudeOutlet != ""){
+
+					Intent intent = new Intent(DetailRekonsinyasi.this, MapsOutletActivity.class);
+					intent.putExtra("lat", iv.doubleToStringFull(latitude));
+					intent.putExtra("long", iv.doubleToStringFull(longitude));
+					intent.putExtra("lat_outlet", latitudeOutlet);
+					intent.putExtra("long_outlet", longitudeOutlet);
+					intent.putExtra("nama", nama);
+
+					startActivity(intent);
+				}else{
+
+					Toast.makeText(DetailRekonsinyasi.this, "Harap tunggu hingga proses pencarian lokasi selesai", Toast.LENGTH_LONG).show();
+				}
 //				getLokasiReseller();
 			}
 		});
@@ -402,8 +417,8 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 										jo.getString("ccid"),
 										jo.getString("harga"),
 										jo.getString("jumlah"),
-										jo.getString("nobukti"),
-										jo.getString("id")
+										jo.getString("nomor_surat_jalan"),
+										jo.getString("id_surat_jalan")
 								));
 
 								edtCCID.setText(jo.getString("ccid"));
@@ -705,17 +720,20 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 		//7. id surat jalam
 
 		JSONArray jData = new JSONArray();
-		for (CustomItem item : adapter.getDataList()) {
+		if(adapter != null) {
 
-			JSONObject jDataDetail = new JSONObject();
-			try {
+			for (CustomItem item : adapter.getDataList()) {
 
-				jDataDetail.put("ccid", item.getItem3());
-			} catch (JSONException e) {
-				e.printStackTrace();
+				JSONObject jDataDetail = new JSONObject();
+				try {
+
+					jDataDetail.put("ccid", item.getItem3());
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+				jData.put(jDataDetail);
 			}
-
-			jData.put(jDataDetail);
 		}
 
 		try {
@@ -919,12 +937,13 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 				//System.out.println(result.getContents());
 
 				//Menambahkan data CCID ke list
-				if (result.getContents().length() >= 21) {
+				getBarang(result.getContents());
+				/*if (result.getContents().length() >= 21) {
 
 					getBarang(result.getContents().substring(5, 21));
 				} else {
 					DialogBox.showDialog(context, 3, "Format CCID tidak benar");
-				}
+				}*/
 			}
 		}
 	}

@@ -77,6 +77,7 @@ import gmedia.net.id.psp.ActKonsinyasi.Adapter.ListCCIDReturKonsinyasiAdapter;
 //import gmedia.net.id.psp.ActivityHome;
 //import gmedia.net.id.psp.MapsResellerActivity;
 import gmedia.net.id.psp.MainNavigationActivity;
+import gmedia.net.id.psp.MapsOutletActivity;
 import gmedia.net.id.psp.OrderDirectSelling.Adapter.ListCCIDAllAdapter;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ServerURL;
@@ -311,7 +312,21 @@ public class DetailReturKonsinyasi extends AppCompatActivity implements Location
 			@Override
 			public void onClick(View view) {
 
-				getLokasiReseller();
+				if(latitudeOutlet != "" && longitudeOutlet != ""){
+
+					Intent intent = new Intent(DetailReturKonsinyasi.this, MapsOutletActivity.class);
+					intent.putExtra("lat", iv.doubleToStringFull(latitude));
+					intent.putExtra("long", iv.doubleToStringFull(longitude));
+					intent.putExtra("lat_outlet", latitudeOutlet);
+					intent.putExtra("long_outlet", longitudeOutlet);
+					intent.putExtra("nama", nama);
+
+					startActivity(intent);
+				}else{
+
+					Toast.makeText(DetailReturKonsinyasi.this, "Harap tunggu hingga proses pencarian lokasi selesai", Toast.LENGTH_LONG).show();
+				}
+				//getLokasiReseller();
 			}
 		});
 	}
@@ -345,7 +360,7 @@ public class DetailReturKonsinyasi extends AppCompatActivity implements Location
 			e.printStackTrace();
 		}
 
-		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewBarangRekonsinyasi, "", "", 0, "", "", new ApiVolley.VolleyCallback() {
+		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.viewBarangRekonsinyasi, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
 			@Override
 			public void onSuccess(String result) {
 
@@ -403,8 +418,8 @@ public class DetailReturKonsinyasi extends AppCompatActivity implements Location
 										jo.getString("ccid"),
 										jo.getString("harga"),
 										jo.getString("jumlah"),
-										jo.getString("nobukti"),
-										jo.getString("id")
+										jo.getString("nomor_surat_jalan"),
+										jo.getString("id_surat_jalan")
 								));
 
 								edtCCID.setText(jo.getString("ccid"));
@@ -733,7 +748,7 @@ public class DetailReturKonsinyasi extends AppCompatActivity implements Location
 			e.printStackTrace();
 		}
 
-		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.returRekonsinyasi, "", "", 0, "", "", new ApiVolley.VolleyCallback() {
+		ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.returRekonsinyasi, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
 			@Override
 			public void onSuccess(String result) {
 
@@ -920,12 +935,13 @@ public class DetailReturKonsinyasi extends AppCompatActivity implements Location
 				//System.out.println(result.getContents());
 
 				//Menambahkan data CCID ke list
-				if (result.getContents().length() >= 21) {
+				getBarang(result.getContents());
+				/*if (result.getContents().length() >= 21) {
 
-					getBarang(result.getContents().substring(5, 21));
+
 				} else {
 					DialogBox.showDialog(context, 3, "Format CCID tidak benar");
-				}
+				}*/
 			}
 		}
 	}

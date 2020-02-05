@@ -25,6 +25,7 @@ import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.CustomView.DialogBox;
 import com.maulana.custommodul.FormatItem;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,6 +57,7 @@ public class ActReturKonsinyasi extends AppCompatActivity {
 	private List<CustomItem> listKonsinyasi = new ArrayList<>();
 	private RecyclerView rvKonsinyasi;
 	private AdapterReturkonsinyasi adapter;
+	private SessionManager session;
 	private String name[] =
 			{
 					"haii",
@@ -108,6 +110,7 @@ public class ActReturKonsinyasi extends AppCompatActivity {
 		}
 
 		context = this;
+		session = new SessionManager(context);
 		dialogBox = new DialogBox(context);
 		initUI();
 		initEvent();
@@ -255,7 +258,7 @@ public class ActReturKonsinyasi extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getReturKonsinyasi,"","",0,"","", new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerURL.getReturKonsinyasi,"","",0,session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
