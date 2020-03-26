@@ -48,6 +48,7 @@ import gmedia.net.id.psp.NavPengajuanDeposit.MainPengajuanDeposit;
 import gmedia.net.id.psp.NavPreorderPerdana.ActPreorderPerdanaActivity;
 import gmedia.net.id.psp.NavTambahCustomer.ActTambahOutlet;
 import gmedia.net.id.psp.NavVerifikasiOutlet.ActVerifikasiOutlet;
+import gmedia.net.id.psp.OrderNgrs.ActOrderNGRS;
 import gmedia.net.id.psp.OrderPerdana.CustomerPerdana;
 import gmedia.net.id.psp.OrderPulsa.ListReseller;
 import gmedia.net.id.psp.OrderTcash.ActOrderTcash;
@@ -85,7 +86,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 	private LinearLayout llOrderMkios, llPenjualanMkios, llOrderPerdana, llPenjualanPerdana, llDaftarPiutang, llStokSales;
 	private TextView tvNamaSales, tvTotalOmset, tvOmsetMkios, tvOmsetPerdana, tvTargetMkios, tvGapMkios, tvTargetPerdana, tvGapPerdana, tvTargetPJP, tvPencapaianPJP, tvGapPJP;
 	private LinearLayout llAddCustomer, llCheckIn, llKomplain;
-	private LinearLayout ll1, ll2, ll3, ll3a, ll4, ll5, ll6, ll7, ll8, ll9, ll10;
+	private LinearLayout ll1, ll1a, ll2, ll3, ll3a, ll4, ll5, ll6, ll7, ll8, ll9, ll10;
 	private LinearLayout llOrderTcash;
 	private LinearLayout llPenjualan;
 	private LinearLayout llRiwayatPenjualan;
@@ -97,6 +98,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 	private LinearLayout llPreorderPerdana;
 	private LinearLayout llEvent, llMarketSurvey, llMarketSurveyAoc;
 	private LinearLayout llDirectSelling;
+	private LinearLayout llOrderNgrs;
 	private LinearLayout llMenuPenjualanReseller, llMenuDirectSelling, llMenuDirectSellingManual, llMenuSPV, llMenuMD, llMenuOperasional, llPengajuanDeposit, llMarketSurveyMD, llKonsinyasi;
 	private LinearLayout llIDS, llDS;
 	private TextView tvDSTargetMkios, tvDSOmsetMkios, tvDSGapMkios, tvDSTargetPerdana, tvDSOmsetPerdana, tvDSGapPerdana;
@@ -180,6 +182,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 
 		//button
 		ll1 = (LinearLayout) layout.findViewById(R.id.ll_1);
+		ll1a = (LinearLayout) layout.findViewById(R.id.ll_1a);
 		ll2 = (LinearLayout) layout.findViewById(R.id.ll_2);
 		ll3 = (LinearLayout) layout.findViewById(R.id.ll_3);
 		ll3a = (LinearLayout) layout.findViewById(R.id.ll_3a);
@@ -197,6 +200,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 		lp.height = (display[1] - mActionBarSize) * 15 / 100;
 
 		ll1.setLayoutParams(lp);
+		ll1a.setLayoutParams(lp);
 		ll2.setLayoutParams(lp);
 		ll3.setLayoutParams(lp);
 		ll3a.setLayoutParams(lp);
@@ -221,25 +225,29 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 		llOrderPerdana = (LinearLayout) layout.findViewById(R.id.ll_order_perdana);         // 3
 		llOrderTcash = (LinearLayout) layout.findViewById(R.id.ll_order_tcash);             // 4
 		llPenjualan = (LinearLayout) layout.findViewById(R.id.ll_penjualan);                // 5
+
 		llRiwayatPenjualan = (LinearLayout) layout.findViewById(R.id.ll_riwayat_penjualan); // 6
 		llDaftarPiutang = (LinearLayout) layout.findViewById(R.id.ll_daftar_piutang);       // 7
 		llStokSales = (LinearLayout) layout.findViewById(R.id.ll_stok_sales);               // 8
 		llKomplain = (LinearLayout) layout.findViewById(R.id.ll_complaint);                 // 9
 		llVerifikasiOutlet = (LinearLayout) layout.findViewById(R.id.ll_verifikasi_outlet); // 10
+
 		llCheckIn = (LinearLayout) layout.findViewById(R.id.ll_checkin);                    // 11
 		llInfoDeposit = (LinearLayout) layout.findViewById(R.id.ll_info_deposit);           // 12
-		llEvent = (LinearLayout) layout.findViewById(R.id.ll_event);                    // 13
-		llMarketSurvey = (LinearLayout) layout.findViewById(R.id.ll_market_survey);     // 13
-		llMarketSurveyAoc = (LinearLayout) layout.findViewById(R.id.ll_market_survey_aoc);     // 13
-		llPreorderPerdana = (LinearLayout) layout.findViewById(R.id.ll_preorder_perdana);   // 13
-		llDirectSelling = (LinearLayout) layout.findViewById(R.id.ll_direct_selling);
-		llPengajuanDeposit = (LinearLayout) layout.findViewById(R.id.ll_pengajuan_deposit);
-		llKonsinyasi = (LinearLayout) layout.findViewById(R.id.ll_konsinyasi);
-		llMarketSurveyMD = (LinearLayout) layout.findViewById(R.id.ll_market_survey_md);
+		llEvent = (LinearLayout) layout.findViewById(R.id.ll_event);                        // 13
+		llMarketSurvey = (LinearLayout) layout.findViewById(R.id.ll_market_survey);         // 14
+		llMarketSurveyAoc = (LinearLayout) layout.findViewById(R.id.ll_market_survey_aoc);  // 15
 
-		llPenjualanMkios = (LinearLayout) layout.findViewById(R.id.ll_penjualan_mkios);
-		llPenjualanPerdana = (LinearLayout) layout.findViewById(R.id.ll_penjualan_perdana);
-		llMapsKunjungan = (LinearLayout) layout.findViewById(R.id.ll_maps_kunjungan);
+		llPreorderPerdana = (LinearLayout) layout.findViewById(R.id.ll_preorder_perdana);   // 16
+		llDirectSelling = (LinearLayout) layout.findViewById(R.id.ll_direct_selling);       // 17
+		llPengajuanDeposit = (LinearLayout) layout.findViewById(R.id.ll_pengajuan_deposit); // 18
+		llKonsinyasi = (LinearLayout) layout.findViewById(R.id.ll_konsinyasi);              // 19
+		llMarketSurveyMD = (LinearLayout) layout.findViewById(R.id.ll_market_survey_md);    // 20
+
+		llPenjualanMkios = (LinearLayout) layout.findViewById(R.id.ll_penjualan_mkios);     // 21
+		llPenjualanPerdana = (LinearLayout) layout.findViewById(R.id.ll_penjualan_perdana); // 22
+		llMapsKunjungan = (LinearLayout) layout.findViewById(R.id.ll_maps_kunjungan);       // 23
+		llOrderNgrs = (LinearLayout) layout.findViewById(R.id.ll_order_ngrs);               // 24
 
 		tvNamaSales = (TextView) layout.findViewById(R.id.tv_nama_sales);
 		tvTotalOmset = (TextView) layout.findViewById(R.id.tv_total_omset);
@@ -406,6 +414,15 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(context, ActOrderTcash.class);
+				context.startActivity(intent);
+				((Activity) context).finish();
+			}
+		});
+
+		llOrderNgrs.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(context, ActOrderNGRS.class);
 				context.startActivity(intent);
 				((Activity) context).finish();
 			}

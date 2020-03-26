@@ -45,7 +45,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Bayu\Music\ic_refresh.png" />
+                                      <entry key="imageAsset" value="$APPLICATION_HOME_DIR$/bin/C:\Users\Bayu\Music\ic_refresh.png" />
                                       <entry key="outputName" value="ic_refresh" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="ff0000" />
@@ -85,7 +85,19 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="color" value="1d1dff" />
+                                                <entry key="color" value="ef303f" />
+                                                <entry key="paddingPercent" value="50" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                      <entry key="clipartAsset">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/device/ic_graphic_eq_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -106,11 +118,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="assetType" value="IMAGE" />
-                                      <entry key="backgroundColor" value="80ff85" />
-                                      <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="C:\Users\Bayu\Music\ic_refresh.png" />
-                                      <entry key="outputName" value="ic_refresh" />
+                                      <entry key="backgroundColor" value="fefefe" />
+                                      <entry key="iconShape" value="CIRCLE" />
+                                      <entry key="imageAsset" value="$APPLICATION_HOME_DIR$/bin/C:\Users\Bayu\Music\ic_refresh.png" />
+                                      <entry key="outputName" value="ic_ngrs" />
                                     </map>
                                   </option>
                                 </PersistentState>
