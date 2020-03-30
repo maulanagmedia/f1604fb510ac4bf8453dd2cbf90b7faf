@@ -457,7 +457,7 @@ public class DetailTcashOrder extends AppCompatActivity implements LocationListe
                     alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
                     List<Item> items = new ArrayList<>();
-                    items.add(new Item("Tcash", "-", iv.parseNullDouble(hargaTcash)));
+                    items.add(new Item("NGRS", "-", iv.parseNullDouble(hargaTcash)));
 
                     Calendar date = Calendar.getInstance();
                     final Transaksi transaksi = new Transaksi(namaRS, namaSales, nonota, date.getTime(), items, iv.ChangeFormatDateString(tglTransaksi, FormatItem.formatTimestamp, FormatItem.formatDateDisplay2));

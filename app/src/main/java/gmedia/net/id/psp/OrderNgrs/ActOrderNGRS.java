@@ -228,7 +228,7 @@ public class ActOrderNGRS extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(activity, jBody, "POST", ServerURL.getPenjualanTcash, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(activity, jBody, "POST", ServerURL.getPenjualanNgrs, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -388,7 +388,7 @@ public class ActOrderNGRS extends AppCompatActivity {
                         alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
                         List<Item> items = new ArrayList<>();
-                        items.add(new Item("Tcash", "-", iv.parseNullDouble(selectedItem.getItem4())));
+                        items.add(new Item("NGRS", "-", iv.parseNullDouble(selectedItem.getItem4())));
 
 
                         Calendar date = Calendar.getInstance();

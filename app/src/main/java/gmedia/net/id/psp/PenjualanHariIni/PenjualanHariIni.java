@@ -54,7 +54,7 @@ public class PenjualanHariIni extends AppCompatActivity {
     private ProgressBar pbProses;
     private ItemValidation iv = new ItemValidation();
     private SessionManager session;
-    private TextView tvTotal, tvTotalTcash, tvTotalDeposit;
+    private TextView tvTotal, tvTotalTcash, tvTotalDeposit, tvTotalNGRS;
     private String keyword = "";
     private List<CustomItem> masterList;
     private boolean firstLoad = true;
@@ -67,15 +67,19 @@ public class PenjualanHariIni extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_penjualan_hari_ini);
 
+        // inisial pemercantik
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
         setTitle("Penjualan Hari Ini");
+
+        // konteks dan printer
         context = this;
         printer = new PspPrinter(context);
         printer.startService();
 
+        // inisialisasi UI
         initUI();
     }
 
@@ -86,6 +90,7 @@ public class PenjualanHariIni extends AppCompatActivity {
         pbProses = (ProgressBar) findViewById(R.id.pb_proses);
         tvTotal = (TextView) findViewById(R.id.tv_total);
         tvTotalTcash = (TextView) findViewById(R.id.tv_total_tcash);
+        tvTotalNGRS = (TextView) findViewById(R.id.tv_total_ngrs);
         tvTotalDeposit = (TextView) findViewById(R.id.tv_total_deposit);
         session = new SessionManager(PenjualanHariIni.this);
         keyword = "";
@@ -127,7 +132,7 @@ public class PenjualanHariIni extends AppCompatActivity {
                     String status = response.getJSONObject("metadata").getString("status");
                     masterList = new ArrayList<>();
 
-                    long total = 0, totalTcash = 0, totalDeposit = 0, totalPerNama = 0;
+                    long total = 0, totalTcash = 0, totalDeposit = 0, totalPerNama = 0, totalNGRS = 0;
                     String nama = "";
 
                     if(iv.parseNullInteger(status) == 200){
@@ -138,6 +143,7 @@ public class PenjualanHariIni extends AppCompatActivity {
 
                             JSONObject jo = items.getJSONObject(i);
 
+                            // I : isi, sehingga diantara header dan footer, supaya terbagi-bagi
                             masterList.add(new CustomItem(
                                     "I"
                                     , jo.getString("nonota")
@@ -149,12 +155,18 @@ public class PenjualanHariIni extends AppCompatActivity {
                                     , jo.getString("jarak")
                                     , jo.getString("status")));
 
-                            if(!jo.getString("flag").toUpperCase().equals("MKIOS_TR") && !jo.getString("flag").toUpperCase().equals("TCASH_TR")){
+                            // Cek yang sudah masuk ke piutang, kalau iya dijumlahkan sebagai piutang
+                            if(!jo.getString("flag").toUpperCase().equals("MKIOS_TR")
+                                    && !jo.getString("flag").toUpperCase().equals("TCASH_TR")
+                                    && !jo.getString("flag").toUpperCase().equals("NGRS_TR")){
                                 if(jo.getString("app_flag").equals("1")){
 
                                     if(jo.getString("flag").trim().toUpperCase().equals("TCASH")){
 
                                         totalTcash += iv.parseNullLong(jo.getString("piutang"));
+                                    }else if(jo.getString("flag").trim().toUpperCase().equals("NGRS")){
+
+                                        totalNGRS += iv.parseNullLong(jo.getString("piutang"));
                                     }else{
 
                                         total += iv.parseNullLong(jo.getString("piutang"));
@@ -166,17 +178,24 @@ public class PenjualanHariIni extends AppCompatActivity {
 
                             }
 
+                            // Ulangi langkah untuk mendapatkan total per nama
                             if(i < items.length() - 1){
 
                                 JSONObject jo2 = items.getJSONObject(i+1);
                                 if(jo2.getString("kdcus").equals(jo.getString("kdcus"))){
 
-                                    if(!jo.getString("flag").toUpperCase().equals("MKIOS_TR") && !jo.getString("flag").toUpperCase().equals("TCASH_TR")){
+                                    if(!jo.getString("flag").toUpperCase().equals("MKIOS_TR")
+                                            && !jo.getString("flag").toUpperCase().equals("TCASH_TR")
+                                            && !jo.getString("flag").toUpperCase().equals("NGRS_TR")){
+
                                         totalPerNama += iv.parseNullLong(jo.getString("piutang"));
                                     }
                                 }else{
 
-                                    if(!jo.getString("flag").toUpperCase().equals("MKIOS_TR") && !jo.getString("flag").toUpperCase().equals("TCASH_TR")){
+                                    if(!jo.getString("flag").toUpperCase().equals("MKIOS_TR")
+                                            && !jo.getString("flag").toUpperCase().equals("TCASH_TR")
+                                            && !jo.getString("flag").toUpperCase().equals("NGRS_TR")){
+
                                         totalPerNama += iv.parseNullLong(jo.getString("piutang"));
                                         masterList.add(new CustomItem("F", String.valueOf(totalPerNama), jo.getString("flag")));
                                         totalPerNama = 0;
@@ -184,7 +203,10 @@ public class PenjualanHariIni extends AppCompatActivity {
                                 }
                             }else{
 
-                                if(!jo.getString("flag").toUpperCase().equals("MKIOS_TR") && !jo.getString("flag").toUpperCase().equals("TCASH_TR")){
+                                if(!jo.getString("flag").toUpperCase().equals("MKIOS_TR")
+                                        && !jo.getString("flag").toUpperCase().equals("TCASH_TR")
+                                        && !jo.getString("flag").toUpperCase().equals("NGRS_TR")){
+
                                     totalPerNama += iv.parseNullLong(jo.getString("piutang"));
                                     masterList.add(new CustomItem("F", String.valueOf(totalPerNama), jo.getString("flag")));
                                     totalPerNama = 0;
@@ -195,6 +217,7 @@ public class PenjualanHariIni extends AppCompatActivity {
 
                     tvTotal.setText(iv.ChangeToRupiahFormat(total));
                     tvTotalTcash.setText(iv.ChangeToRupiahFormat(totalTcash));
+                    tvTotalNGRS.setText(iv.ChangeToRupiahFormat(totalNGRS));
 
                     tvTotalDeposit.setText(iv.ChangeToRupiahFormat(totalDeposit));
                     final List<CustomItem> tableList = new ArrayList<>(masterList);
@@ -278,6 +301,8 @@ public class PenjualanHariIni extends AppCompatActivity {
             List<CustomItem> gaList = new ArrayList<>();
             List<CustomItem> tcashTrList = new ArrayList<>();
             List<CustomItem> tcashList = new ArrayList<>();
+            List<CustomItem> ngrsTrList = new ArrayList<>();
+            List<CustomItem> ngrsList = new ArrayList<>();
             List<CustomItem> dsList = new ArrayList<>();
 
             // Get MKIOS & GA
@@ -295,6 +320,10 @@ public class PenjualanHariIni extends AppCompatActivity {
                         tcashList.add(itemApPosition);
                     }else if(itemApPosition.getItem5().toUpperCase().equals("TCASH_TR")){
                         tcashTrList.add(itemApPosition);
+                    }else if(itemApPosition.getItem5().toUpperCase().equals("NGRS")){
+                        ngrsList.add(itemApPosition);
+                    }else if(itemApPosition.getItem5().toUpperCase().equals("NGRS_TR")){
+                        ngrsTrList.add(itemApPosition);
                     }else if(itemApPosition.getItem5().toUpperCase().equals("DS")){
                         dsList.add(itemApPosition);
                     }
@@ -310,6 +339,10 @@ public class PenjualanHariIni extends AppCompatActivity {
                         tcashList.add(itemApPosition);
                     }else if(itemApPosition.getItem3().toUpperCase().equals("TCASH_TR")){
                         tcashTrList.add(itemApPosition);
+                    }else if(itemApPosition.getItem3().toUpperCase().equals("NGRS")){
+                        ngrsList.add(itemApPosition);
+                    }else if(itemApPosition.getItem3().toUpperCase().equals("NGRS_TR")){
+                        ngrsTrList.add(itemApPosition);
                     }else if(itemApPosition.getItem3().toUpperCase().equals("DS")){
                         dsList.add(itemApPosition);
                     }
@@ -324,6 +357,11 @@ public class PenjualanHariIni extends AppCompatActivity {
             if(tcashTrList.size() > 0){
                 bufferList.add(new CustomItem("H", "Transaksi Link Aja"));
                 bufferList.addAll(tcashTrList);
+            }
+
+            if(ngrsTrList.size() > 0){
+                bufferList.add(new CustomItem("H", "Transaksi NGRS"));
+                bufferList.addAll(ngrsTrList);
             }
 
             if(dsList.size() > 0){
@@ -346,6 +384,11 @@ public class PenjualanHariIni extends AppCompatActivity {
                 bufferList.addAll(tcashList);
             }
 
+            if(ngrsList.size() > 0){
+                bufferList.add(new CustomItem("H", "Penjualan NGRS"));
+                bufferList.addAll(ngrsList);
+            }
+
             PenjualanHariIniAdapter adapter = new PenjualanHariIniAdapter(PenjualanHariIni.this, bufferList);
             lvPenjualan.setAdapter(adapter);
 
@@ -357,7 +400,7 @@ public class PenjualanHariIni extends AppCompatActivity {
 
                     if(selectedItem.getItem1().equals("I")){
 
-                        currentFlag = selectedItem.getItem5().equals("MKIOS_TR") ? "MKIOS" : (selectedItem.getItem5().equals("TCASH_TR") ? "TCASH" : selectedItem.getItem5());
+                        currentFlag = selectedItem.getItem5().equals("MKIOS_TR") ? "MKIOS" : (selectedItem.getItem5().equals("TCASH_TR") ? "TCASH" : (selectedItem.getItem5().equals("NGRS_TR") ? "NGRS" : selectedItem.getItem5()));
 
                         if(currentFlag.equals("DS")){
 

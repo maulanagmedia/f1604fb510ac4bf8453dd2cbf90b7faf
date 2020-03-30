@@ -79,10 +79,11 @@ public class ServerURL {
 
 	public static final String getTcashReseller = baseURL + "api/tcash/get_reseller/";
 	public static final String getPenjualanTcash = baseURL + "api/tcash/get_penjualan_tcash/";
-	public static final String getPenjualanNgrs = baseURL + "api/tcash/get_penjualan_tcash/";
+	public static final String getPenjualanNgrs = baseURL + "api/tcash/get_penjualan_ngrs/";
 	public static final String getDetailPenjualanTcash = baseURL + "api/tcash/get_detail_penjualan_tcash/";
 	public static final String getDetailPenjualanNgrs = baseURL + "api/tcash/get_detail_penjualan_ngrs/";
 	public static final String getTcashHarga = baseURL + "api/tcash/get_harga/";
+	public static final String getHargaNGRS = baseURL + "api/tcash/get_harga_ngrs/";
 	public static final String saveTcash = baseURL + "api/tcash/save/";
 	public static final String saveNGRS = baseURL + "api/tcash/save_ngrs/";
 	public static final String saveTcashDev = baseURL + "api/tcash/save_dev/";

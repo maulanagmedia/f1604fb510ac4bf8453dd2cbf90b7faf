@@ -143,7 +143,7 @@ public class DetailOrderNGRS extends AppCompatActivity implements LocationListen
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
-        setTitle("Detail Link Aja Order");
+        setTitle("Detail Order NGRS");
 
         // getLocation update by google
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -394,7 +394,7 @@ public class DetailOrderNGRS extends AppCompatActivity implements LocationListen
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ApiVolley request = new ApiVolley(activity, jBody, "POST", ServerURL.getDetailPenjualanTcash, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(activity, jBody, "POST", ServerURL.getDetailPenjualanNgrs, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -843,7 +843,7 @@ public class DetailOrderNGRS extends AppCompatActivity implements LocationListen
                         alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
                         List<Item> items = new ArrayList<>();
-                        items.add(new Item("Tcash ", "-", iv.parseNullDouble(hargaTcash)));
+                        items.add(new Item("NGRS ", "-", iv.parseNullDouble(hargaTcash)));
 
                         Calendar date = Calendar.getInstance();
                         final Transaksi transaksi = new Transaksi(namaRS, session.getUser(), nonota, date.getTime(), items, iv.getCurrentDate(FormatItem.formatDateDisplay2));
@@ -1081,7 +1081,7 @@ public class DetailOrderNGRS extends AppCompatActivity implements LocationListen
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ApiVolley request = new ApiVolley(activity, jBody, "POST", ServerURL.getTcashHarga, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(activity, jBody, "POST", ServerURL.getHargaNGRS, "", "", 0, session.getUserDetails().get(SessionManager.TAG_USERNAME), session.getUserDetails().get(SessionManager.TAG_PASSWORD), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
