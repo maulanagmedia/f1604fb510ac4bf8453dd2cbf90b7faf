@@ -47,6 +47,7 @@ import java.util.Locale;
 import gmedia.net.id.psp.LoginScreen;
 import gmedia.net.id.psp.MainNavigationActivity;
 import gmedia.net.id.psp.OrderDirectSelling.HistoryDirectSelling;
+import gmedia.net.id.psp.OrderNgrs.DetailOrderNGRS;
 import gmedia.net.id.psp.OrderPerdana.DetailOrderPerdana;
 import gmedia.net.id.psp.OrderPulsa.DetailOrderPulsa;
 import gmedia.net.id.psp.OrderTcash.DetailTcashOrder;
@@ -655,6 +656,13 @@ public class RiwayatPenjualan extends AppCompatActivity {
                                     break;
                                 }else if(flag.equals("TCASH")){
                                     Intent intent = new Intent(RiwayatPenjualan.this, DetailTcashOrder.class);
+                                    intent.putExtra("nonota", jo.getString("nonota"));
+                                    intent.putExtra("koders", jo.getString("kode"));
+                                    intent.putExtra("tgl", jo.getString("tgl"));
+                                    intent.putExtra("namasales", namaSales);
+                                    startActivity(intent);
+                                }else if(flag.equals("NGRS")){
+                                    Intent intent = new Intent(RiwayatPenjualan.this, DetailOrderNGRS.class);
                                     intent.putExtra("nonota", jo.getString("nonota"));
                                     intent.putExtra("koders", jo.getString("kode"));
                                     intent.putExtra("tgl", jo.getString("tgl"));

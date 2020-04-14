@@ -255,7 +255,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="0.4"
                         android:layout_height="wrap_content"
-                        android:text=" Proses Order tCash "
+                        android:text=" Proses Order Ngrs "
                         android:id="@+id/btn_proses"
                         android:textColor="@color/color_white"
                         android:paddingRight="@dimen/default_margin_small"

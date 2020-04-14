@@ -39,6 +39,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import gmedia.net.id.psp.MainNavigationActivity;
+import gmedia.net.id.psp.OrderNgrs.DetailOrderNGRS;
 import gmedia.net.id.psp.OrderPerdana.DetailOrderPerdana;
 import gmedia.net.id.psp.OrderPulsa.DetailOrderPulsa;
 import gmedia.net.id.psp.OrderTcash.DetailTcashOrder;
@@ -548,6 +549,12 @@ public class PenjualanHariIni extends AppCompatActivity {
                                     break;
                                 }else if(flag.equals("TCASH")){
                                     Intent intent = new Intent(PenjualanHariIni.this, DetailTcashOrder.class);
+                                    intent.putExtra("nonota", jo.getString("nonota"));
+                                    intent.putExtra("koders", jo.getString("kode"));
+                                    intent.putExtra("tgl", jo.getString("tgl"));
+                                    startActivity(intent);
+                                }else if(flag.equals("NGRS")){
+                                    Intent intent = new Intent(PenjualanHariIni.this, DetailOrderNGRS.class);
                                     intent.putExtra("nonota", jo.getString("nonota"));
                                     intent.putExtra("koders", jo.getString("kode"));
                                     intent.putExtra("tgl", jo.getString("tgl"));
