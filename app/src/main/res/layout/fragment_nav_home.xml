@@ -120,7 +120,7 @@
                                     android:gravity="center"
                                     android:textSize="@dimen/font_menu"
                                     android:textColor="@color/color_black"
-                                    android:text="Order Mkios"/>
+                                    android:text="Stock NGRS"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -391,47 +391,7 @@
                                     android:text="Market Survey TSA"/>
                             </LinearLayout>
                         </LinearLayout>
-<!--Tambahan-->
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/menu_height"
-                            android:id="@+id/ll_10"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="@dimen/default_margin_small"
-                            android:layout_marginBottom="@dimen/default_margin_small"
-                            android:weightSum="3">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical"
-                                android:id="@+id/ll_direct_selling_manual"
-                                android:background="?attr/selectableItemBackground"
-                                android:paddingRight="@dimen/default_margin_small"
-                                android:paddingLeft="@dimen/default_margin_small"
-                                android:gravity="center"
-                                android:weightSum="1">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="0.8"
-                                    android:padding="@dimen/default_margin_small"
-                                    android:src="@drawable/ic_order_mkios"
-                                    android:scaleType="fitCenter"/>
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="0.2"
-                                    android:gravity="center"
-                                    android:textSize="@dimen/font_menu"
-                                    android:textColor="@color/color_black"
-                                    android:text="DDS"/>
-                            </LinearLayout>
-                        </LinearLayout>
+                        <!--Tambahan-->
 
 
                        <!-- <LinearLayout
@@ -517,6 +477,76 @@
 
                             </LinearLayout>
 
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ll_menu_dds"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Penjualan DDS"
+                            android:textAllCaps="true"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_black"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginRight="@dimen/default_margin_small"
+                            android:layout_marginLeft="@dimen/default_margin_small"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/default_line"
+                            android:layout_marginTop="@dimen/default_margin_tiny"
+                            android:layout_marginRight="@dimen/default_margin_small"
+                            android:layout_marginLeft="@dimen/default_margin_small"
+                            android:background="@color/color_black"/>
+
+                        <!--Tambahan-->
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/menu_height"
+                            android:id="@+id/ll_10"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/default_margin_small"
+                            android:layout_marginBottom="@dimen/default_margin_small"
+                            android:weightSum="3">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:id="@+id/ll_direct_selling_manual"
+                                android:background="?attr/selectableItemBackground"
+                                android:paddingRight="@dimen/default_margin_small"
+                                android:paddingLeft="@dimen/default_margin_small"
+                                android:gravity="center"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.8"
+                                    android:padding="@dimen/default_margin_small"
+                                    android:src="@drawable/ic_order_mkios"
+                                    android:scaleType="fitCenter"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.2"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/font_menu"
+                                    android:textColor="@color/color_black"
+                                    android:text="DDS"/>
+                            </LinearLayout>
                         </LinearLayout>
 
                     </LinearLayout>

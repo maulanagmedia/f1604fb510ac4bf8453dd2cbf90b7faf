@@ -149,6 +149,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
     private static boolean isSaveButtonClicked = false;
     private static boolean isOnSaving = false;
     private static String transactionID = "";
+    private LinearLayout llPermission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,6 +195,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
         ivRefreshPosition = (ImageView) findViewById(R.id.iv_refresh_position);
         btnMapsOutlet = (Button) findViewById(R.id.btn_maps_event);
         btnAppInfo = (Button) findViewById(R.id.btn_app_info);
+        llPermission = (LinearLayout) findViewById(R.id.ll_permission);
 
         session = new SessionManager(context);
         listBalasan = new ArrayList<>();
@@ -232,6 +234,7 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
                 setTitle("Direct Sales DDS");
                 btnProses.setText("Simpan Transaksi");
+                llPermission.setVisibility(View.GONE);
             }
 
             if(nomor.length() > 0){
@@ -985,34 +988,38 @@ public class DetailInjectPulsa extends AppCompatActivity implements LocationList
 
         isActive = true;
 
-        boolean isAccessGranted =  isAccessibilityEnabled(context.getPackageName() + "/" + context.getPackageName() + ".OrderDirectSelling.Service.USSDService");
-        if(isAccessGranted){
+        if(!isManual){ // jika bukan penjualan DDS
 
-            //Log.d(TAG, "granted");
-        }else{
-            //Log.d(TAG, "not granted");
-            Snackbar.make(findViewById(android.R.id.content), "Mohon ijinkan accessibility pada "+getResources().getString(R.string.app_name)+", Cari " + getResources().getString(R.string.app_name) + " dan ubah enable",
-                    Snackbar.LENGTH_INDEFINITE).setAction("OK",
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-                        }
-                    }).show();
+            boolean isAccessGranted =  isAccessibilityEnabled(context.getPackageName() + "/" + context.getPackageName() + ".OrderDirectSelling.Service.USSDService");
+            if(isAccessGranted){
 
+                //Log.d(TAG, "granted");
+            }else{
+                //Log.d(TAG, "not granted");
+                Snackbar.make(findViewById(android.R.id.content), "Mohon ijinkan accessibility pada "+getResources().getString(R.string.app_name)+", Cari " + getResources().getString(R.string.app_name) + " dan ubah enable",
+                        Snackbar.LENGTH_INDEFINITE).setAction("OK",
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+                            }
+                        }).show();
+
+            }
+
+            if(!iv.isServiceRunning(context,USSDService.class)){
+                startService(new Intent(context, USSDService.class));
+            }
+
+            if(!checkNotificationEnabled()){
+
+                Toast.makeText(context, "Harap ijinkan aksesbilitas untuk menunjang berjalannya sistem", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(
+                        "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                startActivity(intent);
+            }
         }
 
-        if(!iv.isServiceRunning(context,USSDService.class)){
-            startService(new Intent(context, USSDService.class));
-        }
-
-        if(!checkNotificationEnabled()){
-
-            Toast.makeText(context, "Harap ijinkan aksesbilitas untuk menunjang berjalannya sistem", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(
-                    "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-            startActivity(intent);
-        }
     }
 
     public boolean checkNotificationEnabled() {

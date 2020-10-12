@@ -52,9 +52,24 @@ public class PspPrinter extends BluetoothPrinter {
 
     // this will send text data to be printed by the bluetooth printer
     public void print(Transaksi transaksi){
-        final int NAMA_MAX = 15;
-        final int JUMLAH_MAX = 5;
-        final int HARGA_TOTAL_MAX = 10;
+
+        // Check printer besar atau bukan
+        boolean tipeBesar = false;
+        if(BluetoothPrinter.bluetoothDevice != null){
+
+            if(BluetoothPrinter.bluetoothDevice.getName().contains("HP-")) tipeBesar = true;
+        }
+
+        int NAMA_MAX = 15;
+        int JUMLAH_MAX = 5;
+        int HARGA_TOTAL_MAX = 10;
+
+        if(tipeBesar){
+
+            NAMA_MAX = 15;
+            JUMLAH_MAX = 11;
+            HARGA_TOTAL_MAX = 14;
+        }
 
         if(bluetoothDevice == null){
             Toast.makeText(context, "Sambungkan ke device printer terlebih dahulu!", Toast.LENGTH_SHORT).show();
@@ -85,10 +100,19 @@ public class PspPrinter extends BluetoothPrinter {
             outputStream.write(PrintFormatter.NEW_LINE);
 
             //PROSES CETAK TRANSAKSI
-            outputStream.write("--------------------------------\n".getBytes());
-            outputStream.write(PrintFormatter.ALIGN_LEFT);
-            outputStream.write("Nama Barang    Jumlah      Total\n".getBytes());
-            outputStream.write("--------------------------------\n".getBytes());
+            if(tipeBesar){
+
+                outputStream.write("------------------------------------------\n".getBytes());
+                outputStream.write(PrintFormatter.ALIGN_LEFT);
+                outputStream.write("Nama Barang          Jumlah          Total\n".getBytes());
+                outputStream.write("------------------------------------------\n".getBytes());
+            }else{
+
+                outputStream.write("--------------------------------\n".getBytes());
+                outputStream.write(PrintFormatter.ALIGN_LEFT);
+                outputStream.write("Nama Barang    Jumlah      Total\n".getBytes());
+                outputStream.write("--------------------------------\n".getBytes());
+            }
             outputStream.write(PrintFormatter.ALIGN_LEFT);
 
             List<Item> listItem = transaksi.getListItem();
@@ -169,9 +193,23 @@ public class PspPrinter extends BluetoothPrinter {
 
     // this will send text data to be printed by the bluetooth printer
     public void print(Transaksi transaksi, boolean isDeposit){
-        final int NAMA_MAX = 15;
-        final int JUMLAH_MAX = 5;
-        final int HARGA_TOTAL_MAX = 10;
+
+        // Check printer besar atau bukan
+        boolean tipeBesar = false;
+        if(BluetoothPrinter.bluetoothDevice != null){
+
+            if(BluetoothPrinter.bluetoothDevice.getName().contains("HP-")) tipeBesar = true;
+        }
+
+        int NAMA_MAX = 15;
+        int JUMLAH_MAX = 5;
+        int HARGA_TOTAL_MAX = 10;
+
+        if(tipeBesar){
+            NAMA_MAX = 15;
+            JUMLAH_MAX = 11;
+            HARGA_TOTAL_MAX = 14;
+        }
 
         if(bluetoothDevice == null){
             Toast.makeText(context, "Sambungkan ke device printer terlebih dahulu!", Toast.LENGTH_SHORT).show();
@@ -202,10 +240,19 @@ public class PspPrinter extends BluetoothPrinter {
             outputStream.write(PrintFormatter.NEW_LINE);
 
             //PROSES CETAK TRANSAKSI
-            outputStream.write("--------------------------------\n".getBytes());
-            outputStream.write(PrintFormatter.ALIGN_LEFT);
-            outputStream.write("Nama Barang    Jumlah      Total\n".getBytes());
-            outputStream.write("--------------------------------\n".getBytes());
+            if(tipeBesar){
+
+                outputStream.write("------------------------------------------\n".getBytes());
+                outputStream.write(PrintFormatter.ALIGN_LEFT);
+                outputStream.write("Nama Barang          Jumlah          Total\n".getBytes());
+                outputStream.write("------------------------------------------\n".getBytes());
+            }else{
+
+                outputStream.write("--------------------------------\n".getBytes());
+                outputStream.write(PrintFormatter.ALIGN_LEFT);
+                outputStream.write("Nama Barang    Jumlah      Total\n".getBytes());
+                outputStream.write("--------------------------------\n".getBytes());
+            }
             outputStream.write(PrintFormatter.ALIGN_LEFT);
 
             List<Item> listItem = transaksi.getListItem();
@@ -288,9 +335,23 @@ public class PspPrinter extends BluetoothPrinter {
     }
 
     public void print(Transaksi transaksi, String label){
-        final int NAMA_MAX = 15;
-        final int JUMLAH_MAX = 4;
-        final int HARGA_TOTAL_MAX = 11;
+
+        // Check printer besar atau bukan
+        boolean tipeBesar = false;
+        if(BluetoothPrinter.bluetoothDevice != null){
+
+            if(BluetoothPrinter.bluetoothDevice.getName().contains("HP-")) tipeBesar = true;
+        }
+
+        int NAMA_MAX = 15;
+        int JUMLAH_MAX = 4;
+        int HARGA_TOTAL_MAX = 11;
+
+        if(tipeBesar){
+            NAMA_MAX = 15;
+            JUMLAH_MAX = 10;
+            HARGA_TOTAL_MAX = 15;
+        }
 
         if(bluetoothDevice == null){
             Toast.makeText(context, "Sambungkan ke device printer terlebih dahulu!", Toast.LENGTH_SHORT).show();
@@ -321,10 +382,19 @@ public class PspPrinter extends BluetoothPrinter {
             outputStream.write(PrintFormatter.NEW_LINE);
 
             //PROSES CETAK TRANSAKSI
-            outputStream.write("--------------------------------\n".getBytes());
-            outputStream.write(PrintFormatter.ALIGN_LEFT);
-            outputStream.write("Nama Barang    Jumlah      Total\n".getBytes());
-            outputStream.write("--------------------------------\n".getBytes());
+
+            if(tipeBesar){
+                outputStream.write("------------------------------------------\n".getBytes());
+                outputStream.write(PrintFormatter.ALIGN_LEFT);
+                outputStream.write("Nama Barang          Jumlah          Total\n".getBytes());
+                outputStream.write("------------------------------------------\n".getBytes());
+            }else{
+
+                outputStream.write("--------------------------------\n".getBytes());
+                outputStream.write(PrintFormatter.ALIGN_LEFT);
+                outputStream.write("Nama Barang    Jumlah      Total\n".getBytes());
+                outputStream.write("--------------------------------\n".getBytes());
+            }
             outputStream.write(PrintFormatter.ALIGN_LEFT);
 
             List<Item> listItem = transaksi.getListItem();

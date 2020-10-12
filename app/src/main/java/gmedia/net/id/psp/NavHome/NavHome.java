@@ -99,7 +99,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 	private LinearLayout llEvent, llMarketSurvey, llMarketSurveyAoc;
 	private LinearLayout llDirectSelling;
 	private LinearLayout llOrderNgrs;
-	private LinearLayout llMenuPenjualanReseller, llMenuDirectSelling, llMenuDirectSellingManual, llMenuSPV, llMenuMD, llMenuOperasional, llPengajuanDeposit, llMarketSurveyMD, llKonsinyasi;
+	private LinearLayout llMenuPenjualanReseller, llMenuDirectSelling, llMenuDirectSellingManual, llMenuDDS, llMenuSPV, llMenuMD, llMenuOperasional, llPengajuanDeposit, llMarketSurveyMD, llKonsinyasi;
 	private LinearLayout llIDS, llDS;
 	private TextView tvDSTargetMkios, tvDSOmsetMkios, tvDSGapMkios, tvDSTargetPerdana, tvDSOmsetPerdana, tvDSGapPerdana;
 	private TextView tvDSTargetDataMkios, tvDSOmsetDataMkios, tvDSGAPDataMkios, tvDSTargetRevenueDigital, tvDSOmsetRevenueDigital, tvDSGAPRevenueDigital, tvDSDailyPJP, tvDSEffectiveCall, tvDSGAPPJP, tvDSTargetAkuisisi, tvDSAkuisisi, tvDSGAPAkuisisi;
@@ -216,6 +216,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 		llMenuPenjualanReseller = (LinearLayout) layout.findViewById(R.id.ll_penjualan_reseller);
 		llMenuDirectSelling = (LinearLayout) layout.findViewById(R.id.ll_menu_direct_selling);
 		llMenuDirectSellingManual = (LinearLayout) layout.findViewById(R.id.ll_direct_selling_manual);
+		llMenuDDS = (LinearLayout) layout.findViewById(R.id.ll_menu_dds);
 		llMenuSPV = (LinearLayout) layout.findViewById(R.id.ll_menu_spv);
 		llMenuOperasional = (LinearLayout) layout.findViewById(R.id.ll_operasional);
 		llMenuMD = (LinearLayout) layout.findViewById(R.id.ll_menu_md);
@@ -278,6 +279,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 
 			llIDS.setVisibility(View.GONE);
 			llDS.setVisibility(View.VISIBLE);
+			llMenuDDS.setVisibility(View.VISIBLE);
 		}
 
 		tvDSTargetMkios = (TextView) layout.findViewById(R.id.tv_ds_target_mkios);
@@ -334,6 +336,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 		if (session.getJabatan().equals("TSA") || session.getJabatan().equals("AOC") || session.getJabatan().equals("SPVDS") || session.getJabatan().equals("BM")) { // DS
 
 			llMenuDirectSelling.setVisibility(View.VISIBLE);
+			llMenuDDS.setVisibility(View.VISIBLE);
 		} else {
 			llMenuDirectSelling.setVisibility(View.GONE);
 		}
@@ -341,6 +344,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 		if (session.getJabatan().equals("SPVDS") || session.getJabatan().equals("SPVSF") || session.getJabatan().equals("BM")) {
 
 			llMenuSPV.setVisibility(View.VISIBLE);
+			llMenuDDS.setVisibility(View.VISIBLE);
 		} else {
 			llMenuSPV.setVisibility(View.GONE);
 		}

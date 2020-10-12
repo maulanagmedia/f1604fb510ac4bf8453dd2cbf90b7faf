@@ -1210,7 +1210,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             total += iv.parseNullDouble(item.getItem4());
             dataInsert.put(item.getItem2(), item.getItem3());
 
-            if(x == 3 && clusterX <= banyakCluster){
+            /*if(x == 3 && clusterX <= banyakCluster){
 
                 if(sisaList == 0 && iv.parseNullDouble(edtBulk.getText().toString()) > 0) akhir = true;
 
@@ -1225,7 +1225,14 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
 
                 if(iv.parseNullDouble(edtBulk.getText().toString()) > 0) akhir = true;
                 pushJsonData(dataInsert, keteranganOrder, orderFormat, iv.doubleToStringRound(total));
-            }
+            }*/
+            pushJsonData(dataInsert, keteranganOrder, orderFormat, iv.doubleToStringRound(total));
+            x = 0;
+            clusterX +=1 ;
+            total = 0;
+            dataInsert = new TreeMap<>();
+            keteranganOrder = "";
+            orderFormat = "";
 
             x++;
             i++;
@@ -1325,7 +1332,7 @@ public class DetailOrderPulsa extends AppCompatActivity implements LocationListe
             e.printStackTrace();
         }
 
-        String url = ServerURL.saveMKIOS, method = "POST";
+        String url = ServerURL.saveMKIOSV2, method = "POST";
         if(editMode){
             try {
                 jBody.put("nonota", nonota);

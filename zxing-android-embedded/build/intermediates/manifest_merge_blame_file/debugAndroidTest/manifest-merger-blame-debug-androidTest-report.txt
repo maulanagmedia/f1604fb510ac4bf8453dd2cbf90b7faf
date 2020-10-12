@@ -1,0 +1,93 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.google.zxing.client.android.test" >
+4
+5    <uses-sdk
+5-->/Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger369444466156824274.xml:5:5-74
+6        android:minSdkVersion="14"
+6-->/Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger369444466156824274.xml:5:15-41
+7        android:targetSdkVersion="14" />
+7-->/Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger369444466156824274.xml:5:42-71
+8
+9    <instrumentation
+9-->/Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger369444466156824274.xml:11:5-15:86
+10        android:name="android.test.InstrumentationTestRunner"
+10-->/Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger369444466156824274.xml:11:22-75
+11        android:functionalTest="false"
+11-->/Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger369444466156824274.xml:14:22-52
+12        android:handleProfiling="false"
+12-->/Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger369444466156824274.xml:13:22-53
+13        android:label="Tests for com.google.zxing.client.android.test"
+13-->/Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger369444466156824274.xml:15:22-84
+14        android:targetPackage="com.google.zxing.client.android.test" />
+14-->/Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger369444466156824274.xml:12:22-82
+15
+16    <uses-permission android:name="android.permission.CAMERA" /> <!-- Support Android 2.3+. -->
+16-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:22:5-65
+16-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:22:22-62
+17    <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
+18    <uses-feature
+18-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:28:5-30:36
+19        android:name="android.hardware.camera"
+19-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:29:9-47
+20        android:required="false" />
+20-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:30:9-33
+21    <uses-feature
+21-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:31:5-33:36
+22        android:name="android.hardware.camera.front"
+22-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:32:9-53
+23        android:required="false" /> <!-- TODO replace above two with next line after Android 4.2 -->
+23-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:33:9-33
+24    <!-- <uses-feature android:name="android.hardware.camera.any"/> -->
+25    <uses-feature
+25-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:36:5-38:36
+26        android:name="android.hardware.camera.autofocus"
+26-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:37:9-57
+27        android:required="false" />
+27-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:38:9-33
+28    <uses-feature
+28-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:39:5-41:36
+29        android:name="android.hardware.camera.flash"
+29-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:40:9-53
+30        android:required="false" />
+30-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:41:9-33
+31    <uses-feature
+31-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:42:5-44:36
+32        android:name="android.hardware.screen.landscape"
+32-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:43:9-57
+33        android:required="false" />
+33-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:44:9-33
+34    <uses-feature
+34-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:45:5-47:36
+35        android:name="android.hardware.wifi"
+35-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:46:9-45
+36        android:required="false" />
+36-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:47:9-33
+37
+38    <application
+38-->/Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger369444466156824274.xml:7:5-9:19
+39        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+39-->[androidx.core:core:1.0.0] /Users/gmediaiosdev2/.gradle/caches/transforms-2/files-2.1/52c7d93896fd48b68de02e1c27021d76/core-1.0.0/AndroidManifest.xml:22:18-86
+40        android:debuggable="true" >
+40-->/Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger369444466156824274.xml:7:18-43
+41        <uses-library android:name="android.test.runner" />
+41-->/Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger369444466156824274.xml:8:9-60
+41-->/Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/tmp/manifest/androidTest/debug/manifestMerger369444466156824274.xml:8:23-57
+42
+43        <activity
+43-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:50:9-56:63
+44            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+44-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:51:13-74
+45            android:clearTaskOnLaunch="true"
+45-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:52:13-45
+46            android:screenOrientation="sensorPortrait"
+46-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:53:13-55
+47            android:stateNotNeeded="true"
+47-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:54:13-42
+48            android:theme="@style/zxing_CaptureTheme"
+48-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:55:13-54
+49            android:windowSoftInputMode="stateAlwaysHidden" />
+49-->[__tested_artifact__::zxing-android-embedded] /Users/gmediaiosdev2/Documents/Maul/Android/Project/PSPTypeI(Sales)/zxing-android-embedded/build/intermediates/library_manifest/debug/AndroidManifest.xml:56:13-60
+50    </application>
+51
+52</manifest>

@@ -21,6 +21,7 @@ public class ServerURL {
 	public static final String getMKIOSNonota = baseURL + "api/mkios/generate_nonota/";
 	public static final String getPerdanaNonota = baseURL + "api/perdana/generate_nonota/";
 	public static final String saveMKIOS = baseURL + "api/mkios/save/";
+	public static final String saveMKIOSV2 = baseURL + "api/mkios/save_v2/";
 	public static final String savePerdana = baseURL + "api/perdana/save/";
 	public static final String getMkios = baseURL + "api/mkios/get_mkios/";
 

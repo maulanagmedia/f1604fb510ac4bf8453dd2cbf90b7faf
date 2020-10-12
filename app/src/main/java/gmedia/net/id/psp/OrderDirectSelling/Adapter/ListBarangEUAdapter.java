@@ -13,6 +13,7 @@ import com.maulana.custommodul.ItemValidation;
 
 import java.util.List;
 
+import gmedia.net.id.psp.NavEvent.DetailEventManual;
 import gmedia.net.id.psp.OrderDirectSelling.DetailInjectPulsa;
 import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.Utils.ItemLength;
@@ -110,7 +111,12 @@ public class ListBarangEUAdapter extends ArrayAdapter{
             public void onClick(View view) {
 
                 selectedItem = position;
-                DetailInjectPulsa.setSelectedItem(itemSelected);
+                if(((Activity)context) instanceof DetailEventManual){
+                    DetailEventManual.setSelectedItem(itemSelected);
+                }else{
+                    DetailInjectPulsa.setSelectedItem(itemSelected);
+                }
+
                 notifyDataSetChanged();
             }
         });
