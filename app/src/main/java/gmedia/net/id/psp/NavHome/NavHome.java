@@ -59,6 +59,8 @@ import gmedia.net.id.psp.R;
 import gmedia.net.id.psp.RiwayatPenjualan.RiwayatPenjualan;
 import gmedia.net.id.psp.StokSales.StokSales;
 import gmedia.net.id.psp.Utils.ServerURL;
+import gmedia.net.id.psp.WebView.ActivityWebViewDaftarInput;
+import gmedia.net.id.psp.WebView.ActivityWebViewInputan;
 
 public class NavHome extends Fragment implements ViewPager.OnPageChangeListener {
 
@@ -86,7 +88,7 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 	private LinearLayout llOrderMkios, llPenjualanMkios, llOrderPerdana, llPenjualanPerdana, llDaftarPiutang, llStokSales;
 	private TextView tvNamaSales, tvTotalOmset, tvOmsetMkios, tvOmsetPerdana, tvTargetMkios, tvGapMkios, tvTargetPerdana, tvGapPerdana, tvTargetPJP, tvPencapaianPJP, tvGapPJP;
 	private LinearLayout llAddCustomer, llCheckIn, llKomplain;
-	private LinearLayout ll1, ll1a, ll2, ll3, ll3a, ll4, ll5, ll6, ll7, ll8, ll9, ll10;
+	private LinearLayout ll1, ll1a, ll2, ll3, ll3a, ll4, ll5, ll6, ll7, ll8, ll9, ll10, lnInputSurvey, lnDaftarSurvey;
 	private LinearLayout llOrderTcash;
 	private LinearLayout llPenjualan;
 	private LinearLayout llRiwayatPenjualan;
@@ -120,9 +122,9 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 		layout = inflater.inflate(R.layout.fragment_nav_home, container, false);
 		context = getContext();
 		session = new SessionManager(context);
-
 		initUI();
 		return layout;
+
 	}
 
 	private void initUI() {
@@ -193,6 +195,8 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 		ll8 = (LinearLayout) layout.findViewById(R.id.ll_8);
 		ll9 = (LinearLayout) layout.findViewById(R.id.ll_9);
 		ll10 = (LinearLayout) layout.findViewById(R.id.ll_10);
+		lnInputSurvey = (LinearLayout) layout.findViewById(R.id.input_survey);
+		lnDaftarSurvey = (LinearLayout) layout.findViewById(R.id.daftar_surve);
 
 		LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ll1.getLayoutParams();
 
@@ -482,7 +486,6 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 		llVerifikasiOutlet.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-
 				Intent intent = new Intent(context, ActVerifikasiOutlet.class);
 				context.startActivity(intent);
 				((Activity) context).finish();
@@ -492,7 +495,6 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 		llInfoDeposit.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-
 				Intent intent = new Intent(context, ActDeposit.class);
 				context.startActivity(intent);
 				((Activity) context).finish();
@@ -588,6 +590,22 @@ public class NavHome extends Fragment implements ViewPager.OnPageChangeListener 
 				Intent intent = new Intent(context, ActMarketSurveyMD.class);
 				context.startActivity(intent);
 				((Activity) context).finish();
+			}
+		});
+
+		lnInputSurvey.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, ActivityWebViewInputan.class);
+				context.startActivity(intent);
+			}
+		});
+
+		lnDaftarSurvey.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, ActivityWebViewDaftarInput.class);
+				context.startActivity(intent);
 			}
 		});
 	}

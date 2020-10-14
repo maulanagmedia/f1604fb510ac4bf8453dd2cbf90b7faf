@@ -149,7 +149,6 @@ public class LoginScreen extends RuntimePermissionsActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 validasiLogin();
             }
         });
