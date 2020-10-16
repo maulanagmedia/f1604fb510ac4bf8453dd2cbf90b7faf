@@ -37,8 +37,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.SessionManager;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +56,7 @@ public class ActivityWebViewDaftarInput extends AppCompatActivity {
 
     /*-- CUSTOMIZE --*/
     /*-- you can customize these options for your convenience --*/
-    private static String webview_url   = "http://office.putmasaripratama.co.id/yudistira/main/hasil_survei?gtw=";    // web address or local file location you want to open in webview
+    private String webview_url   = "http://office.putmasaripratama.co.id/yudistira/main/hasil_survei?gtw=";    // web address or local file location you want to open in webview
     private static String file_type     = "image/*";    // file types
     private boolean multiple_files      = true;         // multiple file upload
 
@@ -151,7 +154,7 @@ public class ActivityWebViewDaftarInput extends AppCompatActivity {
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
         webView.setWebViewClient(new Callback());
-        webView.loadUrl(webview_url);
+        //webView.loadUrl(webview_url);
         webView.setWebChromeClient(new WebChromeClient() {
 
             /*--
@@ -243,6 +246,23 @@ public class ActivityWebViewDaftarInput extends AppCompatActivity {
                 } else {
                     return false;
                 }
+            }
+        });
+        CekStatus();
+    }
+
+    private void CekStatus(){
+        new ApiVolley(ActivityWebViewDaftarInput.this, new JSONObject(), "GET", webview_url, "", "", 0, "", "", new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d(TAG, "WebView");
+                webView.loadUrl(webview_url);
+                //Toast.makeText(ActivityWebViewInputan.this, "Berhasil", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(String result) {
+                Toast.makeText(ActivityWebViewDaftarInput.this, "Kesalahan Jaringan", Toast.LENGTH_SHORT).show();
             }
         });
     }

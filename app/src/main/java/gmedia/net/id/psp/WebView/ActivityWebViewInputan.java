@@ -12,7 +12,9 @@ package gmedia.net.id.psp.WebView;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -27,6 +29,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -37,8 +41,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.SessionManager;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +59,7 @@ public class ActivityWebViewInputan extends AppCompatActivity {
 
     /*-- CUSTOMIZE --*/
     /*-- you can customize these options for your convenience --*/
-    private static String webview_url   = "http://office.putmasaripratama.co.id/yudistira/main/survei_outlet?gtw=";    // web address or local file location you want to open in webview
+    private  String webview_url   = "http://office.putmasaripratama.co.id/yudistira/main/survei_outlet?gtw=";    // web address or local file location you want to open in webview
     private static String file_type     = "image/*";    // file types
     private boolean multiple_files      = true;         // multiple file upload
 
@@ -144,6 +151,33 @@ public class ActivityWebViewInputan extends AppCompatActivity {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowFileAccess(true);
 
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                try {
+                    view.stopLoading();
+                }catch (Exception e){
+                }
+                if (view.canGoBack()) {
+                    view.goBack();
+                }
+                view.loadUrl("about:blank");
+                AlertDialog alertDialog = new AlertDialog.Builder(ActivityWebViewInputan.this).create();
+                alertDialog.setTitle("Error");
+                alertDialog.setMessage("Cannot connect to the Elitesbase Server. Check your internet connection and try again.");
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Try Again", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        startActivity(getIntent());
+                    }
+                });
+
+                alertDialog.show();
+                super.onReceivedError(view, request, error);
+            }
+        });
+
+
         if(Build.VERSION.SDK_INT >= 21){
             webSettings.setMixedContentMode(0);
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -151,7 +185,6 @@ public class ActivityWebViewInputan extends AppCompatActivity {
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
         webView.setWebViewClient(new Callback());
-        webView.loadUrl(webview_url);
         webView.setWebChromeClient(new WebChromeClient() {
 
             /*--
@@ -243,6 +276,23 @@ public class ActivityWebViewInputan extends AppCompatActivity {
                 } else {
                     return false;
                 }
+            }
+        });
+        CekStatus();
+    }
+
+    private void CekStatus(){
+        new ApiVolley(ActivityWebViewInputan.this, new JSONObject(), "GET", webview_url, "", "", 0, "", "", new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d(TAG, "WebView");
+                webView.loadUrl(webview_url);
+                //Toast.makeText(ActivityWebViewInputan.this, "Berhasil", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(String result) {
+                Toast.makeText(ActivityWebViewInputan.this, "Kesalahan Jaringan", Toast.LENGTH_SHORT).show();
             }
         });
     }
