@@ -56,7 +56,7 @@ public class ActivityWebViewDaftarInput extends AppCompatActivity {
 
     /*-- CUSTOMIZE --*/
     /*-- you can customize these options for your convenience --*/
-    private String webview_url   = "http://office.putmasaripratama.co.id/yudistira/main/hasil_survei?gtw=";    // web address or local file location you want to open in webview
+    private String webview_url   = "https://office.putmasaripratama.co.id/yudistira/main/hasil_survei?gtw=";    // web address or local file location you want to open in webview
     private static String file_type     = "image/*";    // file types
     private boolean multiple_files      = true;         // multiple file upload
 
@@ -146,6 +146,9 @@ public class ActivityWebViewDaftarInput extends AppCompatActivity {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowFileAccess(true);
+        if (Build.VERSION.SDK_INT >= 19) {
+            webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        }
 
         if(Build.VERSION.SDK_INT >= 21){
             webSettings.setMixedContentMode(0);
@@ -257,12 +260,11 @@ public class ActivityWebViewDaftarInput extends AppCompatActivity {
             public void onSuccess(String result) {
                 Log.d(TAG, "WebView");
                 webView.loadUrl(webview_url);
-                //Toast.makeText(ActivityWebViewInputan.this, "Berhasil", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(String result) {
-                Toast.makeText(ActivityWebViewDaftarInput.this, "Kesalahan Jaringan", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ActivityWebViewDaftarInput.this, "Kesalahan Jaringan", Toast.LENGTH_SHORT).show();
             }
         });
     }

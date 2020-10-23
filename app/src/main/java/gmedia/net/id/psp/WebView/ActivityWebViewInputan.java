@@ -59,7 +59,7 @@ public class ActivityWebViewInputan extends AppCompatActivity {
 
     /*-- CUSTOMIZE --*/
     /*-- you can customize these options for your convenience --*/
-    private  String webview_url   = "http://office.putmasaripratama.co.id/yudistira/main/survei_outlet?gtw=";    // web address or local file location you want to open in webview
+    private String webview_url   = "https://office.putmasaripratama.co.id/yudistira/main/survei_outlet?gtw=";    // web address or local file location you want to open in webview
     private static String file_type     = "image/*";    // file types
     private boolean multiple_files      = true;         // multiple file upload
 
@@ -151,6 +151,10 @@ public class ActivityWebViewInputan extends AppCompatActivity {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowFileAccess(true);
 
+        if (Build.VERSION.SDK_INT >= 19) {
+            webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        }
+
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
@@ -164,7 +168,7 @@ public class ActivityWebViewInputan extends AppCompatActivity {
                 view.loadUrl("about:blank");
                 AlertDialog alertDialog = new AlertDialog.Builder(ActivityWebViewInputan.this).create();
                 alertDialog.setTitle("Error");
-                alertDialog.setMessage("Cannot connect to the Elitesbase Server. Check your internet connection and try again.");
+                alertDialog.setMessage("Cannot connect to the Server. Check your internet connection and try again.");
                 alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Try Again", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
@@ -292,7 +296,7 @@ public class ActivityWebViewInputan extends AppCompatActivity {
 
             @Override
             public void onError(String result) {
-                Toast.makeText(ActivityWebViewInputan.this, "Kesalahan Jaringan", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ActivityWebViewInputan.this, "Kesalahan Jaringan", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -300,7 +304,7 @@ public class ActivityWebViewInputan extends AppCompatActivity {
     /*-- callback reporting if error occurs --*/
     public class Callback extends WebViewClient {
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl){
-            Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Failed loading page!", Toast.LENGTH_SHORT).show();
         }
     }
 

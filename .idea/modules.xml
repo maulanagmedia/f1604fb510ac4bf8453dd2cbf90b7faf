@@ -2,16 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PSPTypeI(Sales).iml" filepath="$PROJECT_DIR$/PSPTypeI(Sales).iml" group="PSPTypeI(Sales)" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="PSPTypeI(Sales)/app" />
-      <module fileurl="file://$PROJECT_DIR$/bluetoothprinter/bluetoothprinter.iml" filepath="$PROJECT_DIR$/bluetoothprinter/bluetoothprinter.iml" group="PSPTypeI(Sales)/bluetoothprinter" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/f1604fb510ac4bf8453dd2cbf90b7faf.iml" filepath="$PROJECT_DIR$/.idea/modules/f1604fb510ac4bf8453dd2cbf90b7faf.iml" group="f1604fb510ac4bf8453dd2cbf90b7faf" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/gmedia.psp-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/gmedia.psp-app.iml" group="f1604fb510ac4bf8453dd2cbf90b7faf/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bluetoothprinter/gmedia.psp-bluetoothprinter.iml" filepath="$PROJECT_DIR$/.idea/modules/bluetoothprinter/gmedia.psp-bluetoothprinter.iml" group="f1604fb510ac4bf8453dd2cbf90b7faf/bluetoothprinter" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/maulanacustommodul/gmedia.psp-maulanacustommodul.iml" filepath="$PROJECT_DIR$/.idea/modules/maulanacustommodul/gmedia.psp-maulanacustommodul.iml" group="f1604fb510ac4bf8453dd2cbf90b7faf/maulanacustommodul" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zxing-android-embedded/gmedia.psp-zxing-android-embedded.iml" filepath="$PROJECT_DIR$/.idea/modules/zxing-android-embedded/gmedia.psp-zxing-android-embedded.iml" group="f1604fb510ac4bf8453dd2cbf90b7faf/zxing-android-embedded" />
-      <module fileurl="file://$PROJECT_DIR$/maulanacustommodul/maulanacustommodul.iml" filepath="$PROJECT_DIR$/maulanacustommodul/maulanacustommodul.iml" group="PSPTypeI(Sales)/maulanacustommodul" />
-      <module fileurl="file://$PROJECT_DIR$/zxing-android-embedded/zxing-android-embedded.iml" filepath="$PROJECT_DIR$/zxing-android-embedded/zxing-android-embedded.iml" group="PSPTypeI(Sales)/zxing-android-embedded" />
+      <module fileurl="file://$PROJECT_DIR$/PSPTypeI(Sales).iml" filepath="$PROJECT_DIR$/PSPTypeI(Sales).iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PSPTypeI(Sales).app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PSPTypeI(Sales).app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bluetoothprinter/PSPTypeI(Sales).bluetoothprinter.iml" filepath="$PROJECT_DIR$/.idea/modules/bluetoothprinter/PSPTypeI(Sales).bluetoothprinter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/maulanacustommodul/PSPTypeI(Sales).maulanacustommodul.iml" filepath="$PROJECT_DIR$/.idea/modules/maulanacustommodul/PSPTypeI(Sales).maulanacustommodul.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zxing-android-embedded/PSPTypeI(Sales).zxing-android-embedded.iml" filepath="$PROJECT_DIR$/.idea/modules/zxing-android-embedded/PSPTypeI(Sales).zxing-android-embedded.iml" />
     </modules>
   </component>
 </project>

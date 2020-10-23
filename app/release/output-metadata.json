@@ -1,19 +1,17 @@
 {
-  "version": 1,
+  "version": 2,
   "artifactType": {
     "type": "APK",
     "kind": "Directory"
   },
   "applicationId": "gmedia.net.id.psp",
-  "variantName": "release",
+  "variantName": "processReleaseResources",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
-      "properties": [],
-      "versionCode": 65,
-      "versionName": "27.0.0",
-      "enabled": true,
+      "versionCode": 66,
+      "versionName": "27.0.1",
       "outputFile": "app-release.apk"
     }
   ]
