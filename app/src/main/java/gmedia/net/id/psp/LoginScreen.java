@@ -2,12 +2,18 @@ package gmedia.net.id.psp;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +29,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -58,6 +67,19 @@ public class LoginScreen extends RuntimePermissionsActivity {
     private String sim1 = "", sim2 = "";
     private Button btnChangeAPN;
     private String imei1 = "", imei2 = "";
+    private LinearLayout llID1, llID2;
+    private TextView tvId1, tvId2;
+    private ImageView ivCopy1, ivCopy2;
+
+    private String[] appPermission =  {
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_NETWORK_STATE
+    };
+    private final int PERMIOSSION_REQUEST_CODE = 1111;
+    private final int PERMISSION_PHONE_STATE = 900;
+
+    private List<String> listImei = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +139,36 @@ public class LoginScreen extends RuntimePermissionsActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //permission
+        if (checkPermission()){
+
+            // diijinkan
+            listImei = iv.getIMEI(LoginScreen.this);
+            tvId1.setText(listImei.get(0));
+
+            if(listImei.size() > 1){
+
+                tvId2.setText(listImei.get(1));
+                ivCopy2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("ID 2", tvId2.getText().toString().replaceAll("[,.]", ""));
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(LoginScreen.this, "Id 2 disimpan di clipboard", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }else{
+                llID2.setVisibility(View.GONE);
+            }
+        }
+    }
+
     private void initUI() {
 
         edtUsername = (EditText) findViewById(R.id.edt_username);
@@ -124,6 +176,24 @@ public class LoginScreen extends RuntimePermissionsActivity {
         cbRemeber = (CheckBox) findViewById(R.id.cb_remeber_me);
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnChangeAPN = (Button) findViewById(R.id.btn_change_apn);
+
+        llID1 = (LinearLayout) findViewById(R.id.ll_id1);
+        llID2 = (LinearLayout) findViewById(R.id.ll_id2);
+        tvId1 = (TextView) findViewById(R.id.tv_id1);
+        tvId2 = (TextView) findViewById(R.id.tv_id2);
+        ivCopy1 = (ImageView) findViewById(R.id.iv_copy1);
+        ivCopy2 = (ImageView) findViewById(R.id.iv_copy2);
+
+        ivCopy1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("ID 1", tvId1.getText().toString().replaceAll("[,.]", ""));
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(LoginScreen.this, "Id 1 disimpan di clipboard", Toast.LENGTH_LONG).show();
+            }
+        });
 
         visibleTapped = true;
         session = new SessionManager(LoginScreen.this);
@@ -188,6 +258,53 @@ public class LoginScreen extends RuntimePermissionsActivity {
                 startActivityForResult(new Intent(android.provider.Settings.ACTION_APN_SETTINGS), 0);
             }
         });
+    }
+
+    private boolean checkPermission(){
+
+        List<String> permissionList = new ArrayList<>();
+        for (String perm : appPermission) {
+
+            if (ContextCompat.checkSelfPermission(LoginScreen.this, perm) != PackageManager.PERMISSION_GRANTED){
+
+                permissionList.add(perm);
+            }
+        }
+
+        if (!permissionList.isEmpty()) {
+
+            ActivityCompat.requestPermissions(LoginScreen.this, permissionList.toArray(new String[permissionList.size()]), PERMIOSSION_REQUEST_CODE);
+
+            return  false;
+        }
+
+        return  true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == PERMISSION_PHONE_STATE){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+            }
+            else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Aplikasi Membutuhkan Izin");
+                builder.setMessage("Maaf, anda tidak bisa melanjutkan masuk ke aplikasi. " +
+                        "Aplikasi tidak memperoleh izin yang dibutuhkan untuk bisa berjalan dengan benar");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setCancelable(false);
+                builder.create().show();
+            }
+        }
+        else{
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     //TODO: Change APN setting, still not working

@@ -14,10 +14,13 @@ import android.os.Build;
 import com.google.android.material.textfield.TextInputLayout;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.appcompat.widget.AppCompatDrawableManager;
+
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -965,25 +968,32 @@ public class ItemValidation {
     public ArrayList<String> getIMEI(Context context){
 
         ArrayList<String> imeiList = new ArrayList<>();
-        TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         try {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                String deviceId = Settings.Secure.getString(
+                        context.getContentResolver(),
+                        Settings.Secure.ANDROID_ID);
+                if(deviceId != null && !deviceId.equals("")) imeiList.add(deviceId);
+            } else {
 
-            Class<?> telephonyClass = Class.forName(telephony.getClass().getName());
-            Class<?>[] parameter = new Class[1];
-            parameter[0] = int.class;
-            Method getFirstMethod = telephonyClass.getMethod("getDeviceId", parameter);
-            //Log.d("SimData", getFirstMethod.toString());
-            Object[] obParameter = new Object[1];
-            obParameter[0] = 0;
-            TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            String first = (String) getFirstMethod.invoke(telephony, obParameter);
-            if(first != null && !first.equals("")) imeiList.add(first);
-            //Log.d("SimData", "first :" + first);
-            obParameter[0] = 1;
-            String second = (String) getFirstMethod.invoke(telephony, obParameter);
-            if(second != null && !second.equals("")) imeiList.add(second);
-            //Log.d("SimData", "Second :" + second);
+                TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                Class<?> telephonyClass = Class.forName(telephony.getClass().getName());
+                Class<?>[] parameter = new Class[1];
 
+                parameter[0] = int.class;
+                Method getFirstMethod = telephonyClass.getMethod("getDeviceId", parameter);
+                Object[] obParameter = new Object[1];
+
+                //First IMEI
+                obParameter[0] = 0;
+                String first = (String) getFirstMethod.invoke(telephony, obParameter);
+                if (first != null && !first.equals("")) imeiList.add(first);
+
+                //Second IMEI
+                obParameter[0] = 1;
+                String second = (String) getFirstMethod.invoke(telephony, obParameter);
+                if (second != null && !second.equals("")) imeiList.add(second);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
