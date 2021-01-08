@@ -21,9 +21,17 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +40,9 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 /**
@@ -165,8 +176,14 @@ public class ApiVolley {
             }
         };
         //endregion
+        try {
+            HttpsURLConnection.setDefaultSSLSocketFactory(
+                    getSSLSocketFactory(context));
+            HttpsURLConnection.setDefaultHostnameVerifier(getHostnameVerifier());
 
-        trustAllCertivicate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if(requestQueue == null){
             requestQueue = Volley.newRequestQueue(context.getApplicationContext());
@@ -200,54 +217,99 @@ public class ApiVolley {
         }
     }
 
-    private void trustAllCertivicate() {
+    // untuk menangani terkait SSL
+    private HostnameVerifier getHostnameVerifier() {
+        return new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                //return true; // verify always returns true, which could cause insecure network traffic due to trusting TLS/SSL server certificates for wrong hostnames
+                HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
+                if (hostname.equalsIgnoreCase("putmasaripratama.co.id") ||
+                        hostname.equalsIgnoreCase("office.putmasaripratama.co.id") ||
+                        hostname.equalsIgnoreCase("api.putmasaripratama.co.id") ||
+                        hostname.equalsIgnoreCase("reports.crashlytics.com") ||
+                        hostname.equalsIgnoreCase("api.crashlytics.com") ||
+                        hostname.equalsIgnoreCase("settings.crashlytics.com") ||
+                        hostname.equalsIgnoreCase("clients4.google.com") ||
+                        hostname.equalsIgnoreCase("www.facebook.com") ||
+                        hostname.equalsIgnoreCase("www.instagram.com") ||
+                        hostname.equalsIgnoreCase("lh1.googleusercontent.com") ||
+                        hostname.equalsIgnoreCase("lh2.googleusercontent.com") ||
+                        hostname.equalsIgnoreCase("lh3.googleusercontent.com") ||
+                        hostname.equalsIgnoreCase("lh4.googleusercontent.com") ||
+                        hostname.equalsIgnoreCase("lh5.googleusercontent.com") ||
+                        hostname.equalsIgnoreCase("lh6.googleusercontent.com") ||
+                        hostname.equalsIgnoreCase("lh7.googleusercontent.com") ||
+                        hostname.equalsIgnoreCase("lh8.googleusercontent.com") ||
+                        hostname.equalsIgnoreCase("lh9.googleusercontent.com") ||
+                        hostname.equalsIgnoreCase("googleusercontent.com") ||
+                        hostname.equalsIgnoreCase("fbcdn.net") ||
+                        hostname.equalsIgnoreCase("scontent.xx.fbcdn.net") ||
+                        hostname.equalsIgnoreCase("lookaside.facebook.com")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
+    }
 
-        try {
-            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier(){
-                public boolean verify(String hostname, SSLSession session) {
-                    if (hostname.equalsIgnoreCase("putmasaripratama.co.id") ||
-                            hostname.equalsIgnoreCase("office.putmasaripratama.co.id") ||
-                            hostname.equalsIgnoreCase("api.putmasaripratama.co.id") ||
-                            hostname.equalsIgnoreCase("reports.crashlytics.com") ||
-                            hostname.equalsIgnoreCase("api.crashlytics.com") ||
-                            hostname.equalsIgnoreCase("settings.crashlytics.com") ||
-                            hostname.equalsIgnoreCase("clients4.google.com") ||
-                            hostname.equalsIgnoreCase("www.facebook.com") ||
-                            hostname.equalsIgnoreCase("www.instagram.com") ||
-                            hostname.equalsIgnoreCase("lh1.googleusercontent.com") ||
-                            hostname.equalsIgnoreCase("lh2.googleusercontent.com") ||
-                            hostname.equalsIgnoreCase("lh3.googleusercontent.com") ||
-                            hostname.equalsIgnoreCase("lh4.googleusercontent.com") ||
-                            hostname.equalsIgnoreCase("lh5.googleusercontent.com") ||
-                            hostname.equalsIgnoreCase("lh6.googleusercontent.com") ||
-                            hostname.equalsIgnoreCase("lh7.googleusercontent.com") ||
-                            hostname.equalsIgnoreCase("lh8.googleusercontent.com") ||
-                            hostname.equalsIgnoreCase("lh9.googleusercontent.com") ||
-                            hostname.equalsIgnoreCase("googleusercontent.com") ||
-                            hostname.equalsIgnoreCase("fbcdn.net") ||
-                            hostname.equalsIgnoreCase("scontent.xx.fbcdn.net") ||
-                            hostname.equalsIgnoreCase("lookaside.facebook.com")) {
-                        return true;
-                    } else {
-                        return false;
+    private TrustManager[] getWrappedTrustManagers(TrustManager[] trustManagers) {
+        final X509TrustManager originalTrustManager = (X509TrustManager) trustManagers[0];
+        return new TrustManager[]{
+                new X509TrustManager() {
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return originalTrustManager.getAcceptedIssuers();
                     }
-                }});
 
-            // SSL Tipe TLS
-            SSLContext context = SSLContext.getInstance("TLS");
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                        try {
+                            if (certs != null && certs.length > 0){
+                                certs[0].checkValidity();
+                            } else {
+                                originalTrustManager.checkClientTrusted(certs, authType);
+                            }
+                        } catch (CertificateException e) {
+                            Log.w("checkClientTrusted", e.toString());
+                        }
+                    }
 
-            context.init(null, new X509TrustManager[]{new X509TrustManager(){
-                public void checkClientTrusted(X509Certificate[] chain,
-                                               String authType) throws CertificateException {}
-                public void checkServerTrusted(X509Certificate[] chain,
-                                               String authType) throws CertificateException {}
-                public X509Certificate[] getAcceptedIssuers() {
-                    return new X509Certificate[0];
-                }}}, new SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(
-                    context.getSocketFactory());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                        try {
+                            if (certs != null && certs.length > 0){
+                                certs[0].checkValidity();
+                            } else {
+                                originalTrustManager.checkServerTrusted(certs, authType);
+                            }
+                        } catch (CertificateException e) {
+                            Log.w("checkServerTrusted", e.toString());
+                        }
+                    }
+                }
+        };
+    }
+
+    private SSLSocketFactory getSSLSocketFactory(Context context)
+            throws CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException, KeyManagementException {
+        CertificateFactory cf = CertificateFactory.getInstance("X.509");
+        InputStream caInput = context.getResources().openRawResource(R.raw.ca2); // this cert file stored in \app\src\main\res\raw folder path
+
+        Certificate ca = cf.generateCertificate(caInput);
+        caInput.close();
+
+        KeyStore keyStore = KeyStore.getInstance("BKS");
+        keyStore.load(null, null);
+        keyStore.setCertificateEntry("ca", ca);
+
+        String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+        tmf.init(keyStore);
+
+        TrustManager[] wrappedTrustManagers = getWrappedTrustManagers(tmf.getTrustManagers());
+
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(null, wrappedTrustManagers, null);
+
+        return sslContext.getSocketFactory();
     }
 }
