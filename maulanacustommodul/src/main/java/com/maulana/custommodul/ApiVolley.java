@@ -176,14 +176,14 @@ public class ApiVolley {
             }
         };
         //endregion
-        try {
+        /*try {
             HttpsURLConnection.setDefaultSSLSocketFactory(
                     getSSLSocketFactory(context));
             HttpsURLConnection.setDefaultHostnameVerifier(getHostnameVerifier());
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
         if(requestQueue == null){
             requestQueue = Volley.newRequestQueue(context.getApplicationContext());

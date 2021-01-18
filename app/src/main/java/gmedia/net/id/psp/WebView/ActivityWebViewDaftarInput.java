@@ -56,7 +56,7 @@ public class ActivityWebViewDaftarInput extends AppCompatActivity {
 
     /*-- CUSTOMIZE --*/
     /*-- you can customize these options for your convenience --*/
-    private String webview_url   = "https://office.putmasaripratama.co.id/yudistira/main/hasil_survei?gtw=";    // web address or local file location you want to open in webview
+    private String webview_url   = "http://office.putmasaripratama.co.id/yudistira/main/hasil_survei?gtw=";    // web address or local file location you want to open in webview
     private static String file_type     = "image/*";    // file types
     private boolean multiple_files      = true;         // multiple file upload
 
