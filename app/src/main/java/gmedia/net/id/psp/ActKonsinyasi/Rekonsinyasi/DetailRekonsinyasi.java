@@ -129,7 +129,7 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 	private ImageView ivRefreshJarak;
 	private TextView tvJarak;
 	private Button btnProses;
-	private String nama = "", kdcus = "";
+	private String nama = "", kdcus = "", kdbrg = "";
 	private List<CustomItem> listBarang;
 	private ListCCIDReKonsinyasiAdapter adapter;
 	private String latitudeOutlet = "", longitudeOutlet = "";
@@ -189,6 +189,7 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null) {
 
+			kdbrg = bundle.getString("kdbrg", "");
 			kdcus = bundle.getString("kdcus", "");
 			nama = bundle.getString("nama", "");
 
@@ -355,6 +356,7 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 		try {
 			jBody.put("ccid", ccid);
 			jBody.put("kdcus", kdcus);
+			jBody.put("kdbrg", kdbrg);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -744,6 +746,7 @@ public class DetailRekonsinyasi extends AppCompatActivity implements LocationLis
 			if (imeis != null) if (imeis.size() > 0) imei = imeis.get(0);
 			jBody.put("imei", imei);
 			jBody.put("kdcus", kdcus);
+			jBody.put("kdbrg", kdbrg);
 			jBody.put("latitude", iv.doubleToStringFull(location.getLatitude()));
 			jBody.put("longitude", iv.doubleToStringFull(location.getLongitude()));
 		} catch (JSONException e) {

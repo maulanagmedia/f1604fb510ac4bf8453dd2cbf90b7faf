@@ -128,6 +128,7 @@ public class ActivityWebViewInputan extends AppCompatActivity implements Locatio
     private ValueCallback<Uri[]> file_path;     // received file(s) temp. location
     private ItemValidation itemValidation = new ItemValidation();
     private final static int file_req_code = 1;
+    private boolean firsLoad = true;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
@@ -140,62 +141,65 @@ public class ActivityWebViewInputan extends AppCompatActivity implements Locatio
                 mRequestingLocationUpdates = false;
             }else if(resultCode == Activity.RESULT_OK){
 
-                startLocationUpdates();
+                if(firsLoad){
+
+                    firsLoad = false;
+                    startLocationUpdates();
+                }
             }
 
-        }else{
+        }
 
-            if(Build.VERSION.SDK_INT >= 21){
-                Uri[] results = null;
+        if(Build.VERSION.SDK_INT >= 21){
+            Uri[] results = null;
 
-                if (resultCode == Activity.RESULT_CANCELED) {
-                    if (requestCode == file_req_code) {
-                        file_path.onReceiveValue(null);
+            if (resultCode == Activity.RESULT_CANCELED) {
+                if (requestCode == file_req_code) {
+                    file_path.onReceiveValue(null);
+                    return;
+                }
+            }
+
+            /*-- continue if response is positive --*/
+            if(resultCode== Activity.RESULT_OK){
+                if(requestCode == file_req_code){
+                    if(null == file_path){
                         return;
                     }
-                }
 
-                /*-- continue if response is positive --*/
-                if(resultCode== Activity.RESULT_OK){
-                    if(requestCode == file_req_code){
-                        if(null == file_path){
-                            return;
-                        }
+                    ClipData clipData;
+                    String stringData;
+                    try {
+                        clipData = intent.getClipData();
+                        stringData = intent.getDataString();
+                    }catch (Exception e){
+                        clipData = null;
+                        stringData = null;
+                    }
 
-                        ClipData clipData;
-                        String stringData;
-                        try {
-                            clipData = intent.getClipData();
-                            stringData = intent.getDataString();
-                        }catch (Exception e){
-                            clipData = null;
-                            stringData = null;
-                        }
-
-                        if (clipData == null && stringData == null && cam_file_data != null) {
-                            results = new Uri[]{Uri.parse(cam_file_data)};
-                        }else{
-                            if (clipData != null) { // checking if multiple files selected or not
-                                final int numSelectedFiles = clipData.getItemCount();
-                                results = new Uri[numSelectedFiles];
-                                for (int i = 0; i < clipData.getItemCount(); i++) {
-                                    results[i] = clipData.getItemAt(i).getUri();
-                                }
-                            } else {
-                                results = new Uri[]{Uri.parse(stringData)};
+                    if (clipData == null && stringData == null && cam_file_data != null) {
+                        results = new Uri[]{Uri.parse(cam_file_data)};
+                    }else{
+                        if (clipData != null) { // checking if multiple files selected or not
+                            final int numSelectedFiles = clipData.getItemCount();
+                            results = new Uri[numSelectedFiles];
+                            for (int i = 0; i < clipData.getItemCount(); i++) {
+                                results[i] = clipData.getItemAt(i).getUri();
                             }
+                        } else {
+                            results = new Uri[]{Uri.parse(stringData)};
                         }
                     }
                 }
-                file_path.onReceiveValue(results);
-                file_path = null;
-            }else{
-                if(requestCode == file_req_code){
-                    if(null == file_data) return;
-                    Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-                    file_data.onReceiveValue(result);
-                    file_data = null;
-                }
+            }
+            file_path.onReceiveValue(results);
+            file_path = null;
+        }else{
+            if(requestCode == file_req_code){
+                if(null == file_data) return;
+                Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+                file_data.onReceiveValue(result);
+                file_data = null;
             }
         }
     }
@@ -589,6 +593,7 @@ public class ActivityWebViewInputan extends AppCompatActivity implements Locatio
 
     private void updateAllLocation(){
         mRequestingLocationUpdates = true;
+        firsLoad = false;
         startLocationUpdates();
     }
 
@@ -735,6 +740,7 @@ public class ActivityWebViewInputan extends AppCompatActivity implements Locatio
             isLoading = true;
 
             webview_url = webview_url + "&lati="+ itemValidation.encodeBase64(String.valueOf(latitude)) + "&longi=" + itemValidation.encodeBase64(String.valueOf(longitude));
+            webview_url = webview_url.replace("\n","");
             CekStatus();
         }
     }

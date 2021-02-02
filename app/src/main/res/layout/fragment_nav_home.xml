@@ -98,6 +98,7 @@
                                 android:layout_weight="1"
                                 android:layout_height="match_parent"
                                 android:orientation="vertical"
+                                android:visibility="gone"
                                 android:id="@+id/ll_order_mkios"
                                 android:background="?attr/selectableItemBackground"
                                 android:paddingRight="@dimen/default_margin_small"
@@ -163,6 +164,7 @@
                                 android:paddingRight="@dimen/default_margin_small"
                                 android:paddingLeft="@dimen/default_margin_small"
                                 android:gravity="center"
+                                android:visibility="gone"
                                 android:weightSum="1">
 
                                 <ImageView
@@ -182,15 +184,6 @@
                                     android:textColor="@color/color_black"
                                     android:text="Order Link Aja"/>
                             </LinearLayout>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/menu_height"
-                            android:id="@+id/ll_1a"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="@dimen/default_margin_small"
-                            android:weightSum="3">
 
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -209,7 +202,7 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="0.8"
                                     android:padding="@dimen/default_margin_small"
-                                    android:src="@mipmap/ic_ngrs"
+                                    android:src="@mipmap/ic_ngrs_order"
                                     android:scaleType="fitCenter"/>
 
                                 <TextView
@@ -221,6 +214,18 @@
                                     android:textColor="@color/color_black"
                                     android:text="Order NGRS"/>
                             </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/menu_height"
+                            android:id="@+id/ll_1a"
+                            android:visibility="gone"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="@dimen/default_margin_small"
+                            android:weightSum="3">
+
+
                         </LinearLayout>
 
                         <LinearLayout

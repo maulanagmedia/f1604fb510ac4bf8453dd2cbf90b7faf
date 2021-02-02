@@ -31,11 +31,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".WebView.ActivityWebView"></activity>
-        <activity android:name=".WebView.ActivityWebViewDaftarInput"></activity>
-        <activity android:name=".WebView.ActivityWebViewInputan"></activity>
-        <activity android:name=".WebView.ActivityWebView2"></activity>
-
+        <activity android:name=".ActKonsinyasi.Rekonsinyasi.BarangRekonCustActivity"></activity>
+        <activity android:name=".WebView.ActivityWebView" />
+        <activity android:name=".WebView.ActivityWebViewDaftarInput" />
+        <activity android:name=".WebView.ActivityWebViewInputan" />
+        <activity android:name=".WebView.ActivityWebView2" />
         <activity android:name=".OrderNgrs.ResellerNGRS" />
         <activity android:name=".OrderNgrs.DetailOrderNGRS" />
         <activity android:name=".OrderNgrs.ActOrderNGRS" />

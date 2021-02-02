@@ -81,6 +81,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
+                                      <entry key="assetType" value="IMAGE" />
                                       <entry key="imageAsset" value="$APPLICATION_HOME_DIR$/bin/C:\Users\Bayu\Music\ic_refresh.png" />
                                       <entry key="outputName" value="ic_copy" />
                                       <entry key="theme" value="CUSTOM" />
@@ -179,7 +180,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="1d1dff" />
-                                                <entry key="imagePath" value="$APPLICATION_HOME_DIR$/bin/C:\Users\Bayu\Music\ic_refresh.png" />
+                                                <entry key="imagePath" value="$USER_HOME$/Downloads/digi.png" />
+                                                <entry key="paddingPercent" value="30" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -211,10 +213,11 @@
                                   </option>
                                   <option name="values">
                                     <map>
+                                      <entry key="assetType" value="IMAGE" />
                                       <entry key="backgroundColor" value="fefefe" />
                                       <entry key="iconShape" value="CIRCLE" />
-                                      <entry key="imageAsset" value="$APPLICATION_HOME_DIR$/bin/C:\Users\Bayu\Music\ic_refresh.png" />
-                                      <entry key="outputName" value="ic_ngrs" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/digi.png" />
+                                      <entry key="outputName" value="ic_ngrs_order" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -343,7 +346,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputIconType" value="ACTIONBAR" />
+                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
                           </map>
                         </option>
                       </PersistentState>

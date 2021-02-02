@@ -178,7 +178,7 @@ public class OutletRekonsinyasi extends AppCompatActivity {
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
 				CustomItem item = (CustomItem) adapterView.getItemAtPosition(i);
-				Intent intent = new Intent(view.getContext(), DetailRekonsinyasi.class);
+				Intent intent = new Intent(view.getContext(), BarangRekonCustActivity.class);
 				intent.putExtra("kdcus", item.getItem1());
 				intent.putExtra("nama", item.getItem2());
 				view.getContext().startActivity(intent);
