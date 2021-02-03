@@ -692,6 +692,7 @@
                                 android:layout_height="match_parent"
                                 android:orientation="vertical"
                                 android:paddingRight="@dimen/default_margin_small"
+                                android:visibility="gone"
                                 android:paddingLeft="@dimen/default_margin_small"
                                 android:id="@+id/ll_market_survey_md"
                                 android:background="?attr/selectableItemBackground"
